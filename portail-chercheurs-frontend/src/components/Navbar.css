@@ -1,0 +1,17 @@
+nav {
+  height: 90px;
+}
+.logo {
+  width: 80px;
+  height: 70px;
+}
+.search-bar .search-icon {
+  position: absolute;
+}
+.nav-list li :hover {
+  color: var(--color-text-primary);
+  transition: 0.5s;
+}
+.left-side {
+  width: 40%;
+}
