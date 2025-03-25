@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom"; // Importation des outils de r
 import Home from "./pages/Home"; // Import de la page d'accueil
 import Chercheurs from "./pages/Chercheurs"; // Import de la page des chercheurs
 import Layout from "./components/Layout"; //importer le composant Layout
+
 function App() {
   return (
     <>

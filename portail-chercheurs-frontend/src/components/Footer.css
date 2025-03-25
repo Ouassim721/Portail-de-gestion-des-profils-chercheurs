@@ -1,10 +1,17 @@
-.footer {
-  margin-top: 20px;
-  padding: 10px;
-  background-color: #333;
-  color: white;
-  text-align: center;
+footer {
   position: relative;
   bottom: 0;
-  width: 100%;
+  background-color: #111827;
+}
+footer .info div {
+  width: 25%;
+  padding: 5px;
+}
+footer .info .apropos {
+  width: 35%;
+}
+.separator {
+  width: 70%;
+  background-color: #313a4c;
+  height: 2px;
 }

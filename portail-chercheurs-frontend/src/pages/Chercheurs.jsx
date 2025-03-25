@@ -1,16 +1,24 @@
 import "./Chercheurs.css"; // Import du fichier CSS
+import Button from "../components/Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import book from "../assets/book.jpg";
 
 function Chercheurs() {
   return (
     <div className="chercheurs-container">
       {/* Grande image en haut */}
       <div className="header-image">
-        <img src="/chercheurs-banner.jpg" alt="Chercheurs" />
+        <img src={book} alt="Chercheurs" />
       </div>
-
+      <div className="flex justify-between items-center px-16 py-8">
+        <h1>Chercheurs</h1>
+        <Button variant="neutral">
+          <FontAwesomeIcon icon={faSearch} /> Click
+        </Button>
+      </div>
       {/* Tableau des chercheurs */}
       <div className="table-container">
-        <h2>Liste des chercheurs</h2>
         <table>
           <thead>
             <tr>
@@ -38,11 +46,6 @@ function Chercheurs() {
           </tbody>
         </table>
       </div>
-
-      {/* Footer */}
-      <footer className="footer">
-        <p>&copy; 2025 Portail des Chercheurs. Tous droits réservés.</p>
-      </footer>
     </div>
   );
 }
