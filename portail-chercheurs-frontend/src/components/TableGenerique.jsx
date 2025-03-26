@@ -3,7 +3,7 @@ import React from "react";
 function TableGenerique({ columns, data, onRowClick }) {
   return (
     <div className="table-container">
-      <table>
+      <table className="w-full border-collapse">
         <thead>
           <tr>
             {columns.map((col, index) => (
