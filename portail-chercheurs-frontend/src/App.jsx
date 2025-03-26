@@ -1,8 +1,9 @@
 import "./index.css";
 import { Routes, Route } from "react-router-dom"; // Importation des outils de routage
-import Home from "./pages/Home"; // Import de la page d'accueil
-import Chercheurs from "./pages/Chercheurs"; // Import de la page des chercheurs
-import Layout from "./components/Layout"; //importer le composant Layout
+import Home from "./pages/Home";
+import Chercheurs from "./pages/Chercheurs";
+import Layout from "./components/Layout";
+import ProfilChercheur from "./pages/ProfilChercheur";
 
 function App() {
   return (
@@ -10,9 +11,12 @@ function App() {
       <Routes>
         {/* Définition des routes principales */}
         <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} /> {/* Page d'accueil */}
-          <Route path="chercheurs" element={<Chercheurs />} />{" "}
+          {/* Page d'accueil */}
+          <Route index element={<Home />} />
           {/* Page chercheurs */}
+          <Route path="chercheurs" element={<Chercheurs />} />{" "}
+          {/* Page profil chercheurs */}
+          <Route path="/profil-chercheur/:id" element={<ProfilChercheur />} />
         </Route>
       </Routes>
     </>

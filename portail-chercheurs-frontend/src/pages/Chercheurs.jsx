@@ -851,6 +851,7 @@ const chercheursData = [
 ];
 
 function Chercheurs() {
+  const [chercheurSelectionne, setChercheurSelectionne] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const chercheursPerPage = 10; // Nombre de chercheurs par page
 
@@ -893,13 +894,35 @@ function Chercheurs() {
           <tbody>
             {currentChercheurs.map((chercheur) => (
               <tr key={chercheur.id}>
-                <td>{chercheur.nom}</td>
+                <td>
+                  {/* Lien vers la page complète */}
+                  <Link
+                    to={`/profil-chercheur/${chercheur.id}`}
+                    className="text-blue-600 underline"
+                  >
+                    {chercheur.nom}
+                  </Link>
+                  {/* Affichage du pop-up */}
+                  <button
+                    onClick={() => setChercheurSelectionne(chercheur)}
+                    className="ml-4 text-gray-600"
+                  >
+                    (Voir en pop-up)
+                  </button>
+                </td>
                 <td>{chercheur.departement}</td>
                 <td>{chercheur.publications}</td>
               </tr>
             ))}
           </tbody>
         </table>
+        {/* Affichage du modal si un chercheur est sélectionné */}
+        {chercheurSelectionne && (
+          <ProfilChercheur
+            chercheur={chercheurSelectionne}
+            onClose={() => setChercheurSelectionne(null)}
+          />
+        )}
       </div>
 
       {/* Pagination réutilisable */}
