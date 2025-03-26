@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Chercheurs.css"; // Import du fichier CSS
 import { Link } from "react-router-dom";
 import Button from "../components/Button";
@@ -138,6 +138,14 @@ function Chercheurs() {
   const closePopup = () => {
     setChercheurSelectionne(null);
   };
+
+  useEffect(() => {
+    if (chercheurSelectionne) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [chercheurSelectionne]);
 
   return (
     <div className="chercheurs-container">
