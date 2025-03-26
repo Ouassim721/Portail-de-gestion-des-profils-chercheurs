@@ -21,14 +21,6 @@ td {
 }
 
 th {
-  background-color: #333;
-  color: white;
-}
-
-.footer {
-  margin-top: 20px;
-  padding: 10px;
-  background-color: #333;
-  color: white;
-  text-align: center;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
 }
