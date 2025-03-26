@@ -909,21 +909,8 @@ function Chercheurs() {
                 onClick={() => openPopup(chercheur)}
                 className="cursor-pointer hover:bg-gray-100"
               >
-                <td>
-                  {/* Lien vers la page complète */}
-                  <Link
-                    to={`/profil-chercheur/${chercheur.id}`}
-                    className="text-blue-600 underline"
-                  >
-                    {chercheur.nom}
-                  </Link>
-                  {/* Affichage du pop-up */}
-                  <button
-                    onClick={() => setChercheurSelectionne(chercheur)}
-                    className="ml-4 text-gray-600"
-                  >
-                    (Voir en pop-up)
-                  </button>
+                <td onClick={() => setChercheurSelectionne(chercheur)}>
+                  {chercheur.nom}
                 </td>
                 <td>{chercheur.departement}</td>
                 <td>{chercheur.publications}</td>
@@ -931,13 +918,6 @@ function Chercheurs() {
             ))}
           </tbody>
         </table>
-        {/* Affichage du modal si un chercheur est sélectionné
-        {chercheurSelectionne && (
-          <ProfilChercheur
-            chercheur={chercheurSelectionne}
-            onClose={() => setChercheurSelectionne(null)}
-          />
-        )} */}
       </div>
       {chercheurSelectionne && (
         <div className="popup-overlay">
