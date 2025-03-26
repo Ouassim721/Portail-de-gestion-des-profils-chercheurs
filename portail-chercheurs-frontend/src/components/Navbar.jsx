@@ -19,7 +19,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="bg-[var(--color-bg)] p-4 flex items-center justify-between relative">
+    <nav className="bg-[var(--color-bg)] p-4 pr-8 flex items-center justify-between relative">
       {/* Logo et recherche */}
       <div className="flex items-center gap-12">
         <img src={logo} alt="Logo" className="w-16" />
