@@ -1,9 +1,11 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 const Button = ({
   children,
   onClick,
   type = "button",
   variant = "primary",
-  icon: Icon = null, // Icône facultative
+  icon = null, // Icône facultative
   className = "",
 }) => {
   // Définition des styles selon le variant
@@ -16,7 +18,7 @@ const Button = ({
     secondary:
       "bg-[var(--color-secondary)] text-[var(--color-white)] hover:bg-emerald-400",
     neutral:
-      "bg-[var(--color-bg-secondary)] text-[var(--color-text-primary)] hover:bg-neutral-200 outline outline-neutral-500 ",
+      "bg-[var(--color-bg-secondary)] text-[var(--color-text-primary)] hover:bg-neutral-200 outline outline-gray-300 ",
   };
 
   return (
@@ -25,8 +27,8 @@ const Button = ({
       onClick={onClick}
       className={`${baseStyles} ${variantStyles[variant]} ${className}`}
     >
-      {Icon && <Icon className="w-5 h-5" />}{" "}
-      {/* Affiche l'icône si elle est fournie */}
+      {icon && <FontAwesomeIcon icon={icon} className="w-5 h-5" />}
+      {/* Utilise FontAwesome pour l'icône */}
       {children}
     </button>
   );

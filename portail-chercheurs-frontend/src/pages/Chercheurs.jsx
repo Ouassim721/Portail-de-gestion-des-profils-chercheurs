@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "./Chercheurs.css"; // Import du fichier CSS
 import { Link } from "react-router-dom";
 import Button from "../components/Button";
+import DropdownButton from "../components/DropDownButton";
 import TableGenerique from "../components/TableGenerique";
 import Pagination from "../components/Pagination";
 import ProfilChercheur from "../components/ProfilChercheur";
@@ -159,9 +160,25 @@ function Chercheurs() {
 
       <div className="flex justify-between items-center mx-12 sm:mx-28 xl:mx-38 mt-12">
         <h1 className="font-bold text-3xl">Chercheurs</h1>
-        <button className="border px-4 py-2 rounded">
-          <FontAwesomeIcon icon={faSliders} /> Filtrer
-        </button>
+        <DropdownButton
+          icon={faSliders}
+          children="Filtrer"
+          variant="neutral"
+          options={[
+            {
+              label: "Nom",
+              onClick: () => console.log("Nom"),
+            },
+            {
+              label: "Département",
+              onClick: () => console.log("Département"),
+            },
+            {
+              label: "Nombre de publication",
+              onClick: () => console.log("Nombre de publication"),
+            },
+          ]}
+        />
       </div>
 
       <div className="mx-auto mt-8 mb-12 bg-gray-300 h-0.5 w-3/4"></div>
