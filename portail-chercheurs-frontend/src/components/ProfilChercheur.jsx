@@ -1,9 +1,10 @@
 import "./ProfilChercheur.css";
+import Card from "./Card";
 import pdp from "../assets/chercheur-place-holder.jpg";
 function ProfilChercheur({ chercheur }) {
   return (
-    <div>
-      <section className="info-general p-8 m-4 mt-12 w-3/5 rounded-2xl bg-[var(--color-white)] text-[var(--color-text-primary)]">
+    <div className="grid grid-cols-3 grid-rows-[auto_1fr_1fr] gap-4 mt-8">
+      <section className="col-span-2 box p-8 rounded-2xl bg-[var(--color-white)] text-[var(--color-text-primary)]">
         <div className="flex gap-16">
           <img src={pdp} alt="Photo de profile" className="rounded-full w-32" />
           <div>
@@ -32,16 +33,54 @@ function ProfilChercheur({ chercheur }) {
           </ul>
         </div>
       </section>
-      <section className="info-general p-8 m-4 mt-12 w-3/5 rounded-2xl bg-[var(--color-white)] text-[var(--color-text-primary)]"></section>
-      <p>
-        <strong>Département :</strong> {chercheur.departement}
-      </p>
-      <p>
-        <strong>Nombre de publications :</strong> {chercheur.publications}
-      </p>
-      <p>
-        <strong>Bio :</strong> Lorem ipsum dolor sit amet...
-      </p>
+      <section className="stats row-span-3 box p-8 rounded-2xl bg-[var(--color-white)] text-[var(--color-text-primary)]"></section>
+      <section className="col-span-2 row-span-2 box p-16 rounded-2xl bg-[var(--color-white)] text-[var(--color-text-primary)]">
+        <h1 className="text-2xl font-semibold mb-12 text-[var(--color-text-primary)] ml-3 ">
+          Publications
+        </h1>
+        <Card
+          id="P123"
+          title="Human Emotion Recognition Based on Spatio-Temporal Facial Features Using HOG-HOF and VGG-LSTM"
+          author="Dr. Jane Smith"
+          cardType="publication"
+        />
+        <Card
+          id="P123"
+          title="Human Emotion Recognition Based on Spatio-Temporal Facial Features Using HOG-HOF and VGG-LSTM"
+          author="Dr. Jane Smith"
+          cardType="publication"
+        />
+        <Card
+          id="P123"
+          title="Human Emotion Recognition Based on Spatio-Temporal Facial Features Using HOG-HOF and VGG-LSTM"
+          author="Dr. Jane Smith"
+          cardType="publication"
+        />
+        <Card
+          id="P123"
+          title="Human Emotion Recognition Based on Spatio-Temporal Facial Features Using HOG-HOF and VGG-LSTM"
+          author="Dr. Jane Smith"
+          cardType="publication"
+        />
+        <Card
+          id="P123"
+          title="Human Emotion Recognition Based on Spatio-Temporal Facial Features Using HOG-HOF and VGG-LSTM"
+          author="Dr. Jane Smith"
+          cardType="publication"
+        />
+        <Card
+          id="P123"
+          title="Human Emotion Recognition Based on Spatio-Temporal Facial Features Using HOG-HOF and VGG-LSTM"
+          author="Dr. Jane Smith"
+          cardType="publication"
+        />
+        <Card
+          id="P123"
+          title="Human Emotion Recognition Based on Spatio-Temporal Facial Features Using HOG-HOF and VGG-LSTM"
+          author="Dr. Jane Smith"
+          cardType="publication"
+        />
+      </section>
     </div>
   );
 }
