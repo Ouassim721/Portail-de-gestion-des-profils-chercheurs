@@ -15,3 +15,18 @@ nav {
 .left-side {
   width: 40%;
 }
+.sticky-top {
+  position: fixed !important;
+  top: 0px;
+  animation: stickySlideDown 1s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+@keyframes stickySlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-80px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}

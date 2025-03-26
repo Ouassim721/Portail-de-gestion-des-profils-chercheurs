@@ -1,11 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
-
+import "./Navbar.css";
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsSticky(window.scrollY > 80); // Active le sticky après 80px de scroll
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const location = useLocation(); // Récupérer l'URL actuelle
 
   // Mapping des chemins personnalisés
@@ -19,7 +30,13 @@ function Navbar() {
   };
 
   return (
-    <nav className="bg-[var(--color-bg)] p-4 pr-8 flex items-center justify-between relative">
+    <nav
+      className={`relative w-full p-4 pr-8 flex items-center justify-between z-10 duration-300 ${
+        isSticky
+          ? "bg-[var(--color-white)] shadow-md sticky-top"
+          : "bg-[var(--color-bg)]"
+      } `}
+    >
       {/* Logo et recherche */}
       <div className="flex items-center gap-12">
         <img src={logo} alt="Logo" className="w-16" />
@@ -33,7 +50,7 @@ function Navbar() {
           <input
             type="text"
             placeholder="Rechercher..."
-            className="bg-[var(--color-white)] text-[var(--color-text-secondary)] p-3 pl-12 rounded-full w-64 lg-96 outline-none focus:outline-solid"
+            className="bg-[var(--color-white)] text-[var(--color-text-secondary)] p-3 pl-12 rounded-full w-64 lg-96 outline outline-gray-300 focus:outline-gray-500"
           />
         </div>
       </div>
