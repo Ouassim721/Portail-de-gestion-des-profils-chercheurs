@@ -1,9 +1,11 @@
 import { useState } from "react";
 import "./Chercheurs.css"; // Import du fichier CSS
+import { Link } from "react-router-dom";
 import Button from "../components/Button";
 import Pagination from "../components/Pagination";
+import ProfilChercheur from "../components/ProfilChercheur";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSliders } from "@fortawesome/free-solid-svg-icons";
+import { faSliders, faTimes } from "@fortawesome/free-solid-svg-icons";
 import book from "../assets/book.jpg";
 
 // Données simulées (remplace-les par les résultats de l'API une fois disponible)
@@ -866,6 +868,15 @@ function Chercheurs() {
   // Nombre total de pages
   const totalPages = Math.ceil(chercheursData.length / chercheursPerPage);
 
+  // Fonction pour ouvrir le pop-up
+  const openPopup = (chercheur) => {
+    setChercheurSelectionne(chercheur);
+  };
+
+  // Fonction pour fermer le pop-up
+  const closePopup = () => {
+    setChercheurSelectionne(null);
+  };
   return (
     <div className="chercheurs-container">
       {/* Grande image en haut */}
@@ -893,7 +904,11 @@ function Chercheurs() {
           </thead>
           <tbody>
             {currentChercheurs.map((chercheur) => (
-              <tr key={chercheur.id}>
+              <tr
+                key={chercheur.id}
+                onClick={() => openPopup(chercheur)}
+                className="cursor-pointer hover:bg-gray-100"
+              >
                 <td>
                   {/* Lien vers la page complète */}
                   <Link
@@ -916,14 +931,26 @@ function Chercheurs() {
             ))}
           </tbody>
         </table>
-        {/* Affichage du modal si un chercheur est sélectionné */}
+        {/* Affichage du modal si un chercheur est sélectionné
         {chercheurSelectionne && (
           <ProfilChercheur
             chercheur={chercheurSelectionne}
             onClose={() => setChercheurSelectionne(null)}
           />
-        )}
+        )} */}
       </div>
+      {chercheurSelectionne && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            {/* Bouton de fermeture */}
+            <button className="close-btn" onClick={closePopup}>
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
+            {/* Affichage du profil */}
+            <ProfilChercheur chercheur={chercheurSelectionne} />
+          </div>
+        </div>
+      )}
 
       {/* Pagination réutilisable */}
       <Pagination

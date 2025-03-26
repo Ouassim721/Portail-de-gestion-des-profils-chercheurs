@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom"; // Importation des outils de r
 import Home from "./pages/Home";
 import Chercheurs from "./pages/Chercheurs";
 import Layout from "./components/Layout";
-import ProfilChercheur from "./pages/ProfilChercheur";
+import ProfilChercheur from "./components/ProfilChercheur";
 
 function App() {
   return (
