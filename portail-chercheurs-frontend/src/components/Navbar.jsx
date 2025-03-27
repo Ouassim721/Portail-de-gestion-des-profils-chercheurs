@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import DropdownMenu from "./DropdownMenu";
 import logo from "../assets/logo.png";
+import pdp from "../assets/chercheur-place-holder.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 import "./Navbar.css";
@@ -10,7 +12,7 @@ function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsSticky(window.scrollY > 80); // Active le sticky après 80px de scroll
+      setIsSticky(window.scrollY > 80);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -56,7 +58,7 @@ function Navbar() {
       </div>
 
       {/* Navigation - Desktop */}
-      <ul className="hidden lg:flex gap-6 text-lg text-[var(--color-gray)]">
+      <ul className="hidden lg:flex items-center gap-6 text-lg text-[var(--color-gray)]">
         {[
           "Accueil",
           "Chercheurs",
@@ -82,8 +84,21 @@ function Navbar() {
             </li>
           );
         })}
+        <DropdownMenu
+          options={[
+            {
+              label: "Profil",
+              onClick: () => console.log("Nom"),
+            },
+          ]}
+        >
+          <img
+            src={pdp}
+            alt="Logo"
+            className="w-16 rounded-full cursor-pointer"
+          />
+        </DropdownMenu>
       </ul>
-
       {/* Bouton Menu Burger - Mobile */}
       <button
         className="lg:hidden text-2xl text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] z-10 cursor-pointer duration-300"
