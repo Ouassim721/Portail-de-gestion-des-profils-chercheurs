@@ -87,8 +87,8 @@ function Navbar() {
         <DropdownMenu
           options={[
             {
-              label: "Profil",
-              onClick: () => console.log("Nom"),
+              label: "Nom",
+              link: "/profil",
             },
           ]}
         >

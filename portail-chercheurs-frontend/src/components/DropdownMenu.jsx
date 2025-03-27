@@ -6,24 +6,31 @@ const DropdownMenu = ({ children, options = [] }) => {
 
   return (
     <div className="relative inline-block">
-      <div className="" onClick={() => setIsOpen(!isOpen)}>
-        {children}
-      </div>
+      <div onClick={() => setIsOpen(!isOpen)}>{children}</div>
       {isOpen && (
         <div className="absolute right-0 w-60 text-sm text-[var(--color-text-primary)] bg-[var(--color-white)] border border-gray-200 rounded shadow-md">
           <div className="h-[1px] w-full bg-gray-300 my-2"></div>
           {options.map((option, index) => (
-            <button
+            <div
               key={index}
               className="w-full px-4 py-2 text-left hover:bg-blue-100 hover:text-blue-600 cursor-pointer"
               onClick={() => {
-                option.onClick();
+                if (option.onClick) {
+                  option.onClick();
+                }
                 setIsOpen(false);
               }}
             >
               <FontAwesomeIcon icon={option.icon} className="mr-2" />
-              {option.label}
-            </button>
+              {/* Si un lien existe, rendre l'élément cliquable sur toute la largeur */}
+              {option.link ? (
+                <a href={option.link} className="w-full block">
+                  {option.label}
+                </a>
+              ) : (
+                option.label
+              )}
+            </div>
           ))}
           <div className="h-[1px] w-full bg-gray-300 my-2"></div>
         </div>
