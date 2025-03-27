@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "./Chercheurs.css"; // Import du fichier CSS
 import { Link } from "react-router-dom";
 import Button from "../components/Button";
-import DropdownButton from "../components/DropDownButton";
+import DropdownButton from "../components/DropdownButton";
 import TableGenerique from "../components/TableGenerique";
 import Pagination from "../components/Pagination";
 import ProfilChercheur from "../components/ProfilChercheur";
