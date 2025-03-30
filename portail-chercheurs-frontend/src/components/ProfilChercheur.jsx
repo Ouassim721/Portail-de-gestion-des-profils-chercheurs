@@ -33,18 +33,20 @@ function ProfilChercheur({ chercheur }) {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 grid-rows-[auto_1fr_1fr] gap-4 mt-8">
-      <section className="col-span-2 box p-2 md:p-8 rounded-2xl bg-[var(--color-white)] text-[var(--color-text-primary)]">
-        <div className="flex gap-8 sm:gap-12 lg:gap-16">
+      <section className="col-span-2 box p-8 md:p-8 rounded-2xl bg-[var(--color-white)] text-[var(--color-text-primary)]">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-12 lg:gap-16">
           <img
             src={pdp}
             alt="Photo de profile"
-            className="rounded-full w-24 sm:w-28 lg:w-32"
+            className="rounded-full w-24 sm:w-28 lg:w-32 mx-auto sm:mx-0"
           />
           <div>
-            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-center sm:text-left">
               {chercheur.nom}
             </h2>
-            <p className="text-sm mt-1">{chercheur.departement}</p>
+            <p className="text-sm mt-1 text-center sm:text-left">
+              {chercheur.departement}
+            </p>
           </div>
         </div>
         <div className="mx-auto my-8 bg-gray-300 h-0.75 w-9/10"></div>

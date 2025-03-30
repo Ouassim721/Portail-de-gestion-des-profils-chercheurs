@@ -27,8 +27,6 @@ th {
 .popup-content {
   background: var(--color-bg);
   color: var(--color-text-primary);
-  width: 80%;
-  height: 100vh;
   padding: 20px;
   border-radius: 10px;
   position: relative;

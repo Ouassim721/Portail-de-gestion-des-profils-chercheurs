@@ -683,61 +683,59 @@ function Chercheurs() {
         />
       </div>
 
-      <div className="flex justify-between items-center mx-12 sm:mx-28 xl:mx-38 mt-12">
-        <h1 className="font-bold text-3xl">Chercheurs</h1>
-        <DropdownButton
-          icon={faSliders}
-          children="Filtrer"
-          variant="neutral"
-          options={[
-            {
-              label: "Nom",
-              onClick: () => console.log("Nom"),
-            },
-            {
-              label: "Département",
-              onClick: () => console.log("Département"),
-            },
-            {
-              label: "Nombre de publication",
-              onClick: () => console.log("Nombre de publication"),
-            },
-          ]}
-        />
-      </div>
-
-      <div className="mx-auto mt-8 mb-12 bg-gray-300 h-0.5 w-3/4"></div>
-
-      <div className="mx-auto my-5 w-4/5">
-        <TableGenerique
-          columns={[
-            { key: "nom", label: "Nom" },
-            { key: "departement", label: "Département" },
-            { key: "publications", label: "Publications" },
-          ]}
-          data={currentChercheurs}
-          onRowClick={openPopup}
-        />
-      </div>
-
-      {chercheurSelectionne && (
-        <div className="popup-overlay">
-          <div className="popup-content">
-            {/* Bouton de fermeture */}
-            <button className="close-btn" onClick={closePopup}>
-              <FontAwesomeIcon icon={faTimes} />
-            </button>
-            {/* Affichage du profil */}
-            <ProfilChercheur chercheur={chercheurSelectionne} />
-          </div>
+      <div className="">
+        <div className="flex justify-between items-center mx-12 sm:mx-28 xl:mx-38 mt-12">
+          <h1 className="font-bold text-3xl">Chercheurs</h1>
+          <DropdownButton
+            icon={faSliders}
+            children="Filtrer"
+            variant="neutral"
+            options={[
+              {
+                label: "Nom",
+                onClick: () => console.log("Nom"),
+              },
+              {
+                label: "Département",
+                onClick: () => console.log("Département"),
+              },
+              {
+                label: "Nombre de publication",
+                onClick: () => console.log("Nombre de publication"),
+              },
+            ]}
+          />
         </div>
-      )}
-
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
-      />
+        <div className="mx-auto mt-8 mb-12 bg-gray-300 h-0.5 w-3/4"></div>
+        <div className="mx-auto my-5 w-4/5">
+          <TableGenerique
+            columns={[
+              { key: "nom", label: "Nom" },
+              { key: "departement", label: "Département" },
+              { key: "publications", label: "Publications" },
+            ]}
+            data={currentChercheurs}
+            onRowClick={openPopup}
+          />
+        </div>
+        {chercheurSelectionne && (
+          <div className="popup-overlay">
+            <div className="popup-content w-[95%] h-[95%] sm:w-[85%] md:w-[80%] ">
+              {/* Bouton de fermeture */}
+              <button className="close-btn" onClick={closePopup}>
+                <FontAwesomeIcon icon={faTimes} />
+              </button>
+              {/* Affichage du profil */}
+              <ProfilChercheur chercheur={chercheurSelectionne} />
+            </div>
+          </div>
+        )}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      </div>
     </div>
   );
 }
