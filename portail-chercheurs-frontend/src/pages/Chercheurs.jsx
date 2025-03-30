@@ -684,8 +684,10 @@ function Chercheurs() {
       </div>
 
       <div className="">
-        <div className="flex justify-between items-center mx-12 sm:mx-28 xl:mx-38 mt-12">
-          <h1 className="font-bold text-3xl">Chercheurs</h1>
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-0 sm:justify-between items-center mx-12 sm:mx-28 xl:mx-38 mt-12">
+          <h1 className="font-bold text-xl sm:text-2xl md:text-3xl">
+            Chercheurs
+          </h1>
           <DropdownButton
             icon={faSliders}
             children="Filtrer"
@@ -707,7 +709,7 @@ function Chercheurs() {
           />
         </div>
         <div className="mx-auto mt-8 mb-12 bg-gray-300 h-0.5 w-3/4"></div>
-        <div className="mx-auto my-5 w-4/5">
+        <div className="mx-auto my-5">
           <TableGenerique
             columns={[
               { key: "nom", label: "Nom" },

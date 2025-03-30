@@ -2,12 +2,15 @@ import React from "react";
 
 function TableGenerique({ columns, data, onRowClick }) {
   return (
-    <div className="table-container">
-      <table className="w-full border-collapse">
-        <thead>
+    <div className="overflow-x-auto">
+      <table className="w-full border-collapse border border-gray-300 text-sm sm:text-md">
+        <thead className="bg-gray-200">
           <tr>
             {columns.map((col, index) => (
-              <th key={index} className="text-left">
+              <th
+                key={index}
+                className="px-4 py-2 text-left text-gray-700 uppercase font-semibold border-b"
+              >
                 {col.label}
               </th>
             ))}
@@ -18,10 +21,12 @@ function TableGenerique({ columns, data, onRowClick }) {
             <tr
               key={rowIndex}
               onClick={() => onRowClick && onRowClick(item)}
-              className="cursor-pointer hover:bg-gray-100"
+              className="cursor-pointer hover:bg-gray-100 border-b"
             >
               {columns.map((col, colIndex) => (
-                <td key={colIndex}>{item[col.key]}</td>
+                <td key={colIndex} className="px-4 py-2 text-gray-600">
+                  {item[col.key]}
+                </td>
               ))}
             </tr>
           ))}
