@@ -2,7 +2,7 @@ import React from "react";
 
 function TableGenerique({ columns, data, onRowClick }) {
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto max-w-[100%] md:max-w-[80%] xl:max-w-[75%] mx-auto">
       <table className="w-full border-collapse border border-gray-300 text-sm sm:text-md">
         <thead className="bg-gray-200">
           <tr>
