@@ -32,42 +32,48 @@ function ProfilChercheur({ chercheur }) {
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"]; // Couleurs pour chaque catégorie
 
   return (
-    <div className="grid grid-cols-3 grid-rows-[auto_1fr_1fr] gap-4 mt-8">
+    <div className="grid grid-cols-1 lg:grid-cols-3 grid-rows-[auto_1fr_1fr] gap-4 mt-8">
       <section className="col-span-2 box p-8 rounded-2xl bg-[var(--color-white)] text-[var(--color-text-primary)]">
-        <div className="flex gap-16">
-          <img src={pdp} alt="Photo de profile" className="rounded-full w-32" />
+        <div className="flex gap-8 sm:gap-12 lg:gap-16">
+          <img
+            src={pdp}
+            alt="Photo de profile"
+            className="rounded-full w-24 sm:w-28 lg:w-32"
+          />
           <div>
-            <h2 className="text-3xl font-bold">{chercheur.nom}</h2>
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold">
+              {chercheur.nom}
+            </h2>
             <p className="text-sm mt-1">{chercheur.departement}</p>
           </div>
         </div>
         <div className="mx-auto my-8 bg-gray-300 h-0.75 w-9/10"></div>
-        <div className="flex my-3">
-          <p className="w-2/5">
+        <div className="flex flex-col md:flex-row my-3">
+          <p className="w-full md:w-2/5">
             <strong className="text-md">Organisations</strong>{" "}
           </p>
-          <ul className="text-[var(--color-text-secondary)] ">
+          <ul className="text-[var(--color-text-secondary)] text-sm md:text-md ">
             <li>Cadi Ayyad University of Marrakech</li>
             <li>Cadi Ayyad University of Marrakech</li>
             <li>Cadi Ayyad University of Marrakech</li>
           </ul>
         </div>
-        <div className="flex my-6">
-          <p className="w-2/5">
+        <div className="flex flex-col md:flex-row my-6">
+          <p className="w-full md:w-2/5">
             <strong className="text-md">Catégories de sujets</strong>{" "}
           </p>
-          <ul className="text-[var(--color-text-secondary)] ">
+          <ul className="text-[var(--color-text-secondary)] text-sm md:text-sm">
             <li>Computer Science</li>
             <li>Computer Science</li>
           </ul>
         </div>
       </section>
-      <section className="stats row-span-3 box p-8 rounded-2xl bg-[var(--color-white)] text-[var(--color-text-primary)]">
-        <div className="flex flex-col gap-8">
+      <section className="stats col-span-2 md:col-span-1 row-span-3 box p-8 rounded-2xl bg-[var(--color-white)] text-[var(--color-text-primary)]">
+        <div className="flex flex-col gap-4 md-gap-8">
           <h3 className="text-md font-medium tracking-wider text-center">
             Publications par Année
           </h3>
-          <div className="h-50">
+          <div className="h-40 md:h-50 max-w-[350px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={dataBar}>
                 <XAxis dataKey="year" />
@@ -108,7 +114,7 @@ function ProfilChercheur({ chercheur }) {
           </div>
         </div>
       </section>
-      <section className="col-span-2 row-span-2 box p-16 rounded-2xl bg-[var(--color-white)] text-[var(--color-text-primary)]">
+      <section className="col-span-2 row-span-2 box p-8 md:p-16 rounded-2xl bg-[var(--color-white)] text-[var(--color-text-primary)]">
         <h1 className="text-2xl font-semibold mb-12 text-[var(--color-text-primary)] ml-3 ">
           Publications
         </h1>

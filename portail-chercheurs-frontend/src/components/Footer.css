@@ -4,11 +4,8 @@ footer {
   background-color: #111827;
 }
 footer .info div {
-  width: 25%;
+  width: 100%;
   padding: 5px;
-}
-footer .info .apropos {
-  width: 35%;
 }
 .separator {
   width: 70%;

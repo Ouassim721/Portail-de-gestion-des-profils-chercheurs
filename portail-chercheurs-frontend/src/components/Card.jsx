@@ -1,11 +1,11 @@
 const Card = ({ id, title, author, image, footer, className, cardType }) => {
   const baseStyle =
-    "shadow-lg p-4 rounded transition-transform hover:scale-101 flex items-center cursor-pointer m-auto my-6";
+    "shadow-lg p-3 md:p-4 rounded transition-transform hover:scale-101 flex items-center cursor-pointer m-auto my-6";
 
   const styles = {
     chercheur: "bg-white-200 p-4",
     publication:
-      "bg-[var(--color-white)]  w-[100%] flex items-center px-4 gap-10",
+      "bg-[var(--color-white)]  w-[100%] flex flex-col md:flex-row items-center px-4 gap-4 md:gap-10",
     projet: "bg-green-50 p-4",
   };
 
@@ -15,13 +15,13 @@ const Card = ({ id, title, author, image, footer, className, cardType }) => {
     >
       {/* ID à gauche */}
       {id && (
-        <div className="text-[var(--color-text-primary)] w-14 h-14 flex items-center justify-center rounded-full text-lg font-semibold">
+        <div className="text-[var(--color-text-primary)] w-14 h-4 md:h-14 flex items-center justify-center rounded-full text-lg font-semibold">
           {id}
         </div>
       )}
 
       {/* Contenu texte */}
-      <div className="ml-2 flex flex-col justify-center">
+      <div className="md:ml-2 flex flex-col justify-center">
         {image && (
           <img
             src={image}
