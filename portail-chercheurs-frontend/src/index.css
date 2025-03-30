@@ -27,3 +27,32 @@ body {
   margin: 0;
   background-color: var(--color-bg);
 }
+
+@keyframes stickySlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-80px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+.nav-list li :hover {
+  color: var(--color-text-primary);
+  transition: 0.5s;
+}
+.sticky-top {
+  position: fixed !important;
+  top: 0px;
+  animation: stickySlideDown 1s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+footer .info div {
+  width: 100%;
+  padding: 5px;
+}
+footer .separator {
+  width: 70%;
+  background-color: #313a4c;
+  height: 2px;
+}

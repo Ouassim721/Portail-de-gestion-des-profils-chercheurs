@@ -33,7 +33,7 @@ function Navbar() {
 
   return (
     <nav
-      className={`relative w-full p-4 pr-8 flex items-center justify-between z-10 duration-300 ${
+      className={`relative w-full h-[80px] p-4 pr-8 flex items-center justify-between z-10 duration-300 ${
         isSticky
           ? "bg-[var(--color-white)] shadow-md sticky-top"
           : "bg-[var(--color-bg)]"
@@ -41,7 +41,7 @@ function Navbar() {
     >
       {/* Logo et recherche */}
       <div className="flex items-center gap-12">
-        <img src={logo} alt="Logo" className="w-16" />
+        <img src={logo} alt="Logo" className="w-[80px] h-[70px]" />
 
         {/* Barre de recherche - Visible sur grand écran */}
         <div className="hidden sm:flex relative">

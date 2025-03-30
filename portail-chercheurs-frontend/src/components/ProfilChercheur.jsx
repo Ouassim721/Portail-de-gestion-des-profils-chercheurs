@@ -1,4 +1,3 @@
-import "./ProfilChercheur.css";
 import Card from "./Card";
 import pdp from "../assets/chercheur-place-holder.jpg";
 import {
@@ -33,7 +32,7 @@ function ProfilChercheur({ chercheur }) {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 grid-rows-[auto_1fr_1fr] gap-4 mt-8">
-      <section className="col-span-2 box p-8 md:p-8 rounded-2xl bg-[var(--color-white)] text-[var(--color-text-primary)]">
+      <section className="col-span-2 shadow-[0_0_20px_rgba(0,0,0,0.25)] p-8 md:p-8 rounded-2xl bg-[var(--color-white)] text-[var(--color-text-primary)]">
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-12 lg:gap-16">
           <img
             src={pdp}
@@ -70,7 +69,7 @@ function ProfilChercheur({ chercheur }) {
           </ul>
         </div>
       </section>
-      <section className="stats col-span-2 md:col-span-1 row-span-3 box p-8 rounded-2xl bg-[var(--color-white)] text-[var(--color-text-primary)]">
+      <section className="stats col-span-2 md:col-span-1 row-span-3 shadow-[0_0_20px_rgba(0,0,0,0.25)] p-8 rounded-2xl bg-[var(--color-white)] text-[var(--color-text-primary)]">
         <div className="flex flex-col gap-4 md-gap-8">
           <h3 className="text-md font-medium tracking-wider text-center">
             Publications par Année
@@ -116,7 +115,7 @@ function ProfilChercheur({ chercheur }) {
           </div>
         </div>
       </section>
-      <section className="col-span-2 row-span-2 box p-8 md:p-16 rounded-2xl bg-[var(--color-white)] text-[var(--color-text-primary)]">
+      <section className="col-span-2 row-span-2 shadow-[0_0_20px_rgba(0,0,0,0.25)] p-8 md:p-16 rounded-2xl bg-[var(--color-white)] text-[var(--color-text-primary)]">
         <h1 className="text-2xl font-semibold mb-12 text-[var(--color-text-primary)] ml-3 ">
           Publications
         </h1>

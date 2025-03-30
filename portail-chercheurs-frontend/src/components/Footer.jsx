@@ -2,7 +2,7 @@ import "./Footer.css"; // Import du fichier de style
 
 const Footer = () => {
   return (
-    <footer className="px-10 py-12 ">
+    <footer className="px-5 sm:px-8 md:px-10 py-6 sm:py-8 md:py-12 relative bottom-0 bg-[#111827]">
       <div className="info flex flex-col lg:flex-row justify-around gap-8">
         <div className="flex flex-col sm:flex-row justify-around gap-8">
           <div className="apropos ">
