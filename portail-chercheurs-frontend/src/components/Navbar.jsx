@@ -5,7 +5,7 @@ import logo from "../assets/logo.png";
 import pdp from "../assets/chercheur-place-holder.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
-import "./Navbar.css";
+
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
@@ -26,8 +26,8 @@ function Navbar() {
     Accueil: "/",
     Chercheurs: "/chercheurs",
     Publications: "/publications",
-    Actualité: "/news", // Exemple d'exception
-    "À propos": "/about-us", // Exemple d'exception
+    Actualité: "/Actualite",
+    "À propos": "/about-us",
     Contact: "/contact",
   };
 

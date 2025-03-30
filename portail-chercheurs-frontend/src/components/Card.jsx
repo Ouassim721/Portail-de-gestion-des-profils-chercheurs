@@ -7,6 +7,8 @@ const Card = ({ id, title, author, image, footer, className, cardType }) => {
     publication:
       "bg-[var(--color-white)]  w-[100%] flex flex-col md:flex-row items-center px-4 gap-4 md:gap-10",
     projet: "bg-green-50 p-4",
+    actualite:
+      "bg-[var(--color-white)]  w-[100%] flex flex-col md:flex-row items-center px-4 gap-4 md:gap-10",
   };
 
   return (
