@@ -39,11 +39,14 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
   };
 
   return (
-    <nav className="pagination m-12" aria-label="Pagination">
+    <nav
+      className="flex justify-center my-12 text-sm md:text-base flex-wrap"
+      aria-label="Pagination"
+    >
       <div className="flex justify-center mt-6">
         <button
           type="button"
-          className={`px-4 py-2  cursor-pointer ${
+          className={`px-3 sm:px-4 py-2  cursor-pointer ${
             currentPage === 1
               ? "hidden"
               : "bg-[var(--color-white)] text-[var(--color-text-primary)] border border-gray-200 hover:bg-gray-200"
@@ -52,7 +55,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
           onClick={() => handlePageChange(currentPage - 1)}
           aria-label="Page précédente"
         >
-          ◀ Précédent
+          ◀
         </button>
 
         {getPaginationRange().map((page, index) =>
@@ -68,7 +71,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
             <button
               key={page}
               type="button"
-              className={`px-6 py-3 cursor-pointer ${
+              className={`px-6 py-3 sm:px-6 sm:py-3 cursor-pointer ${
                 currentPage === page
                   ? "bg-[var(--color-primary)] text-[var(--color-white)] font-bold"
                   : "bg-[var(--color-white)] border border-gray-200 hover:bg-gray-200 text-[var(--color-text-primary)]"
@@ -93,7 +96,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
           onClick={() => handlePageChange(currentPage + 1)}
           aria-label="Page suivante"
         >
-          Suivant ▶
+          ▶
         </button>
       </div>
     </nav>
