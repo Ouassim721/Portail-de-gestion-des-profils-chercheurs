@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom"; // Importation des outils de r
 import Home from "./pages/Home";
 import Chercheurs from "./pages/Chercheurs";
 import Actualite from "./pages/Actualite";
+import Profil from "./pages/Profil";
 import Layout from "./components/Layout";
 import ProfilChercheur from "./components/ProfilChercheur";
 
@@ -20,6 +21,8 @@ function App() {
           <Route path="/profil-chercheur/:id" element={<ProfilChercheur />} />
           {/* Page D'actualités */}
           <Route path="/actualite" element={<Actualite />} />
+          {/* Page De Profil Chercheur */}
+          <Route path="/profil" element={<Profil />} />
         </Route>
       </Routes>
     </>
