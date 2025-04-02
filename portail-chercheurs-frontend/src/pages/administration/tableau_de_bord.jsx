@@ -1,13 +1,10 @@
 import React from 'react';
-import SideMenu from '../../components/SideMenu';
 import TopBar from '../../components/topbar';
 import Dashboard from '../../components/Dashboard';
 
 function AdminPage() {
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
-      <SideMenu />
 
       {/* Contenu principal */}
       <div className="flex-1 flex flex-col">
