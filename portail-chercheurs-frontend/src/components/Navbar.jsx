@@ -29,6 +29,7 @@ function Navbar() {
     Actualité: "/Actualite",
     "À propos": "/about-us",
     Contact: "/contact",
+    connexion: "/connexion",
   };
 
   return (
@@ -66,6 +67,7 @@ function Navbar() {
           "Actualité",
           "À propos",
           "Contact",
+          "connexion" ,
         ].map((item, index) => {
           const path =
             routesMap[item] || `/${item.toLowerCase().replace(" ", "-")}`;
@@ -120,6 +122,7 @@ function Navbar() {
           "Actualité",
           "À propos",
           "Contact",
+          "connexion" ,
         ].map((item, index) => {
           const path =
             routesMap[item] || `/${item.toLowerCase().replace(" ", "-")}`;

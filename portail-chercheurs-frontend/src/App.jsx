@@ -1,26 +1,32 @@
 import "./index.css";
-import { Routes, Route } from "react-router-dom"; // Importation des outils de routage
+import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Chercheurs from "./pages/Chercheurs";
 import Actualite from "./pages/Actualite";
 import Layout from "./components/Layout";
 import ProfilChercheur from "./components/ProfilChercheur";
-
+import Connexion from "./pages/connexion";
+import AdminConnexion from "./pages/administration/AdminConnexion";
+import AdminPage from "./pages/administration/tableau_de_bord";
+import AdminChercheurs from "./pages/administration/AdminChercheurs";
+import CreationChercheur from "./pages/administration/CreationChercheur";
 function App() {
   return (
     <>
-      <Routes>
-        {/* Définition des routes principales */}
+      <Routes>        
         <Route path="/" element={<Layout />}>
-          {/* Page d'accueil */}
           <Route index element={<Home />} />
-          {/* Page chercheurs */}
-          <Route path="chercheurs" element={<Chercheurs />} />{" "}
-          {/* Page profil chercheurs */}
+          <Route path="chercheurs" element={<Chercheurs />} />
           <Route path="/profil-chercheur/:id" element={<ProfilChercheur />} />
-          {/* Page D'actualités */}
           <Route path="/actualite" element={<Actualite />} />
         </Route>
+
+        <Route path="/connexion" element={<Connexion />} />
+        <Route path="/adminconnexion" element={<AdminConnexion />} />
+        <Route path="/tableau_de_bord" element={<AdminPage />} />
+        <Route path="/AdminChercheurs" element={<AdminChercheurs />} />
+        <Route path="/CreationChercheur" element={<CreationChercheur />} />
+
       </Routes>
     </>
   );
