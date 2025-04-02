@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Chercheurs from "./pages/Chercheurs";
 import Actualite from "./pages/Actualite";
+import Profil from "./pages/Profil";
 import Layout from "./components/Layout";
 import ProfilChercheur from "./components/ProfilChercheur";
 import Connexion from "./pages/connexion";
@@ -19,6 +20,8 @@ function App() {
           <Route path="chercheurs" element={<Chercheurs />} />
           <Route path="/profil-chercheur/:id" element={<ProfilChercheur />} />
           <Route path="/actualite" element={<Actualite />} />
+          {/* Page De Profil Chercheur */}
+          <Route path="/profil" element={<Profil />} />
         </Route>
 
         <Route path="/connexion" element={<Connexion />} />
