@@ -1,8 +1,10 @@
+import { useState, useEffect } from "react";
 import Card from "./Card";
 import pdp from "../assets/chercheur-place-holder.jpg";
 import Button from "./Button";
+import UserSettingsPopup from "./UserSettingsPopup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSliders } from "@fortawesome/free-solid-svg-icons";
+import { faSliders, faTimes } from "@fortawesome/free-solid-svg-icons";
 import {
   BarChart,
   Bar,
@@ -32,7 +34,22 @@ function ProfilChercheur({ chercheur, pov = "invite" }) {
     { name: "Autres", value: 3 },
   ];
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"]; // Couleurs pour chaque catégorie
+  const [editPopup, setEditPopup] = useState(false);
 
+  const openPopup = () => {
+    setEditPopup(true);
+  };
+
+  const closePopup = () => {
+    setEditPopup(null);
+  };
+  useEffect(() => {
+    if (editPopup) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [editPopup]);
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 grid-rows-[auto_1fr_1fr] gap-4 mt-8">
       <section className="col-span-2 shadow-[0_0_20px_rgba(0,0,0,0.25)] p-8 md:p-8 rounded-2xl bg-[var(--color-white)] text-[var(--color-text-primary)]">
@@ -56,9 +73,22 @@ function ProfilChercheur({ chercheur, pov = "invite" }) {
                     variant="neutral"
                     icon={faSliders}
                     className="text-sm p-2!"
+                    onClick={openPopup}
                   >
                     Modifier
                   </Button>
+                </div>
+              )}
+              {editPopup && (
+                <div className="popup-overlay">
+                  <div className="popup-content w-[95%] h-[90%] sm:w-[80%] md:w-[65%] lg:w-[60%]  xl:w-[50%] ">
+                    {/* Bouton de fermeture */}
+                    <button className="close-btn" onClick={closePopup}>
+                      <FontAwesomeIcon icon={faTimes} />
+                    </button>
+                    {/* Affichage du profil */}
+                    <UserSettingsPopup></UserSettingsPopup>
+                  </div>
                 </div>
               )}
             </div>

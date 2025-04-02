@@ -6,7 +6,7 @@ import pdp from "../assets/chercheur-place-holder.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 
-function Navbar() {
+function Navbar({ sticky = false }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
 
@@ -34,9 +34,9 @@ function Navbar() {
   return (
     <nav
       className={`relative w-full h-[80px] p-4 pr-8 flex items-center justify-between z-10 duration-300 ${
-        isSticky
+        isSticky && sticky == true
           ? "bg-[var(--color-white)] shadow-md sticky-top"
-          : "bg-[var(--color-bg)]"
+          : "bg-[var(--color-white)] shadow-sm "
       } `}
     >
       {/* Logo et recherche */}
