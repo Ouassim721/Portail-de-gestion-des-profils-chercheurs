@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Button from "../components/Button";
 import connexionImg from "../assets/connexion.png";
 
@@ -82,9 +83,9 @@ const LoginPage = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 text-gray-500 hover:text-blue-600"
+                  className="absolute right-3 top-3 text-gray-500 hover:text-blue-600 focus:outline-none"
                 >
-                  {showPassword ? "🔒" : "👁️"}
+                  {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
                 </button>
               </div>
             </div>
