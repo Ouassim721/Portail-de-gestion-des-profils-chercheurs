@@ -1,16 +1,23 @@
-import "./index.css";
-import { Routes, Route } from "react-router-dom";
+import "./index.css"; import { Routes, Route } from "react-router-dom";
+
+// Pages publiques
 import Home from "./pages/Home";
 import Chercheurs from "./pages/Chercheurs";
 import Actualite from "./pages/Actualite";
 import Profil from "./pages/Profil";
-import Layout from "./components/Layout";
 import ProfilChercheur from "./components/ProfilChercheur";
+import Layout from "./components/Layout";
+import Publications from "./pages/Publications";
+
+// Authentification
 import Connexion from "./pages/connexion";
 import AdminConnexion from "./pages/administration/AdminConnexion";
+
+// Administration
 import AdminPage from "./pages/administration/tableau_de_bord";
 import AdminChercheurs from "./pages/administration/AdminChercheurs";
 import CreationChercheur from "./pages/administration/CreationChercheur";
+
 function App() {
   return (
     <>
@@ -20,7 +27,8 @@ function App() {
           <Route path="chercheurs" element={<Chercheurs />} />
           <Route path="/profil-chercheur/:id" element={<ProfilChercheur />} />
           <Route path="/actualite" element={<Actualite />} />
-          {/* Page De Profil Chercheur */}
+          <Route path="/Publications" element={<Publications />} />
+          
           <Route path="/profil" element={<Profil />} />
         </Route>
 
