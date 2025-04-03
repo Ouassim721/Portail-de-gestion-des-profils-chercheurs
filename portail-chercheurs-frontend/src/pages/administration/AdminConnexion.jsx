@@ -6,7 +6,7 @@ const AdminLogin = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    navigate("/tableau");
+    navigate("/tableau_de_bord");
   };
 
   return (

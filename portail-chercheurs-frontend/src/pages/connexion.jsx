@@ -28,11 +28,11 @@ const LoginPage = () => {
   return (
     <div className="h-screen overflow-hidden flex flex-col md:flex-row">
       {/* Section Image - Dimensions fixes */}
-      <div 
+      <div
         className="hidden md:flex md:w-1/2 h-full bg-gray-50 items-center justify-center p-8"
         style={{ minWidth: "696px" }}
       >
-        <img 
+        <img
           src={connexionImg}
           alt="Interface de connexion sécurisée"
           className="w-[696px] h-[1024px] object-contain"
@@ -48,7 +48,10 @@ const LoginPage = () => {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Adresse Email
               </label>
               <input
@@ -62,7 +65,10 @@ const LoginPage = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Mot de passe
               </label>
               <div className="relative">
@@ -86,8 +92,8 @@ const LoginPage = () => {
             {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
             <div className="text-right">
-              <a 
-                href="#mot-de-passe-oublie" 
+              <a
+                href="#mot-de-passe-oublie"
                 className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
               >
                 Mot de passe oublié ?
@@ -97,7 +103,7 @@ const LoginPage = () => {
             <Button
               type="submit"
               variant="primary"
-              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex justify-center focus:outline-none focus:shadow-outline w-full"
             >
               Se Connecter
             </Button>
