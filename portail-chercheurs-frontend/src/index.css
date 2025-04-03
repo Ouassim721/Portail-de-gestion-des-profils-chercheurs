@@ -49,3 +49,6 @@ footer .separator {
   background-color: #313a4c;
   height: 2px;
 }
+button {
+  cursor: pointer;
+}
