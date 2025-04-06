@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import "./Chercheurs.css"; // Import du fichier CSS
+import { getChercheurs } from "../services/api";
+import "./Chercheurs.css";
 import { Link } from "react-router-dom";
 import Button from "../components/Button";
 import DropdownButton from "../components/DropdownButton";
@@ -645,6 +646,18 @@ const chercheursData = [
 ];
 
 function Chercheurs() {
+  //*********************************************************************/
+  const [chercheurs, setChercheurs] = useState([]); //useState pour le fetch API
+  useEffect(() => {
+    getChercheurs()
+      .then((response) => {
+        setChercheurs(response.data);
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la récupération des chercheurs!", error);
+      });
+  }, []);
+  //*********************************************************************/
   const [chercheurSelectionne, setChercheurSelectionne] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const chercheursPerPage = 10;
