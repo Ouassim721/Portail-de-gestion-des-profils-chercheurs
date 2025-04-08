@@ -8,7 +8,7 @@
   --color-secondary: #00c49a;
   --color-text-primary: #2c2c2c;
   --color-text-secondary: #3a3a3a;
-  --color-bg: #f8f9fa;
+  --color-bg: #f9fafb;
   --color-bg-secondary: #f1f1f1;
   --color-white: #fefefe;
   --color-gray: #b0b0b0;
@@ -24,7 +24,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+body {
+  background-color: var(--color-bg) !important;
+}
 @keyframes stickySlideDown {
   from {
     opacity: 0;

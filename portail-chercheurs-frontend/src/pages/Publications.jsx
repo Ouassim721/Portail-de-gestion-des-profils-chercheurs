@@ -5,7 +5,7 @@ import { FaFileAlt, FaSearch, FaPlus, FaFilter } from "react-icons/fa";
 import SearchBar from "../components/research/SearchBar";
 import Button from "../components/Button";
 import DropdownButton from "../components/DropdownButton";
-
+import CardStatPublication from "../components/cards/CardStatPublication";
 const PublicationsPage = () => {
   const publications = [
     {
@@ -92,6 +92,12 @@ const PublicationsPage = () => {
         </div>
       </div>
       <main className="max-w-7xl mx-auto p-8">
+        <section className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4 my-6 mb-10">
+          <CardStatPublication stat="2,456" title="Chercheur Actif" />
+          <CardStatPublication variant="secondary" />
+          <CardStatPublication />
+          <CardStatPublication variant="secondary" />
+        </section>
         {/* En-tête */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
           <div className="mb-4 md:mb-0">
