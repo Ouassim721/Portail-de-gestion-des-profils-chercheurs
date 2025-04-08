@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Card from "./Card";
+import Card from "./cards/Card";
 import pdp from "../assets/chercheur-place-holder.jpg";
 import Button from "./Button";
 import UserSettingsPopup from "./UserSettingsPopup";
