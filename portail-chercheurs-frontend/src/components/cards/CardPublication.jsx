@@ -13,7 +13,10 @@ const CardPublication = ({
   citations = "156",
 }) => {
   return (
-    <div className="w-full p-4 lg:p-8 bg-[var(--color-white)] flex flex-col lg:flex-row gap-8 mx-auto my-4">
+    <div
+      className="w-full p-4 lg:p-8 bg-[var(--color-white)] flex flex-col lg:flex-row gap-8 mx-auto my-4 drop-shadow-md
+ hover:scale-101 duration-300"
+    >
       <div className="flex flex-col gap-4">
         <h2 className="text-lg font-medium text-[var(--color-primary)] md:text-xl">
           {title}
