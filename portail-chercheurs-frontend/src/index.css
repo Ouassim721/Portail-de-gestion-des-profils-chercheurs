@@ -1,4 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 @import "tailwindcss";
 
 :root {
@@ -6,21 +8,29 @@
   --color-secondary: #00c49a;
   --color-text-primary: #2c2c2c;
   --color-text-secondary: #3a3a3a;
-  --color-bg: #f8f9fa;
+  --color-bg: #f9fafb;
   --color-bg-secondary: #f1f1f1;
   --color-white: #fefefe;
   --color-gray: #b0b0b0;
-  --font-base: "Roboto", sans-serif;
+  --font-base: "Inter", sans-serif;
   --spacing-base: 1rem;
 }
 :root {
   font-family: var(--font-base);
+  line-height: 20px;
+  letter-spacing: 0;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+body {
+  background-color: var(--color-bg) !important;
+}
+body::selection {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
 @keyframes stickySlideDown {
   from {
     opacity: 0;

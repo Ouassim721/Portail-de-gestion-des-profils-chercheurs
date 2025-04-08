@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 //import { faSliders } from "@fortawesome/free-solid-svg-icons";
 import DropdownButton from "../components/DropdownButton";
 import Pagination from "../components/Pagination";
-import Card from "../components/Card";
+import Card from "../components/cards/Card";
 
 const Actualite = () => {
   const fakeData = [

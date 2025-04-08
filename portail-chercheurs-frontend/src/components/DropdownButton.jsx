@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import Button from "./Button"; // Importer le composant Button
@@ -8,15 +8,30 @@ const DropdownButton = ({
   children,
   variant = "primary",
   options = [],
+  iconPosition = "left",
+  className = "",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef(null);
 
+  // Fermer le menu lorsqu'on clique en dehors
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-block " ref={menuRef}>
       <Button
         onClick={() => setIsOpen(!isOpen)}
-        icon={icon || faChevronDown} // Icône par défaut (flèche vers le bas)
+        icon={icon || faChevronDown}
         variant={variant}
+        iconPosition={iconPosition}
+        className={className}
       >
         {children}
       </Button>
