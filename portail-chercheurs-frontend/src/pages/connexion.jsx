@@ -1,7 +1,15 @@
 import React, { useState } from "react";
-import { MdLock, MdEmail, MdVisibility, MdVisibilityOff, MdScience, MdPublic, MdArticle } from "react-icons/md";
+import {
+  MdLock,
+  MdEmail,
+  MdVisibility,
+  MdVisibilityOff,
+  MdScience,
+  MdPublic,
+  MdArticle,
+} from "react-icons/md";
 import { FaRegLightbulb } from "react-icons/fa";
-import connixionImage from "../assets/connexion.png";
+import connexionImage from "../assets/connexion.png";
 
 export default function ScholarHubLogin() {
   const [email, setEmail] = useState("");
@@ -26,17 +34,19 @@ export default function ScholarHubLogin() {
         {/* Partie gauche (informations) : cachée sur mobile */}
         <div
           className="hidden md:flex md:flex-col md:justify-center md:w-1/2 relative p-8 bg-blue-900 bg-blend-overlay bg-cover bg-center"
-          style={{ backgroundImage: `url(${connixionImage})` }}
+          style={{ backgroundImage: `url(${connexionImage})` }}
         >
           {/* Overlay sombre pour la lisibilité */}
           <div className="absolute inset-0 bg-blue-900 opacity-60"></div>
           <div className="relative z-10">
             <h1 className="mb-8 text-3xl font-bold text-white">ScholarHub</h1>
             <p className="mb-4 flex items-center text-xl font-semibold text-white">
-              <FaRegLightbulb className="mr-2 text-2xl" /> Gérez votre profil de recherche
+              <FaRegLightbulb className="mr-2 text-2xl" /> Gérez votre profil de
+              recherche
             </p>
             <p className="mb-6 text-white">
-              Connectez-vous avec la communauté scientifique pour collaborer, publier et échanger sur vos travaux de recherche.
+              Connectez-vous avec la communauté scientifique pour collaborer,
+              publier et échanger sur vos travaux de recherche.
             </p>
             <ul className="space-y-4 text-white">
               <li className="flex items-center">
@@ -58,10 +68,15 @@ export default function ScholarHubLogin() {
         {/* Partie droite (formulaire de connexion) */}
         <div className="flex flex-col justify-center p-8 md:w-1/2">
           <div className="w-full">
-            <h2 className="mb-8 text-2xl font-bold text-gray-700 text-center">Connexion Chercheur</h2>
+            <h2 className="mb-8 text-2xl font-bold text-gray-700 text-center">
+              Connexion Chercheur
+            </h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-6">
-                <label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="email"
+                  className="mb-2 block text-sm font-medium text-gray-700"
+                >
                   Email Institutionnel
                 </label>
                 <div className="flex items-center rounded border border-gray-300">
@@ -79,7 +94,10 @@ export default function ScholarHubLogin() {
               </div>
 
               <div className="mb-6">
-                <label htmlFor="password" className="mb-2 block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="password"
+                  className="mb-2 block text-sm font-medium text-gray-700"
+                >
                   Mot de passe
                 </label>
                 <div className="relative flex items-center rounded border border-gray-300">
@@ -97,7 +115,11 @@ export default function ScholarHubLogin() {
                     className="absolute right-2 cursor-pointer text-gray-500"
                     onClick={toggleShowPassword}
                   >
-                    {showPassword ? <MdVisibilityOff size={24} /> : <MdVisibility size={24} />}
+                    {showPassword ? (
+                      <MdVisibilityOff size={24} />
+                    ) : (
+                      <MdVisibility size={24} />
+                    )}
                   </div>
                 </div>
               </div>
@@ -109,7 +131,10 @@ export default function ScholarHubLogin() {
                     type="checkbox"
                     className="h-4 w-4 text-blue-600 focus:ring-blue-500"
                   />
-                  <label htmlFor="remember" className="ml-2 text-sm text-gray-600">
+                  <label
+                    htmlFor="remember"
+                    className="ml-2 text-sm text-gray-600"
+                  >
                     Se souvenir de moi
                   </label>
                 </div>

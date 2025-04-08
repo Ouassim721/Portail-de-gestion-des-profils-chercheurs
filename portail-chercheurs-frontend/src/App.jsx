@@ -1,4 +1,5 @@
-import "./index.css"; import { Routes, Route } from "react-router-dom";
+import "./index.css";
+import { Routes, Route } from "react-router-dom";
 
 // Pages publiques
 import Home from "./pages/Home";
@@ -11,7 +12,7 @@ import Publications from "./pages/Publications";
 import DetailsPublication from "./pages/DetailsPublication";
 
 // Authentification
-import Connexion from "./pages/connexion";
+import Connexion from "./pages/Connexion";
 import AdminConnexion from "./pages/administration/AdminConnexion";
 
 // Administration
@@ -22,16 +23,18 @@ import CreationChercheur from "./pages/administration/CreationChercheur";
 function App() {
   return (
     <>
-      <Routes>        
+      <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="chercheurs" element={<Chercheurs />} />
           <Route path="/profil-chercheur/:id" element={<ProfilChercheur />} />
           <Route path="/actualite" element={<Actualite />} />
           <Route path="/Publications" element={<Publications />} />
-          <Route path="/details-publication/:id" element={<DetailsPublication />} />
+          <Route
+            path="/details-publication/:id"
+            element={<DetailsPublication />}
+          />
 
-          
           <Route path="/profil" element={<Profil />} />
         </Route>
 
@@ -40,7 +43,6 @@ function App() {
         <Route path="/tableau_de_bord" element={<AdminPage />} />
         <Route path="/AdminChercheurs" element={<AdminChercheurs />} />
         <Route path="/CreationChercheur" element={<CreationChercheur />} />
-
       </Routes>
     </>
   );
