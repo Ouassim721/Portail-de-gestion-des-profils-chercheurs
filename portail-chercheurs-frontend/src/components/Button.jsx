@@ -28,8 +28,9 @@ const Button = ({
       className={`${baseStyles} ${variantStyles[variant]} ${className}`}
     >
       {/* Utilise FontAwesome pour l'icône */}
-      {children}
+
       {icon && <FontAwesomeIcon icon={icon} className="w-5 h-5" />}
+      {children}
     </button>
   );
 };
