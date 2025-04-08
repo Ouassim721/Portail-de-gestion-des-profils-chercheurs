@@ -8,6 +8,7 @@ import Profil from "./pages/Profil";
 import ProfilChercheur from "./components/ProfilChercheur";
 import Layout from "./components/Layout";
 import Publications from "./pages/Publications";
+import DetailsPublication from "./pages/DetailsPublication";
 
 // Authentification
 import Connexion from "./pages/connexion";
@@ -28,6 +29,8 @@ function App() {
           <Route path="/profil-chercheur/:id" element={<ProfilChercheur />} />
           <Route path="/actualite" element={<Actualite />} />
           <Route path="/Publications" element={<Publications />} />
+          <Route path="/details-publication/:id" element={<DetailsPublication />} />
+
           
           <Route path="/profil" element={<Profil />} />
         </Route>
