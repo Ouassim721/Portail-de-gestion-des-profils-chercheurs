@@ -1,6 +1,6 @@
 import pdp from "../../assets/chercheur-place-holder.jpg";
 import Button from "../Button";
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faDownload, faShareNodes } from "@fortawesome/free-solid-svg-icons";
 
 const CardPublication = ({
   title = "Intelligence Artificielle et Apprentissage Automatique : Une Approche Moderne",
@@ -13,7 +13,7 @@ const CardPublication = ({
   citations = "156",
 }) => {
   return (
-    <div className="w-full p-4 lg:p-8 bg-[var(--color-white)] flex flex-col lg:flex-row gap-8">
+    <div className="w-full p-4 lg:p-8 bg-[var(--color-white)] flex flex-col lg:flex-row gap-8 mx-auto my-4">
       <div className="flex flex-col gap-4">
         <h2 className="text-lg font-medium text-[var(--color-primary)] md:text-xl">
           {title}
@@ -42,13 +42,34 @@ const CardPublication = ({
           })}
         </div>
       </div>
-      <div className="flex justify-between items-center">
-        <h6 className="font-light text-sm text-neutral-500">
-          Publié le {date}
-        </h6>
-        <Button icon={faDownload} variant="secondary">
-          Télécharger
-        </Button>
+      <div className="flex lg:flex-col justify-between lg:justify- items-center  lg:w-1/3">
+        <div className="lg:flex lg:flex-col lg:gap-2 lg:text-right lg:w-full lg:pr-3">
+          <h6 className="font-light text-sm text-neutral-500">
+            Publié le {date}
+          </h6>
+          <h5 className="hidden lg:block font-bold text-xl">
+            {citations}{" "}
+            <span className="font-light text-neutral-700 text-sm">
+              Citations
+            </span>
+          </h5>
+        </div>
+        <div className="flex lg:flex-col gap-4 lg:w-full">
+          <Button
+            icon={faDownload}
+            variant="secondary"
+            className="font-light! h-10"
+          >
+            Télécharger PDF
+          </Button>
+          <Button
+            icon={faShareNodes}
+            variant="secondaryoutline"
+            className="font-light! h-10"
+          >
+            Partager
+          </Button>
+        </div>
       </div>
     </div>
   );

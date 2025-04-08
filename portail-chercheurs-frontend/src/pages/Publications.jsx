@@ -1,4 +1,3 @@
-import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FaFileAlt, FaSearch, FaPlus, FaFilter } from "react-icons/fa";
@@ -7,24 +6,7 @@ import Button from "../components/Button";
 import DropdownButton from "../components/DropdownButton";
 import CardStatPublication from "../components/cards/CardStatPublication";
 import CardPublication from "../components/cards/CardPublication";
-const PublicationsPage = () => {
-  /* const publications = [
-    {
-      id: 1,
-      title: "Les nouvelles méthodes d'IA en médecine",
-      author: "Dr. Marie Dupont",
-      date: "2024-03-15",
-      status: "Publié",
-    },
-    {
-      id: 2,
-      title: "Optimisation des algorithmes quantiques",
-      author: "Prof. Jean Martin",
-      date: "2024-03-12",
-      status: "En révision",
-    },
-  ];*/
-
+const Publications = () => {
   return (
     <div className="min-h-screen ">
       <div className="w-full bg-[var(--color-primary)] flex flex-col lg:flex-row gap-4 items-center p-4">
@@ -34,12 +16,13 @@ const PublicationsPage = () => {
             placeHolder="Rechercher des publications..."
           />
         </div>
-        <div className="w-full flex flex-col sm:flex-row gap-4 sm:justify-between items-center">
-          <div className="w-full flex justify-between sm:justify-start lg:justify-end sm:gap-8 px-2">
+        <div className="w-full flex flex-col sm:flex-row gap-8 sm:justify-between items-center">
+          <div className="w-full flex justify-between sm:justify-start lg:justify-end sm:gap-6 px-2">
             <DropdownButton
               icon={faChevronDown}
               children="Année"
               variant="neutral"
+              iconPosition="right"
               options={[
                 {
                   label: "2025",
@@ -63,6 +46,7 @@ const PublicationsPage = () => {
               icon={faChevronDown}
               children="Domaine"
               variant="neutral"
+              iconPosition="right"
               options={[
                 {
                   label: "IA",
@@ -102,6 +86,9 @@ const PublicationsPage = () => {
         <section>
           <div>
             <CardPublication />
+            <CardPublication />
+            <CardPublication />
+            <CardPublication />
           </div>
         </section>
       </main>
@@ -109,4 +96,4 @@ const PublicationsPage = () => {
   );
 };
 
-export default PublicationsPage;
+export default Publications;

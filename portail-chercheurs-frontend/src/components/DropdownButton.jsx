@@ -8,6 +8,8 @@ const DropdownButton = ({
   children,
   variant = "primary",
   options = [],
+  iconPosition = "left",
+  className = "",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
@@ -28,6 +30,8 @@ const DropdownButton = ({
         onClick={() => setIsOpen(!isOpen)}
         icon={icon || faChevronDown}
         variant={variant}
+        iconPosition={iconPosition}
+        className={className}
       >
         {children}
       </Button>

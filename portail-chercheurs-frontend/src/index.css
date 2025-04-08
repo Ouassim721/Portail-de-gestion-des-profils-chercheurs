@@ -27,6 +27,10 @@
 body {
   background-color: var(--color-bg) !important;
 }
+body::selection {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
 @keyframes stickySlideDown {
   from {
     opacity: 0;
