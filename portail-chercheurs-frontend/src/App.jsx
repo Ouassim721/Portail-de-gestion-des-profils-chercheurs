@@ -12,7 +12,7 @@ import Publications from "./pages/Publications";
 import DetailsPublication from "./pages/DetailsPublication";
 
 // Authentification
-import Connexion from "./pages/Connexion";
+import Connexion from "./pages/connexion";
 import AdminConnexion from "./pages/administration/AdminConnexion";
 
 // Administration

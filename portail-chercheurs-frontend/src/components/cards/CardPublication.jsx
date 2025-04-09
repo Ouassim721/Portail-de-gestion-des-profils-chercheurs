@@ -14,7 +14,7 @@ const CardPublication = ({
 }) => {
   return (
     <div
-      className="w-full p-4 lg:p-8 bg-[var(--color-white)] flex flex-col lg:flex-row gap-8 mx-auto my-4 drop-shadow-md
+      className="w-full p-4 lg:p-8 bg-[var(--color-white)] flex flex-col lg:flex-row gap-8 mx-auto my-4 drop-shadow-md hover:drop-shadow-lg
  hover:scale-101 duration-300"
     >
       <div className="flex flex-col gap-4">

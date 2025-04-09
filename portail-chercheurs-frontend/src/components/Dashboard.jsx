@@ -1,5 +1,5 @@
-import React from 'react';
-import { Line } from 'react-chartjs-2';
+import React from "react";
+import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,28 +9,37 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
+} from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 function Dashboard() {
   // Génère des valeurs aléatoires pour les données du graphique
-  const randomData = Array.from({ length: 7 }, () => Math.floor(Math.random() * 20));
+  const randomData = Array.from({ length: 7 }, () =>
+    Math.floor(Math.random() * 20)
+  );
   const data = {
-    labels: ['Déc', 'Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin'],
+    labels: ["Déc", "Jan", "Fév", "Mar", "Avr", "Mai", "Juin"],
     datasets: [
       {
-        label: 'Chercheurs',
+        label: "Chercheurs",
         data: randomData,
-        borderColor: '#3b82f6', // bleu-500 de Tailwind
-        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+        borderColor: "var(--color-primary)", // bleu-500 de Tailwind
+        backgroundColor: "rgba(59, 130, 246, 0.2)",
         fill: true,
         tension: 0.3,
       },
     ],
   };
 
-  // Options de configuration du graphique
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -68,8 +77,12 @@ function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Section graphique */}
         <div className="bg-white rounded-md p-4 shadow">
-          <h2 className="text-lg font-bold mb-2">Statistiques des chercheurs</h2>
-          <p className="text-xs text-gray-500 mb-4">Déc - Juin (les 6 derniers mois)</p>
+          <h2 className="text-lg font-bold mb-2">
+            Statistiques des chercheurs
+          </h2>
+          <p className="text-xs text-gray-500 mb-4">
+            Déc - Juin (les 6 derniers mois)
+          </p>
           <div className="h-64">
             <Line data={data} options={options} />
           </div>

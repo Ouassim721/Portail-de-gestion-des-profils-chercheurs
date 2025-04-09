@@ -10,7 +10,7 @@ const CardStatPublication = ({
 }) => {
   return (
     <div className={className}>
-      <div className="w-74 h-24 flex gap-3 bg-[var(--color-white)] rounded-xl shadow-sm hover:scale-102 duration-300">
+      <div className="w-74 h-24 flex gap-3 bg-[var(--color-white)] rounded-xl shadow-xs hover:scale-101 duration-300">
         <div className="flex justify-center items-center p-5">
           <div
             className={`rounded-xl ${
