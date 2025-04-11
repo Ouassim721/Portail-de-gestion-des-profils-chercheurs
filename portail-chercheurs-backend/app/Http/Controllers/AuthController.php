@@ -21,10 +21,14 @@ class AuthController extends Controller
             'email' => $validated['email'],
             'password' => bcrypt($validated['password']),
         ]);
-
+        $user->sendEmailVerificationNotification();
         $token = Auth::guard('api')->login($user);
 
-        return response()->json(['user' => $user, 'token' => $token]);
+        return response()->json([
+            'user' => $user,
+            'token' => $token,
+            'message' => 'Utilisateur créé. Un e-mail de vérification a été envoyé.'
+        ]);
     }
 
     public function login(Request $request)
