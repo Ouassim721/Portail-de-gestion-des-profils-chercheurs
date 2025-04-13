@@ -34,17 +34,17 @@ const DropdownMenu = ({ children, options = [] }) => {
           {options.map((option, index) => (
             <div
               key={index}
-              className="w-full px-4 py-2 hover:bg-blue-100 hover:text-blue-600 cursor-pointer flex items-center gap-2"
+              className="w-full px-4 py-2 hover:bg-blue-100 hover:text-blue-600 cursor-pointer flex items-center gap-4"
               onClick={() => {
                 if (!option.link && option.onClick) option.onClick();
                 setIsOpen(false);
               }}
             >
-              <FontAwesomeIcon icon={option.icon} className="text-gray-600" />
+              <FontAwesomeIcon icon={option.icon} className="text-lg" />
               {option.link ? (
                 <Link
                   to={option.link}
-                  className="w-full block text-inherit no-underline hover:text-inherit"
+                  className="w-full block text-inherit no-underline hover:text-inherit "
                 >
                   {option.label}
                 </Link>

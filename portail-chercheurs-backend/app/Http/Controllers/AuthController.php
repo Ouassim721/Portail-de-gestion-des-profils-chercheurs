@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -21,25 +22,41 @@ class AuthController extends Controller
             'email' => $validated['email'],
             'password' => bcrypt($validated['password']),
         ]);
+
+        // Envoie l'email de vérification
         $user->sendEmailVerificationNotification();
-        $token = Auth::guard('api')->login($user);
 
         return response()->json([
-            'user' => $user,
-            'token' => $token,
-            'message' => 'Utilisateur créé. Un e-mail de vérification a été envoyé.'
+            'message' => 'Utilisateur créé. Veuillez vérifier votre e-mail pour activer votre compte.'
         ]);
     }
 
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
+        $user = User::where('email', $credentials['email'])->first();
 
-        if (!$token = Auth::guard('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if (!$user || !Hash::check($credentials['password'], $user->password)) {
+            return response()->json(['error' => 'Identifiants incorrects.'], 401);
         }
 
-        return response()->json(['token' => $token]);
+        // Vérifier si l'email est confirmé
+        if (!$user->hasVerifiedEmail()) {
+            // Supprime l'utilisateur non vérifié
+            $user->delete();
+
+            return response()->json([
+                'error' => 'Votre e-mail n\'a pas été vérifié. Le compte a été supprimé.'
+            ], 403);
+        }
+
+        // Login OK
+        $token = $user->createToken('MyApp')->plainTextToken;
+
+        return response()->json([
+            'user' => $user,
+            'token' => $token
+        ]);
     }
 
     public function profile()
@@ -50,6 +67,6 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::guard('api')->logout();
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json(['message' => 'Déconnexion réussie']);
     }
 }

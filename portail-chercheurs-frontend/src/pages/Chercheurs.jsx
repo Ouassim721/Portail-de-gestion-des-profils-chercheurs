@@ -8,10 +8,11 @@ import ProfilChercheur from "../components/ProfilChercheur";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders, faTimes } from "@fortawesome/free-solid-svg-icons";
 import book from "../assets/book.jpg";
+import axios from "../axios"; //AXIOS POUR LE BACKEND
 
 function Chercheurs() {
   // Fake data en attendant l'API
-  const fakeData = [
+  /*const fakeData = [
     {
       id: 1,
       nom: "Dr. Mohamed Ali",
@@ -24,165 +25,38 @@ function Chercheurs() {
       departement: "Mathématiques",
       publications: 15,
     },
-    {
-      id: 3,
-      nom: "Dr. Sara Hassan",
-      departement: "SMI",
-      publications: 15,
-    },
-    {
-      id: 4,
-      nom: "Dr. Ahmed Ben",
-      departement: "SMI",
-      publications: 12,
-    },
-    {
-      id: 5,
-      nom: "Dr. Fatima Zahra",
-      departement: "Informatique",
-      publications: 8,
-    },
-    {
-      id: 6,
-      nom: "Dr. Omar El",
-      departement: "Mathématiques",
-      publications: 20,
-    },
-    {
-      id: 7,
-      nom: "Dr. Amina Badr",
-      departement: "Informatique",
-      publications: 5,
-    },
-    {
-      id: 8,
-      nom: "Dr. Youssef Ali",
-      departement: "SMI",
-      publications: 18,
-    },
-    {
-      id: 9,
-      nom: "Dr. Leila Ahmed",
-      departement: "Mathématiques",
-      publications: 22,
-    },
-    {
-      id: 10,
-      nom: "Dr. Rachid Bou",
-      departement: "Informatique",
-      publications: 30,
-    },
-    {
-      id: 11,
-      nom: "Dr. Samira El",
-      departement: "SMI",
-      publications: 25,
-    },
-    {
-      id: 12,
-      nom: "Dr. Khaled Sa",
-      departement: "Informatique",
-      publications: 14,
-    },
-    {
-      id: 13,
-      nom: "Dr. Hicham Ou",
-      departement: "Mathématiques",
-      publications: 9,
-    },
-    {
-      id: 14,
-      nom: "Dr. Souad El",
-      departement: "SMI",
-      publications: 17,
-    },
-    {
-      id: 15,
-      nom: "Dr. Yassine Am",
-      departement: "Informatique",
-      publications: 11,
-    },
-    {
-      id: 16,
-      nom: "Dr. Nadia Ba",
-      departement: "Mathématiques",
-      publications: 13,
-    },
-    {
-      id: 17,
-      nom: "Dr. Walid El",
-      departement: "SMI",
-      publications: 19,
-    },
-    {
-      id: 18,
-      nom: "Dr. Amina Sa",
-      departement: "Informatique",
-      publications: 21,
-    },
-    {
-      id: 19,
-      nom: "Dr. Ibrahim Ou",
-      departement: "Mathématiques",
-      publications: 27,
-    },
-    {
-      id: 20,
-      nom: "Dr. Salma Am",
-      departement: "SMI",
-      publications: 16,
-    },
-    {
-      id: 21,
-      nom: "Dr. Omar El",
-      departement: "Informatique",
-      publications: 12,
-    },
-    {
-      id: 22,
-      nom: "Dr. Fatima Ba",
-      departement: "Mathématiques",
-      publications: 14,
-    },
-    {
-      id: 23,
-      nom: "Dr. Hicham Am",
-      departement: "SMI",
-      publications: 10,
-    },
-    {
-      id: 24,
-      nom: "Dr. Souad Ou",
-      departement: "Informatique",
-      publications: 8,
-    },
-    {
-      id: 25,
-      nom: "Dr. Yassine El",
-      departement: "Mathématiques",
-      publications: 9,
-    },
-  ];
+  ];*/
 
   //*********************************************************************/
   // État pour stocker la liste des chercheurs récupérée de l'API ou des fake data
   const [chercheurs, setChercheurs] = useState([]);
 
-  useEffect(() => {
-    setChercheurs(fakeData);
-    localStorage.setItem("chercheurs", JSON.stringify(fakeData));
+  // useEffect(() => {
+  //   setChercheurs(fakeData);
+  //   localStorage.setItem("chercheurs", JSON.stringify(fakeData));
 
-    // Une fois l'API disponible il faut decommenter ce bloc
-    /*
-      getChercheurs() // Appel à la fonction qui récupère les données de l'API
-        .then((response) => {
-          setChercheurs(response.data); // Stocke les données dans l'état
-          localStorage.setItem("chercheurs", JSON.stringify(response.data));
-        })
-        .catch((error) => {
-          console.error("Erreur lors de la récupération des chercheurs!", error); // En cas d'erreur
-        });
-      */
+  //   // Une fois l'API disponible il faut decommenter ce bloc
+  //   /*
+  //     getChercheurs() // Appel à la fonction qui récupère les données de l'API
+  //       .then((response) => {
+  //         setChercheurs(response.data); // Stocke les données dans l'état
+  //         localStorage.setItem("chercheurs", JSON.stringify(response.data));
+  //       })
+  //       .catch((error) => {
+  //         console.error("Erreur lors de la récupération des chercheurs!", error); // En cas d'erreur
+  //       });
+  //     */
+  // }, []);
+  useEffect(() => {
+    // Faire un appel à l'API pour récupérer les chercheurs
+    axios
+      .get("/chercheurs")
+      .then((response) => {
+        setChercheurs(response.data);
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la récupération des chercheurs:", error);
+      });
   }, []);
 
   // État pour gérer la page actuelle de pagination

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import Button from "./Button";
 import DropdownMenu from "./DropdownMenu";
 // import logo from "../assets/logo.png";
 import pdp from "../assets/chercheur-place-holder.jpg";
@@ -10,12 +11,28 @@ import {
   faBars,
   faTimes,
   faCaretDown,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { faBell as faRegularBell } from "@fortawesome/free-regular-svg-icons"; // Style Regular
 
 function Navbar({ sticky = false }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      console.log("ca marche");
+
+      setUser({
+        name: "Martin",
+        image: pdp,
+      });
+    } else {
+      console.log("ca ne marche pas");
+    }
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -96,30 +113,40 @@ function Navbar({ sticky = false }) {
             className="text-xl text-gray-700"
           />
         </div>
-        <DropdownMenu
-          options={[
-            {
-              label: "profil",
-              link: "/profil",
-            },
-          ]}
-        >
-          <div className="flex gap-3 items-center">
-            <img
-              src={pdp}
-              alt="Logo"
-              className="w-13 rounded-full cursor-pointer"
-            />
-            <div className="text-gray-600 ">
-              <h2>Dr.</h2>
-              <h2>Marin</h2>
+        {user ? (
+          <DropdownMenu
+            options={[
+              {
+                label: "profil",
+                link: "/profil",
+                icon: faUser,
+              },
+            ]}
+          >
+            <div className="flex gap-3 items-center">
+              <img
+                src={pdp}
+                alt="Logo"
+                className="w-13 rounded-full cursor-pointer"
+              />
+              <div className="text-gray-600 ">
+                <h2>Dr.</h2>
+                <h2>{user.name}</h2>
+              </div>
+              <FontAwesomeIcon
+                icon={faCaretDown}
+                className="text-xl text-gray-600"
+              />
             </div>
-            <FontAwesomeIcon
-              icon={faCaretDown}
-              className="text-xl text-gray-600"
-            />
-          </div>
-        </DropdownMenu>
+          </DropdownMenu>
+        ) : (
+          <Button
+            variant="secondary"
+            onClick={() => (window.location.href = "/connexion")}
+          >
+            Connexion
+          </Button>
+        )}
       </div>
       {/* Bouton Menu Burger - Mobile */}
       <button

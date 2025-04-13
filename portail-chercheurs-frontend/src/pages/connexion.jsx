@@ -13,16 +13,30 @@ import {
 import { FaRegLightbulb } from "react-icons/fa";
 import { faSignIn, faMicroscope } from "@fortawesome/free-solid-svg-icons";
 import connexionImage from "../assets/connexion.png";
+import axios from "../axios";
 
 export default function ScholarHubLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (e) => {
+  //Fonction pour envoyer une requette de connexion
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
+    axios
+      .post("http://localhost:8000/api/login", {
+        email,
+        password,
+      })
+      .then((res) => {
+        localStorage.setItem("token", res.data.token); // ← Important
+        window.location.href = "/";
+      })
+      .catch((err) => {
+        console.error(err);
+        setError("Identifiants incorrects ou autre erreur.");
+      });
   };
 
   const toggleShowPassword = () => {
@@ -93,7 +107,7 @@ export default function ScholarHubLogin() {
                 Accédez à votre espace de recherche
               </p>
             </div>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleLogin}>
               <div className="mb-6">
                 <label
                   htmlFor="email"
@@ -168,6 +182,7 @@ export default function ScholarHubLogin() {
               <Button icon={faSignIn} className="w-full p-3! font-light!">
                 Se Connecter
               </Button>
+              {error && <p style={{ color: "red" }}>{error}</p>}
             </form>
           </div>
         </div>

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const Button = ({
   children,
   onClick,
-  type = "button",
+  type = "submit",
   variant = "primary",
   icon = null, // Icône facultative
   iconPosition = "left", // corrigé

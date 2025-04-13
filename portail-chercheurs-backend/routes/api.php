@@ -3,41 +3,42 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Models\Chercheur;
 use App\Http\Controllers\EmailVerificationController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
+Route::post('/register', [AuthController::class, 'register']);  // Inscription de l'utilisateur
 
-Route::post('/register', [AuthController::class, 'register']);
-//*************Verification d'email****************************/
+// ******************** Vérification d'email ****************************/
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill(); // Met à jour email_verified_at
+    $request->fulfill();  // Met à jour email_verified_at
     return response()->json(['message' => 'Email vérifié avec succès']);
 })->middleware(['auth:api', 'signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
-
     return response()->json(['message' => 'Lien de vérification renvoyé']);
 })->middleware(['auth:api'])->name('verification.send');
 
 Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
     ->name('verification.verify');
+// ******************** Fin Vérification d'email ************************/
 
-/*
+// Route pour la connexion avec JWT
+Route::post('/login', [AuthController::class, 'login']);  // Connexion pour obtenir le token
+
+// Middleware pour les utilisateurs authentifiés et vérifiés
 Route::middleware(['auth:api', 'verified'])->group(function () {
-    Route::get('/profile', [AuthController::class, 'profile']);
-});*/ //cette partie indique que /profil est accessible ssi l'émail est vérifié
-/*Route::middleware(['auth:api', 'verified'])->group(function () {
-    Route::get('/user', function () {
-        return auth()->user();
-    });
-});*/
+    Route::get('/profile', [AuthController::class, 'profile']);  // Affiche le profil de l'utilisateur connecté
+    Route::post('/logout', [AuthController::class, 'logout']);  // Déconnexion
+});
 
+// Route pour récupérer tous les chercheurs
+Route::get('/chercheurs', function () {
+    return Chercheur::all();
+});
 
-//*************FIN Verification d'email****************************/
-Route::post('/login', [AuthController::class, 'login']);
-
-Route::middleware('auth:api')->group(function () {
-    Route::get('/profile', [AuthController::class, 'profile']);
-    Route::post('/logout', [AuthController::class, 'logout']);
+// Route pour récupérer un chercheur par ID
+Route::get('/chercheurs/{id}', function ($id) {
+    return Chercheur::findOrFail($id);
 });
