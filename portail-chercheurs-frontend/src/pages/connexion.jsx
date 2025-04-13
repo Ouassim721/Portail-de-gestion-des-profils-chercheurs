@@ -15,7 +15,7 @@ import { faSignIn, faMicroscope } from "@fortawesome/free-solid-svg-icons";
 import connexionImage from "../assets/connexion.png";
 import axios from "../axios";
 
-export default function ScholarHubLogin() {
+function Connexion() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -190,3 +190,4 @@ export default function ScholarHubLogin() {
     </div>
   );
 }
+export default Connexion;

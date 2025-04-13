@@ -3,6 +3,9 @@ import { Link, useLocation } from "react-router-dom";
 import Button from "./Button";
 import DropdownMenu from "./DropdownMenu";
 // import logo from "../assets/logo.png";
+import { useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext";
+
 import pdp from "../assets/chercheur-place-holder.jpg";
 import SearchBar from "./research/SearchBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,6 +22,7 @@ function Navbar({ sticky = false }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [user, setUser] = useState(null);
+  // const { user } = useContext(AuthContext);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -117,7 +121,7 @@ function Navbar({ sticky = false }) {
           <DropdownMenu
             options={[
               {
-                label: "profil",
+                label: "Profil",
                 link: "/profil",
                 icon: faUser,
               },
