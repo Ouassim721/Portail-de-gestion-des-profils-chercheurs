@@ -6,6 +6,8 @@ use App\Http\Controllers\AuthController;
 use App\Models\Chercheur;
 use App\Http\Controllers\EmailVerificationController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\DisciplineController;
+use App\Http\Controllers\PublicationController;
 
 Route::post('/register', [AuthController::class, 'register']);  // Inscription de l'utilisateur
 
@@ -42,3 +44,9 @@ Route::get('/chercheurs', function () {
 Route::get('/chercheurs/{id}', function ($id) {
     return Chercheur::findOrFail($id);
 });
+
+// Routes pour les disciplines
+Route::apiResource('disciplines', DisciplineController::class);
+
+// Routes pour les publications
+Route::apiResource('publications', PublicationController::class);
