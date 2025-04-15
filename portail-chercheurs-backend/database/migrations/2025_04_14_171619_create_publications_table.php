@@ -18,12 +18,12 @@ return new class extends Migration
             $table->unsignedInteger('chercheur_id');
 
             $table->timestamps();
-            
+
             // Clé étrangère adaptée à la table Chercheur existante
             $table->foreign('chercheur_id')
-                  ->references('id')
-                  ->on('Chercheur')
-                  ->onDelete('cascade');
+                ->references('id')
+                ->on('Chercheur')
+                ->onDelete('cascade');
         });
     }
 
