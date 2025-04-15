@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Discipline;
 use App\Models\Chercheur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -84,17 +85,18 @@ class ChercheurController extends Controller
     /**
      * Met à jour un chercheur
      */
-    public function update(Request $request, Chercheur $chercheur)
-    {
-        $validator = Validator::make($request->all(), [
-            'nom' => 'sometimes|string|max:100',
-            'prenom' => 'sometimes|string|max:100',
-            'email' => 'sometimes|email|max:150|unique:chercheur,email,'.$chercheur->id,
-            'date_naissance' => 'sometimes|date',
-            'discipline' => 'sometimes|string|max:100',
-            'cv' => 'sometimes|mimes:pdf|max:2048',
-            'role' => 'sometimes|in:Chercheur,Administrateur'
-        ]);
+    
+public function update(Request $request, Chercheur $chercheur)
+{
+    $validator = Validator::make($request->all(), [
+        'nom' => 'sometimes|string|max:100',
+        'prenom' => 'sometimes|string|max:100',
+        'email' => 'sometimes|email|max:150|unique:chercheur,email,'.$chercheur->id,
+        'date_naissance' => 'sometimes|date',
+        'discipline' => 'required|string|max:100',
+        'cv' => 'sometimes|mimes:pdf|max:2048',
+        'role' => 'sometimes|in:Chercheur,Administrateur'
+    ]);
 
         if ($validator->fails()) {
             return redirect()->back()

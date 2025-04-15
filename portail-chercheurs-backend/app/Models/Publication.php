@@ -1,86 +1,31 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Models;
 
-use App\Models\Publication;
-use App\Models\Discipline;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class PublicationController extends Controller
+class Publication extends Model
 {
-    /**
-     * Liste toutes les publications
-     */
-    public function index()
+    use HasFactory;
+
+    protected $fillable = [
+        'titre',
+        'date_publication',
+        'date_modification',
+        'auteurs',
+        'abstract',
+        'chercheur_id',
+        'discipline_id'
+    ];
+
+    public function chercheur()
     {
-        return response()->json([
-            'publications' => Publication::with('discipline')->get()
-        ], Response::HTTP_OK);
+        return $this->belongsTo(Chercheur::class);
     }
 
-    /**
-     * Crée une nouvelle publication
-     */
-    public function store(Request $request)
+    public function discipline()
     {
-        $validated = $request->validate([
-            'titre' => 'required|string|max:255',
-            'date_publication' => 'required|date',
-            'date_modification' => 'nullable|date',
-            'auteurs' => 'required|string',
-            'abstract' => 'required|string',
-            'discipline_id' => 'required|exists:disciplines,id',
-            'chercheur_id' => 'required|exists:chercheur,id'
-        ]);
-
-        $publication = Publication::create($validated);
-
-        return response()->json([
-            'message' => 'Publication créée',
-            'publication' => $publication->load('discipline')
-        ], Response::HTTP_CREATED);
-    }
-
-    /**
-     * Affiche une publication
-     */
-    public function show(Publication $publication)
-    {
-        return response()->json([
-            'publication' => $publication->load(['discipline', 'chercheur'])
-        ], Response::HTTP_OK);
-    }
-
-    /**
-     * Met à jour une publication
-     */
-    public function update(Request $request, Publication $publication)
-    {
-        $validated = $request->validate([
-            'titre' => 'sometimes|string|max:255',
-            'date_publication' => 'sometimes|date',
-            'date_modification' => 'nullable|date',
-            'auteurs' => 'sometimes|string',
-            'abstract' => 'sometimes|string',
-            'discipline_id' => 'sometimes|exists:disciplines,id',
-            'chercheur_id' => 'sometimes|exists:chercheur,id'
-        ]);
-
-        $publication->update($validated);
-
-        return response()->json([
-            'message' => 'Publication mise à jour',
-            'publication' => $publication->fresh()->load('discipline')
-        ], Response::HTTP_OK);
-    }
-
-    /**
-     * Supprime une publication
-     */
-    public function destroy(Publication $publication)
-    {
-        $publication->delete();
-        return response()->json(null, Response::HTTP_NO_CONTENT);
+        return $this->belongsTo(Discipline::class);
     }
 }

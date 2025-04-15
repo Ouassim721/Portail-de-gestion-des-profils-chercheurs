@@ -14,6 +14,8 @@ return new class extends Migration
     Schema::create('disciplines', function (Blueprint $table) {
         $table->increments('id');
         $table->string('nom')->unique(); 
+        $table->timestamps(); 
+        
     });
 }
 /**

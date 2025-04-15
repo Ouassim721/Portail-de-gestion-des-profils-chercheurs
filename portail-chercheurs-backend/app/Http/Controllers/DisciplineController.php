@@ -2,63 +2,100 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Discipline;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class DisciplineController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Affiche la liste des disciplines
      */
     public function index()
     {
-        return Discipline::all();
+        $disciplines = Discipline::all();
+        return view('disciplines.index', compact('disciplines'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Affiche le formulaire de création
      */
     public function create()
     {
-        //
+        return view('disciplines.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Stocke une nouvelle discipline
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'nom' => 'required|string|max:100|unique:disciplines'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        Discipline::create($request->all());
+
+        return redirect()->route('disciplines.index')
+            ->with('success', 'Discipline créée avec succès');
     }
 
     /**
-     * Display the specified resource.
+     * Affiche les détails d'une discipline
      */
-    public function show(string $id)
+    public function show(Discipline $discipline)
     {
-        //
+        return view('disciplines.show', compact('discipline'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Affiche le formulaire d'édition
      */
-    public function edit(string $id)
+    public function edit(Discipline $discipline)
     {
-        //
+        return view('disciplines.edit', compact('discipline'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Met à jour une discipline
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Discipline $discipline)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'nom' => 'required|string|max:100|unique:disciplines,nom,'.$discipline->id
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $discipline->update($request->all());
+
+        return redirect()->route('disciplines.index')
+            ->with('success', 'Discipline mise à jour');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Supprime une discipline
      */
-    public function destroy(string $id)
+    public function destroy(Discipline $discipline)
     {
-        //
+        try {
+            $discipline->delete();
+            return redirect()->route('disciplines.index')
+                ->with('success', 'Discipline supprimée');
+                
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Impossible de supprimer : des publications sont liées');
+        }
     }
 }

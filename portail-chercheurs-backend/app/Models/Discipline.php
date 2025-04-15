@@ -1,82 +1,23 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Models;
 
-use App\Models\Discipline;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class DisciplineController extends Controller
+class Discipline extends Model
 {
-    /**
-     * Liste toutes les disciplines
-     */
-    public function index()
+    use HasFactory;
+
+    protected $fillable = ['nom'];
+
+    public function publications()
     {
-        return response()->json([
-            'disciplines' => Discipline::all()
-        ], Response::HTTP_OK);
+        return $this->hasMany(Publication::class);
     }
 
-    /**
-     * Crée une nouvelle discipline
-     */
-    public function store(Request $request)
+    public function chercheurs()
     {
-        $validated = $request->validate([
-            'nom' => 'required|string|max:100|unique:disciplines'
-        ]);
-
-        $discipline = Discipline::create($validated);
-
-        return response()->json([
-            'message' => 'Discipline créée',
-            'discipline' => $discipline
-        ], Response::HTTP_CREATED);
-    }
-
-    /**
-     * Affiche une discipline
-     */
-    public function show(Discipline $discipline)
-    {
-        return response()->json([
-            'discipline' => $discipline->load('publications')
-        ], Response::HTTP_OK);
-    }
-
-    /**
-     * Met à jour une discipline
-     */
-    public function update(Request $request, Discipline $discipline)
-    {
-        $validated = $request->validate([
-            'nom' => 'sometimes|string|max:100|unique:disciplines,nom,' . $discipline->id
-        ]);
-
-        $discipline->update($validated);
-
-        return response()->json([
-            'message' => 'Discipline mise à jour',
-            'discipline' => $discipline
-        ], Response::HTTP_OK);
-    }
-
-    /**
-     * Supprime une discipline
-     */
-    public function destroy(Discipline $discipline)
-    {
-        try {
-            $discipline->delete();
-            return response()->json([
-                'message' => 'Discipline supprimée'
-            ], Response::HTTP_NO_CONTENT);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Impossible de supprimer la discipline (des publications y sont liées)'
-            ], Response::HTTP_CONFLICT);
-        }
+        return $this->hasMany(Chercheur::class);
     }
 }

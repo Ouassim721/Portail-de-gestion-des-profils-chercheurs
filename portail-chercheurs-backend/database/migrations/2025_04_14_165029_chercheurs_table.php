@@ -18,9 +18,10 @@ return new class extends Migration
             $table->string('discipline', 100);
             $table->string('mot_de_passe', 255);
             $table->string('email', 150);
-            $table->date('date_naissance');
+            $table->date('date_naissance'); 
             $table->string('cv', 255)->nullable(); // Stocke le chemin vers le PDF
             $table->enum('role', ['Chercheur', 'Administrateur'])->default('Chercheur');
+            $table->timestamps();
         });
     }
 
