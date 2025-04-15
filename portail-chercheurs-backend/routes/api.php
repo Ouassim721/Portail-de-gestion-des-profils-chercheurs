@@ -10,6 +10,7 @@ use App\Http\Controllers\EmailVerificationController;
 // 🔐 Authentification (JWT)
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/create-chercheur', [AuthController::class, 'createChercheurFromAdmin']);
 
 // 📨 Vérification d'e-mail
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
@@ -34,10 +35,10 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
 });
 
 // 📚 Chercheurs
-Route::get('/chercheurs', function () {
+/*Route::get('/chercheurs', function () {
     return Chercheur::all();
 });
 
 Route::get('/chercheurs/{id}', function ($id) {
     return Chercheur::findOrFail($id);
-});
+});*/
