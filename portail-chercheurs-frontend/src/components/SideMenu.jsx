@@ -1,6 +1,6 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import React from "react";
+import { NavLink } from "react-router-dom";
+import PropTypes from "prop-types";
 import {
   FaTachometerAlt,
   FaUser,
@@ -9,22 +9,26 @@ import {
   FaShieldAlt,
   FaCog,
   FaTimes,
-} from 'react-icons/fa';
+} from "react-icons/fa";
 
 const SideMenu = ({ isVisible, onClose }) => {
   const links = [
-    { label: 'Tableau de bord', icon: <FaTachometerAlt />, to: '/tableau_de_bord' },
-    { label: 'Chercheurs', icon: <FaUser />, to: '/AdminChercheurs' },
-    { label: 'Institutions', icon: <FaUniversity />, to: '/institutions' },
-    { label: 'Evénements', icon: <FaCalendarAlt />, to: '/evenements' },
-    { label: 'Sécurité', icon: <FaShieldAlt />, to: '/securite' },
-    { label: 'Paramètres', icon: <FaCog />, to: '/parametres' },
+    {
+      label: "Tableau de bord",
+      icon: <FaTachometerAlt />,
+      to: "/",
+    },
+    { label: "Chercheurs", icon: <FaUser />, to: "/AdminChercheurs" },
+    { label: "Institutions", icon: <FaUniversity />, to: "/institutions" },
+    { label: "Evénements", icon: <FaCalendarAlt />, to: "/evenements" },
+    { label: "Sécurité", icon: <FaShieldAlt />, to: "/securite" },
+    { label: "Paramètres", icon: <FaCog />, to: "/parametres" },
   ];
 
   return (
     <aside
       className={`fixed top-0 left-0 h-full w-64 bg-white border-r border-gray-200 p-4 shadow-lg transform ${
-        isVisible ? 'translate-x-0' : '-translate-x-full'
+        isVisible ? "translate-x-0" : "-translate-x-full"
       } transition-transform duration-300 ease-in-out z-50`}
       aria-label="Navigation latérale"
     >
@@ -40,10 +44,10 @@ const SideMenu = ({ isVisible, onClose }) => {
           {links.map(({ label, icon, to }) => (
             <li key={label} className="rounded-md">
               <NavLink
-                to={to}
+                to={`/dashboard${to}`}
                 className={({ isActive }) =>
                   `flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md ${
-                    isActive ? 'bg-gray-100 font-bold' : ''
+                    isActive ? "bg-gray-100 font-bold" : ""
                   }`
                 }
               >

@@ -13,7 +13,7 @@ function Home() {
               <h1 className="font-bold text-4xl text-center lg:text-left max-w-125">
                 Facilitez l’Accès aux Profils de Recherche
               </h1>
-              <p className="text-neutral-400 font-semibold text-lg text-center lg:text-left max-w-125 xl:max-w-full">
+              <p className="text-neutral-400 font-medium text-lg text-center lg:text-left max-w-125 xl:max-w-full">
                 Trouvez facilement les informations des chercheurs et leurs
                 travaux scientifiques.
               </p>

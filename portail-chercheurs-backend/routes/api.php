@@ -4,17 +4,24 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Models\Chercheur;
-use App\Http\Controllers\EmailVerificationController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\DisciplineController;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\ChercheurController;
 
-Route::post('/register', [AuthController::class, 'register']);  // Inscription de l'utilisateur
+// 🔐 Authentification (JWT)
+Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']);
+Route::middleware(['auth:api', 'is_admin'])->post('/admin/create-chercheur', [AuthController::class, 'createChercheurFromAdmin']);
 
-// ******************** Vérification d'email ****************************/
+Route::middleware('auth:api')->get('/me', function () {
+    return Auth::user();
+});
+// 📨 Vérification d'e-mail
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();  // Met à jour email_verified_at
+    $request->fulfill(); // Met à jour email_verified_at
     return response()->json(['message' => 'Email vérifié avec succès']);
 })->middleware(['auth:api', 'signed'])->name('verification.verify');
 
@@ -23,28 +30,24 @@ Route::post('/email/verification-notification', function (Request $request) {
     return response()->json(['message' => 'Lien de vérification renvoyé']);
 })->middleware(['auth:api'])->name('verification.send');
 
-Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
-    ->name('verification.verify');
-// ******************** Fin Vérification d'email ************************/
-
-// Route pour la connexion avec JWT
-Route::post('/login', [AuthController::class, 'login']);  // Connexion pour obtenir le token
-
-// Middleware pour les utilisateurs authentifiés et vérifiés
-Route::middleware(['auth:api', 'verified'])->group(function () {
-    Route::get('/profile', [AuthController::class, 'profile']);  // Affiche le profil de l'utilisateur connecté
-    Route::post('/logout', [AuthController::class, 'logout']);  // Déconnexion
+// ✅ Cette route permet à React de récupérer l'utilisateur connecté via JWT
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return response()->json($request->user());
 });
 
-// Route pour récupérer tous les chercheurs
-Route::get('/chercheurs', function () {
+// ✅ Routes protégées (nécessitent d’être connecté + email vérifié)
+Route::middleware(['auth:api', 'verified'])->group(function () {
+    Route::get('/profile', [AuthController::class, 'profile']);
+});
+
+// 📚 Chercheurs
+/*Route::get('/chercheurs', function () {
     return Chercheur::all();
 });
 
-// Route pour récupérer un chercheur par ID
 Route::get('/chercheurs/{id}', function ($id) {
     return Chercheur::findOrFail($id);
-});
+});*/
 
 // Routes pour les disciplines
 Route::apiResource('disciplines', DisciplineController::class);

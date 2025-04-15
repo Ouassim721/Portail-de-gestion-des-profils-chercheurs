@@ -15,28 +15,37 @@ import { faSignIn, faMicroscope } from "@fortawesome/free-solid-svg-icons";
 import connexionImage from "../assets/connexion.png";
 import axios from "../axios";
 
-export default function ScholarHubLogin() {
+function Connexion() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  //Fonction pour envoyer une requette de connexion
   const handleLogin = async (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:8000/api/login", {
-        email,
-        password,
-      })
-      .then((res) => {
-        localStorage.setItem("token", res.data.token); // ← Important
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/api/login",
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true, // ⭐ Pour inclure les cookies (important)
+        }
+      );
+
+      const user = res.data.user;
+
+      if (user.role === "admin") {
+        window.location.href = "/dashboard";
+      } else {
         window.location.href = "/";
-      })
-      .catch((err) => {
-        console.error(err);
-        setError("Identifiants incorrects ou autre erreur.");
-      });
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Identifiants Invalide ou autre erreur.");
+    }
   };
 
   const toggleShowPassword = () => {
@@ -182,7 +191,9 @@ export default function ScholarHubLogin() {
               <Button icon={faSignIn} className="w-full p-3! font-light!">
                 Se Connecter
               </Button>
-              {error && <p style={{ color: "red" }}>{error}</p>}
+              {error && (
+                <p className="mt-3 text-red-500 text-center">{error}</p>
+              )}
             </form>
           </div>
         </div>
@@ -190,3 +201,4 @@ export default function ScholarHubLogin() {
     </div>
   );
 }
+export default Connexion;
