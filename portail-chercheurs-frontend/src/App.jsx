@@ -1,5 +1,6 @@
 import "./index.css";
 import { Routes, Route } from "react-router-dom";
+import React, { useEffect } from "react";
 
 // Pages publiques
 import Home from "./pages/Home";
@@ -14,36 +15,62 @@ import DetailsPublication from "./pages/DetailsPublication";
 // Authentification
 import Connexion from "./pages/connexion";
 import AdminConnexion from "./pages/administration/AdminConnexion";
+import { AuthProvider } from "./contexts/AuthProvider";
 
 // Administration
-import AdminPage from "./pages/administration/tableau_de_bord";
+import AdminDashboard from "./pages/administration/AdminDashboard";
 import AdminChercheurs from "./pages/administration/AdminChercheurs";
 import CreationChercheur from "./pages/administration/CreationChercheur";
 
+//Loader
+import { useLoading } from "./contexts/useLoading";
+import Loader from "./components/Loader";
+
 function App() {
+  const { isLoading, showLoader, hideLoader } = useLoading();
+
+  useEffect(() => {
+    showLoader();
+    setTimeout(() => {
+      hideLoader();
+    }, 1000);
+  }, [showLoader, hideLoader]);
   return (
     <>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="chercheurs" element={<Chercheurs />} />
-          <Route path="/profil-chercheur/:id" element={<ProfilChercheur />} />
-          <Route path="/actualite" element={<Actualite />} />
-          <Route path="/Publications" element={<Publications />} />
+      {isLoading && <Loader />}
+
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="chercheurs" element={<Chercheurs />} />
+            <Route path="/profil-chercheur/:id" element={<ProfilChercheur />} />
+            <Route path="/actualite" element={<Actualite />} />
+            <Route path="/publications" element={<Publications />} />
+            <Route
+              path="/details-publication/:id"
+              element={<DetailsPublication />}
+            />
+
+            <Route path="/profil" element={<Profil />} />
+          </Route>
+
+          <Route path="/connexion" element={<Connexion />} />
           <Route
-            path="/details-publication/:id"
-            element={<DetailsPublication />}
+            path="/dashboard/adminconnexion"
+            element={<AdminConnexion />}
           />
-
-          <Route path="/profil" element={<Profil />} />
-        </Route>
-
-        <Route path="/connexion" element={<Connexion />} />
-        <Route path="/adminconnexion" element={<AdminConnexion />} />
-        <Route path="/tableau_de_bord" element={<AdminPage />} />
-        <Route path="/AdminChercheurs" element={<AdminChercheurs />} />
-        <Route path="/CreationChercheur" element={<CreationChercheur />} />
-      </Routes>
+          <Route path="/dashboard" element={<AdminDashboard />} />
+          <Route
+            path="/dashboard/adminchercheurs"
+            element={<AdminChercheurs />}
+          />
+          <Route
+            path="/dashboard/adminchercheurs/creationchercheur"
+            element={<CreationChercheur />}
+          />
+        </Routes>
+      </AuthProvider>
     </>
   );
 }

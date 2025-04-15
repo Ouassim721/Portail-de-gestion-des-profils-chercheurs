@@ -1,6 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ProfilChercheur from "../components/ProfilChercheur";
+
 const Profil = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/connexion");
+    }
+  }, [navigate]);
   const chercheursData = {
     id: 1,
     nom: "Dr. Mohamed Ali",

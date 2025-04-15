@@ -3,6 +3,9 @@ import { Link, useLocation } from "react-router-dom";
 import Button from "./Button";
 import DropdownMenu from "./DropdownMenu";
 // import logo from "../assets/logo.png";
+/*import { useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext";*/
+import axios from "../axios";
 import pdp from "../assets/chercheur-place-holder.jpg";
 import SearchBar from "./research/SearchBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,6 +15,7 @@ import {
   faTimes,
   faCaretDown,
   faUser,
+  faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { faBell as faRegularBell } from "@fortawesome/free-regular-svg-icons"; // Style Regular
 
@@ -21,18 +25,28 @@ function Navbar({ sticky = false }) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      console.log("ca marche");
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get("/me");
+        setUser(res.data);
+      } catch (err) {
+        console.error(err);
+        setUser(null);
+      }
+    };
 
-      setUser({
-        name: "Martin",
-        image: pdp,
-      });
-    } else {
-      console.log("ca ne marche pas");
-    }
+    fetchUser();
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      await axios.post("/logout"); // route backend qui supprime le token côté serveur
+      setUser(null);
+      window.location.href = "/connexion"; // ou navigation via React Router
+    } catch (err) {
+      console.error("Erreur lors de la déconnexion :", err);
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -53,20 +67,19 @@ function Navbar({ sticky = false }) {
     Actualité: "/Actualite",
     "À propos": "/about-us",
     Contact: "/contact",
-    connexion: "/connexion",
   };
 
   return (
     <nav
       className={`relative w-full h-[74px] p-4 pr-8 flex flex-row-reverse
- sm:flex-row items-center justify-between z-10 duration-300${
+ lg:flex-row items-center justify-between z-10 duration-300${
    isSticky && sticky == true
      ? "bg-[var(--color-white)] shadow-md sticky-top"
      : "bg-[var(--color-white)] shadow-sm "
  } `}
     >
       {/* Logo et recherche */}
-      <div className="hidden sm:flex items-center gap-4 sm:gap-8 md:gap-12 lg-gap-16">
+      <div className="hidden lg:flex items-center gap-4 sm:gap-8 md:gap-12 lg-gap-16">
         {/* <img src={logo} alt="Logo" className="w-[80px] h-[70px]" /> */}
         <h1 className="text-xl sm:text-2xl font-bold text-[var(--color-primary)]">
           ScholarHub
@@ -110,16 +123,22 @@ function Navbar({ sticky = false }) {
         <div>
           <FontAwesomeIcon
             icon={faRegularBell}
-            className="text-xl text-gray-700"
+            className="text-xl text-gray-700 cursor-pointer "
           />
         </div>
         {user ? (
           <DropdownMenu
             options={[
               {
-                label: "profil",
+                label: "Profil",
                 link: "/profil",
                 icon: faUser,
+              },
+              {
+                label: "Déconnexion",
+                link: "/",
+                onClick: handleLogout,
+                icon: faRightFromBracket,
               },
             ]}
           >
@@ -148,6 +167,9 @@ function Navbar({ sticky = false }) {
           </Button>
         )}
       </div>
+      <h1 className="lg:hidden text-xl sm:text-2xl font-bold text-[var(--color-primary)]">
+        ScholarHub
+      </h1>
       {/* Bouton Menu Burger - Mobile */}
       <button
         className="lg:hidden text-2xl text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] z-10 cursor-pointer duration-300"
@@ -169,7 +191,6 @@ function Navbar({ sticky = false }) {
           "Actualité",
           "À propos",
           "Contact",
-          "connexion",
         ].map((item, index) => {
           const path =
             routesMap[item] || `/${item.toLowerCase().replace(" ", "-")}`;

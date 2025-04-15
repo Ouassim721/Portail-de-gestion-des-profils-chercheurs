@@ -1,12 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom"; // Import du router pour gerer la navigation
-import App from "./App.jsx"; // Import du composant principal
+import { BrowserRouter } from "react-router-dom";
+import App from "./App";
+import { LoadingProvider } from "./contexts/LoadingProvider"; // Importer le LoadingProvider
 
-// Création de la racine de l'application et encapsulation avec <BrowserRouter>
+// Création de la racine de l'application et encapsulation avec <BrowserRouter> et <LoadingProvider>
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <BrowserRouter>
-    {/* On encapsule <App /> avec <BrowserRouter> pour permettre l'utilisation des routes partout dans l'application. */}
-    <App />
-  </BrowserRouter>
+  <LoadingProvider>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </LoadingProvider>
 );
