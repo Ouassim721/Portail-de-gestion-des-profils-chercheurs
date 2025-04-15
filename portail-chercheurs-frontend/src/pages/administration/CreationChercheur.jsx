@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Button from "../../components/Button";
-import axios from "../axios";
+import axios from "../../axios";
 
 const CreateResearcher = () => {
   const [firstName, setFirstName] = useState("");
@@ -11,14 +11,11 @@ const CreateResearcher = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-        "http://localhost:8000/api/create-chercheur",
-        {
-          prenom: firstName,
-          nom: lastName,
-          email: email,
-        }
-      );
+      await axios.post("http://localhost:8000/api/admin/create-chercheur", {
+        prenom: firstName,
+        nom: lastName,
+        email: email,
+      });
 
       alert("Chercheur créé avec succès !");
       window.location.href = "/dashboard/adminchercheurs";

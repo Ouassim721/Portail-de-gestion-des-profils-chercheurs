@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Pagination from "./Pagination";
 import TableGenerique2 from "./TableGenerique2";
-
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import Button from "./Button";
 const initialResearchers = [
   {
     id: 1,
@@ -98,12 +99,12 @@ export default function ResearchersList() {
             className="px-4 py-2 border rounded-lg flex-grow"
             onChange={handleSearch}
           />
-          <button
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors"
+          <Button
             onClick={() => navigate("CreationChercheur", { relative: "path" })}
+            icon={faPlus}
           >
             Ajouter
-          </button>
+          </Button>
         </div>
       </div>
 

@@ -21,17 +21,22 @@ function Connexion() {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  //Fonction pour envoyer une requette de connexion
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:8000/api/login", {
-        email,
-        password,
-      });
-      const { token, user } = res.data;
-      localStorage.setItem("token", token);
-      localStorage.setItem("role", user.role);
+      const res = await axios.post(
+        "http://localhost:8000/api/login",
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true, // ⭐ Pour inclure les cookies (important)
+        }
+      );
+
+      const user = res.data.user;
+
       if (user.role === "admin") {
         window.location.href = "/dashboard";
       } else {

@@ -5,7 +5,7 @@ import DropdownMenu from "./DropdownMenu";
 // import logo from "../assets/logo.png";
 /*import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";*/
-
+import axios from "../axios";
 import pdp from "../assets/chercheur-place-holder.jpg";
 import SearchBar from "./research/SearchBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -23,23 +23,29 @@ function Navbar({ sticky = false }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [user, setUser] = useState(null);
-  // const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      console.log("ca marche");
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get("/me");
+        setUser(res.data);
+      } catch (err) {
+        console.error(err);
+        setUser(null);
+      }
+    };
 
-      setUser({
-        name: "Martin",
-        image: pdp,
-      });
-    }
+    fetchUser();
   }, []);
-  const handleLogout = () => {
-    localStorage.removeItem("token"); // supprime le token
-    setUser(null); // met l'utilisateur à null
-    console.log("Déconnecté");
+
+  const handleLogout = async () => {
+    try {
+      await axios.post("/logout"); // route backend qui supprime le token côté serveur
+      setUser(null);
+      window.location.href = "/connexion"; // ou navigation via React Router
+    } catch (err) {
+      console.error("Erreur lors de la déconnexion :", err);
+    }
   };
 
   useEffect(() => {

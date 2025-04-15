@@ -55,7 +55,7 @@ function App() {
             <Route path="/profil" element={<Profil />} />
           </Route>
 
-          <Route path="/dashboard/connexion" element={<Connexion />} />
+          <Route path="/connexion" element={<Connexion />} />
           <Route
             path="/dashboard/adminconnexion"
             element={<AdminConnexion />}
