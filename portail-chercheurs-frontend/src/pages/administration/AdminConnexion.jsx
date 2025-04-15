@@ -6,7 +6,7 @@ const AdminLogin = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    navigate("/tableau_de_bord");
+    navigate("/dashboard");
   };
 
   return (
@@ -48,7 +48,7 @@ const AdminLogin = () => {
           </div>
           <button
             className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors"
-            onClick={() => navigate("/tableau_de_bord")}
+            onClick={() => navigate("/dashboard")}
           >
             Se connecter
           </button>

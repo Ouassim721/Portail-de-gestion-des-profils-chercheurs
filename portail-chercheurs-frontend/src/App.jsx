@@ -18,7 +18,7 @@ import AdminConnexion from "./pages/administration/AdminConnexion";
 import { AuthProvider } from "./contexts/AuthProvider";
 
 // Administration
-import AdminPage from "./pages/administration/tableau_de_bord";
+import AdminDashboard from "./pages/administration/AdminDashboard";
 import AdminChercheurs from "./pages/administration/AdminChercheurs";
 import CreationChercheur from "./pages/administration/CreationChercheur";
 
@@ -46,7 +46,7 @@ function App() {
             <Route path="chercheurs" element={<Chercheurs />} />
             <Route path="/profil-chercheur/:id" element={<ProfilChercheur />} />
             <Route path="/actualite" element={<Actualite />} />
-            <Route path="/Publications" element={<Publications />} />
+            <Route path="/publications" element={<Publications />} />
             <Route
               path="/details-publication/:id"
               element={<DetailsPublication />}
@@ -55,11 +55,20 @@ function App() {
             <Route path="/profil" element={<Profil />} />
           </Route>
 
-          <Route path="/connexion" element={<Connexion />} />
-          <Route path="/adminconnexion" element={<AdminConnexion />} />
-          <Route path="/tableau_de_bord" element={<AdminPage />} />
-          <Route path="/AdminChercheurs" element={<AdminChercheurs />} />
-          <Route path="/CreationChercheur" element={<CreationChercheur />} />
+          <Route path="/dashboard/connexion" element={<Connexion />} />
+          <Route
+            path="/dashboard/adminconnexion"
+            element={<AdminConnexion />}
+          />
+          <Route path="/dashboard" element={<AdminDashboard />} />
+          <Route
+            path="/dashboard/adminchercheurs"
+            element={<AdminChercheurs />}
+          />
+          <Route
+            path="/dashboard/creationchercheur"
+            element={<CreationChercheur />}
+          />
         </Routes>
       </AuthProvider>
     </>

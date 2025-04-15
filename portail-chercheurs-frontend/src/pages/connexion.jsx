@@ -24,19 +24,23 @@ function Connexion() {
   //Fonction pour envoyer une requette de connexion
   const handleLogin = async (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:8000/api/login", {
+    try {
+      const res = await axios.post("http://localhost:8000/api/login", {
         email,
         password,
-      })
-      .then((res) => {
-        localStorage.setItem("token", res.data.token); // ← Important
-        window.location.href = "/";
-      })
-      .catch((err) => {
-        console.error(err);
-        setError("Identifiants incorrects ou autre erreur.");
       });
+      const { token, user } = res.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", user.role);
+      if (user.role === "admin") {
+        window.location.href = "/dashboard";
+      } else {
+        window.location.href = "/";
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Identifiants Invalide ou autre erreur.");
+    }
   };
 
   const toggleShowPassword = () => {
