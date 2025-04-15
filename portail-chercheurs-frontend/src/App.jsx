@@ -66,7 +66,7 @@ function App() {
             element={<AdminChercheurs />}
           />
           <Route
-            path="/dashboard/creationchercheur"
+            path="/dashboard/adminchercheurs/creationchercheur"
             element={<CreationChercheur />}
           />
         </Routes>
