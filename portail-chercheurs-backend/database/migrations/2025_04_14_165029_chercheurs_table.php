@@ -19,11 +19,13 @@ return new class extends Migration
             $table->string('mot_de_passe', 255);
             $table->string('email', 150);
             $table->date('date_naissance');
-            $table->string('cv', 255)->nullable(); // chemin vers le CV (optionnel)
+            $table->string('cv', 255)->nullable(); // nouvelle colonne pour le CV
             $table->enum('role', ['Chercheur', 'Administrateur'])->default('Chercheur');
+            $table->string('photoProfil', 255)->nullable(); // nouvelle colonne pour la photo de profil
             $table->timestamps();
         });
     }
+    
 
     /**
      * Reverse the migrations.

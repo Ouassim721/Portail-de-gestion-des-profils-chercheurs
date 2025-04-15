@@ -25,12 +25,14 @@ class ChercheurFactory extends Factory
                 false
             ),
             'role' => $this->faker->randomElement(['Chercheur', 'Administrateur']),
-            'discipline' => $this->faker->randomElement([ // Ajout du champ texte libre
+            'discipline' => $this->faker->randomElement([
                 'Informatique',
                 'Biologie Moléculaire',
                 'Physique Quantique',
                 'Chimie Organique'
             ]),
+            // Ajout du nouveau champ photoProfil avec une URL d'image factice
+            'photoProfil' => $this->faker->imageUrl(640, 480, 'people', true),
             'created_at' => $this->faker->dateTimeBetween('-1 year'),
             'updated_at' => $this->faker->dateTimeBetween('-6 months')
         ];
