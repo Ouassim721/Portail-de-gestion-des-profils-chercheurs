@@ -35,8 +35,12 @@ const DropdownMenu = ({ children, options = [] }) => {
             <div
               key={index}
               className="w-full px-4 py-2 hover:bg-blue-100 hover:text-blue-600 cursor-pointer flex items-center gap-4"
-              onClick={() => {
+              /*onClick={() => {
                 if (!option.link && option.onClick) option.onClick();
+                setIsOpen(false);
+              }}*/
+              onClick={() => {
+                if (option.onClick) option.onClick();
                 setIsOpen(false);
               }}
             >

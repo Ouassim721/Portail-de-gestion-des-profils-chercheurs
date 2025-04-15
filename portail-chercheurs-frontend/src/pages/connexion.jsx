@@ -182,7 +182,9 @@ function Connexion() {
               <Button icon={faSignIn} className="w-full p-3! font-light!">
                 Se Connecter
               </Button>
-              {error && <p style={{ color: "red" }}>{error}</p>}
+              {error && (
+                <p className="mt-3 text-red-500 text-center">{error}</p>
+              )}
             </form>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import "./index.css";
 import { Routes, Route } from "react-router-dom";
+import React, { useEffect } from "react";
 
 // Pages publiques
 import Home from "./pages/Home";
@@ -12,7 +13,7 @@ import Publications from "./pages/Publications";
 import DetailsPublication from "./pages/DetailsPublication";
 
 // Authentification
-import Connexion from "./pages/Connexion";
+import Connexion from "./pages/connexion";
 import AdminConnexion from "./pages/administration/AdminConnexion";
 import { AuthProvider } from "./contexts/AuthProvider";
 
@@ -21,9 +22,23 @@ import AdminPage from "./pages/administration/tableau_de_bord";
 import AdminChercheurs from "./pages/administration/AdminChercheurs";
 import CreationChercheur from "./pages/administration/CreationChercheur";
 
+//Loader
+import { useLoading } from "./contexts/useLoading";
+import Loader from "./components/Loader";
+
 function App() {
+  const { isLoading, showLoader, hideLoader } = useLoading();
+
+  useEffect(() => {
+    showLoader();
+    setTimeout(() => {
+      hideLoader();
+    }, 1000);
+  }, [showLoader, hideLoader]);
   return (
     <>
+      {isLoading && <Loader />}
+
       <AuthProvider>
         <Routes>
           <Route path="/" element={<Layout />}>
