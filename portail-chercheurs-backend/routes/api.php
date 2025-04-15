@@ -4,16 +4,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Models\Chercheur;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\DisciplineController;
 use App\Http\Controllers\PublicationController;
 
 // 🔐 Authentification (JWT)
-Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/create-chercheur', [AuthController::class, 'createChercheurFromAdmin']);
+Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']);
+Route::middleware(['auth:api', 'is_admin'])->post('/admin/create-chercheur', [AuthController::class, 'createChercheurFromAdmin']);
 
+Route::middleware('auth:api')->get('/me', function () {
+    return Auth::user();
+});
 // 📨 Vérification d'e-mail
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill(); // Met à jour email_verified_at
@@ -33,7 +37,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // ✅ Routes protégées (nécessitent d’être connecté + email vérifié)
 Route::middleware(['auth:api', 'verified'])->group(function () {
     Route::get('/profile', [AuthController::class, 'profile']);
-    Route::post('/logout', [AuthController::class, 'logout']);
 });
 
 // 📚 Chercheurs

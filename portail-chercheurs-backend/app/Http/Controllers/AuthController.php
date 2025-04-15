@@ -3,34 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Chercheur;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Chercheur;
+use Carbon\Carbon;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
-    {
-        $validated = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:6'
-        ]);
-
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => bcrypt($validated['password']),
-        ]);
-
-        $user->sendEmailVerificationNotification();
-
-        return response()->json([
-            'message' => 'Utilisateur créé. Veuillez vérifier votre e-mail pour activer votre compte.'
-        ]);
-    }
     public function createChercheurFromAdmin(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -40,14 +21,16 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['message' => 'Données invalides.'], 400);
+            return response()->json([
+                'message' => 'Données invalides.',
+                'errors' => $validator->errors(),
+            ], 422);
         }
 
-        $prenom = strtolower($request->prenom);
-        $nom = strtolower($request->nom);
-        $email = strtolower($request->email);
+        $prenom = strtolower(trim($request->prenom));
+        $nom = strtolower(trim($request->nom));
+        $email = strtolower(trim($request->email));
 
-        // Chercher le chercheur dans la base
         $chercheur = Chercheur::whereRaw('LOWER(prenom) = ?', [$prenom])
             ->whereRaw('LOWER(nom) = ?', [$nom])
             ->whereRaw('LOWER(email) = ?', [$email])
@@ -57,15 +40,13 @@ class AuthController extends Controller
             return response()->json(['message' => 'Chercheur non trouvé.'], 404);
         }
 
-        $annee = \Carbon\Carbon::parse($chercheur->date_naissance)->year ?? '0000';
+        $annee = $chercheur->date_naissance ? Carbon::parse($chercheur->date_naissance)->year : '0000';
         $passwordRaw = $prenom . $nom . '@' . $annee;
 
-        // Vérifier si un utilisateur existe déjà avec cet email
         if (User::where('email', $email)->exists()) {
             return response()->json(['message' => 'Un utilisateur avec cet email existe déjà.'], 409);
         }
 
-        // Créer l'utilisateur
         $user = User::create([
             'name' => ucfirst($prenom) . ' ' . ucfirst($nom),
             'email' => $email,
@@ -88,32 +69,35 @@ class AuthController extends Controller
             return response()->json(['error' => 'Identifiants incorrects.'], 401);
         }
 
-        // Vérifier si l'email est confirmé
-        if (!$user->hasVerifiedEmail()) {
-            // Supprime l'utilisateur non vérifié
-            $user->delete();
-
-            return response()->json([
-                'error' => 'Votre e-mail n\'a pas été vérifié. Le compte a été supprimé.'
-            ], 403);
-        }
-
-        $token = $user->createToken('MyApp')->plainTextToken;
+        $token = JWTAuth::fromUser($user);
 
         return response()->json([
             'user' => $user,
-            'token' => $token
-        ]);
+        ])->cookie(
+            'token',               // Nom du cookie
+            $token,                // Le token JWT
+            60 * 24,               // Durée d'expiration (ici 24 heures)
+            null,                  // Chemin (null pour tout le domaine)
+            null,                  // Domaine (null pour le domaine actuel)
+            true,                  // Secure (True pour HTTPS uniquement)
+            true,                  // HttpOnly (Empêche l'accès par JavaScript)
+            false,                 // SameSite (Strict pour éviter le partage inter-domaines)
+            'Strict'              // SameSite=Strict (protéger contre CSRF)
+        );
     }
 
     public function profile()
     {
-        return response()->json(Auth::guard('api')->user());
+        return response()->json(JWTAuth::user());
     }
 
     public function logout()
     {
-        Auth::guard('api')->logout();
-        return response()->json(['message' => 'Déconnexion réussie']);
+        try {
+            JWTAuth::invalidate(JWTAuth::getToken());
+            return response()->json(['message' => 'Déconnexion réussie.']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Échec de la déconnexion.'], 500);
+        }
     }
 }
