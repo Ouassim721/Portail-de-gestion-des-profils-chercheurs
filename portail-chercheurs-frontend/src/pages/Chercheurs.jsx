@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-//import { getChercheurs } from "../services/api"; // Importation de la fonction API
-import "./Chercheurs.css";
+import axios from "axios";
 import DropdownButton from "../components/DropdownButton";
 import TableGenerique from "../components/TableGenerique";
 import Pagination from "../components/Pagination";
@@ -8,166 +7,135 @@ import ProfilChercheur from "../components/ProfilChercheur";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders, faTimes } from "@fortawesome/free-solid-svg-icons";
 import book from "../assets/book.jpg";
-import axios from "../axios"; //AXIOS POUR LE BACKEND
+import "./Chercheurs.css";
 
 function Chercheurs() {
-  // Fake data en attendant l'API
-  /*const fakeData = [
-    {
-      id: 1,
-      nom: "Dr. Mohamed Ali",
-      departement: "Informatique",
-      publications: 10,
-    },
-    {
-      id: 2,
-      nom: "Dr. Sara Karim",
-      departement: "Mathématiques",
-      publications: 15,
-    },
-  ];*/
-
-  //*********************************************************************/
-  // État pour stocker la liste des chercheurs récupérée de l'API ou des fake data
   const [chercheurs, setChercheurs] = useState([]);
+  const [chercheurSelectionne, setChercheurSelectionne] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const chercheursPerPage = 10;
 
-  // useEffect(() => {
-  //   setChercheurs(fakeData);
-  //   localStorage.setItem("chercheurs", JSON.stringify(fakeData));
-
-  //   // Une fois l'API disponible il faut decommenter ce bloc
-  //   /*
-  //     getChercheurs() // Appel à la fonction qui récupère les données de l'API
-  //       .then((response) => {
-  //         setChercheurs(response.data); // Stocke les données dans l'état
-  //         localStorage.setItem("chercheurs", JSON.stringify(response.data));
-  //       })
-  //       .catch((error) => {
-  //         console.error("Erreur lors de la récupération des chercheurs!", error); // En cas d'erreur
-  //       });
-  //     */
-  // }, []);
+  // Appel API à chaque changement de page
   useEffect(() => {
-    // Faire un appel à l'API pour récupérer les chercheurs
-    axios
-      .get("/chercheurs")
-      .then((response) => {
-        setChercheurs(response.data);
-      })
-      .catch((error) => {
-        console.error("Erreur lors de la récupération des chercheurs:", error);
-      });
-  }, []);
+    const fetchChercheurs = async () => {
+      try {
+        setIsLoading(true);
+        const response = await axios.get(`http://localhost:8000/api/chercheurs?page=${currentPage}`);
 
-  // État pour gérer la page actuelle de pagination
-  const [chercheurSelectionne, setChercheurSelectionne] = useState(null); // Chercheur sélectionné pour afficher dans le pop-up
-  const [currentPage, setCurrentPage] = useState(1); // Page actuelle
-  const chercheursPerPage = 10; // Nombre de chercheurs par page
+        // La réponse doit être structurée comme suit :
+        // {
+        //   data: [...],     // liste des chercheurs
+        //   current_page: 1,
+        //   last_page: 5,
+        //   total: 50
+        // }
+        setChercheurs(response.data.data);
+        setTotalPages(response.data.last_page);
+        setError(null);
+      } catch (error) {
+        console.error("Erreur API:", error);
+        setError("Erreur lors du chargement des données");
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  // Calcul des indices de la page actuelle pour la pagination
-  const indexOfLastChercheur = currentPage * chercheursPerPage;
-  const indexOfFirstChercheur = indexOfLastChercheur - chercheursPerPage;
+    fetchChercheurs();
+  }, [currentPage]);
 
-  // Utilisation des données de l'API ou des fake data
-  const currentChercheurs = chercheurs.slice(
-    indexOfFirstChercheur,
-    indexOfLastChercheur
-  );
-
-  // Calcul du nombre total de pages pour la pagination
-  const totalPages = Math.ceil(chercheurs.length / chercheursPerPage);
-
-  // Fonction pour ouvrir le pop-up du chercheur sélectionné
-  const openPopup = (chercheur) => {
-    setChercheurSelectionne(chercheur);
+  // Formatage des données pour la table générique
+  const formatDataForTable = (data) => {
+    return data.map((chercheur) => ({
+      id: chercheur.id,
+      nom: `${chercheur.prenom} ${chercheur.nom}`,
+      departement: chercheur.discipline,
+      publications: chercheur.publications_count || 0,
+      rawData: chercheur // On conserve les données brutes pour afficher le profil complet
+    }));
   };
 
-  // Fonction pour fermer le pop-up
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  const openPopup = (ligne) => {
+    setChercheurSelectionne(ligne.rawData);
+  };
+
   const closePopup = () => {
     setChercheurSelectionne(null);
   };
 
-  // Gestion du comportement du scroll lorsque le pop-up est ouvert ou fermé
+  // Gérer le scroll du body en cas d'ouverture du popup
   useEffect(() => {
-    if (chercheurSelectionne) {
-      document.body.style.overflow = "hidden"; // Désactive le scroll lorsque le pop-up est ouvert
-    } else {
-      document.body.style.overflow = "auto"; // Réactive le scroll lorsque le pop-up est fermé
-    }
+    document.body.style.overflow = chercheurSelectionne ? "hidden" : "auto";
   }, [chercheurSelectionne]);
 
-  //**************RETURN STATEMENT********************************************* */
   return (
     <div className="chercheurs-container">
+      {/* Image d'en-tête */}
       <div>
-        <img
-          src={book}
-          alt="Chercheurs"
-          className="w-full h-100 object-cover"
-        />
+        <img src={book} alt="Chercheurs" className="w-full h-100 object-cover" />
       </div>
 
-      <div className="">
-        <div className="flex flex-col sm:flex-row gap-4 sm:gap-0 sm:justify-between items-center mx-12 sm:mx-28 xl:mx-38 mt-12">
-          <h1 className="font-bold text-xl sm:text-2xl md:text-3xl">
-            Chercheurs
-          </h1>
+      <div>
+        <div className="flex flex-col sm:flex-row gap-4 sm:justify-between items-center mx-12 sm:mx-28 xl:mx-38 mt-12">
+          <h1 className="font-bold text-xl sm:text-2xl md:text-3xl">Chercheurs</h1>
           <DropdownButton
             icon={faSliders}
             children="Filtrer"
             variant="neutral"
             options={[
-              {
-                label: "Nom",
-                onClick: () => console.log("Nom"),
-              },
-              {
-                label: "Département",
-                onClick: () => console.log("Département"),
-              },
-              {
-                label: "Nombre de publication",
-                onClick: () => console.log("Nombre de publication"),
-              },
+              { label: "Nom", onClick: () => console.log("Filtrer par nom") },
+              { label: "Département", onClick: () => console.log("Filtrer par département") },
+              { label: "Publications", onClick: () => console.log("Filtrer par publications") },
             ]}
           />
         </div>
         <div className="mx-auto mt-8 mb-12 bg-gray-300 h-0.5 w-3/4"></div>
-        <div className="mx-auto my-5">
-          {/* Utilisation de TableGenerique pour afficher les données */}
-          <TableGenerique
-            columns={[
-              { key: "nom", label: "Nom" },
-              { key: "departement", label: "Département" },
-              { key: "publications", label: "Publications" },
-            ]}
-            data={currentChercheurs} // Les données actuelles de la page
-            onRowClick={openPopup} // Fonction pour ouvrir le pop-up lors du clic sur une ligne
-          />
-        </div>
-        {/* Affichage du pop-up si un chercheur est sélectionné */}
+
+        {isLoading ? (
+          <div className="text-center py-8">Chargement en cours...</div>
+        ) : error ? (
+          <div className="text-center py-8 text-red-500">{error}</div>
+        ) : (
+          <div className="mx-auto my-5">
+            <TableGenerique
+              columns={[
+                { key: "nom", label: "Nom" },
+                { key: "departement", label: "Département" },
+                { key: "publications", label: "Publications" },
+              ]}
+              data={formatDataForTable(chercheurs)}
+              onRowClick={openPopup}
+            />
+
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </div>
+        )}
+
         {chercheurSelectionne && (
           <div className="popup-overlay">
-            <div className="popup-content w-[95%] h-[95%] sm:w-[85%] md:w-[80%] ">
-              {/* Bouton de fermeture du pop-up */}
+            <div className="popup-content w-[95%] h-[95%] sm:w-[85%] md:w-[80%]">
               <button className="close-btn" onClick={closePopup}>
                 <FontAwesomeIcon icon={faTimes} />
               </button>
-              {/* Affichage du profil du chercheur sélectionné */}
-              <ProfilChercheur chercheur={chercheurSelectionne} />
+              <ProfilChercheur chercheur={chercheurSelectionne} onClose={closePopup} />
             </div>
           </div>
         )}
-        {/* Pagination pour naviguer entre les pages */}
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage} // Met à jour la page actuelle
-        />
       </div>
     </div>
   );
-  //**************FIN RETURN STATEMENT********************************************* */
 }
 
 export default Chercheurs;
