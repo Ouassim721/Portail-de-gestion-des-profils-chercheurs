@@ -37,7 +37,7 @@ function Connexion() {
 
       const user = res.data.user;
 
-      if (user.role === "admin") {
+      if (user.role === "Administrateur") {
         window.location.href = "/dashboard";
       } else {
         window.location.href = "/";

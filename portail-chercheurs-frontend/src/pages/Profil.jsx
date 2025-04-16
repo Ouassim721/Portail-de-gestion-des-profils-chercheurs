@@ -1,15 +1,24 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProfilChercheur from "../components/ProfilChercheur";
-
+import axios from "../axios";
 const Profil = () => {
   const navigate = useNavigate();
-
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/connexion");
-    }
+    // Assurez-vous que les cookies sont envoyés avec la requête
+    axios
+      .get("/profile", {
+        withCredentials: true, // Ceci permet d'envoyer les cookies HTTPOnly avec la requête
+      })
+      .then((response) => {
+        // Traitement si la requête réussit
+        console.log("Profil récupéré:", response.data);
+      })
+      .catch((error) => {
+        // Si l'authentification échoue ou si le token est invalide, rediriger vers la page de connexion
+        console.error("Erreur de récupération du profil:", error);
+        navigate("/connexion");
+      });
   }, [navigate]);
   const chercheursData = {
     id: 1,

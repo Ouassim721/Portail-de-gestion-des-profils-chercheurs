@@ -12,7 +12,7 @@ function AdminDashboard() {
       .get("/profile")
       .then((response) => {
         const user = response.data;
-        if (user.role !== "admin") {
+        if (user.role !== "Administrateur") {
           navigate("/"); // Rediriger si l'utilisateur n'est pas un admin
         }
       })

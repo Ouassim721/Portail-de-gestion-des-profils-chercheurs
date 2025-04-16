@@ -16,7 +16,7 @@ function TopBar() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("/me");
+        const res = await axios.get("/profile");
         setUser(res.data);
       } catch (err) {
         console.error(
