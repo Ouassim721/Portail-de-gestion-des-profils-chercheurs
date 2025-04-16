@@ -38,7 +38,7 @@ return [
     'guards' => [
         'api' => [
             'driver' => 'jwt',
-            'provider' => 'users',
+            'provider' => 'chercheurs',
         ],
     ],
 
@@ -60,9 +60,9 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'chercheurs' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => env('AUTH_MODEL', App\Models\Chercheur::class),
         ],
 
         // 'users' => [

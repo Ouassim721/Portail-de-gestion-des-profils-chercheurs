@@ -20,6 +20,13 @@ class ChercheurController extends Controller
             'total' => $chercheurs->total(),
         ]);
     }
-    
-    
+    public function destroy($id)
+    {
+        $chercheur = Chercheur::find($id);
+        if ($chercheur) {
+            $chercheur->delete();
+            return response()->json(['message' => 'Chercheur supprimé avec succès.']);
+        }
+        return response()->json(['message' => 'Chercheur introuvable.'], 404);
+    }
 }

@@ -18,7 +18,7 @@ class IsAdmin
     {
         $user = Auth::user();
 
-        if (!$user || $user->role !== 'admin') {
+        if (!$user || $user->role !== 'Administrateur') {
             return response()->json(['message' => 'Accès refusé.'], 403);
         }
 

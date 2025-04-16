@@ -16,8 +16,8 @@ class PublicationFactory extends Factory
             'abstract' => $this->faker->paragraphs(3, true),
             'chercheur_id' => \App\Models\Chercheur::inRandomOrder()->first()->id,
             'discipline_id' => \App\Models\Discipline::inRandomOrder()->first()->id,
-            'created_at' => $this->faker->dateTimeBetween('-6 months'),
-            'updated_at' => $this->faker->dateTimeBetween('-1 month')
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 
@@ -25,11 +25,11 @@ class PublicationFactory extends Factory
     {
         $count = rand(1, 4);
         $authors = [];
-        
+
         for ($i = 0; $i < $count; $i++) {
             $authors[] = $this->faker->name;
         }
-        
+
         return implode(', ', $authors);
     }
 }

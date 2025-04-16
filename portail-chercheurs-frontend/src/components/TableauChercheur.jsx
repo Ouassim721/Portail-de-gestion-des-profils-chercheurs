@@ -1,66 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Pagination from "./Pagination";
 import TableGenerique2 from "./TableGenerique2";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Button from "./Button";
-const initialResearchers = [
-  {
-    id: 1,
-    name: "Lindsey Stroud",
-    email: "lindsey.stroud@gmail.com",
-    domain: "Science mathématique informatique",
-    status: "Online",
-    avatar: "https://via.placeholder.com/40",
-  },
-  {
-    id: 2,
-    name: "Sarah Brown",
-    email: "sarah.brown@gmail.com",
-    domain: "Science mathématique informatique",
-    status: "Online",
-    avatar: "https://via.placeholder.com/40",
-  },
-  {
-    id: 3,
-    name: "Micheal Owen",
-    email: "michael.owen@gmail.com",
-    domain: "Science mathématique informatique",
-    status: "Offline",
-    avatar: "https://via.placeholder.com/40",
-  },
-  {
-    id: 4,
-    name: "Mary Jane",
-    email: "mary.jane@gmail.com",
-    domain: "Intelligence Artificielle",
-    status: "Offline",
-    avatar: "https://via.placeholder.com/40",
-  },
-  {
-    id: 5,
-    name: "Garry Lineker",
-    email: "garry.lineker@gmail.com",
-    domain: "Intelligence Artificielle",
-    status: "Online",
-    avatar: "https://via.placeholder.com/40",
-  },
-];
+import axios from "../axios";
 
-export default function ResearchersList() {
+export default function ChercheursList() {
   const navigate = useNavigate();
-  const [researchers, setResearchers] = useState(initialResearchers);
+  const [researchers, setChercheurs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const [totalPages, setTotalPages] = useState(0);
+
+  useEffect(() => {
+    const fetchChercheurs = async () => {
+      try {
+        const res = await axios.get(`/chercheurs?page=${currentPage}`);
+
+        // Update the total researchers and pages
+        setTotalPages(res.data.last_page);
+
+        // Format data for display
+        const formatted = res.data.data.map((c) => ({
+          id: c.id,
+          name: `${c.prenom} ${c.nom}`,
+          email: c.email,
+          domain: c.discipline,
+          status: "Online",
+        }));
+
+        setChercheurs(formatted);
+      } catch (error) {
+        console.error("Erreur lors du chargement des chercheurs :", error);
+      }
+    };
+
+    fetchChercheurs();
+  }, [currentPage]);
 
   const handleSearch = (e) => setSearchTerm(e.target.value.toLowerCase());
 
-  const deleteResearcher = (id) => {
+  const deleteChercheur = async (id) => {
+    // Demander confirmation à l'admin
     if (window.confirm("Supprimer ce chercheur ?")) {
-      setResearchers((prev) => prev.filter((r) => r.id !== id));
+      try {
+        // Envoi de la requête DELETE pour supprimer le chercheur du backend
+        await axios.delete(`/chercheurs/${id}`);
+
+        // Mise à jour de l'état local pour supprimer le chercheur de la liste
+        setChercheurs((prev) => prev.filter((r) => r.id !== id));
+      } catch (error) {
+        console.error("Erreur lors de la suppression du chercheur :", error);
+        alert("Une erreur est survenue lors de la suppression du chercheur.");
+      }
     }
   };
 
@@ -81,10 +76,6 @@ export default function ResearchersList() {
       }
       return 0;
     });
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="container mx-auto p-6">
@@ -109,17 +100,17 @@ export default function ResearchersList() {
       </div>
 
       <TableGenerique2
-        data={currentItems}
+        data={filteredData} // Utiliser filteredData qui est déjà filtré et trié
         selectedRows={selectedRows}
         setSelectedRows={setSelectedRows}
         sortConfig={sortConfig}
         setSortConfig={setSortConfig}
-        deleteResearcher={deleteResearcher}
+        deleteChercheur={deleteChercheur}
       />
 
       <Pagination
         currentPage={currentPage}
-        totalPages={Math.ceil(filteredData.length / itemsPerPage)}
+        totalPages={totalPages}
         onPageChange={setCurrentPage}
       />
     </div>

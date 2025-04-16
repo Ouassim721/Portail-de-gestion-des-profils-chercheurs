@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('Publications', function (Blueprint $table) {
+        Schema::create('publications', function (Blueprint $table) {
             $table->increments('id');
             $table->string('titre', 255);
             $table->date('date_publication');
@@ -22,13 +22,13 @@ return new class extends Migration
             // Clé étrangère adaptée à la table Chercheur existante
             $table->foreign('chercheur_id')
                 ->references('id')
-                ->on('Chercheur')
+                ->on('chercheurs')
                 ->onDelete('cascade');
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('Publications');
+        Schema::dropIfExists('publications');
     }
 };

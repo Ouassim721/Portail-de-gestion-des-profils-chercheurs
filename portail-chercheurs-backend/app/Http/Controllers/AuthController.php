@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
 use App\Models\Chercheur;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Carbon\Carbon;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
@@ -17,7 +15,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'prenom' => 'required|string',
             'nom' => 'required|string',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:chercheurs,email',
         ]);
 
         if ($validator->fails()) {
@@ -31,39 +29,27 @@ class AuthController extends Controller
         $nom = strtolower(trim($request->nom));
         $email = strtolower(trim($request->email));
 
-        $chercheur = Chercheur::whereRaw('LOWER(prenom) = ?', [$prenom])
-            ->whereRaw('LOWER(nom) = ?', [$nom])
-            ->whereRaw('LOWER(email) = ?', [$email])
-            ->first();
+        $passwordRaw = $prenom . '@' . $nom;
 
-        if (!$chercheur) {
-            return response()->json(['message' => 'Chercheur non trouvé.'], 404);
-        }
-
-        $annee = $chercheur->date_naissance ? Carbon::parse($chercheur->date_naissance)->year : '0000';
-        $passwordRaw = $prenom . $nom . '@' . $annee;
-
-        if (User::where('email', $email)->exists()) {
-            return response()->json(['message' => 'Un utilisateur avec cet email existe déjà.'], 409);
-        }
-
-        $user = User::create([
-            'name' => ucfirst($prenom) . ' ' . ucfirst($nom),
+        $user = Chercheur::create([
+            'nom' => ucfirst($nom),
+            'prenom' => ucfirst($prenom),
             'email' => $email,
             'password' => Hash::make($passwordRaw),
             'role' => 'chercheur',
+            'discipline' => 'Informatique'
         ]);
 
         return response()->json([
             'message' => 'Utilisateur chercheur créé avec succès.',
-            'default_password' => $passwordRaw,
+            // 'default_password' => $passwordRaw,
             'user' => $user,
         ], 201);
     }
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-        $user = User::where('email', $credentials['email'])->first();
+        $user = Chercheur::where('email', $credentials['email'])->first();
 
         if (!$user || !Hash::check($credentials['password'], $user->password)) {
             return response()->json(['error' => 'Identifiants incorrects.'], 401);
@@ -82,7 +68,7 @@ class AuthController extends Controller
             true,                  // Secure (True pour HTTPS uniquement)
             true,                  // HttpOnly (Empêche l'accès par JavaScript)
             false,                 // SameSite (Strict pour éviter le partage inter-domaines)
-            'Strict'              // SameSite=Strict (protéger contre CSRF)
+            'Strict'               // SameSite=Strict (protéger contre CSRF)
         );
     }
 
