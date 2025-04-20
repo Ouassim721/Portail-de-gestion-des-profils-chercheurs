@@ -1,5 +1,6 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
+import axios from "../axios";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -22,6 +23,9 @@ ChartJS.register(
 );
 
 function Dashboard() {
+  const [countChercheurs, setcountChercheurs] = useState(null);
+  const [countPublications, setcountPublications] = useState(null);
+
   // Génère des valeurs aléatoires pour les données du graphique
   const randomData = Array.from({ length: 7 }, () =>
     Math.floor(Math.random() * 20)
@@ -32,7 +36,7 @@ function Dashboard() {
       {
         label: "Chercheurs",
         data: randomData,
-        borderColor: "var(--color-primary)", // bleu-500 de Tailwind
+        borderColor: "var(--color-primary)",
         backgroundColor: "rgba(59, 130, 246, 0.2)",
         fill: true,
         tension: 0.3,
@@ -49,10 +53,25 @@ function Dashboard() {
       },
     },
   };
-
+  useEffect(() => {
+    axios
+      .get("/stats")
+      .then((response) => {
+        setcountChercheurs(response.data.chercheurs);
+        setcountPublications(response.data.publications);
+      })
+      .catch((error) => {
+        console.error(
+          "Erreur lors de la récupération du nombre de chercheurs:",
+          error
+        );
+      });
+  }, []);
   // Génère des valeurs aléatoires pour les cartes statistiques
-  const randomPublications = Math.floor(Math.random() * 2000);
-  const randomChercheurs = Math.floor(Math.random() * 100);
+  const nombrePublications =
+    countPublications !== null ? countPublications : "Chargement...";
+  const nombreChercheurs =
+    countChercheurs !== null ? countChercheurs : "Chargement...";
   const randomVisiteurs = Math.floor(Math.random() * 500);
 
   return (
@@ -61,11 +80,11 @@ function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-pink-100 rounded-md p-4">
           <h3 className="text-sm text-gray-500">Publications</h3>
-          <p className="text-2xl font-bold">{randomPublications}</p>
+          <p className="text-2xl font-bold">{nombrePublications}</p>
         </div>
         <div className="bg-green-100 rounded-md p-4">
           <h3 className="text-sm text-gray-500">Chercheurs</h3>
-          <p className="text-2xl font-bold">{randomChercheurs}</p>
+          <p className="text-2xl font-bold">{nombreChercheurs}</p>
         </div>
         <div className="bg-blue-100 rounded-md p-4">
           <h3 className="text-sm text-gray-500">Visiteurs</h3>

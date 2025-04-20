@@ -29,4 +29,9 @@ class ChercheurController extends Controller
         }
         return response()->json(['message' => 'Chercheur introuvable.'], 404);
     }
+    public function getNombreChercheurs()
+    {
+        $compteur = Chercheur::count();
+        return response()->json(['count' => $compteur]);
+    }
 }

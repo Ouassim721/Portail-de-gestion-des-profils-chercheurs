@@ -7,19 +7,17 @@ function AdminDashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Vérification si le token est dans les cookies
     axios
       .get("/profile")
       .then((response) => {
         const user = response.data;
         if (user.role !== "Administrateur") {
-          navigate("/"); // Rediriger si l'utilisateur n'est pas un admin
+          navigate("/");
         }
       })
       .catch((error) => {
-        // Si l'utilisateur n'est pas authentifié ou autre erreur
         console.error("Erreur de récupération du profil:", error);
-        navigate("/connexion"); // Rediriger vers la page de connexion si pas authentifié
+        navigate("/connexion");
       });
   }, [navigate]);
   return (

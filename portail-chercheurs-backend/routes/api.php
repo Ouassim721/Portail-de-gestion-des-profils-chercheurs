@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Chercheur;
 use App\Http\Controllers\DisciplineController;
+use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\ChercheurController;
 
@@ -41,3 +42,6 @@ Route::apiResource('publications', PublicationController::class);
 
 
 Route::get('/chercheurs', [ChercheurController::class, 'apiIndex']);
+
+// Route pour le nombre des chercheurs inscrit
+Route::get('/stats', [StatisticsController::class, 'getStats']);

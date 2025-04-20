@@ -23,9 +23,9 @@ function TopBar() {
           "Erreur lors de la récupération des données utilisateur:",
           err
         );
-        setUser(null); // Gérer l'erreur
+        setUser(null);
       } finally {
-        setLoading(false); // Fin du chargement
+        setLoading(false);
       }
     };
 
@@ -63,7 +63,9 @@ function TopBar() {
             <FaBars size={20} />
           </button>
         </div>
-        <h1 className="text-xl font-semibold">Bienvenue {user.name}</h1>
+        <h1 className="text-xl font-semibold">
+          Bienvenue {user.prenom} {user.nom}
+        </h1>
         <div className="flex items-center space-x-2">
           <img
             src={pdp}
@@ -71,7 +73,9 @@ function TopBar() {
             className="w-16 rounded-full cursor-pointer"
           />
           <div>
-            <p className="text-sm font-medium">{user.name}</p>
+            <p className="text-sm font-medium">
+              {user.prenom} {user.nom}
+            </p>
             <p className="text-xs text-gray-500">Administrateur</p>
           </div>
         </div>

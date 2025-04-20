@@ -117,4 +117,9 @@ class PublicationController extends Controller
         return redirect()->route('publications.index')
             ->with('success', 'Publication supprimée');
     }
+    public function getNombrePublications()
+    {
+        $compteur = Publication::count();
+        return response()->json(['count' => $compteur]);
+    }
 }
