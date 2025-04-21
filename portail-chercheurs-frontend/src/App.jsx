@@ -11,7 +11,7 @@ import Layout from "./components/Layout";
 import Publications from "./pages/Publications";
 import DetailsPublication from "./pages/DetailsPublication";
 // import "./services/api";
-import Erreur from "./pages/Erreur404";
+import NotFound from "./pages/NotFound";
 
 // Authentification
 import Connexion from "./pages/connexion";
@@ -50,7 +50,6 @@ function App() {
             {/* Pages publiques */}
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
-              <Route path="/erreur" element={<Erreur />} />
               <Route path="chercheurs" element={<Chercheurs />} />
               <Route
                 path="/profil-chercheur/:id"
@@ -73,6 +72,7 @@ function App() {
                 }
               />
             </Route>
+            <Route path="*" element={<NotFound />} />
 
             {/* Authentification */}
             <Route path="/connexion" element={<Connexion />} />
