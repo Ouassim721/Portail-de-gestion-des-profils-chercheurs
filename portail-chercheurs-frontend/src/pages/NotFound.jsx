@@ -1,4 +1,5 @@
 import Footer from "../components/Footer";
+import Button from "../components/Button";
 export default function NotFound() {
   return (
     <>
@@ -14,12 +15,9 @@ export default function NotFound() {
             Sorry, we couldn’t find the page you’re looking for.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
-            <a
-              href="#"
-              className="rounded-md bg-[var(--color-primary)] px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-900 duration-300"
-            >
+            <Button onClick={() => (window.location.href = "/")}>
               Go back home
-            </a>
+            </Button>
             <a href="#" className="text-sm font-semibold text-gray-900">
               Contact support <span aria-hidden="true">&rarr;</span>
             </a>
