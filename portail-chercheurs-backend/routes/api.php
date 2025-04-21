@@ -20,7 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return response()->json($request->user());
 });
 
-Route::middleware(['auth:api'])->group(function () {
+Route::middleware(['auth:api', 'password.changed'])->group(function () {
     Route::get('/profile', [AuthController::class, 'profile']);
 });
 
@@ -45,3 +45,6 @@ Route::get('/chercheurs', [ChercheurController::class, 'apiIndex']);
 
 // Route pour le nombre des chercheurs inscrit
 Route::get('/stats', [StatisticsController::class, 'getStats']);
+
+//Route pour le changement de mot de passe
+Route::middleware('auth:api')->post('/change-password', [AuthController::class, 'changePassword']);

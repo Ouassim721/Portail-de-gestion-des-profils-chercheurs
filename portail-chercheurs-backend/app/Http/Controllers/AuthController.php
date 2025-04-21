@@ -76,6 +76,19 @@ class AuthController extends Controller
     {
         return response()->json(JWTAuth::user());
     }
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = JWTAuth::user();
+        $user->password = bcrypt($request->password);
+        $user->must_change_password = false;
+        $user->save();
+
+        return response()->json(['message' => 'Mot de passe changé avec succès.']);
+    }
 
     public function logout()
     {

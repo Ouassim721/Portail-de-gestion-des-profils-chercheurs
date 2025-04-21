@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -16,6 +17,7 @@ import connexionImage from "../assets/connexion.png";
 import axios from "../axios";
 
 function Connexion() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -25,22 +27,25 @@ function Connexion() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:8000/api/login",
+        "/login",
         {
           email,
           password,
         },
         {
-          withCredentials: true, // ⭐ Pour inclure les cookies (important)
+          withCredentials: true,
         }
       );
 
       const user = res.data.user;
-
-      if (user.role === "Administrateur") {
-        window.location.href = "/dashboard";
+      if (user && user.must_change_password) {
+        navigate("/change-password");
       } else {
-        window.location.href = "/";
+        if (user.role === "Administrateur") {
+          window.location.href = "/dashboard";
+        } else {
+          window.location.href = "/";
+        }
       }
     } catch (err) {
       console.error(err);
