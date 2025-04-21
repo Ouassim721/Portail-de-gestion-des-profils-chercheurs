@@ -20,7 +20,6 @@ const CreateResearcher = () => {
       alert("Chercheur créé avec succès !");
       window.location.href = "/dashboard/adminchercheurs";
     } catch (err) {
-      console.error(err);
       setError(
         "Erreur lors de la création : " + err.response?.data?.message ||
           "Erreur inconnue"
