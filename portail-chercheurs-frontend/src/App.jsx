@@ -26,16 +26,12 @@ import AdminDashboard from "./pages/administration/AdminDashboard";
 import AdminChercheurs from "./pages/administration/AdminChercheurs";
 import CreationChercheur from "./pages/administration/CreationChercheur";
 
-<<<<<<< HEAD
-import ProfileCompletion from "./pages/ProfileCompletion";
-import ScopusPublications from "./pages/ScopusPublications";
-
-//Loader
-=======
 // Loader
->>>>>>> main
 import { useLoading } from "./contexts/useLoading";
 import Loader from "./components/Loader";
+
+import ProfileCompletion from "./pages/ProfileCompletion";
+import ScopusPublications from "./pages/ScopusPublications";
 
 function App() {
   const { isLoading, showLoader, hideLoader } = useLoading();
@@ -49,7 +45,7 @@ function App() {
 
   return (
     <>
-      {isLoading && <Loader />}
+      {/* {isLoading && <Loader />} */}
 
       <AuthProvider>
         <BrowserRouter>
@@ -81,27 +77,9 @@ function App() {
             </Route>
             <Route path="*" element={<NotFound />} />
 
-<<<<<<< HEAD
-        
+            <Route path="complete-profile" element={<ProfileCompletion />} />
+            <Route path="scopus-publications" element={<ScopusPublications />} />
 
-        <Route path="/connexion" element={<Connexion />} />
-        <Route path="/change-password" element={<ChangePassword />} />
-        <Route path="/dashboard/adminconnexion" element={<AdminConnexion />} />
-        <Route path="/dashboard" element={<AdminDashboard />} />
-        <Route
-          path="/dashboard/adminchercheurs"
-          element={<AdminChercheurs />}
-        />
-        <Route
-          path="/dashboard/adminchercheurs/creationchercheur"
-          element={<CreationChercheur />}
-        />
-      </Routes>
-      <Routes>
-        <Route path="/complete-profile" element={<ProfileCompletion />} />
-        <Route path="/scopus-publications" element={<ScopusPublications />} />
-      </Routes>
-=======
             {/* Authentification */}
             <Route path="/connexion" element={<Connexion />} />
             <Route
@@ -159,7 +137,6 @@ function App() {
           </Routes>
         </BrowserRouter>
       </AuthProvider>
->>>>>>> main
     </>
   );
 }

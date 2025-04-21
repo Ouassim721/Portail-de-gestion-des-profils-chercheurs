@@ -48,8 +48,12 @@ function Connexion() {
         }
       }
     } catch (err) {
-      console.error(err);
-      setError("Identifiants Invalide ou autre erreur.");
+      if (err.response) {
+        console.error("Réponse de l'API :", err.response.status, err.response.data);
+      } else {
+        console.error("Erreur réseau ou client :", err);
+      }
+      setError("Identifiants invalides ou erreur serveur.");
     }
   };
 
