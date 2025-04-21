@@ -49,8 +49,6 @@ const ChangePassword = () => {
         navigate("/");
       }, 1500);
     } catch (err) {
-      console.log("haha");
-
       const msg = err.response?.data?.message || "Une erreur s'est produite.";
       setError(msg);
     }

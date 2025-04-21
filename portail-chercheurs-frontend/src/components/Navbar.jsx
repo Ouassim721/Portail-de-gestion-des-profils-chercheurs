@@ -27,10 +27,11 @@ function Navbar({ sticky = false }) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("/profile");
+        const res = await axios.get("/profile", {
+          withCredentials: true,
+        });
         setUser(res.data);
-      } catch (err) {
-        console.error(err);
+      } catch {
         setUser(null);
       }
     };
@@ -149,8 +150,8 @@ function Navbar({ sticky = false }) {
                 className="w-13 rounded-full cursor-pointer"
               />
               <div className="text-gray-600 ">
-                <h2>Dr.</h2>
-                <h2>{user.name}</h2>
+                <h2>{user.prenom}</h2>
+                <h2 className="uppercase">{user.nom}</h2>
               </div>
               <FontAwesomeIcon
                 icon={faCaretDown}

@@ -20,9 +20,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return response()->json($request->user());
 });
 
-Route::middleware(['auth:api', 'password.changed'])->group(function () {
-    Route::get('/profile', [AuthController::class, 'profile']);
+// Route::middleware(['auth:api', 'password.changed'])->group(function () {
+//     Route::get('/profile', [AuthController::class, 'profile']);
+// });
+Route::middleware('auth:api')->get('/profile', function (Request $request) {
+    return $request->user();
 });
+
 
 //Chercheurs
 Route::middleware('auth:api')->get('/chercheurs', function () {
@@ -48,3 +52,7 @@ Route::get('/stats', [StatisticsController::class, 'getStats']);
 
 //Route pour le changement de mot de passe
 Route::middleware('auth:api')->post('/change-password', [AuthController::class, 'changePassword']);
+
+Route::middleware('auth:api')->get('/check-auth', function () {
+    return response()->json(['authenticated' => true]);
+});
