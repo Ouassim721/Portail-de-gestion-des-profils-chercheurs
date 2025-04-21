@@ -21,6 +21,9 @@ import AdminDashboard from "./pages/administration/AdminDashboard";
 import AdminChercheurs from "./pages/administration/AdminChercheurs";
 import CreationChercheur from "./pages/administration/CreationChercheur";
 
+import ProfileCompletion from "./pages/ProfileCompletion";
+import ScopusPublications from "./pages/ScopusPublications";
+
 //Loader
 import { useLoading } from "./contexts/useLoading";
 import Loader from "./components/Loader";
@@ -53,6 +56,8 @@ function App() {
           <Route path="/profil" element={<Profil />} />
         </Route>
 
+        
+
         <Route path="/connexion" element={<Connexion />} />
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/dashboard/adminconnexion" element={<AdminConnexion />} />
@@ -65,6 +70,10 @@ function App() {
           path="/dashboard/adminchercheurs/creationchercheur"
           element={<CreationChercheur />}
         />
+      </Routes>
+      <Routes>
+        <Route path="/complete-profile" element={<ProfileCompletion />} />
+        <Route path="/scopus-publications" element={<ScopusPublications />} />
       </Routes>
     </>
   );

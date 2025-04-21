@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             'role' => 'admin',
             'remember_token' => Str::random(10),
         ]);
-
+        
         User::factory()->count(10)->create();
     }
 }

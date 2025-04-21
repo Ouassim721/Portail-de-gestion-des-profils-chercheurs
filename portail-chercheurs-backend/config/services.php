@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'scopus' => [
+    'base_uri' => 'https://api.elsevier.com/',
+    'api_key' => env('545782305c16d8fbbd29c26a4addf6f5'),
+    'headers' => [
+        'Accept' => 'application/json',
+    ]
+    ],
+
 ];

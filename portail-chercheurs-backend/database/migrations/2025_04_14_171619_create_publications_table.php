@@ -1,11 +1,11 @@
+// 2025_04_14_171619_create_publications_table.php
 <?php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up()
     {
         Schema::create('publications', function (Blueprint $table) {
@@ -15,11 +15,11 @@ return new class extends Migration
             $table->date('date_modification')->nullable();
             $table->text('auteurs');
             $table->text('abstract');
+            $table->integer('citation_count')->nullable();//->after('abstract'); 
             $table->unsignedInteger('chercheur_id');
 
             $table->timestamps();
 
-            // Clé étrangère adaptée à la table Chercheur existante
             $table->foreign('chercheur_id')
                 ->references('id')
                 ->on('chercheurs')

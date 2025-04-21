@@ -46,7 +46,7 @@ const ChangePassword = () => {
       });
 
       setTimeout(() => {
-        navigate("/");
+        navigate("/complete-profile");
       }, 1500);
     } catch (err) {
       console.log("haha");
