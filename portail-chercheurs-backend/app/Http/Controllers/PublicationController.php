@@ -12,7 +12,7 @@ class PublicationController extends Controller
     {
         $request->validate([
             'publications' => 'required|array',
-            'publications.*' => 'required|string'
+            'publications.*.titre' => 'required|string',
         ]);
 
         try {
@@ -37,6 +37,44 @@ class PublicationController extends Controller
 
         } catch (\Exception $e) {
             return response()->json(['error' => 'Erreur lors de l\'importation'], 500);
+        }
+    }
+    public function store(Request $request)
+    {
+        $request->validate([
+            'publications' => 'required|array',
+            'publications.*.scopus_id' => 'required|string',
+            'publications.*.title' => 'required|string',
+        ]);
+
+        try {
+            $importedIds = [];
+            
+            foreach ($request->publications as $pub) {
+                $chercheur = Publication::updateOrCreate(
+                    ['scopus_id' => $pub['scopus_id']],
+                    [
+                        'user_id' => auth()->id(),
+                        'title' => $pub['title'],
+                        'authors' => $pub['authors'],
+                        'publication_date' => $pub['publication_date'],
+                        'citation_count' => $pub['citation_count'],
+                        'doi' => $pub['doi']
+                    ]
+                );
+                
+                $importedIds[] = $publication->id;
+            }
+
+            return response()->json([
+                'message' => count($importedIds).' publications importées avec succès',
+                'ids' => $importedIds
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Erreur lors de l\'importation: '.$e->getMessage()
+            ], 500);
         }
     }
 }
