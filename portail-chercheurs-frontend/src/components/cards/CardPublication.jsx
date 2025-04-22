@@ -11,6 +11,7 @@ const CardPublication = ({
   category = ["IA", "Machine Learning", "Deep Learning", "Web"],
   date = "15 Jan 2025",
   citations = "156",
+  pdf_path = null,
 }) => {
   return (
     <div
@@ -58,13 +59,19 @@ const CardPublication = ({
           </h5>
         </div>
         <div className="flex lg:flex-col gap-4 lg:w-full">
-          <Button
-            icon={faDownload}
-            variant="secondary"
-            className="font-light! h-10"
-          >
-            Télécharger PDF
-          </Button>
+          {pdf_path ? (
+            <a
+              href={`http://localhost:8000/storage/${pdf_path}`}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-3 px-4 py-2 rounded-lg transition duration-300 ease-in-out cursor-pointer justify-center bg-[var(--color-secondary)] text-[var(--color-white)] hover:bg-emerald-400 font-light! h-10"
+            >
+              Voir le PDF
+            </a>
+          ) : (
+            ""
+          )}
+
           <Button
             icon={faShareNodes}
             variant="secondaryoutline"

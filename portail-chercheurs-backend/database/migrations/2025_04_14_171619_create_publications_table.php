@@ -16,7 +16,7 @@ return new class extends Migration
             $table->text('auteurs');
             $table->text('abstract');
             $table->unsignedInteger('chercheur_id');
-
+            $table->string('pdf_path')->nullable();
             $table->timestamps();
 
             // Clé étrangère adaptée à la table Chercheur existante

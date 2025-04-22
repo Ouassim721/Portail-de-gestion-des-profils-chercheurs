@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState, useEffect } from "react";
 import { faFilter, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FaFileAlt, FaSearch, FaPlus, FaFilter } from "react-icons/fa";
 import SearchBar from "../components/research/SearchBar";
@@ -6,7 +7,20 @@ import Button from "../components/Button";
 import DropdownButton from "../components/DropdownButton";
 import CardStatPublication from "../components/cards/CardStatPublication";
 import CardPublication from "../components/cards/CardPublication";
+import axios from "../axios";
 const Publications = () => {
+  const [publications, setPublications] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/api/publications")
+      .then((response) => {
+        setPublications(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Erreur lors du chargement des publications :", error);
+      });
+  }, []);
   return (
     <div className="min-h-screen ">
       <div className="w-full bg-[var(--color-primary)] flex flex-col lg:flex-row gap-4 items-center p-4">
@@ -85,10 +99,16 @@ const Publications = () => {
         </section>
         <section>
           <div>
-            <CardPublication />
-            <CardPublication />
-            <CardPublication />
-            <CardPublication />
+            {publications.map((pub) => (
+              <CardPublication
+                key={pub.id}
+                title={pub.titre}
+                auteur={` ${pub.chercheur.prenom} ${pub.chercheur.nom}`}
+                description={pub.abstract}
+                date={pub.date_publication}
+                departement={pub.discipline.nom}
+              />
+            ))}
           </div>
         </section>
       </main>
