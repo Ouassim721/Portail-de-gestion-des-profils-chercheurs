@@ -1,6 +1,8 @@
 import pdp from "../../assets/chercheur-place-holder.jpg";
 import Button from "../Button";
-import { faDownload, faShareNodes } from "@fortawesome/free-solid-svg-icons";
+import {
+  /*faDownload,*/ faShareNodes,
+} from "@fortawesome/free-solid-svg-icons";
 
 const CardPublication = ({
   title = "Intelligence Artificielle et Apprentissage Automatique : Une Approche Moderne",
