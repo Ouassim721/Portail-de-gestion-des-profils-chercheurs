@@ -42,8 +42,8 @@ Route::delete('/chercheurs/{id}', [ChercheurController::class, 'destroy']);
 Route::apiResource('disciplines', DisciplineController::class);
 
 // Routes pour les publications
-Route::apiResource('publications', PublicationController::class);
-
+// Route::apiResource('/publications', PublicationController::class, 'index');
+Route::get('/publications', [PublicationController::class, 'index']);
 
 Route::get('/chercheurs', [ChercheurController::class, 'apiIndex']);
 

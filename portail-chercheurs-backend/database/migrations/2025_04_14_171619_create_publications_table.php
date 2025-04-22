@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->text('abstract');
             $table->integer('citation_count')->nullable();//->after('abstract'); 
             $table->unsignedInteger('chercheur_id');
-
+            $table->string('pdf_path')->nullable();
             $table->timestamps();
 
             $table->foreign('chercheur_id')
