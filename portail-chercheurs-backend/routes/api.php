@@ -9,6 +9,7 @@ use App\Http\Controllers\DisciplineController;
 use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\ChercheurController;
+use App\Http\Controllers\ScopusPublicationController;
 
 //-------------------------------Authentification (JWT)-----------------------------------------------//
 Route::post('/login', [AuthController::class, 'login']);
@@ -53,8 +54,20 @@ Route::get('/stats', [StatisticsController::class, 'getStats']);
 //Route pour le changement de mot de passe
 Route::middleware('auth:api')->post('/change-password', [AuthController::class, 'changePassword']);
 
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/scopus-publications', [ScopusController::class, 'fetchPublications']);
+Route::middleware('auth:api')->group(function () {
+    // Scopus
+    Route::get('/scopus-publications', [ScopusPublicationController::class, 'searchAuthors']);
+    Route::post('/publications', [ScopusPublicationController::class, 'store']);
+    
     Route::put('/chercheur/profile', [ChercheurController::class, 'updateProfile']);
-    Route::post('/publications', [PublicationController::class, 'storeBatch']);
 });
+
+Route::middleware('auth:api')->group(function () {
+    // Recherche d'auteurs
+    Route::get('/scopus/authors', [ScopusPublicationController::class, 'searchAuthors']);
+    Route::post('/scopus/link', [ScopusPublicationControllerr::class, 'linkAuthor']);
+    // Lier un auteur
+    Route::post('/scopus/link-author', [ScopusPublicationController::class, 'linkAuthor']);
+    
+});
+

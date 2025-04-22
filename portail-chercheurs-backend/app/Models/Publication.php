@@ -24,6 +24,11 @@ class Publication extends Model
         return $this->belongsTo(Chercheur::class);
     }
 
+    protected $casts = [
+        'publication_date' => 'date:Y-m-d',
+        'citation_count' => 'integer'
+    ];
+
     public function discipline()
     {
         return $this->belongsTo(Discipline::class);

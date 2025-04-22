@@ -22,6 +22,7 @@ class Chercheur extends Authenticatable implements JWTSubject
     protected $fillable = [
         'nom',
         'prenom',
+        'scopus_author_id',
         'email',
         'password',
         'date_naissance',
@@ -85,4 +86,13 @@ class Chercheur extends Authenticatable implements JWTSubject
     {
         return [];
     }
+    public function updateScopusId(string $id): void
+    {
+        if (!preg_match('/^[1-9]\d{8,19}$/', $id)) {
+            throw new \InvalidArgumentException('ID Scopus invalide');
+        }
+    
+        $this->update(['scopus_author_id' => $id]);
+    }
 }
+
