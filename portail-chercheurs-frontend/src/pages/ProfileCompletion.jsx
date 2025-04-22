@@ -34,7 +34,7 @@ const ProfileCompletion = () => {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            navigate('/scopus-publications');
+            navigate('/select-scopus-profile');
         } catch (error) {
             console.error('Error updating profile:', error);
         } finally {
@@ -100,7 +100,7 @@ const ProfileCompletion = () => {
                         type="button"
                         variant="outline"
                         className="w-1/2"
-                        onClick={() => navigate('/scopus-publications')}
+                        onClick={() => navigate('/select-scopus-profile')}
                     >
                         Passer cette étape
                     </Button>

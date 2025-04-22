@@ -32,6 +32,7 @@ import Loader from "./components/Loader";
 
 import ProfileCompletion from "./pages/ProfileCompletion";
 import ScopusPublications from "./pages/ScopusPublications";
+import SelectScopusProfile from "./pages/SelectScopusProfile";
 
 function App() {
   const { isLoading, showLoader, hideLoader } = useLoading();
@@ -77,11 +78,8 @@ function App() {
             </Route>
             <Route path="*" element={<NotFound />} />
 
-            <Route path="complete-profile" element={<ProfileCompletion />} />
-            <Route path="scopus-publications" element={<ScopusPublications />} />
-
-            {/* Authentification */}
-            <Route path="/connexion" element={<Connexion />} />
+           {/* Authentification */}
+           <Route path="/connexion" element={<Connexion />} />
             <Route
               path="/change-password"
               element={
@@ -92,7 +90,10 @@ function App() {
                   <ChangePassword />
                 </ProtectedRoute>
               }
-            />
+            /> 
+            <Route path="complete-profile" element={<ProfileCompletion />} />
+            <Route path="scopus-publications" element={<ScopusPublications />} />
+            <Route path="/select-scopus-profile" element={<ScopusPublications />} />
 
             {/* Pages Admin protégées */}
             <Route
@@ -135,6 +136,7 @@ function App() {
               element={<AdminConnexion />}
             />
           </Routes>
+          
         </BrowserRouter>
       </AuthProvider>
     </>
