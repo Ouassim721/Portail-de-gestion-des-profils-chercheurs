@@ -30,7 +30,7 @@ import CreationChercheur from "./pages/administration/CreationChercheur";
 import { useLoading } from "./contexts/useLoading";
 import Loader from "./components/Loader";
 
-import ProfileCompletion from "./pages/ProfileCompletion";
+import ProfileCompletion from "./pages/CompleteProfile.jsx";
 import ScopusPublications from "./pages/ScopusPublications";
 import SelectScopusProfile from "./pages/SelectScopusProfile";
 
@@ -91,9 +91,9 @@ function App() {
                 </ProtectedRoute>
               }
             /> 
-            <Route path="complete-profile" element={<ProfileCompletion />} />
+            <Route path="/complete-profile" element={<ProfileCompletion />} />
             <Route path="scopus-publications" element={<ScopusPublications />} />
-            <Route path="/select-scopus-profile" element={<ScopusPublications />} />
+            <Route path="/select-scopus-profile" element={<SelectScopusProfile />} />
 
             {/* Pages Admin protégées */}
             <Route
