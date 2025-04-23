@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Publication;
 use Illuminate\Http\Request;
+use App\Models\Chercheur;
+use App\Models\Publication;
+use App\Models\Discipline;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Carbon;
 
 class PublicationController extends Controller
 {
-<<<<<<< HEAD
+
     public function storeBatch(Request $request)
     {
         $request->validate([
@@ -39,7 +42,6 @@ class PublicationController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Erreur lors de l\'importation'], 500);
         }
-=======
     /**
      * Affiche la liste des publications
      */
@@ -107,7 +109,6 @@ class PublicationController extends Controller
 
         return redirect()->route('publications.index')
             ->with('success', 'Publication créée avec succès');
->>>>>>> ouassim
     }
     public function store(Request $request)
     {
@@ -147,4 +148,5 @@ class PublicationController extends Controller
             ], 500);
         }
     }
+  }
 }
