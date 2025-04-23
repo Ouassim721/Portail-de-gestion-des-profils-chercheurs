@@ -107,6 +107,7 @@ const Publications = () => {
                 description={pub.abstract}
                 date={pub.date_publication}
                 departement={pub.discipline.nom}
+                citations={pub.citation_count}
               />
             ))}
           </div>
