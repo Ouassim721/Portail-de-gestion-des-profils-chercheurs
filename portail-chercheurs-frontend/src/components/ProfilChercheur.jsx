@@ -60,7 +60,7 @@ function ProfilChercheur({ chercheur, pov = "invite" }) {
   return (
     <div className="grid grid-rows-[auto_auto_ato] grid-cols-[auto_auto_auto] gap-4 mt-8">
       {/* ***************La section principale de photo et les bouttons ********************************/}
-      <section className="col-span-3 p-8 md:p-8 rounded shadow-sm bg-[var(--color-white)] text-[var(--color-text-primary)] h-50 border-gray-200">
+      <section className="col-span-3 p-8 md:p-8 rounded shadow-sm bg-[var(--color-white)] text-[var(--color-text-primary)] border-gray-200">
         <div className="relative flex flex-col sm:flex-row gap-2 sm:gap-12 lg:gap-16">
           <img
             src={pdp}
@@ -123,7 +123,7 @@ function ProfilChercheur({ chercheur, pov = "invite" }) {
         </div>
       </section>
       {/* ***************La section des Publication********************************/}
-      <section className="row-span-3 col-span-2 p-4 md:p-8 rounded-2xl shadow-sm bg-[var(--color-white)] text-[var(--color-text-primary)] border-gray-200">
+      <section className="row-span-3 col-span-3 lg:col-span-2 p-4 md:p-8 rounded-2xl shadow-sm bg-[var(--color-white)] text-[var(--color-text-primary)] border-gray-200">
         <h1 className="text-xl font-semibold mb-4 text-[var(--color-text-primary)] ml-3 ">
           Publications récentes
         </h1>
@@ -153,7 +153,7 @@ function ProfilChercheur({ chercheur, pov = "invite" }) {
         />
       </section>
       {/* ***************La section des Informations********************************/}
-      <section className="flex flex-col gap-4 md-gap-8 p-8 shadow-sm bg-[var(--color-white)] border-gray-200">
+      <section className="col-span-full lg:col-span-1 flex flex-col gap-4 md-gap-8 p-8 shadow-sm bg-[var(--color-white)] border-gray-200">
         <h3 className="tracking-wide font-bold text-xl mb-4">Informations</h3>
         <ul className="flex flex-col gap-4 list-none text-[var(--color-text-primary)]">
           <li>
@@ -178,7 +178,7 @@ function ProfilChercheur({ chercheur, pov = "invite" }) {
       </section>
       {/* ***************La section des Statistiques********************************/}
 
-      <section className="flex flex-col gap-4 md-gap-8 p-8 shadow-sm bg-[var(--color-white)] text-[var(--color-text-primary)] border-gray-200">
+      <section className="col-span-full md:col lg:col-span-1 flex flex-col gap-4 md-gap-8 p-8 shadow-sm bg-[var(--color-white)] text-[var(--color-text-primary)] border-gray-200">
         <h3 className="tracking-wide font-bold text-xl mb-4">Statistiques</h3>
         <div className="flex flex-col gap-4">
           <div className="flex justify-between">
@@ -203,7 +203,7 @@ function ProfilChercheur({ chercheur, pov = "invite" }) {
       </section>
       {/* ***************La section de GRAPHE********************************/}
 
-      <section className="flex flex-col gap-4 md-gap-8 p-8 shadow-sm bg-[var(--color-white)] border-gray-200">
+      <section className="col-span-full lg:col-span-1 flex flex-col justify-center items-center gap-4 md-gap-8 p-8 shadow-sm bg-[var(--color-white)] border-gray-200">
         <h3 className="text-md font-medium tracking-wider text-center">
           Publications par Année
         </h3>
