@@ -7,6 +7,7 @@ use App\Models\Chercheur;
 use App\Http\Controllers\DisciplineController;
 use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\PublicationController;
+use App\Http\Controllers\ActualiteController;
 use App\Http\Controllers\ChercheurController;
 use App\Http\Controllers\ScopusPublicationController;
 
@@ -58,3 +59,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/chercheur/profile', [ChercheurController::class, 'updateProfile']);
     Route::post('/publications', [PublicationController::class, 'storeBatch']);
 });
+
+//modifier le profil
+Route::middleware('auth:api')->post('/chercheurs/{id}/update', [ChercheurController::class, 'update']);
+
+
+//Manipuler les actualités
+Route::apiResource('actualites', ActualiteController::class);

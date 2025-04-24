@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "../axios";
 import { useNavigate } from "react-router-dom";
-import Button from "../components/Button";
-import Loader from "../components/Loader";
+import Button from "../components/ui/Button";
 
 const ScopusPublications = () => {
   const [publications, setPublications] = useState([]);
