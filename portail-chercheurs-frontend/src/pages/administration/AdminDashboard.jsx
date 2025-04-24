@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import TopBar from "../../components/topbar";
+import TopBar from "../../components/layout/topbar";
 import Dashboard from "../../components/Dashboard";
 import axios from "../../axios";
 function AdminDashboard() {

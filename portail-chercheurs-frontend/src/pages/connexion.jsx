@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../components/Button";
+import Button from "../components/ui/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   MdLock,
@@ -39,6 +39,7 @@ function Connexion() {
 
       const user = res.data.user;
       if (user && user.must_change_password) {
+        console.log("line 42 *****************");
         navigate("/change-password");
       } else {
         if (user.role === "Administrateur") {
@@ -49,7 +50,11 @@ function Connexion() {
       }
     } catch (err) {
       if (err.response) {
-        console.error("Réponse de l'API :", err.response.status, err.response.data);
+        console.error(
+          "Réponse de l'API :",
+          err.response.status,
+          err.response.data
+        );
       } else {
         console.error("Erreur réseau ou client :", err);
       }

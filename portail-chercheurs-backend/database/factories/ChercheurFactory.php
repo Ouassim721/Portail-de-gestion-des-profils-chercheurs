@@ -18,6 +18,7 @@ class ChercheurFactory extends Factory
             'email' => $this->faker->unique()->safeEmail,
             'password' => Hash::make('password'),
             'cv' => null,
+            'photoProfil' => null,
             'role' => 'Chercheur',
             'discipline' => $this->faker->randomElement([
                 'Informatique',
@@ -26,7 +27,6 @@ class ChercheurFactory extends Factory
                 'Chimie Organique'
             ]),
             // Ajout du nouveau champ photoProfil avec une URL d'image factice
-            'photoProfil' => $this->faker->imageUrl(640, 480, 'people', true),
             'remember_token' => Str::random(10),
             'created_at' => $this->faker->dateTimeBetween('-1 year'),
             'updated_at' => $this->faker->dateTimeBetween('-6 months'),

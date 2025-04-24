@@ -1,11 +1,10 @@
-import React from 'react';
-import TopBar from '../../components/topbar';
-import TableauChercheur from '../../components/TableauChercheur';
+import React from "react";
+import TopBar from "../../components/layout/topbar";
+import TableauChercheur from "../../components/tables/TableauChercheur";
 
 function AdminPage() {
   return (
-    <div className="flex min-h-screen bg-gray-100">      
-
+    <div className="flex min-h-screen bg-gray-100">
       {/* Contenu principal */}
       <div className="flex-1 flex flex-col">
         {/* Barre supérieure */}
@@ -19,7 +18,5 @@ function AdminPage() {
     </div>
   );
 }
-
-
 
 export default AdminPage;

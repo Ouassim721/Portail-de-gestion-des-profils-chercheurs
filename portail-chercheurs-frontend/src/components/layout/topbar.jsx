@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { FaBars } from "react-icons/fa";
 import SideMenu from "./SideMenu";
-import pdp from "../assets/chercheur-place-holder.jpg";
-import axios from "../axios";
+import pdp from "../../assets/chercheur-place-holder.jpg";
+import axios from "../../axios";
 
 function TopBar() {
   const [showSideMenu, setShowSideMenu] = useState(false);

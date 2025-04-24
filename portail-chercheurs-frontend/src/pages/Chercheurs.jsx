@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import DropdownButton from "../components/DropdownButton";
-import TableGenerique from "../components/TableGenerique";
-import Pagination from "../components/Pagination";
+import DropdownButton from "../components/ui/DropdownButton";
+import TableGenerique from "../components/tables/TableGenerique";
+import Pagination from "../components/ui/Pagination";
 import ProfilChercheur from "../components/ProfilChercheur";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders, faTimes } from "@fortawesome/free-solid-svg-icons";

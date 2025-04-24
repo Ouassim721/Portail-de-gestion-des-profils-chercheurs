@@ -1,16 +1,23 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
-import { faFilter, faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import { FaFileAlt, FaSearch, FaPlus, FaFilter } from "react-icons/fa";
+import {
+  faFilter,
+  faChevronDown,
+  faUsers,
+  faBook,
+  faQuoteRight,
+} from "@fortawesome/free-solid-svg-icons";
 import SearchBar from "../components/research/SearchBar";
-import Button from "../components/Button";
-import DropdownButton from "../components/DropdownButton";
+import Button from "../components/ui/Button";
+import DropdownButton from "../components/ui/DropdownButton";
 import CardStatPublication from "../components/cards/CardStatPublication";
 import CardPublication from "../components/cards/CardPublication";
 import axios from "../axios";
+
 const Publications = () => {
   const [publications, setPublications] = useState([]);
-
+  const [countChercheurs, setcountChercheurs] = useState(null);
+  const [countPublications, setcountPublications] = useState(null);
+  const [countCitations, setcountCitations] = useState(null);
   useEffect(() => {
     axios
       .get("http://localhost:8000/api/publications")
@@ -21,6 +28,28 @@ const Publications = () => {
         console.error("Erreur lors du chargement des publications :", error);
       });
   }, []);
+  useEffect(() => {
+    axios
+      .get("/stats")
+      .then((response) => {
+        setcountChercheurs(response.data.chercheurs);
+        setcountPublications(response.data.publications);
+        setcountCitations(response.data.citations);
+      })
+      .catch((error) => {
+        console.error(
+          "Erreur lors de la récupération du nombre de chercheurs:",
+          error
+        );
+      });
+  }, []);
+
+  const nombrePublications =
+    countPublications !== null ? countPublications : "Chargement...";
+  const nombreChercheurs =
+    countChercheurs !== null ? countChercheurs : "Chargement...";
+  const nombreCitations =
+    countChercheurs !== null ? countCitations : "Chargement...";
   return (
     <div className="min-h-screen ">
       <div className="w-full bg-[var(--color-primary)] flex flex-col lg:flex-row gap-4 items-center p-4">
@@ -92,9 +121,21 @@ const Publications = () => {
       </div>
       <main className="max-w-7xl mx-auto p-8">
         <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-6 my-6 mb-10 place-items-center">
-          <CardStatPublication stat="2,456" title="Chercheurs Actifs" />
-          <CardStatPublication variant="secondary" />
-          <CardStatPublication />
+          <CardStatPublication
+            stat={nombreChercheurs}
+            title="Chercheurs Actifs"
+            icon={faUsers}
+          />{" "}
+          <CardStatPublication
+            stat={nombrePublications}
+            variant="secondary"
+            icon={faBook}
+          />
+          <CardStatPublication
+            stat={nombreCitations}
+            title="Citations"
+            icon={faQuoteRight}
+          />
           <CardStatPublication variant="secondary" />
         </section>
         <section>

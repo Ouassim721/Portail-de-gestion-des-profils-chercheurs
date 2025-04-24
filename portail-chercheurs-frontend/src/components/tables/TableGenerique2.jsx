@@ -1,4 +1,3 @@
-import React from "react";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 const TableGenerique = ({
@@ -7,18 +6,20 @@ const TableGenerique = ({
   setSelectedRows,
   sortConfig,
   setSortConfig,
-  deleteResearcher
+  deleteResearcher,
 }) => {
   const columns = [
     { key: "name", label: "Nom" },
     { key: "email", label: "Email" },
     { key: "domain", label: "Domaine" },
     { key: "status", label: "Statut" },
-    { label: "Actions" }
+    { label: "Actions" },
   ];
 
   const handleSelectAll = (e) => {
-    const newSelected = e.target.checked ? new Set(data.map(r => r.id)) : new Set();
+    const newSelected = e.target.checked
+      ? new Set(data.map((r) => r.id))
+      : new Set();
     setSelectedRows(newSelected);
   };
 
@@ -28,27 +29,30 @@ const TableGenerique = ({
         <thead className="bg-gray-50">
           <tr>
             <th className="px-4 py-3">
-              <input 
-                type="checkbox" 
+              <input
+                type="checkbox"
                 onChange={handleSelectAll}
                 checked={selectedRows.size === data.length}
               />
             </th>
             {columns.map((header) => (
-              <th 
+              <th
                 key={header.key || header.label}
                 className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                onClick={() => header.key && setSortConfig({
-                  key: header.key,
-                  direction: sortConfig.direction === 'asc' ? 'desc' : 'asc'
-                })}
+                onClick={() =>
+                  header.key &&
+                  setSortConfig({
+                    key: header.key,
+                    direction: sortConfig.direction === "asc" ? "desc" : "asc",
+                  })
+                }
               >
                 <div className="flex items-center gap-1">
                   {header.label}
                   {header.key && (
                     <span className="text-gray-400">
-                      {sortConfig.key === header.key && 
-                        (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                      {sortConfig.key === header.key &&
+                        (sortConfig.direction === "asc" ? "↑" : "↓")}
                     </span>
                   )}
                 </div>
@@ -56,17 +60,20 @@ const TableGenerique = ({
             ))}
           </tr>
         </thead>
-        
+
         <tbody className="bg-white divide-y divide-gray-200">
           {data.map((researcher) => (
-            <tr key={researcher.id} className="hover:bg-gray-50 transition-colors">
+            <tr
+              key={researcher.id}
+              className="hover:bg-gray-50 transition-colors"
+            >
               <td className="px-4 py-3">
-                <input 
+                <input
                   type="checkbox"
                   checked={selectedRows.has(researcher.id)}
                   onChange={(e) => {
                     const newSelected = new Set(selectedRows);
-                    e.target.checked 
+                    e.target.checked
                       ? newSelected.add(researcher.id)
                       : newSelected.delete(researcher.id);
                     setSelectedRows(newSelected);
@@ -80,8 +87,13 @@ const TableGenerique = ({
                     alt={researcher.name}
                     className="w-8 h-8 rounded-full object-cover"
                   />
-                  <div className={`absolute -bottom-0 -right-0 w-3 h-3 rounded-full 
-                    ${researcher.status === 'Online' ? 'bg-green-500' : 'bg-gray-400'} 
+                  <div
+                    className={`absolute -bottom-0 -right-0 w-3 h-3 rounded-full 
+                    ${
+                      researcher.status === "Online"
+                        ? "bg-green-500"
+                        : "bg-gray-400"
+                    } 
                     border-2 border-white`}
                   />
                 </div>
@@ -94,10 +106,13 @@ const TableGenerique = ({
                 </span>
               </td>
               <td className="px-4 py-3">
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                  ${researcher.status === 'Online' 
-                    ? 'bg-green-100 text-green-800' 
-                    : 'bg-gray-100 text-gray-800'}`}
+                <span
+                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                  ${
+                    researcher.status === "Online"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-gray-100 text-gray-800"
+                  }`}
                 >
                   {researcher.status}
                 </span>

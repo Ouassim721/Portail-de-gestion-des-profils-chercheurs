@@ -1,48 +1,48 @@
 import "./index.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import React, { useEffect } from "react";
+// import React, { useEffect } from "react";
 
 // Pages publiques
 import Home from "./pages/Home";
 import Chercheurs from "./pages/Chercheurs";
 import Actualite from "./pages/Actualite";
 import ProfilChercheur from "./components/ProfilChercheur";
-import Layout from "./components/Layout";
+import Layout from "./components/layout/Layout";
 import Publications from "./pages/Publications";
 import DetailsPublication from "./pages/DetailsPublication";
-// import "./services/api";
 import NotFound from "./pages/NotFound";
 
 // Authentification
 import Connexion from "./pages/connexion";
 import ChangePassword from "./pages/ChangePassword";
-import AdminConnexion from "./pages/administration/AdminConnexion";
 import AuthProvider from "./contexts/AuthProvider";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 // Pages protégées
 import Profil from "./pages/Profil";
 import AdminDashboard from "./pages/administration/AdminDashboard";
 import AdminChercheurs from "./pages/administration/AdminChercheurs";
 import CreationChercheur from "./pages/administration/CreationChercheur";
+import AdminActualite from "./pages/administration/AdminActualites";
+import CreationActualite from "./pages/administration/CreationActualite";
 
 // Loader
-import { useLoading } from "./contexts/useLoading";
-import Loader from "./components/Loader";
+// import { useLoading } from "./contexts/useLoading";
+import Loader from "./components/ui/Loader";
 
 import ProfileCompletion from "./pages/CompleteProfile.jsx";
 import ScopusPublications from "./pages/ScopusPublications";
 import SelectScopusProfile from "./pages/SelectScopusProfile";
 
 function App() {
-  const { isLoading, showLoader, hideLoader } = useLoading();
+  /*const { isLoading, showLoader, hideLoader } = useLoading();
 
   useEffect(() => {
     showLoader();
     setTimeout(() => {
       hideLoader();
     }, 300);
-  }, [showLoader, hideLoader]);
+  }, [showLoader, hideLoader]);*/
 
   return (
     <>
@@ -78,8 +78,14 @@ function App() {
             </Route>
             <Route path="*" element={<NotFound />} />
 
-           {/* Authentification */}
-           <Route path="/connexion" element={<Connexion />} />
+            <Route path="complete-profile" element={<ProfileCompletion />} />
+            <Route
+              path="scopus-publications"
+              element={<ScopusPublications />}
+            />
+
+            {/* Authentification */}
+            <Route path="/connexion" element={<Connexion />} />
             <Route
               path="/change-password"
               element={
@@ -90,19 +96,13 @@ function App() {
                   <ChangePassword />
                 </ProtectedRoute>
               }
-            /> 
-            <Route path="/complete-profile" element={<ProfileCompletion />} />
-            <Route path="scopus-publications" element={<ScopusPublications />} />
-            <Route path="/select-scopus-profile" element={<SelectScopusProfile />} />
+            />
 
             {/* Pages Admin protégées */}
             <Route
               path="/dashboard"
               element={
-                <ProtectedRoute
-                  redirectTo="/dashboard/adminconnexion"
-                  adminOnly
-                >
+                <ProtectedRoute redirectTo="/connexion" adminOnly>
                   <AdminDashboard />
                 </ProtectedRoute>
               }
@@ -110,33 +110,36 @@ function App() {
             <Route
               path="/dashboard/adminchercheurs"
               element={
-                <ProtectedRoute
-                  redirectTo="/dashboard/adminconnexion"
-                  adminOnly
-                >
+                <ProtectedRoute redirectTo="/connexion" adminOnly>
                   <AdminChercheurs />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/adminactualite"
+              element={
+                <ProtectedRoute redirectTo="/connexion" adminOnly>
+                  <AdminActualite />
                 </ProtectedRoute>
               }
             />
             <Route
               path="/dashboard/adminchercheurs/creationchercheur"
               element={
-                <ProtectedRoute
-                  redirectTo="/dashboard/adminconnexion"
-                  adminOnly
-                >
+                <ProtectedRoute redirectTo="/connexion" adminOnly>
                   <CreationChercheur />
                 </ProtectedRoute>
               }
             />
-
-            {/* Connexion admin */}
             <Route
-              path="/dashboard/adminconnexion"
-              element={<AdminConnexion />}
+              path="/dashboard/adminactualite/creationactualite"
+              element={
+                <ProtectedRoute redirectTo="/connexion" adminOnly>
+                  <CreationActualite />
+                </ProtectedRoute>
+              }
             />
           </Routes>
-          
         </BrowserRouter>
       </AuthProvider>
     </>

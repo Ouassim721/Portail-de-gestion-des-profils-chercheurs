@@ -3,14 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Chercheur;
 use App\Http\Controllers\DisciplineController;
 use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\ChercheurController;
-use App\Http\Controllers\ScopusPublicationController;
-use App\Http\Controllers\ProfileController;
 
 //-------------------------------Authentification (JWT)-----------------------------------------------//
 Route::post('/login', [AuthController::class, 'login']);
@@ -55,25 +52,8 @@ Route::get('/stats', [StatisticsController::class, 'getStats']);
 //Route pour le changement de mot de passe
 Route::middleware('auth:api')->post('/change-password', [AuthController::class, 'changePassword']);
 
-Route::middleware('auth:api')->group(function () {
-    // Endpoint pour compléter le profil
-    Route::post('complete-profile', [ProfileController::class, 'completeProfile']);
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/scopus-publications', [ScopusController::class, 'fetchPublications']);
+    Route::put('/chercheur/profile', [ChercheurController::class, 'updateProfile']);
+    Route::post('/publications', [PublicationController::class, 'storeBatch']);
 });
-
-// Route::middleware('auth:api')->group(function () {
-//     // Scopus
-//     Route::get('/scopus-publications', [ScopusPublicationController::class, 'searchAuthors']);
-//     Route::post('/publications', [ScopusPublicationController::class, 'store']);
-    
-//     Route::put('/chercheur/profile', [ChercheurController::class, 'updateProfile']);
-// });
-
-// Route::middleware('auth:api')->group(function () {
-//     // Recherche d'auteurs
-//     Route::get('/scopus/authors', [ScopusPublicationController::class, 'searchAuthors']);
-//     Route::post('/scopus/link', [ScopusPublicationControllerr::class, 'linkAuthor']);
-//     // Lier un auteur
-//     Route::post('/scopus/link-author', [ScopusPublicationController::class, 'linkAuthor']);
-    
-// });
-
