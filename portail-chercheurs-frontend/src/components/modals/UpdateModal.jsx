@@ -1,10 +1,10 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { useState } from "react";
-import Button from "./Button";
+import Button from "../ui/Button";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import axios from "../axios";
+import axios from "../../axios";
 
 export default function UpdateModal({ actualite, onUpdate }) {
   const [form, setForm] = useState({ ...actualite });

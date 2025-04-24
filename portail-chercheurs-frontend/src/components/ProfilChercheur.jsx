@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import Card from "./cards/Card";
 import pdp from "../assets/chercheur-place-holder.jpg";
-import Button from "./Button";
-import UserSettingsPopup from "./UserSettingsPopup";
+import Card from "./cards/Card";
+import Button from "./ui/Button";
+import UserSettingsPopup from "./ui/UserSettingsPopup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders, faTimes } from "@fortawesome/free-solid-svg-icons";
 import {

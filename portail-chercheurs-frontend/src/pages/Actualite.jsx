@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 //import { faSliders } from "@fortawesome/free-solid-svg-icons";
-import DropdownButton from "../components/DropdownButton";
-import Pagination from "../components/Pagination";
+import DropdownButton from "../components/ui/DropdownButton";
+import Pagination from "../components/ui/Pagination";
 import Card from "../components/cards/Card";
 
 const Actualite = () => {

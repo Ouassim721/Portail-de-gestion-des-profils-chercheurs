@@ -1,13 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import Button from "./Button";
-import DropdownMenu from "./DropdownMenu";
-// import logo from "../assets/logo.png";
-/*import { useContext } from "react";
-import { AuthContext } from "../contexts/AuthContext";*/
-import axios from "../axios";
-import pdp from "../assets/chercheur-place-holder.jpg";
-import SearchBar from "./research/SearchBar";
+import Button from "../ui/Button";
+import DropdownMenu from "../ui/DropdownMenu";
+import axios from "../../axios";
+import pdp from "../../assets/chercheur-place-holder.jpg";
+import SearchBar from "../research/SearchBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,

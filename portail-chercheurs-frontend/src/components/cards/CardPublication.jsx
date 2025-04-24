@@ -1,5 +1,5 @@
 import pdp from "../../assets/chercheur-place-holder.jpg";
-import Button from "../Button";
+import Button from "../ui/Button";
 import {
   /*faDownload,*/ faShareNodes,
 } from "@fortawesome/free-solid-svg-icons";

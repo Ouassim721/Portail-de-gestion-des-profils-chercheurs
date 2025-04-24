@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
 import {
   faFilter,
@@ -7,10 +6,9 @@ import {
   faBook,
   faQuoteRight,
 } from "@fortawesome/free-solid-svg-icons";
-import { FaFileAlt, FaSearch, FaPlus, FaFilter } from "react-icons/fa";
 import SearchBar from "../components/research/SearchBar";
-import Button from "../components/Button";
-import DropdownButton from "../components/DropdownButton";
+import Button from "../components/ui/Button";
+import DropdownButton from "../components/ui/DropdownButton";
 import CardStatPublication from "../components/cards/CardStatPublication";
 import CardPublication from "../components/cards/CardPublication";
 import axios from "../axios";

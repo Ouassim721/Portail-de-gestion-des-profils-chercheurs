@@ -7,18 +7,16 @@ import Home from "./pages/Home";
 import Chercheurs from "./pages/Chercheurs";
 import Actualite from "./pages/Actualite";
 import ProfilChercheur from "./components/ProfilChercheur";
-import Layout from "./components/Layout";
+import Layout from "./components/layout/Layout";
 import Publications from "./pages/Publications";
 import DetailsPublication from "./pages/DetailsPublication";
-// import "./services/api";
 import NotFound from "./pages/NotFound";
 
 // Authentification
 import Connexion from "./pages/connexion";
 import ChangePassword from "./pages/ChangePassword";
-import AdminConnexion from "./pages/administration/AdminConnexion";
 import AuthProvider from "./contexts/AuthProvider";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 // Pages protégées
 import Profil from "./pages/Profil";
@@ -29,21 +27,21 @@ import AdminActualite from "./pages/administration/AdminActualites";
 import CreationActualite from "./pages/administration/CreationActualite";
 
 // Loader
-import { useLoading } from "./contexts/useLoading";
-import Loader from "./components/Loader";
+// import { useLoading } from "./contexts/useLoading";
+import Loader from "./components/ui/Loader";
 
 import ProfileCompletion from "./pages/ProfileCompletion";
 import ScopusPublications from "./pages/ScopusPublications";
 
 function App() {
-  const { isLoading, showLoader, hideLoader } = useLoading();
+  /*const { isLoading, showLoader, hideLoader } = useLoading();
 
   useEffect(() => {
     showLoader();
     setTimeout(() => {
       hideLoader();
     }, 300);
-  }, [showLoader, hideLoader]);
+  }, [showLoader, hideLoader]);*/
 
   return (
     <>

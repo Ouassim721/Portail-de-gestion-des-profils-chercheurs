@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import TopBar from "../../components/topbar";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import Button from "../../components/Button";
 import moment from "moment";
 import axios from "../../axios";
-import UpdateModal from "../../components/UpdateModal";
+import TopBar from "../../components/layout/topbar";
+import Button from "../../components/ui/Button";
+import UpdateModal from "../../components/modals/UpdateModal";
 
 const AdminActualite = () => {
   const navigate = useNavigate();

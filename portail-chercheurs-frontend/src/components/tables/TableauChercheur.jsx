@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Pagination from "./Pagination";
+import Pagination from "../ui/Pagination";
 import TableGenerique2 from "./TableGenerique2";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import Button from "./Button";
-import axios from "../axios";
+import Button from "../ui/Button";
+import axios from "../../axios";
 
 export default function ChercheursList() {
   const navigate = useNavigate();

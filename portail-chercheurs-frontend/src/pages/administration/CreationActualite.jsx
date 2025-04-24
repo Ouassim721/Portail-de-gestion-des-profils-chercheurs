@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import Button from "../../components/Button";
+import Button from "../../components/ui/Button";
 
 axios.defaults.withCredentials = true;
 
