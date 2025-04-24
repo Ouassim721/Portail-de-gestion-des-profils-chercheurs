@@ -22,12 +22,16 @@ class Chercheur extends Authenticatable implements JWTSubject
     protected $fillable = [
         'nom',
         'prenom',
+        'scopus_author_id',
         'email',
         'password',
         'date_naissance',
         'cv',
         'role',
-        'discipline'
+        'discipline',
+        'photoProfil',
+        'must_change_password',
+        'remember_token',
     ];
 
     /**
@@ -85,4 +89,11 @@ class Chercheur extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    /**
+     * Casts.
+     */
+    protected $casts = [
+        'must_change_password' => 'boolean',
+    ];
 }

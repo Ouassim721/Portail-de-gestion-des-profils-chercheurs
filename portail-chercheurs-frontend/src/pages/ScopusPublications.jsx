@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "../axios";
 import { useNavigate } from "react-router-dom";
-import Button from "../components/ui/Button";
-import Loader from "../components/ui/Loader";
+import Button from "../components/Button";
+import Loader from "../components/Loader";
 
 const ScopusPublications = () => {
   const [publications, setPublications] = useState([]);
@@ -43,7 +43,11 @@ const ScopusPublications = () => {
     }
   };
 
-  if (loading) return <Loader />;
+  if (loading) {
+    return (
+      <div className="text-center p-4">Chargement des publications...</div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-6">

@@ -21,6 +21,7 @@ class ChercheurSeeder extends Seeder
             'discipline' => 'Informatique',
             'photoProfil' => null,
             'remember_token' => Str::random(10),
+            'scopus_author_id' => null,
         ]);
         \App\Models\Chercheur::factory(25)->create();
     }

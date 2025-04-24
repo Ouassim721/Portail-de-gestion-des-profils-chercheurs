@@ -3,14 +3,12 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Chercheur;
 use App\Http\Controllers\DisciplineController;
 use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\ChercheurController;
-use App\Http\Controllers\ScopusController;
-use App\Http\Controllers\ActualiteController;
+use App\Http\Controllers\ScopusPublicationController;
 
 //-------------------------------Authentification (JWT)-----------------------------------------------//
 Route::post('/login', [AuthController::class, 'login']);
@@ -55,14 +53,8 @@ Route::get('/stats', [StatisticsController::class, 'getStats']);
 //Route pour le changement de mot de passe
 Route::middleware('auth:api')->post('/change-password', [AuthController::class, 'changePassword']);
 
-Route::middleware(['auth:api'])->group(function () {
-    Route::get('/scopus-publications', [ScopusController::class, 'fetchPublications']);
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/scopus-publications', [ScopusPublicationController::class, 'fetchPublications']);
     Route::put('/chercheur/profile', [ChercheurController::class, 'updateProfile']);
     Route::post('/publications', [PublicationController::class, 'storeBatch']);
 });
-
-//Actualite
-Route::apiResource('/actualites', ActualiteController::class);
-
-//Modification de profil chercheur
-Route::middleware('auth:api')->post('/chercheurs/{id}/update', [ChercheurController::class, 'update']);

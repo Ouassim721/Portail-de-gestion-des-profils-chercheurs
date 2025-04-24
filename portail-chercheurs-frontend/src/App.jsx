@@ -30,8 +30,9 @@ import CreationActualite from "./pages/administration/CreationActualite";
 // import { useLoading } from "./contexts/useLoading";
 import Loader from "./components/ui/Loader";
 
-import ProfileCompletion from "./pages/ProfileCompletion";
+import ProfileCompletion from "./pages/CompleteProfile.jsx";
 import ScopusPublications from "./pages/ScopusPublications";
+import SelectScopusProfile from "./pages/SelectScopusProfile";
 
 function App() {
   /*const { isLoading, showLoader, hideLoader } = useLoading();
@@ -85,7 +86,17 @@ function App() {
 
             {/* Authentification */}
             <Route path="/connexion" element={<Connexion />} />
-            <Route path="/change-password" element={<ChangePassword />} />
+            <Route
+              path="/change-password"
+              element={
+                <ProtectedRoute
+                  redirectTo="/connexion"
+                  allowIfMustChangePassword
+                >
+                  <ChangePassword />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Pages Admin protégées */}
             <Route

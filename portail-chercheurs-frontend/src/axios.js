@@ -3,6 +3,14 @@ import axios from "axios";
 const axiosInstance = axios.create({
   baseURL: "http://localhost:8000/api",
   withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
+});
+axios.interceptors.request.use(req => {
+  console.log('→ Request:', req.method, req.url, ' withCredentials=', req.withCredentials);
+  return req;
 });
 axiosInstance.interceptors.response.use(
   (response) => response,
