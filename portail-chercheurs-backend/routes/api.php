@@ -8,6 +8,7 @@ use App\Http\Controllers\DisciplineController;
 use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\ChercheurController;
+use App\Http\Controllers\ScopusPublicationController;
 
 //-------------------------------Authentification (JWT)-----------------------------------------------//
 Route::post('/login', [AuthController::class, 'login']);
@@ -53,7 +54,7 @@ Route::get('/stats', [StatisticsController::class, 'getStats']);
 Route::middleware('auth:api')->post('/change-password', [AuthController::class, 'changePassword']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/scopus-publications', [ScopusController::class, 'fetchPublications']);
+    Route::get('/scopus-publications', [ScopusPublicationController::class, 'fetchPublications']);
     Route::put('/chercheur/profile', [ChercheurController::class, 'updateProfile']);
     Route::post('/publications', [PublicationController::class, 'storeBatch']);
 });
