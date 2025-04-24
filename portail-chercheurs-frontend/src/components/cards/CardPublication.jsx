@@ -17,7 +17,7 @@ const CardPublication = ({
 }) => {
   return (
     <div
-      className="w-full p-4 lg:p-8 bg-[var(--color-white)] flex flex-col lg:flex-row gap-8 mx-auto my-4 drop-shadow-md hover:drop-shadow-lg
+      className="w-full p-4 lg:p-8 bg-[var(--color-white)] flex flex-col lg:flex-row gap-6 mx-auto my-4 drop-shadow-md hover:drop-shadow-lg
  hover:scale-101 duration-300"
     >
       <div className="flex flex-col gap-4">
@@ -37,7 +37,7 @@ const CardPublication = ({
             </p>
           </div>
         </div>
-        <p className="text-md text-neutral-500">{description}</p>
+        <p className="text-md text-neutral-500 text-justify ">{description}</p>
         <div className="flex gap-2">
           {category.map((item) => {
             return (
@@ -48,7 +48,7 @@ const CardPublication = ({
           })}
         </div>
       </div>
-      <div className="flex lg:flex-col justify-between lg:justify- items-center  lg:w-1/3">
+      <div className="flex lg:flex-col justify-between lg:justify- items-center  lg:w-1/3 lg:min-w-42">
         <div className="lg:flex lg:flex-col lg:gap-2 lg:text-right lg:w-full lg:pr-3">
           <h6 className="font-light text-sm text-neutral-500">
             Publié le {date}

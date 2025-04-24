@@ -12,9 +12,12 @@ class StatisticsController extends Controller
     {
         $chercheurs = Chercheur::count();
         $publications = Publication::count();
+        $citations = Publication::sum('citation_count');
+
         return response()->json([
             'chercheurs' => $chercheurs,
-            'publications' => $publications
+            'publications' => $publications,
+            'citations' => $citations
         ]);
     }
 }

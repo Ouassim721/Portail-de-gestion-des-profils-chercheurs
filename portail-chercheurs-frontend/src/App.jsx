@@ -25,6 +25,8 @@ import Profil from "./pages/Profil";
 import AdminDashboard from "./pages/administration/AdminDashboard";
 import AdminChercheurs from "./pages/administration/AdminChercheurs";
 import CreationChercheur from "./pages/administration/CreationChercheur";
+import AdminActualite from "./pages/administration/AdminActualites";
+import CreationActualite from "./pages/administration/CreationActualite";
 
 // Loader
 import { useLoading } from "./contexts/useLoading";
@@ -78,30 +80,20 @@ function App() {
             <Route path="*" element={<NotFound />} />
 
             <Route path="complete-profile" element={<ProfileCompletion />} />
-            <Route path="scopus-publications" element={<ScopusPublications />} />
+            <Route
+              path="scopus-publications"
+              element={<ScopusPublications />}
+            />
 
             {/* Authentification */}
             <Route path="/connexion" element={<Connexion />} />
-            <Route
-              path="/change-password"
-              element={
-                <ProtectedRoute
-                  redirectTo="/connexion"
-                  allowIfMustChangePassword
-                >
-                  <ChangePassword />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/change-password" element={<ChangePassword />} />
 
             {/* Pages Admin protégées */}
             <Route
               path="/dashboard"
               element={
-                <ProtectedRoute
-                  redirectTo="/dashboard/adminconnexion"
-                  adminOnly
-                >
+                <ProtectedRoute redirectTo="/connexion" adminOnly>
                   <AdminDashboard />
                 </ProtectedRoute>
               }
@@ -109,30 +101,34 @@ function App() {
             <Route
               path="/dashboard/adminchercheurs"
               element={
-                <ProtectedRoute
-                  redirectTo="/dashboard/adminconnexion"
-                  adminOnly
-                >
+                <ProtectedRoute redirectTo="/connexion" adminOnly>
                   <AdminChercheurs />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/adminactualite"
+              element={
+                <ProtectedRoute redirectTo="/connexion" adminOnly>
+                  <AdminActualite />
                 </ProtectedRoute>
               }
             />
             <Route
               path="/dashboard/adminchercheurs/creationchercheur"
               element={
-                <ProtectedRoute
-                  redirectTo="/dashboard/adminconnexion"
-                  adminOnly
-                >
+                <ProtectedRoute redirectTo="/connexion" adminOnly>
                   <CreationChercheur />
                 </ProtectedRoute>
               }
             />
-
-            {/* Connexion admin */}
             <Route
-              path="/dashboard/adminconnexion"
-              element={<AdminConnexion />}
+              path="/dashboard/adminactualite/creationactualite"
+              element={
+                <ProtectedRoute redirectTo="/connexion" adminOnly>
+                  <CreationActualite />
+                </ProtectedRoute>
+              }
             />
           </Routes>
         </BrowserRouter>
