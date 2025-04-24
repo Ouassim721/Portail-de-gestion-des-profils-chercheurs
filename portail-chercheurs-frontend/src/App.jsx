@@ -1,6 +1,6 @@
 import "./index.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import React, { useEffect } from "react";
+// import React, { useEffect } from "react";
 
 // Pages publiques
 import Home from "./pages/Home";
