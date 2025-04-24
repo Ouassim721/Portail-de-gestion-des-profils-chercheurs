@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import pdp from "../assets/chercheur-place-holder.jpg";
+import pdp from "../assets/blankpdp.png";
 import Card from "./cards/Card";
 import Button from "./ui/Button";
-import UserSettingsPopup from "./ui/UserSettingsPopup";
+import axios from "../axios";
+import UpdateProfileModal from "./modals/UpdateProfileModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBuildingColumns,
-  faTimes,
   faUserPen,
   faLocationDot,
   faGraduationCap,
@@ -19,13 +19,39 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  Legend,
 } from "recharts";
 
-function ProfilChercheur({ chercheur, pov = "invite" }) {
+function ProfilChercheur() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [chercheur, setChercheur] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  /***********************PARTIE MODAL************************* */
+  const handleUpdate = (updatedChercheur) => {
+    setChercheur(updatedChercheur);
+  };
+  //********************GET PROFILE**************************************** */
+  useEffect(() => {
+    const fetchChercheur = async () => {
+      try {
+        const response = await axios.get("/profile", {
+          withCredentials: true,
+        });
+        setChercheur(response.data);
+      } catch (error) {
+        console.error("Erreur lors du chargement du profil :", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchChercheur();
+  }, []);
+
+  if (loading) return <p>Chargement du profil...</p>;
+
+  if (!chercheur) return <p>Impossible de charger le profil.</p>;
+
   // Données des publications (exemple)
   const dataBar = [
     { year: "2019", publications: 5 },
@@ -34,14 +60,8 @@ function ProfilChercheur({ chercheur, pov = "invite" }) {
     { year: "2022", publications: 10 },
     { year: "2023", publications: 15 },
   ];
-  const dataPie = [
-    { name: "Articles de revue", value: 10 },
-    { name: "Conférences", value: 7 },
-    { name: "Chapitres de livre", value: 5 },
-    { name: "Autres", value: 3 },
-  ];
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"]; // Couleurs pour chaque catégorie
-  const [editPopup, setEditPopup] = useState(false);
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+  /* const [editPopup, setEditPopup] = useState(false);
 
   const openPopup = () => {
     setEditPopup(true);
@@ -56,65 +76,66 @@ function ProfilChercheur({ chercheur, pov = "invite" }) {
     } else {
       document.body.style.overflow = "auto";
     }
-  }, [editPopup]);
+  }, [editPopup]);*/
   return (
     <div className="grid grid-rows-[auto_auto_ato] grid-cols-[auto_auto_auto] gap-4 mt-8">
       {/* ***************La section principale de photo et les bouttons ********************************/}
       <section className="col-span-3 p-8 md:p-8 rounded shadow-sm bg-[var(--color-white)] text-[var(--color-text-primary)] border-gray-200">
         <div className="relative flex flex-col sm:flex-row gap-2 sm:gap-12 lg:gap-16">
-          <img
-            src={pdp}
-            alt="Photo de profile"
-            className="rounded-full w-24 sm:w-28 lg:w-32 mx-auto sm:mx-0"
-          />
+          {chercheur.photoProfil ? (
+            <img
+              src={`http://localhost:8000/${chercheur.photoProfil}`}
+              alt="Photo de profil"
+              className="object-cover rounded-full w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 mx-auto sm:mx-0"
+            />
+          ) : (
+            <img
+              src={pdp}
+              alt="Photo de profil"
+              className="object-cover rounded-full w-24 sm:w-28 lg:w-32 mx-auto sm:mx-0"
+            />
+          )}
           <div className="sm:flex sm:justify-between w-full mx-auto">
             <div>
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-center sm:text-left">
-                {chercheur.nom}
+                {chercheur.prenom} {chercheur.nom}
               </h2>
-              <p className="text-sm mt-1 text-center sm:text-left text-[var(--color-text-primary)]">
-                Départemant {chercheur.departement}
-              </p>
               <p className="text-sm mt-1 text-center sm:text-left text-[var(--color-text-secondary)]">
                 Université {chercheur.university} Cadi Ayaad
               </p>
-              {pov == "chercheur" && (
-                <div className="flex  gap-4 justify-center my-3 sm:mx-0 sm:my-2">
-                  <Button
-                    variant="secondary"
-                    icon={faEnvelope}
-                    className="text-sm p-2!"
-                  >
-                    Contacter
-                  </Button>
-                  <Button
-                    variant="neutral"
-                    icon={faFilePdf}
-                    className="text-sm p-2!"
-                  >
-                    Voir CV
-                  </Button>
-                </div>
-              )}
-              {editPopup && (
+              <div className="flex  gap-4 justify-center my-3 sm:mx-0 sm:my-2">
+                <Button
+                  variant="secondary"
+                  icon={faEnvelope}
+                  className="text-sm p-2!"
+                >
+                  Contacter
+                </Button>
+                <Button
+                  variant="neutral"
+                  icon={faFilePdf}
+                  className="text-sm p-2!"
+                >
+                  Voir CV
+                </Button>
+              </div>
+              {/* {editPopup && (
                 <div className="popup-overlay">
                   <div className="popup-content w-[95%] h-[90%] sm:w-[80%] md:w-[65%] lg:w-[60%]  xl:w-[50%] ">
-                    {/* Bouton de fermeture */}
                     <button className="close-btn" onClick={closePopup}>
                       <FontAwesomeIcon icon={faTimes} />
                     </button>
-                    {/* Affichage du profil */}
                     <UserSettingsPopup></UserSettingsPopup>
                   </div>
                 </div>
-              )}
+              )} */}
             </div>
             <div className="flex justify-center sm:block sm:mr-8">
               <Button
                 variant="primary"
                 icon={faUserPen}
                 className="text-sm p-2!"
-                onClick={openPopup}
+                onClick={() => setIsModalOpen(true)}
               >
                 Modifier
               </Button>
@@ -160,7 +181,7 @@ function ProfilChercheur({ chercheur, pov = "invite" }) {
             <span className="mr-3">
               <FontAwesomeIcon icon={faBuildingColumns} />
             </span>
-            Département Informatique
+            Départemant {chercheur.discipline}
           </li>
           <li>
             <span className="mr-3">
@@ -218,6 +239,12 @@ function ProfilChercheur({ chercheur, pov = "invite" }) {
           </ResponsiveContainer>
         </div>
       </section>
+      <UpdateProfileModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        chercheur={chercheur}
+        onUpdate={handleUpdate}
+      />
     </div>
   );
 }

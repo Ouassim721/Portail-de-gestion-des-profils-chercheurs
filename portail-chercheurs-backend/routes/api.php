@@ -63,3 +63,6 @@ Route::middleware(['auth:api'])->group(function () {
 
 //Actualite
 Route::apiResource('/actualites', ActualiteController::class);
+
+//Modification de profil chercheur
+Route::middleware('auth:api')->post('/chercheurs/{id}/update', [ChercheurController::class, 'update']);

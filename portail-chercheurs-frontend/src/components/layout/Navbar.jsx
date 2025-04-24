@@ -19,7 +19,7 @@ import { faBell as faRegularBell } from "@fortawesome/free-regular-svg-icons"; /
 function Navbar({ sticky = false }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
-  const [user, setUser] = useState(null);
+  const [chercheur, setChercheur] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -27,9 +27,9 @@ function Navbar({ sticky = false }) {
         const res = await axios.get("/profile", {
           withCredentials: true,
         });
-        setUser(res.data);
+        setChercheur(res.data);
       } catch {
-        setUser(null);
+        setChercheur(null);
       }
     };
 
@@ -39,7 +39,7 @@ function Navbar({ sticky = false }) {
   const handleLogout = async () => {
     try {
       await axios.post("/logout"); // route backend qui supprime le token côté serveur
-      setUser(null);
+      setChercheur(null);
       window.location.href = "/connexion"; // ou navigation via React Router
     } catch (err) {
       console.error("Erreur lors de la déconnexion :", err);
@@ -70,7 +70,7 @@ function Navbar({ sticky = false }) {
   return (
     <nav
       className={`relative w-full h-[74px] p-4 pr-8 flex flex-row-reverse
- lg:flex-row items-center justify-between z-10 duration-300${
+ lg:flex-row items-center justify-between z-5 duration-300${
    isSticky && sticky == true
      ? "bg-[var(--color-white)] shadow-md sticky-top"
      : "bg-[var(--color-white)] shadow-sm "
@@ -84,7 +84,7 @@ function Navbar({ sticky = false }) {
         </h1>
 
         {/* Barre de recherche - Visible sur grand écran */}
-        <div className="hidden xl:flex relative">
+        <div className="hidden xl:flex">
           <SearchBar />
         </div>
       </div>
@@ -124,7 +124,7 @@ function Navbar({ sticky = false }) {
             className="text-xl text-gray-700 cursor-pointer "
           />
         </div>
-        {user ? (
+        {chercheur ? (
           <DropdownMenu
             options={[
               {
@@ -141,14 +141,22 @@ function Navbar({ sticky = false }) {
             ]}
           >
             <div className="flex gap-3 items-center">
-              <img
-                src={pdp}
-                alt="Logo"
-                className="w-13 rounded-full cursor-pointer"
-              />
+              {chercheur.photoProfil ? (
+                <img
+                  src={`http://localhost:8000/${chercheur.photoProfil}`}
+                  alt="Photo de profil"
+                  className="object-cover w-13 h-13 rounded-full cursor-pointer"
+                />
+              ) : (
+                <img
+                  src={pdp}
+                  alt="Photo de profil"
+                  className="object-cover w-13 h-13 rounded-full cursor-pointer"
+                />
+              )}
               <div className="text-gray-600 ">
-                <h2>{user.prenom}</h2>
-                <h2 className="uppercase">{user.nom}</h2>
+                <h2>{chercheur.prenom}</h2>
+                <h2 className="uppercase">{chercheur.nom}</h2>
               </div>
               <FontAwesomeIcon
                 icon={faCaretDown}
