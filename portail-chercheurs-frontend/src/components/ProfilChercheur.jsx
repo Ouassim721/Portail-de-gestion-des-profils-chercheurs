@@ -4,7 +4,14 @@ import Card from "./cards/Card";
 import Button from "./ui/Button";
 import UserSettingsPopup from "./ui/UserSettingsPopup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSliders, faTimes } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBuildingColumns,
+  faTimes,
+  faUserPen,
+  faLocationDot,
+  faGraduationCap,
+} from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faFilePdf } from "@fortawesome/free-regular-svg-icons";
 import {
   BarChart,
   Bar,
@@ -51,8 +58,9 @@ function ProfilChercheur({ chercheur, pov = "invite" }) {
     }
   }, [editPopup]);
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 grid-rows-[auto_1fr_1fr] gap-4 mt-8">
-      <section className="col-span-2 shadow-[0_0_20px_rgba(0,0,0,0.25)] p-8 md:p-8 rounded-2xl bg-[var(--color-white)] text-[var(--color-text-primary)]">
+    <div className="grid grid-rows-[auto_auto_ato] grid-cols-[auto_auto_auto] gap-4 mt-8">
+      {/* ***************La section principale de photo et les bouttons ********************************/}
+      <section className="col-span-3 p-8 md:p-8 rounded shadow-sm bg-[var(--color-white)] text-[var(--color-text-primary)] h-50 border-gray-200">
         <div className="relative flex flex-col sm:flex-row gap-2 sm:gap-12 lg:gap-16">
           <img
             src={pdp}
@@ -64,18 +72,27 @@ function ProfilChercheur({ chercheur, pov = "invite" }) {
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-center sm:text-left">
                 {chercheur.nom}
               </h2>
-              <p className="text-sm mt-1 text-center sm:text-left">
-                {chercheur.departement}
+              <p className="text-sm mt-1 text-center sm:text-left text-[var(--color-text-primary)]">
+                Départemant {chercheur.departement}
+              </p>
+              <p className="text-sm mt-1 text-center sm:text-left text-[var(--color-text-secondary)]">
+                Université {chercheur.university} Cadi Ayaad
               </p>
               {pov == "chercheur" && (
-                <div className="flex justify-center my-3 sm:block sm:mx-0 sm:my-2">
+                <div className="flex  gap-4 justify-center my-3 sm:mx-0 sm:my-2">
+                  <Button
+                    variant="secondary"
+                    icon={faEnvelope}
+                    className="text-sm p-2!"
+                  >
+                    Contacter
+                  </Button>
                   <Button
                     variant="neutral"
-                    icon={faSliders}
+                    icon={faFilePdf}
                     className="text-sm p-2!"
-                    onClick={openPopup}
                   >
-                    Modifier
+                    Voir CV
                   </Button>
                 </div>
               )}
@@ -93,80 +110,22 @@ function ProfilChercheur({ chercheur, pov = "invite" }) {
               )}
             </div>
             <div className="flex justify-center sm:block sm:mr-8">
-              <Button variant="secondary">Voir CV</Button>
+              <Button
+                variant="primary"
+                icon={faUserPen}
+                className="text-sm p-2!"
+                onClick={openPopup}
+              >
+                Modifier
+              </Button>
             </div>
           </div>
         </div>
-        <div className="mx-auto my-8 bg-gray-300 h-0.75 w-9/10"></div>
-        <div className="flex flex-col md:flex-row my-3">
-          <p className="w-full md:w-2/5">
-            <strong className="text-md">Organisations</strong>{" "}
-          </p>
-          <ul className="text-[var(--color-text-secondary)] text-sm md:text-md ">
-            <li>Cadi Ayyad University of Marrakech</li>
-            <li>Cadi Ayyad University of Marrakech</li>
-            <li>Cadi Ayyad University of Marrakech</li>
-          </ul>
-        </div>
-        <div className="flex flex-col md:flex-row my-6">
-          <p className="w-full md:w-2/5">
-            <strong className="text-md">Catégories de sujets</strong>{" "}
-          </p>
-          <ul className="text-[var(--color-text-secondary)] text-sm md:text-sm">
-            <li>Computer Science</li>
-            <li>Computer Science</li>
-          </ul>
-        </div>
       </section>
-      <section className="stats col-span-2 md:col-span-1 row-span-3 shadow-[0_0_20px_rgba(0,0,0,0.25)] p-8 rounded-2xl bg-[var(--color-white)] text-[var(--color-text-primary)]">
-        <div className="flex flex-col gap-4 md-gap-8">
-          <h3 className="text-md font-medium tracking-wider text-center">
-            Publications par Année
-          </h3>
-          <div className="h-40 md:h-50 max-w-[350px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={dataBar}>
-                <XAxis dataKey="year" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="publications" fill="var(--color-primary)" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-        <div className="flex flex-col mt-12">
-          <h3 className="text-md font-medium tracking-wider text-center">
-            Publications par Année
-          </h3>
-          <div className="h-80">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={dataPie}
-                  cx="50%" // Position horizontale
-                  cy="50%" // Position verticale
-                  outerRadius={80} // Taille du cercle
-                  fill="#8884d8"
-                  dataKey="value"
-                  label
-                >
-                  {dataPie.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      </section>
-      <section className="col-span-2 row-span-2 shadow-[0_0_20px_rgba(0,0,0,0.25)] p-8 md:p-16 rounded-2xl bg-[var(--color-white)] text-[var(--color-text-primary)]">
-        <h1 className="text-2xl font-semibold mb-12 text-[var(--color-text-primary)] ml-3 ">
-          Publications
+      {/* ***************La section des Publication********************************/}
+      <section className="row-span-3 col-span-2 p-4 md:p-8 rounded-2xl shadow-sm bg-[var(--color-white)] text-[var(--color-text-primary)] border-gray-200">
+        <h1 className="text-xl font-semibold mb-4 text-[var(--color-text-primary)] ml-3 ">
+          Publications récentes
         </h1>
         <Card
           id="P123"
@@ -192,24 +151,72 @@ function ProfilChercheur({ chercheur, pov = "invite" }) {
           author="Dr. Jane Smith"
           cardType="publication"
         />
-        <Card
-          id="P123"
-          title="Human Emotion Recognition Based on Spatio-Temporal Facial Features Using HOG-HOF and VGG-LSTM"
-          author="Dr. Jane Smith"
-          cardType="publication"
-        />
-        <Card
-          id="P123"
-          title="Human Emotion Recognition Based on Spatio-Temporal Facial Features Using HOG-HOF and VGG-LSTM"
-          author="Dr. Jane Smith"
-          cardType="publication"
-        />
-        <Card
-          id="P123"
-          title="Human Emotion Recognition Based on Spatio-Temporal Facial Features Using HOG-HOF and VGG-LSTM"
-          author="Dr. Jane Smith"
-          cardType="publication"
-        />
+      </section>
+      {/* ***************La section des Informations********************************/}
+      <section className="flex flex-col gap-4 md-gap-8 p-8 shadow-sm bg-[var(--color-white)] border-gray-200">
+        <h3 className="tracking-wide font-bold text-xl mb-4">Informations</h3>
+        <ul className="flex flex-col gap-4 list-none text-[var(--color-text-primary)]">
+          <li>
+            <span className="mr-3">
+              <FontAwesomeIcon icon={faBuildingColumns} />
+            </span>
+            Département Informatique
+          </li>
+          <li>
+            <span className="mr-3">
+              <FontAwesomeIcon icon={faLocationDot} />
+            </span>
+            Safi, Maroc
+          </li>
+          <li>
+            <span className="mr-3">
+              <FontAwesomeIcon icon={faGraduationCap} />
+            </span>
+            PhD en Intelligence Artificielle
+          </li>
+        </ul>
+      </section>
+      {/* ***************La section des Statistiques********************************/}
+
+      <section className="flex flex-col gap-4 md-gap-8 p-8 shadow-sm bg-[var(--color-white)] text-[var(--color-text-primary)] border-gray-200">
+        <h3 className="tracking-wide font-bold text-xl mb-4">Statistiques</h3>
+        <div className="flex flex-col gap-4">
+          <div className="flex justify-between">
+            <h3 className="text-[var(color-text-secondary)] ">Publications</h3>
+            <h3 className="font-semibold text-lg">47</h3>
+          </div>
+          <div className="flex justify-between">
+            <h3 className="text-[var(color-text-secondary)] ">Citations</h3>
+            <h3 className="font-semibold text-lg">1250</h3>
+          </div>
+          <div className="flex justify-between">
+            <h3 className="text-[var(color-text-secondary)] ">H-index</h3>
+            <h3 className="font-semibold text-lg">15</h3>
+          </div>
+          <div className="flex justify-between">
+            <h3 className="text-[var(color-text-secondary)] ">
+              Projets de recherche
+            </h3>
+            <h3 className="font-semibold text-lg">12</h3>
+          </div>
+        </div>
+      </section>
+      {/* ***************La section de GRAPHE********************************/}
+
+      <section className="flex flex-col gap-4 md-gap-8 p-8 shadow-sm bg-[var(--color-white)] border-gray-200">
+        <h3 className="text-md font-medium tracking-wider text-center">
+          Publications par Année
+        </h3>
+        <div className="h-40 md:h-50 max-w-[350px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={dataBar}>
+              <XAxis dataKey="year" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="publications" fill="var(--color-primary)" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </section>
     </div>
   );
