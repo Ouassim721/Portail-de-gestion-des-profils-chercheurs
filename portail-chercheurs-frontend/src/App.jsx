@@ -86,17 +86,7 @@ function App() {
 
             {/* Authentification */}
             <Route path="/connexion" element={<Connexion />} />
-            <Route
-              path="/change-password"
-              element={
-                <ProtectedRoute
-                  redirectTo="/connexion"
-                  allowIfMustChangePassword
-                >
-                  <ChangePassword />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/change-password" element={<ChangePassword />} />
 
             {/* Pages Admin protégées */}
             <Route
