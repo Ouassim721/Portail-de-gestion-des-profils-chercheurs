@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import format from "date-fns/format";
@@ -25,7 +26,7 @@ const localizer = dateFnsLocalizer({
 
 const Actualites = () => {
   const [events, setEvents] = useState([]);
-  const [view, setView] = useState("calendrier");
+  const [view, setView] = useState("liste");
   const [underlineStyle, setUnderlineStyle] = useState({});
   const listeRef = useRef(null);
   const calendrierRef = useRef(null);
@@ -56,7 +57,7 @@ const Actualites = () => {
   }, [view]);
   return (
     <div className="md:p-6 bg-white rounded-2xl shadow-md text-xs sm:text-sm md:text-base 2xl:text:lg">
-      <div className="flex space-x-4 border-b border-gray-300 relative">
+      <div className="flex space-x-4 border-b border-gray-300 relative mb-4">
         <button
           ref={listeRef}
           onClick={() => setView("liste")}
@@ -90,44 +91,65 @@ const Actualites = () => {
         />
       </div>
 
-      {view === "calendrier" ? (
-        <Calendar
-          localizer={localizer}
-          events={events}
-          startAccessor="start"
-          endAccessor="end"
-          culture="fr"
-          style={{ height: 600 }}
-          messages={{
-            next: "Suivant",
-            previous: "Précédent",
-            today: "Aujourd'hui",
-            month: "Mois",
-            week: "Semaine",
-            day: "Jour",
-            agenda: "Agenda",
-            date: "Date",
-            time: "Heure",
-            event: "Événement",
-            showMore: (total) => `+${total} de plus`,
-          }}
-        />
-      ) : (
-        <div className="space-y-4">
-          {events.map((event, index) => (
-            <div
-              key={index}
-              className="p-4 bg-white rounded shadow border-l-4 border-[var(--color-primary)]"
-            >
-              <h3 className="text-lg font-semibold">{event.title}</h3>
-              <p className="text-sm text-gray-500">
-                {format(event.start, "dd MMMM yyyy", { locale: fr })}
-              </p>
-              <p className="text-sm">{event.resource.categorie}</p>
+      {/* Transitions lisses entre les vues */}
+      <AnimatePresence mode="wait">
+        {view === "calendrier" && (
+          <motion.div
+            key="calendrier"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            transition={{ duration: 0.4 }}
+          >
+            <Calendar
+              localizer={localizer}
+              events={events}
+              startAccessor="start"
+              endAccessor="end"
+              culture="fr"
+              style={{ height: 600 }}
+              messages={{
+                next: "Suivant",
+                previous: "Précédent",
+                today: "Aujourd'hui",
+                month: "Mois",
+                week: "Semaine",
+                day: "Jour",
+                agenda: "Agenda",
+                date: "Date",
+                time: "Heure",
+                event: "Événement",
+                showMore: (total) => `+${total} de plus`,
+              }}
+            />
+          </motion.div>
+        )}
+
+        {view === "liste" && (
+          <motion.div
+            key="liste"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 50 }}
+            transition={{ duration: 0.4 }}
+          >
+            <div className="space-y-4 mt-6">
+              {events.map((event, index) => (
+                <div
+                  key={index}
+                  className="p-4 bg-white rounded shadow border-l-4 border-[var(--color-primary)]"
+                >
+                  <h3 className="text-lg font-semibold">{event.title}</h3>
+                  <p className="text-sm text-gray-500">
+                    {format(event.start, "dd MMMM yyyy", { locale: fr })}
+                  </p>
+                  <p className="text-sm">{event.resource.categorie}</p>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
