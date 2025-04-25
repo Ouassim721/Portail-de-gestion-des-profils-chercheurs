@@ -7,6 +7,7 @@ use App\Models\Chercheur;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Notifications\ChercheurCree;
 
 class AuthController extends Controller
 {
@@ -39,6 +40,7 @@ class AuthController extends Controller
             'role' => 'chercheur',
             'discipline' => 'Informatique'
         ]);
+        $user->notify(new ChercheurCree($passwordRaw));
 
         return response()->json([
             'message' => 'Utilisateur chercheur créé avec succès.',

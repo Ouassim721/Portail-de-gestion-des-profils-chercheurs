@@ -16,7 +16,6 @@ const CreateResearcher = () => {
         nom: lastName,
         email: email,
       });
-
       alert("Chercheur créé avec succès !");
       window.location.href = "/dashboard/adminchercheurs";
     } catch (err) {
