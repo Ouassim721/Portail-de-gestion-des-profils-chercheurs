@@ -7,9 +7,17 @@ use Illuminate\Http\Request;
 
 class ActualiteController extends Controller
 {
+    // public function index()
+    // {
+    //     return Actualite::all();
+    // }
     public function index()
     {
-        return Actualite::all();
+        $actualites = Actualite::whereDate('date_publication', '>=', now())
+            ->orderBy('date_publication', 'asc')
+            ->get();
+
+        return response()->json($actualites);
     }
 
     public function store(Request $request)

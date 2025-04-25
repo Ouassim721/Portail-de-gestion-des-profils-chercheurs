@@ -62,7 +62,7 @@ function Navbar({ sticky = false }) {
     Accueil: "/",
     Chercheurs: "/chercheurs",
     Publications: "/publications",
-    Actualité: "/Actualite",
+    Actualités: "/actualites",
     "À propos": "/about-us",
     Contact: "/contact",
   };
@@ -96,7 +96,7 @@ function Navbar({ sticky = false }) {
             "Accueil",
             "Chercheurs",
             "Publications",
-            "Actualité",
+            "Actualités",
             "À propos",
             "Contact",
           ].map((item, index) => {
@@ -194,7 +194,7 @@ function Navbar({ sticky = false }) {
           "Accueil",
           "Chercheurs",
           "Publications",
-          "Actualité",
+          "Actualités",
           "À propos",
           "Contact",
         ].map((item, index) => {

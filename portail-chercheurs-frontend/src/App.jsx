@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // Pages publiques
 import Home from "./pages/Home";
 import Chercheurs from "./pages/Chercheurs";
-import Actualite from "./pages/Actualite";
+import Actualites from "./pages/Actualites";
 import ProfilChercheur from "./components/ProfilChercheur";
 import Layout from "./components/layout/Layout";
 import Publications from "./pages/Publications";
@@ -59,7 +59,7 @@ function App() {
                 path="/profil-chercheur/:id"
                 element={<ProfilChercheur />}
               />
-              <Route path="/actualite" element={<Actualite />} />
+              <Route path="/actualites" element={<Actualites />} />
               <Route path="/publications" element={<Publications />} />
               <Route
                 path="/details-publication/:id"

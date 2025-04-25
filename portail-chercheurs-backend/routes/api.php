@@ -54,7 +54,7 @@ Route::get('/stats', [StatisticsController::class, 'getStats']);
 //Route pour le changement de mot de passe
 Route::middleware('auth:api')->post('/change-password', [AuthController::class, 'changePassword']);
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:api'])->group(function () {
     Route::get('/scopus-publications', [ScopusPublicationController::class, 'fetchPublications']);
     Route::put('/chercheur/profile', [ChercheurController::class, 'updateProfile']);
     Route::post('/publications', [PublicationController::class, 'storeBatch']);
