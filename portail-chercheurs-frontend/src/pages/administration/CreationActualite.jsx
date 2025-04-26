@@ -10,10 +10,10 @@ const CreationActualite = () => {
     localisation: "",
     description: "",
     categorie: "",
-    document_pdf: "",
     date_publication: "",
   });
 
+  const [documentPdf, setDocumentPdf] = useState(null); // pour gérer le fichier PDF séparément
   const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
@@ -23,14 +23,35 @@ const CreationActualite = () => {
     });
   };
 
+  const handleFileChange = (e) => {
+    setDocumentPdf(e.target.files[0]); // récupère le fichier sélectionné
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      const data = new FormData();
+      data.append("titre", formData.titre);
+      data.append("localisation", formData.localisation);
+      data.append("description", formData.description);
+      data.append("categorie", formData.categorie);
+      data.append("date_publication", formData.date_publication);
+
+      if (documentPdf) {
+        data.append("document_pdf", documentPdf); // très important pour ajouter le fichier
+      }
+
       const response = await axios.post(
         "http://localhost:8000/api/actualites",
-        formData
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
+
       setMessage("Actualité ajoutée avec succès !");
       console.log("Réponse :", response.data);
     } catch (error) {
@@ -49,6 +70,7 @@ const CreationActualite = () => {
           placeholder="Titre"
           onChange={handleChange}
           className="w-full border p-2 rounded"
+          required
         />
         <input
           type="text"
@@ -56,6 +78,7 @@ const CreationActualite = () => {
           placeholder="Localisation"
           onChange={handleChange}
           className="w-full border p-2 rounded"
+          required
         />
         <input
           type="text"
@@ -63,6 +86,7 @@ const CreationActualite = () => {
           placeholder="Description"
           onChange={handleChange}
           className="w-full border p-2 rounded"
+          required
         />
         <input
           type="text"
@@ -70,12 +94,13 @@ const CreationActualite = () => {
           placeholder="Catégorie"
           onChange={handleChange}
           className="w-full border p-2 rounded"
+          required
         />
         <input
-          type="text"
+          type="file"
           name="document_pdf"
-          placeholder="Lien PDF (optionnel)"
-          onChange={handleChange}
+          accept="application/pdf"
+          onChange={handleFileChange}
           className="w-full border p-2 rounded"
         />
         <input
@@ -90,4 +115,5 @@ const CreationActualite = () => {
     </div>
   );
 };
+
 export default CreationActualite;

@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import pdp from "../assets/blankpdp.png";
 import Card from "./cards/Card";
 import Button from "./ui/Button";
 import axios from "../axios";
 import UpdateProfileModal from "./modals/UpdateProfileModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ChercheurAvatar from "./ui/ChercheurAvatar";
 import {
   faBuildingColumns,
   faUserPen,
@@ -82,7 +82,7 @@ function ProfilChercheur() {
       {/* ***************La section principale de photo et les bouttons ********************************/}
       <section className="col-span-3 p-8 md:p-8 rounded shadow-sm bg-[var(--color-white)] text-[var(--color-text-primary)] border-gray-200">
         <div className="relative flex flex-col sm:flex-row gap-2 sm:gap-12 lg:gap-16">
-          {chercheur.photoProfil ? (
+          {/* {chercheur.photoProfil ? (
             <img
               src={`http://localhost:8000/${chercheur.photoProfil}`}
               alt="Photo de profil"
@@ -94,7 +94,14 @@ function ProfilChercheur() {
               alt="Photo de profil"
               className="object-cover rounded-full w-24 sm:w-28 lg:w-32 mx-auto sm:mx-0"
             />
-          )}
+          )} */}
+          <div className="flex-shrink-0">
+            <ChercheurAvatar
+              chercheur={chercheur}
+              size="xl"
+              className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 mx-auto sm:mx-0 text-4xl!"
+            />
+          </div>
           <div className="sm:flex sm:justify-between w-full mx-auto">
             <div>
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-center sm:text-left">

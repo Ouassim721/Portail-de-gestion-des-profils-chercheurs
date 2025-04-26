@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Chercheurs from "./pages/Chercheurs";
 import Actualites from "./pages/Actualites";
+import DetailsActualite from "./pages/DetailsActualite";
 import ProfilChercheur from "./components/ProfilChercheur";
 import Layout from "./components/layout/Layout";
 import Publications from "./pages/Publications";
@@ -60,6 +61,8 @@ function App() {
                 element={<ProfilChercheur />}
               />
               <Route path="/actualites" element={<Actualites />} />
+              <Route path="/actualites/:id" element={<DetailsActualite />} />
+
               <Route path="/publications" element={<Publications />} />
               <Route
                 path="/details-publication/:id"

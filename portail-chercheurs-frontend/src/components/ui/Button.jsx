@@ -21,7 +21,7 @@ const Button = ({
     secondaryoutline:
       "bg-transparent text-[var(--color-secondary)] outline outline-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:text-[var(--color-white)]",
     neutral:
-      "bg-[var(--color-bg-secondary)] text-[var(--color-text-primary)] hover:bg-neutral-200 outline outline-gray-300",
+      "px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors",
   };
 
   return (

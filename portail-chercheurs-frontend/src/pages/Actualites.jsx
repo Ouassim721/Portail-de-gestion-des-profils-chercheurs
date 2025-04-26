@@ -8,6 +8,7 @@ import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
 import { fr } from "date-fns/locale";
+import { Link } from "react-router-dom";
 // import { registerLocale } from "react-datepicker";
 
 const locales = {
@@ -36,6 +37,7 @@ const Actualites = () => {
       .get("http://localhost:8000/api/actualites", { withCredentials: true })
       .then((res) => {
         const formatted = res.data.map((actu) => ({
+          id: `${actu.id}`,
           title: `${actu.titre} (${actu.categorie})`,
           start: new Date(actu.date_publication),
           end: new Date(actu.date_publication),
@@ -135,16 +137,18 @@ const Actualites = () => {
           >
             <div className="space-y-4 mt-6">
               {events.map((event, index) => (
-                <div
-                  key={index}
-                  className="p-4 bg-white rounded shadow border-l-4 border-[var(--color-primary)]"
-                >
-                  <h3 className="text-lg font-semibold">{event.title}</h3>
-                  <p className="text-sm text-gray-500">
-                    {format(event.start, "dd MMMM yyyy", { locale: fr })}
-                  </p>
-                  <p className="text-sm">{event.resource.categorie}</p>
-                </div>
+                <Link to={`/actualites/${event.id}`} key={index}>
+                  <div
+                    key={index}
+                    className="p-4 bg-white rounded shadow border-l-4 border-[var(--color-primary)]"
+                  >
+                    <h3 className="text-lg font-semibold">{event.title}</h3>
+                    <p className="text-sm text-gray-500">
+                      {format(event.start, "dd MMMM yyyy", { locale: fr })}
+                    </p>
+                    <p className="text-sm">{event.resource.categorie}</p>
+                  </div>
+                </Link>
               ))}
             </div>
           </motion.div>

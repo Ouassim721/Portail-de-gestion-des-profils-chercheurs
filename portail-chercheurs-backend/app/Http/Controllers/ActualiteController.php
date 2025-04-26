@@ -27,10 +27,13 @@ class ActualiteController extends Controller
             'localisation' => 'required|string|max:100',
             'description' => 'required|string|max:255',
             'categorie' => 'required|string|max:255',
-            'document_pdf' => 'nullable|string',
+            'document_pdf' => 'nullable|file|mimes:pdf|max:10240',
             'date_publication' => 'nullable|date',
         ]);
-
+        if ($request->hasFile('document_pdf')) {
+            $pdfPath = $request->file('document_pdf')->store('actualites', 'public');
+            $validated['document_pdf'] = $pdfPath;
+        }
         $actualite = Actualite::create($validated);
 
         return response()->json($actualite, 201);
@@ -50,10 +53,14 @@ class ActualiteController extends Controller
             'localisation' => 'required|string|max:100',
             'description' => 'required|string|max:255',
             'categorie' => 'required|string|max:255',
-            'document_pdf' => 'nullable|string',
+            'document_pdf' => 'nullable|file|mimes:pdf|max:10240',
             'date_publication' => 'nullable|date',
         ]);
-
+        if ($request->hasFile('document_pdf')) {
+            $file = $request->file('document_pdf');
+            $path = $file->store('actualites', 'public'); // Stocké dans storage/app/public/actualites
+            $validated['document_pdf'] = $path;
+        }
         $actualite->update($validated);
 
         return response()->json($actualite);

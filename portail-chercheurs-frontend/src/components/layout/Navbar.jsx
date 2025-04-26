@@ -3,8 +3,8 @@ import { Link, useLocation } from "react-router-dom";
 import Button from "../ui/Button";
 import DropdownMenu from "../ui/DropdownMenu";
 import axios from "../../axios";
-import pdp from "../../assets/chercheur-place-holder.jpg";
 import SearchBar from "../research/SearchBar";
+import ChercheurAvatar from "../ui/ChercheurAvatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
@@ -141,19 +141,13 @@ function Navbar({ sticky = false }) {
             ]}
           >
             <div className="flex gap-3 items-center">
-              {chercheur.photoProfil ? (
-                <img
-                  src={`http://localhost:8000/${chercheur.photoProfil}`}
-                  alt="Photo de profil"
-                  className="object-cover w-13 h-13 rounded-full cursor-pointer"
+              <div className="flex-shrink-0">
+                <ChercheurAvatar
+                  chercheur={chercheur}
+                  size="md"
+                  className="w-13 h-13 cursor-pointer text-lg!"
                 />
-              ) : (
-                <img
-                  src={pdp}
-                  alt="Photo de profil"
-                  className="object-cover w-13 h-13 rounded-full cursor-pointer"
-                />
-              )}
+              </div>
               <div className="text-gray-600 ">
                 <h2>{chercheur.prenom}</h2>
                 <h2 className="uppercase">{chercheur.nom}</h2>

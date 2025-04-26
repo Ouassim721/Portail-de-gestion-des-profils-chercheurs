@@ -66,3 +66,6 @@ Route::middleware('auth:api')->post('/chercheurs/{id}/update', [ChercheurControl
 
 //Manipuler les actualités
 Route::apiResource('actualites', ActualiteController::class);
+
+Route::get('/actualites', [ActualiteController::class, 'index']);
+Route::get('/actualites/{id}', [ActualiteController::class, 'show']);
