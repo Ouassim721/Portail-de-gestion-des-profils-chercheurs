@@ -1,8 +1,11 @@
 import { useState, useRef, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
+import ChercheurAvatar from "../ui/ChercheurAvatar";
 
-const DropdownMenu = ({ children, options = [] }) => {
+const DropdownMenu = ({ children, sections = [], userProfile }) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -19,45 +22,86 @@ const DropdownMenu = ({ children, options = [] }) => {
 
   return (
     <div className="relative inline-block" ref={menuRef}>
-      <div onClick={() => setIsOpen(!isOpen)} className="cursor-pointer">
-        {children}
+      {/* Déclencheur du menu */}
+      <div
+        onClick={() => setIsOpen(!isOpen)}
+        className="cursor-pointer flex items-center gap-3 hover:bg-gray-100 rounded-lg p-2 transition-colors"
+      >
+        {React.Children.map(children, (child) => {
+          if (
+            child?.type === FontAwesomeIcon &&
+            child?.props?.icon === faAngleDown
+          ) {
+            return React.cloneElement(child, {
+              className: `${
+                child.props.className
+              } transition-transform duration-200 ${
+                isOpen ? "rotate-180" : ""
+              }`,
+            });
+          }
+          return child;
+        })}
       </div>
 
       {isOpen && (
-        <div
-          className="absolute right-0 w-60 text-sm bg-white border border-gray-200 rounded shadow-md"
-          role="menu"
-          aria-haspopup="true"
-          aria-expanded={isOpen}
-        >
-          <div className="h-[1px] w-full bg-gray-300 my-2"></div>
-          {options.map((option, index) => (
-            <div
-              key={index}
-              className="w-full px-4 py-2 hover:bg-blue-100 hover:text-blue-600 cursor-pointer flex items-center gap-4"
-              /*onClick={() => {
-                if (!option.link && option.onClick) option.onClick();
-                setIsOpen(false);
-              }}*/
-              onClick={() => {
-                if (option.onClick) option.onClick();
-                setIsOpen(false);
-              }}
-            >
-              <FontAwesomeIcon icon={option.icon} className="text-lg" />
-              {option.link ? (
-                <Link
-                  to={option.link}
-                  className="w-full block text-inherit no-underline hover:text-inherit "
-                >
-                  {option.label}
-                </Link>
-              ) : (
-                option.label
+        <div className="absolute right-0 w-72 mt-2 bg-white rounded-md shadow-lg z-50 border border-gray-200">
+          {/* Section profil en haut */}
+          {userProfile && (
+            <div className="px-4 py-3 border-b border-gray-200">
+              <div className="flex items-center gap-3">
+                <div className="flex-shrink-0">
+                  <ChercheurAvatar
+                    chercheur={userProfile}
+                    size="md"
+                    className="w-10 h-10"
+                  />
+                </div>
+                <div className="flex gap-1 text-gray-600">
+                  <h2 className="">{userProfile.prenom} </h2>
+                  <h2 className="uppercase font-medium">{userProfile.nom}</h2>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Sections du menu */}
+          {sections.map((section, sectionIndex) => (
+            <div key={`section-${sectionIndex}`}>
+              <div className="py-1">
+                {section.options.map((option, optionIndex) => (
+                  <div
+                    key={`option-${optionIndex}`}
+                    onClick={() => {
+                      if (option.onClick) option.onClick();
+                      setIsOpen(false);
+                    }}
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3"
+                  >
+                    {option.icon && (
+                      <FontAwesomeIcon
+                        icon={option.icon}
+                        className="text-gray-500 w-5 text-center"
+                      />
+                    )}
+                    {option.link ? (
+                      <Link
+                        to={option.link}
+                        className="block w-full text-gray-700 no-underline hover:text-gray-900"
+                      >
+                        {option.label}
+                      </Link>
+                    ) : (
+                      <span className="text-gray-700">{option.label}</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+              {sectionIndex < sections.length - 1 && (
+                <div className="border-t border-gray-200"></div>
               )}
             </div>
           ))}
-          <div className="h-[1px] w-full bg-gray-300 my-2"></div>
         </div>
       )}
     </div>
