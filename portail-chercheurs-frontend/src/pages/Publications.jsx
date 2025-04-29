@@ -11,6 +11,7 @@ import Button from "../components/ui/Button";
 import DropdownButton from "../components/ui/DropdownButton";
 import CardStatPublication from "../components/cards/CardStatPublication";
 import CardPublication from "../components/cards/CardPublication";
+import CommentsSection from "../components/comments/CommentsSection";
 import axios from "../axios";
 
 const Publications = () => {
@@ -140,17 +141,22 @@ const Publications = () => {
         </section>
         <section>
           <div>
-            {publications.map((pub) => (
-              <CardPublication
-                key={pub.id}
-                title={pub.titre}
-                auteur={` ${pub.chercheur.prenom} ${pub.chercheur.nom}`}
-                description={pub.abstract}
-                date={pub.date_publication}
-                departement={pub.discipline.nom}
-                citations={pub.citation_count}
-              />
-            ))}
+          {publications.map((pub) => (
+  <div key={pub.id} className="mb-10">
+    <CardPublication
+      title={pub.titre}
+      auteur={`${pub.chercheur.prenom} ${pub.chercheur.nom}`}
+      university={pub.chercheur.university}
+      departement={pub.discipline.nom}
+      description={pub.abstract}
+      category={pub.discipline.keywords || []}
+      date={pub.date_publication}
+      citations={pub.citation_count}
+      pdf_path={pub.pdf_path}
+    />
+    <CommentsSection publicationId={pub.id} />
+  </div>
+))}
           </div>
         </section>
       </main>
