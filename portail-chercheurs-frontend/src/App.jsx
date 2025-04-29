@@ -16,6 +16,8 @@ import NotFound from "./pages/NotFound";
 // Authentification
 import Connexion from "./pages/connexion";
 import ChangePassword from "./pages/ChangePassword";
+import ProfilUpdateForm from "./pages/ProfilUpdateForm";
+import SelectionPublication from "./pages/SelectionPublications.jsx";
 import AuthProvider from "./contexts/AuthProvider";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
@@ -90,6 +92,11 @@ function App() {
             {/* Authentification */}
             <Route path="/connexion" element={<Connexion />} />
             <Route path="/change-password" element={<ChangePassword />} />
+            <Route path="/profil-update-form" element={<ProfilUpdateForm />} />
+            <Route
+              path="/selection-publications"
+              element={<SelectionPublication />}
+            />
 
             {/* Pages Admin protégées */}
             <Route

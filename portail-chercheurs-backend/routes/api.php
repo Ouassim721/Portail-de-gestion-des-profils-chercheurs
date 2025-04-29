@@ -62,10 +62,16 @@ Route::middleware(['auth:api'])->group(function () {
 
 //modifier le profil
 Route::middleware('auth:api')->post('/chercheurs/{id}/update', [ChercheurController::class, 'update']);
-
+//update profil first login
+Route::middleware('auth:api')->put('/chercheur/profil', [ChercheurController::class, 'updateProfil']);
+//recuperer les publications first login
+Route::middleware('auth:api')->get('/chercheur/publications', [PublicationController::class, 'fetchScopusPublications']);
 
 //Manipuler les actualités
 Route::apiResource('actualites', ActualiteController::class);
 
 Route::get('/actualites', [ActualiteController::class, 'index']);
 Route::get('/actualites/{id}', [ActualiteController::class, 'show']);
+
+//Enregistrer les publications sélectionnées
+Route::middleware('auth:api')->post('/chercheur/publications', [PublicationController::class, 'store']);
