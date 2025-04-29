@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Publication extends Model
 {
@@ -15,22 +17,42 @@ class Publication extends Model
         'date_modification',
         'auteurs',
         'abstract',
+        'citation_count',
         'chercheur_id',
-        'discipline_id'
+        'discipline_id',
+        'pdf_path',
     ];
 
-    public function chercheur()
+    /**
+     * Les casts de colonnes
+     */
+    protected $casts = [
+        'date_publication'   => 'date:Y-m-d',
+        'date_modification'  => 'date:Y-m-d',
+        'citation_count'     => 'integer',
+    ];
+
+    /**
+     * Le chercheur·e propriétaire de la publication
+     */
+    public function chercheur(): BelongsTo
     {
         return $this->belongsTo(Chercheur::class);
     }
 
-    protected $casts = [
-        'publication_date' => 'date:Y-m-d',
-        'citation_count' => 'integer'
-    ];
-
-    public function discipline()
+    /**
+     * La discipline associée à la publication
+     */
+    public function discipline(): BelongsTo
     {
         return $this->belongsTo(Discipline::class);
+    }
+
+    /**
+     * Les commentaires sur cette publication
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
     }
 }

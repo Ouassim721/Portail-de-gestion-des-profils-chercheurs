@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Chercheur extends Authenticatable implements JWTSubject
 {
@@ -96,4 +97,12 @@ class Chercheur extends Authenticatable implements JWTSubject
     protected $casts = [
         'must_change_password' => 'boolean',
     ];
+
+    /**
+     * Commentaires rédigés par ce chercheur
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'chercheur_id');
+    }
 }

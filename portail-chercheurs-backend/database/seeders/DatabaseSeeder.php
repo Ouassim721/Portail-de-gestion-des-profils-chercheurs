@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             DisciplineSeeder::class,
             ChercheurSeeder::class,
+            CommentSeeder::class,
             PublicationSeeder::class
         ]);
     }

@@ -10,6 +10,7 @@ use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\ActualiteController;
 use App\Http\Controllers\ChercheurController;
 use App\Http\Controllers\ScopusPublicationController;
+use App\Http\Controllers\CommentController;
 
 //-------------------------------Authentification (JWT)-----------------------------------------------//
 Route::post('/login', [AuthController::class, 'login']);
@@ -54,7 +55,7 @@ Route::get('/stats', [StatisticsController::class, 'getStats']);
 //Route pour le changement de mot de passe
 Route::middleware('auth:api')->post('/change-password', [AuthController::class, 'changePassword']);
 
-Route::middleware(['auth:api'])->group(function () {
+Route::middleware('auth:api')->group(function () {
     Route::get('/scopus-publications', [ScopusPublicationController::class, 'fetchPublications']);
     Route::put('/chercheur/profile', [ChercheurController::class, 'updateProfile']);
     Route::post('/publications', [PublicationController::class, 'storeBatch']);
@@ -69,3 +70,12 @@ Route::apiResource('actualites', ActualiteController::class);
 
 Route::get('/actualites', [ActualiteController::class, 'index']);
 Route::get('/actualites/{id}', [ActualiteController::class, 'show']);
+
+
+
+Route::middleware(['auth:api'])->group(function () {
+    Route::get('publications/{publication}/comments', [CommentController::class, 'index']);
+    Route::post('comments',                         [CommentController::class, 'store']);
+    Route::put('comments/{comment}',                [CommentController::class, 'update']);
+    Route::delete('comments/{comment}',             [CommentController::class, 'destroy']);
+});
