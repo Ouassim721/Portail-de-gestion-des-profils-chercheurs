@@ -8,18 +8,13 @@ import ChercheurAvatar from "../ui/ChercheurAvatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
-  faGear,
-  faUserCircle,
   faAngleDown,
   faSignOutAlt,
   faCog,
   faBars,
   faTimes,
-  faCaretDown,
   faQuestionCircle,
-  faShoppingBag,
   faUser,
-  faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { faBell as faRegularBell } from "@fortawesome/free-regular-svg-icons"; // Style Regular
 
@@ -132,97 +127,12 @@ function Navbar({ sticky = false }) {
           />
         </div>
         {chercheur ? (
-          // <DropdownMenu
-          //   options={[
-          //     {
-          //       label: "Profil",
-          //       link: "/profil",
-          //       icon: faUser,
-          //     },
-          //     {
-          //       label: "Paramètre",
-          //       link: "/profil",
-          //       icon: faGear,
-          //     },
-          //     {
-          //       label: "Déconnexion",
-          //       link: "/",
-          //       onClick: handleLogout,
-          //       icon: faRightFromBracket,
-          //     },
-          //   ]}
-          // >
-          //   <div className="flex gap-3 items-center">
-          //     <div className="flex-shrink-0">
-          //       <ChercheurAvatar
-          //         chercheur={chercheur}
-          //         size="md"
-          //         className="w-13 h-13 cursor-pointer text-lg!"
-          //       />
-          //     </div>
-          //     <div className="text-gray-600 ">
-          //       <h2>{chercheur.prenom}</h2>
-          //       <h2 className="uppercase">{chercheur.nom}</h2>
-          //     </div>
-          //     <FontAwesomeIcon
-          //       icon={faCaretDown}
-          //       className="text-xl text-gray-600"
-          //     />
-          //   </div>
-          // </DropdownMenu>
-          // <DropdownMenu
-          //   sections={[
-          //     {
-          //       options: [
-          //         { label: "Mon compte", icon: faUser, link: "/account" },
-          //       ],
-          //     },
-          //     {
-          //       options: [
-          //         {
-          //           label: "Paramètres",
-          //           icon: faCog,
-          //           onClick: () => console.log("Settings clicked"),
-          //         },
-          //         { label: "Aide", icon: faQuestionCircle, link: "/help" },
-          //       ],
-          //     },
-          //     {
-          //       options: [
-          //         {
-          //           label: "Déconnexion",
-          //           icon: faSignOutAlt,
-          //           onClick: handleLogout,
-          //         },
-          //       ],
-          //     },
-          //   ]}
-          // >
-          //   {/* Votre déclencheur de menu ici */}
-          //   <div className="flex gap-3 items-center">
-          //     <div className="flex-shrink-0">
-          //       <ChercheurAvatar
-          //         chercheur={chercheur}
-          //         size="md"
-          //         className="w-13 h-13 cursor-pointer text-lg!"
-          //       />
-          //     </div>
-          //     <div className="text-gray-600 ">
-          //       <h2>{chercheur.prenom}</h2>
-          //       <h2 className="uppercase">{chercheur.nom}</h2>
-          //     </div>
-          //     <FontAwesomeIcon
-          //       icon={faAngleDown}
-          //       className="text-xl text-gray-600"
-          //     />
-          //   </div>
-          // </DropdownMenu>
           <DropdownMenu
             userProfile={chercheur} // Ajoutez cette prop pour le profil en haut
             sections={[
               {
                 options: [
-                  { label: "Mon compte", icon: faUser, link: "/account" },
+                  { label: "Mon compte", icon: faUser, link: "/profil" },
                 ],
               },
               {

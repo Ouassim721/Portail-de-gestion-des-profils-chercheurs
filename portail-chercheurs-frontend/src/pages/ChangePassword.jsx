@@ -46,7 +46,7 @@ const ChangePassword = () => {
       });
 
       setTimeout(() => {
-        navigate("/complete-profile");
+        navigate("/profil-update-form");
       }, 1500);
     } catch (err) {
       const msg = err.response?.data?.message || "Une erreur s'est produite.";

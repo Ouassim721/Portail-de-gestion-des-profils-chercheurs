@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import Button from "../../components/ui/Button";
+import { Navigate } from "react-router-dom";
 
 axios.defaults.withCredentials = true;
 
@@ -54,6 +55,7 @@ const CreationActualite = () => {
 
       setMessage("Actualité ajoutée avec succès !");
       console.log("Réponse :", response.data);
+      window.location.href = "/dashboard/adminactualite";
     } catch (error) {
       console.error("Erreur :", error.response?.data);
       setMessage("Erreur lors de l'ajout !");

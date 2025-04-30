@@ -12,65 +12,93 @@ use App\Http\Controllers\ChercheurController;
 use App\Http\Controllers\ScopusPublicationController;
 use App\Http\Controllers\CommentController;
 
-//-------------------------------Authentification (JWT)-----------------------------------------------//
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
+*/
+
+/* ==================== ROUTES D'AUTHENTIFICATION (JWT) ==================== */
+
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']);
+
+// Route protégée pour admin seulement
 Route::middleware(['auth:api', 'is_admin'])->post('/admin/create-chercheur', [AuthController::class, 'createChercheurFromAdmin']);
 
-
+// Récupérer les informations de l'utilisateur connecté
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return response()->json($request->user());
 });
 
-// Route::middleware(['auth:api', 'password.changed'])->group(function () {
-//     Route::get('/profile', [AuthController::class, 'profile']);
-// });
+// Profil utilisateur
 Route::middleware('auth:api')->get('/profile', function (Request $request) {
     return $request->user();
 });
 
-
-//Chercheurs
-Route::middleware('auth:api')->get('/chercheurs', function () {
-    return Chercheur::all();
-});
-
-Route::get('/chercheurs/{id}', function ($id) {
-    return Chercheur::findOrFail($id);
-});
-Route::delete('/chercheurs/{id}', [ChercheurController::class, 'destroy']);
-
-// Routes pour les disciplines
-Route::apiResource('disciplines', DisciplineController::class);
-
-// Routes pour les publications
-// Route::apiResource('/publications', PublicationController::class, 'index');
-Route::get('/publications', [PublicationController::class, 'index']);
-
-Route::get('/chercheurs', [ChercheurController::class, 'apiIndex']);
-
-// Route pour le nombre des chercheurs inscrit
-Route::get('/stats', [StatisticsController::class, 'getStats']);
-
-//Route pour le changement de mot de passe
+// Changement de mot de passe
 Route::middleware('auth:api')->post('/change-password', [AuthController::class, 'changePassword']);
 
+<<<<<<< HEAD
 Route::middleware('auth:api')->group(function () {
     Route::get('/scopus-publications', [ScopusPublicationController::class, 'fetchPublications']);
+=======
+/* ==================== ROUTES POUR LES CHERCHEURS ==================== */
+Route::middleware('auth:api')->group(function () {
+    // Lister tous les chercheurs
+    Route::get('/chercheurs', [ChercheurController::class, 'apiIndex']);
+
+    // Récupérer un chercheur spécifique
+    Route::get('/chercheurs/{id}', function ($id) {
+        return Chercheur::findOrFail($id);
+    });
+
+    // Supprimer un chercheur
+    Route::delete('/chercheurs/{id}', [ChercheurController::class, 'destroy']);
+
+    // Mettre à jour un chercheur
+    Route::post('/chercheurs/{id}/update', [ChercheurController::class, 'update']);
+
+    // Mettre à jour le profil (première connexion)
+    Route::put('/chercheur/profil', [ChercheurController::class, 'updateProfil']);
+
+    // Mettre à jour le profil général
+>>>>>>> ouassim
     Route::put('/chercheur/profile', [ChercheurController::class, 'updateProfile']);
+});
+
+/* ==================== ROUTES POUR LES PUBLICATIONS ==================== */
+Route::middleware('auth:api')->group(function () {
+    // Lister les publications
+    Route::get('/publications', [PublicationController::class, 'index']);
+
+    // Récupérer les publications Scopus d'un chercheur
+    Route::get('/chercheur/publications', [PublicationController::class, 'fetchScopusPublications']);
+
+    // Enregistrer une publication
+    Route::post('/chercheur/publications', [PublicationController::class, 'store']);
+
+    // Enregistrer un batch de publications
     Route::post('/publications', [PublicationController::class, 'storeBatch']);
 });
 
-//modifier le profil
-Route::middleware('auth:api')->post('/chercheurs/{id}/update', [ChercheurController::class, 'update']);
+// Récupérer les publications Scopus (via API externe)
+Route::middleware('auth:api')->get('/scopus-publications', [ScopusPublicationController::class, 'fetchPublications']);
 
+/* ==================== ROUTES POUR LES DISCIPLINES ==================== */
+Route::apiResource('disciplines', DisciplineController::class);
 
-//Manipuler les actualités
+/* ==================== ROUTES POUR LES ACTUALITES ==================== */
 Route::apiResource('actualites', ActualiteController::class);
-
 Route::get('/actualites', [ActualiteController::class, 'index']);
 Route::get('/actualites/{id}', [ActualiteController::class, 'show']);
 
+<<<<<<< HEAD
 
 
 Route::middleware(['auth:api'])->group(function () {
@@ -79,3 +107,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::put('comments/{comment}',                [CommentController::class, 'update']);
     Route::delete('comments/{comment}',             [CommentController::class, 'destroy']);
 });
+=======
+/* ==================== ROUTES POUR LES STATISTIQUES ==================== */
+Route::get('/stats', [StatisticsController::class, 'getStats']);
+>>>>>>> ouassim

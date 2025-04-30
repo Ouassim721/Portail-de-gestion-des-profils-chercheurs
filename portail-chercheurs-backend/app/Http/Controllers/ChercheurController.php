@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\Chercheur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -21,6 +22,12 @@ class ChercheurController extends Controller
             'total' => $chercheurs->total(),
         ]);
     }
+    /**
+     * Méthode pour la suppression d'un chercheur via admin
+     *
+     * @param [type] $id
+     * @return void
+     */
     public function destroy($id)
     {
         $chercheur = Chercheur::find($id);
@@ -30,6 +37,13 @@ class ChercheurController extends Controller
         }
         return response()->json(['message' => 'Chercheur introuvable.'], 404);
     }
+    /**
+     * Méthode permettant au chercheur de modifier son profil depuis sa page profil
+     *
+     * @param Request $request
+     * @param [type] $id
+     * @return void
+     */
     public function update(Request $request, $id)
     {
         $chercheur = Chercheur::findOrFail($id);
@@ -59,6 +73,33 @@ class ChercheurController extends Controller
 
         return response()->json($chercheur);
     }
+    /**
+     * Méthode pour le remplissage de profil lors de la première connexion
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function updateProfil(Request $request)
+    {
+        $chercheur = JWTAuth::user();
+
+        $validated = $request->validate([
+            'nom' => 'required|string|max:100',
+            'prenom' => 'required|string|max:100',
+            'scopus_author_id' => 'required|string|max:20',
+            'discipline' => 'nullable|string|max:100',
+        ]);
+
+        $chercheur->update($validated);
+
+        return response()->json(['message' => 'Profil mis à jour avec succès']);
+    }
+
+    /**
+     * Méthode pour la récupération de nombre des chercheurs inscrit dans le portail
+     *
+     * @return void
+     */
     public function getNombreChercheurs()
     {
         $compteur = Chercheur::count();
