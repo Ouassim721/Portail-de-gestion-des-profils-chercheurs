@@ -46,45 +46,94 @@ class PublicationController extends Controller
         if (!$chercheur || !$chercheur->scopus_author_id) {
             return response()->json(['message' => 'Scopus ID manquant ou chercheur non authentifié'], 400);
         }
-        $scopusId = $chercheur->scopus_author_id;
 
+        $scopusId = $chercheur->scopus_author_id;
         $client = new \GuzzleHttp\Client();
 
-        $response = $client->get("https://api.elsevier.com/content/search/scopus", [
-            'query' => [
-                'query' => "AU-ID({$scopusId})"
-            ],
-            'headers' => [
-                'Accept' => 'application/json',
-                'X-ELS-APIKey' => env('SCOPUS_API_KEY'), // définit dans  .env
-            ]
-        ]);
+        try {
+            $response = $client->get("https://api.elsevier.com/content/search/scopus", [
+                'query' => [
+                    'query' => "AU-ID({$scopusId})",
+                    'field' => 'title,coverDate,creator,description,citedby-count,dc:identifier'
+                ],
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'X-ELS-APIKey' => env('SCOPUS_API_KEY'),
+                ]
+            ]);
 
-        $data = json_decode($response->getBody(), true);
+            $data = json_decode($response->getBody(), true);
 
-        return response()->json($data);
+            $formattedData = [
+                'publications' => array_map(function ($entry) {
+                    // Extraction de l'identifiant Scopus (format: "SCOPUS_ID:85076477900")
+                    $scopusId = isset($entry['dc:identifier'])
+                        ? str_replace('SCOPUS_ID:', '', $entry['dc:identifier'])
+                        : null;
+
+                    return [
+                        'identifiant' => $scopusId,
+                        'titre' => $entry['dc:title'] ?? 'Titre non disponible',
+                        'date_publication' => $entry['prism:coverDate'] ?? null,
+                        'auteurs' => is_array($entry['dc:creator'] ?? null)
+                            ? implode(', ', $entry['dc:creator'])
+                            : ($entry['dc:creator'] ?? 'Auteur inconnu'),
+                        'abstract' => $entry['dc:description'] ?? null,
+                        'citation_count' => $entry['citedby-count'] ?? 0,
+                        'discipline_id' => 1 // Valeur par défaut
+                    ];
+                }, $data['search-results']['entry'] ?? [])
+            ];
+
+            return response()->json($formattedData);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Erreur lors de la récupération des publications Scopus',
+                'details' => $e->getMessage()
+            ], 500);
+        }
     }
-
-
-    /**
-     * Stocke une nouvelle publication
-     */
 
     public function store(Request $request)
     {
-        $chercheur = JWTAuth::user();
+        try {
+            $chercheur = JWTAuth::parseToken()->authenticate();
+            if (!$chercheur) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
 
-        foreach ($request->all() as $pub) {
-            Publication::create([
-                'titre' => $pub['titre'],
-                'date_publication' => $pub['date_publication'],
-                'auteurs' => $pub['auteurs'],
-                'abstract' => $pub['abstract'],
-                'citation_count' => $pub['citation_count'] ?? null,
-                'chercheur_id' => $chercheur->id,
+            $request->validate([
+                'publications' => 'required|array',
+                'publications.*.identifiant' => 'nullable|string', // Champ identifiant ajouté
+                'publications.*.titre' => 'required|string',
+                'publications.*.date_publication' => 'required|date',
+                'publications.*.auteurs' => 'required',
+                'publications.*.abstract' => 'nullable|string',
+                'publications.*.citation_count' => 'nullable|integer',
+                'publications.*.discipline_id' => 'sometimes|exists:disciplines,id',
             ]);
-        }
 
-        return response()->json(['message' => 'Publications enregistrées avec succès.']);
+            foreach ($request->publications as $pub) {
+                Publication::create([
+                    'scopus_id' => $pub['identifiant'] ?? null, // Stockage de l'identifiant Scopus
+                    'titre' => $pub['titre'],
+                    'date_publication' => $pub['date_publication'],
+                    'auteurs' => is_array($pub['auteurs'])
+                        ? implode(', ', $pub['auteurs'])
+                        : $pub['auteurs'],
+                    'abstract' => $pub['abstract'] ?? null,
+                    'citation_count' => $pub['citation_count'] ?? 0,
+                    'chercheur_id' => $chercheur->id,
+                    'discipline_id' => $pub['discipline_id'] ?? null
+                ]);
+            }
+
+            return response()->json(['message' => 'Publications enregistrées avec succès']);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Erreur lors de l\'enregistrement',
+                'details' => $e->getMessage()
+            ], 500);
+        }
     }
 }
