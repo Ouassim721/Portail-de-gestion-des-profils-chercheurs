@@ -44,10 +44,6 @@ Route::middleware('auth:api')->get('/profile', function (Request $request) {
 // Changement de mot de passe
 Route::middleware('auth:api')->post('/change-password', [AuthController::class, 'changePassword']);
 
-<<<<<<< HEAD
-Route::middleware('auth:api')->group(function () {
-    Route::get('/scopus-publications', [ScopusPublicationController::class, 'fetchPublications']);
-=======
 /* ==================== ROUTES POUR LES CHERCHEURS ==================== */
 Route::middleware('auth:api')->group(function () {
     // Lister tous les chercheurs
@@ -68,7 +64,6 @@ Route::middleware('auth:api')->group(function () {
     Route::put('/chercheur/profil', [ChercheurController::class, 'updateProfil']);
 
     // Mettre à jour le profil général
->>>>>>> ouassim
     Route::put('/chercheur/profile', [ChercheurController::class, 'updateProfile']);
 });
 
@@ -98,16 +93,12 @@ Route::apiResource('actualites', ActualiteController::class);
 Route::get('/actualites', [ActualiteController::class, 'index']);
 Route::get('/actualites/{id}', [ActualiteController::class, 'show']);
 
-<<<<<<< HEAD
-
-
+/* ==================== ROUTES POUR LES COMMENTAIRES ==================== */
 Route::middleware(['auth:api'])->group(function () {
     Route::get('publications/{publication}/comments', [CommentController::class, 'index']);
     Route::post('comments',                         [CommentController::class, 'store']);
     Route::put('comments/{comment}',                [CommentController::class, 'update']);
     Route::delete('comments/{comment}',             [CommentController::class, 'destroy']);
 });
-=======
 /* ==================== ROUTES POUR LES STATISTIQUES ==================== */
 Route::get('/stats', [StatisticsController::class, 'getStats']);
->>>>>>> ouassim
