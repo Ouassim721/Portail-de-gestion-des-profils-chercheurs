@@ -36,53 +36,25 @@ const SelectionPublications = () => {
     }
   };
 
-  // const handleSave = () => {
-  //   const formatted = selected.map((pub) => ({
-  //     titre: pub["dc:title"],
-  //     date_publication: pub["prism:coverDate"],
-  //     auteurs: pub["dc:creator"],
-  //     abstract: pub["dc:description"],
-  //     citation_count: pub["citedby-count"],
-  //   }));
+  const handleSave = () => {
+    const formatted = selected.map((pub) => ({
+      titre: pub["dc:title"],
+      date_publication: pub["prism:coverDate"],
+      auteurs: pub["dc:creator"],
+      abstract: pub["dc:description"],
+      citation_count: pub["citedby-count"],
+    }));
 
-  //   axios
-  //     .post(
-  //       "/chercheur/publications",
-  //       { publications: formatted },
-  //       { withCredentials: true }
-  //     )
-  //     .then(() => alert("Publications sauvegardées avec succès."))
-  //     .catch((err) => console.error("Erreur :", err));
-  // };
-  const handleSave = async () => {
-    try {
-      const formatted = selected.map((pub) => ({
-        titre: pub["dc:title"] || "Titre non disponible",
-        date_publication: pub["prism:coverDate"] || null,
-        auteurs: pub["dc:creator"] || "Auteur inconnu",
-        abstract: pub["dc:description"] || "",
-        citation_count: pub["citedby-count"] || 0,
-      }));
-
-      const response = await axios.post(
+    axios
+      .post(
         "/chercheur/publications",
         { publications: formatted },
-        {
-          withCredentials: true,
-        }
-      );
-
-      if (response.data.message) {
-        alert(response.data.message);
-      }
-    } catch (err) {
-      console.error("Erreur détaillée:", err.response?.data || err.message);
-      alert(
-        "Erreur lors de l'enregistrement: " +
-          (err.response?.data?.error || err.message)
-      );
-    }
+        { withCredentials: true }
+      )
+      .then(() => alert("Publications sauvegardées avec succès."))
+      .catch((err) => console.error("Erreur :", err));
   };
+
   return (
     <div className="max-w-5xl mx-auto mt-10 p-4">
       <h2 className="text-2xl font-bold mb-4">Sélectionnez vos publications</h2>

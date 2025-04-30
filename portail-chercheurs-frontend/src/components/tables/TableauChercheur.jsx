@@ -105,7 +105,7 @@ export default function ChercheursList() {
         setSelectedRows={setSelectedRows}
         sortConfig={sortConfig}
         setSortConfig={setSortConfig}
-        deleteChercheur={deleteChercheur}
+        deleteResearcher={deleteChercheur}
       />
 
       <Pagination
