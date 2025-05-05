@@ -14,8 +14,8 @@ return new class extends Migration {
             $table->date('date_publication');
             $table->date('date_modification')->nullable();
             $table->text('auteurs');
-            $table->text('abstract');
-            $table->integer('citation_count')->nullable();//->after('abstract'); 
+            $table->text('abstract')->nullable(); //ne doit pas être nulle juste maintenant pour le test
+            $table->integer('citation_count')->nullable(); //->after('abstract'); 
             $table->unsignedInteger('chercheur_id');
             $table->string('pdf_path')->nullable();
             $table->timestamps();

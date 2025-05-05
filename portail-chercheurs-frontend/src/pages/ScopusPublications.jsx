@@ -14,6 +14,7 @@ const ScopusPublications = () => {
       try {
         const response = await axios.get("/api/scopus-publications");
         setPublications(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("Error fetching Scopus publications:", error);
       } finally {
@@ -32,6 +33,7 @@ const ScopusPublications = () => {
   };
 
   const handleImport = async () => {
+    console.log("Data sent to backend:", selectedPublications);
     try {
       await axios.post("/api/publications", {
         publications: selectedPublications,

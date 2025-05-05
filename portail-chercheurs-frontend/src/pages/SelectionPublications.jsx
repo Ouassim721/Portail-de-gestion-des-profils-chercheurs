@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "../axios";
 import Button from "../components/ui/Button";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Composant pour sélectionner et enregistrer des publications Scopus
@@ -11,7 +12,7 @@ const SelectionPublications = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [saveStatus, setSaveStatus] = useState({ success: null, message: "" });
-
+  const navigate = useNavigate();
   // Fonction pour extraire un identifiant unique d'une publication
   const getPublicationId = (pub) => {
     // Priorité 1: dc:identifier (format Scopus)
@@ -110,6 +111,7 @@ const SelectionPublications = () => {
           response.data.message || "Publications sauvegardées avec succès",
       });
       setSelected([]);
+      navigate("/");
     } catch (err) {
       console.error("Erreur détaillée:", err.response?.data || err.message);
       setSaveStatus({
