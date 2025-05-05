@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../axios";
+import Loader from "../../components/ui/Loader";
 import Button from "../../components/ui/Button";
 import { useNavigate } from "react-router-dom";
 
@@ -125,7 +126,7 @@ const SelectionPublications = () => {
     return (
       <div className="max-w-5xl mx-auto mt-10 p-4 text-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
-        <p className="mt-4 text-gray-600">Chargement des publications...</p>
+        <Loader />
       </div>
     );
   }

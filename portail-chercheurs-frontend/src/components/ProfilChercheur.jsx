@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import Card from "./cards/Card";
 import Button from "./ui/Button";
+import PublicationSection from "./PublicationsSection";
 import axios from "../axios";
+import Loader from "../components/ui/Loader";
 import UpdateProfileModal from "./modals/UpdateProfileModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ChercheurAvatar from "./ui/ChercheurAvatar";
@@ -25,7 +26,8 @@ function ProfilChercheur() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [chercheur, setChercheur] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [publication, setPublication] = useState([]);
+  const [showAllPublications, setShowAllPublications] = useState(false);
   /***********************PARTIE MODAL************************* */
   const handleUpdate = (updatedChercheur) => {
     setChercheur(updatedChercheur);
@@ -44,11 +46,25 @@ function ProfilChercheur() {
         setLoading(false);
       }
     };
+    const fetchPublications = async () => {
+      try {
+        const response = await axios.get("/profile/publications", {
+          withCredentials: true,
+        });
+        setPublication(response.data.publications);
+        console.log(response.data.publications);
+      } catch (error) {
+        console.error("Erreur lors du chargement des publications :", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
     fetchChercheur();
+    fetchPublications();
   }, []);
 
-  if (loading) return <p>Chargement du profil...</p>;
+  if (loading) return <Loader />;
 
   if (!chercheur) return <p>Impossible de charger le profil.</p>;
 
@@ -78,23 +94,10 @@ function ProfilChercheur() {
     }
   }, [editPopup]);*/
   return (
-    <div className="grid grid-rows-[auto_auto_ato] grid-cols-[auto_auto_auto] gap-4 mt-8">
-      {/* ***************La section principale de photo et les bouttons ********************************/}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+      {/* ***************Section principale (toujours en haut) ********************************/}
       <section className="col-span-3 p-8 md:p-8 rounded shadow-sm bg-[var(--color-white)] text-[var(--color-text-primary)] border-gray-200">
-        <div className="relative flex flex-col sm:flex-row gap-2 sm:gap-12 lg:gap-16">
-          {/* {chercheur.photoProfil ? (
-            <img
-              src={`http://localhost:8000/${chercheur.photoProfil}`}
-              alt="Photo de profil"
-              className="object-cover rounded-full w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 mx-auto sm:mx-0"
-            />
-          ) : (
-            <img
-              src={pdp}
-              alt="Photo de profil"
-              className="object-cover rounded-full w-24 sm:w-28 lg:w-32 mx-auto sm:mx-0"
-            />
-          )} */}
+        <div className="col-span-3 relative flex flex-col sm:flex-row gap-2 sm:gap-12 lg:gap-16">
           <div className="flex-shrink-0">
             <ChercheurAvatar
               chercheur={chercheur}
@@ -150,36 +153,6 @@ function ProfilChercheur() {
           </div>
         </div>
       </section>
-      {/* ***************La section des Publication********************************/}
-      <section className="row-span-3 col-span-3 lg:col-span-2 p-4 md:p-8 rounded-2xl shadow-sm bg-[var(--color-white)] text-[var(--color-text-primary)] border-gray-200">
-        <h1 className="text-xl font-semibold mb-4 text-[var(--color-text-primary)] ml-3 ">
-          Publications récentes
-        </h1>
-        <Card
-          id="P123"
-          title="Human Emotion Recognition Based on Spatio-Temporal Facial Features Using HOG-HOF and VGG-LSTM"
-          author="Dr. Jane Smith"
-          cardType="publication"
-        />
-        <Card
-          id="P123"
-          title="Human Emotion Recognition Based on Spatio-Temporal Facial Features Using HOG-HOF and VGG-LSTM"
-          author="Dr. Jane Smith"
-          cardType="publication"
-        />
-        <Card
-          id="P123"
-          title="Human Emotion Recognition Based on Spatio-Temporal Facial Features Using HOG-HOF and VGG-LSTM"
-          author="Dr. Jane Smith"
-          cardType="publication"
-        />
-        <Card
-          id="P123"
-          title="Human Emotion Recognition Based on Spatio-Temporal Facial Features Using HOG-HOF and VGG-LSTM"
-          author="Dr. Jane Smith"
-          cardType="publication"
-        />
-      </section>
       {/* ***************La section des Informations********************************/}
       <section className="col-span-full lg:col-span-1 flex flex-col gap-4 md-gap-8 p-8 shadow-sm bg-[var(--color-white)] border-gray-200">
         <h3 className="tracking-wide font-bold text-xl mb-4">Informations</h3>
@@ -205,7 +178,6 @@ function ProfilChercheur() {
         </ul>
       </section>
       {/* ***************La section des Statistiques********************************/}
-
       <section className="col-span-full md:col lg:col-span-1 flex flex-col gap-4 md-gap-8 p-8 shadow-sm bg-[var(--color-white)] text-[var(--color-text-primary)] border-gray-200">
         <h3 className="tracking-wide font-bold text-xl mb-4">Statistiques</h3>
         <div className="flex flex-col gap-4">
@@ -230,7 +202,6 @@ function ProfilChercheur() {
         </div>
       </section>
       {/* ***************La section de GRAPHE********************************/}
-
       <section className="col-span-full lg:col-span-1 flex flex-col justify-center items-center gap-4 md-gap-8 p-8 shadow-sm bg-[var(--color-white)] border-gray-200">
         <h3 className="text-md font-medium tracking-wider text-center">
           Publications par Année
@@ -246,6 +217,12 @@ function ProfilChercheur() {
           </ResponsiveContainer>
         </div>
       </section>
+      {/* ***************La section des Publication********************************/}
+      <PublicationSection
+        publications={publication}
+        onToggleView={() => setShowAllPublications(!showAllPublications)}
+        isExpanded={showAllPublications}
+      />
       <UpdateProfileModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

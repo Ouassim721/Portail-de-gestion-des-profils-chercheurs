@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import {
   faFilter,
   faChevronDown,
@@ -13,22 +13,57 @@ import CardStatPublication from "../components/cards/CardStatPublication";
 import CardPublication from "../components/cards/CardPublication";
 import CommentsSection from "../components/comments/CommentsSection";
 import axios from "../axios";
+import Loader from "../components/ui/Loader";
 
 const Publications = () => {
   const [publications, setPublications] = useState([]);
   const [countChercheurs, setcountChercheurs] = useState(null);
   const [countPublications, setcountPublications] = useState(null);
   const [countCitations, setcountCitations] = useState(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const loader = useRef(null);
+
+  const handleObserver = useCallback(
+    (entries) => {
+      const target = entries[0];
+      if (target.isIntersecting && hasMore) {
+        setPage((prev) => prev + 1);
+      }
+    },
+    [hasMore]
+  );
+
   useEffect(() => {
+    const option = {
+      root: null,
+      rootMargin: "20px",
+      threshold: 0,
+    };
+    const observer = new IntersectionObserver(handleObserver, option);
+    const currentLoader = loader.current;
+    if (currentLoader) observer.observe(currentLoader);
+
+    return () => {
+      if (currentLoader) observer.unobserve(currentLoader);
+    };
+  }, [handleObserver]);
+
+  useEffect(() => {
+    if (!hasMore || isLoading) return;
+
+    setIsLoading(true);
     axios
-      .get("http://localhost:8000/api/publications")
-      .then((response) => {
-        setPublications(response.data.data);
+      .get(`/publications?page=${page}&limit=10`)
+      .then((res) => {
+        setPublications((prev) => [...prev, ...res.data.data]);
+        setHasMore(res.data.hasMore);
       })
-      .catch((error) => {
-        console.error("Erreur lors du chargement des publications :", error);
-      });
-  }, []);
+      .finally(() => setIsLoading(false));
+  }, [page]);
+
   useEffect(() => {
     axios
       .get("/stats")
@@ -46,11 +81,9 @@ const Publications = () => {
   }, []);
 
   const nombrePublications =
-    countPublications !== null ? countPublications : "Chargement...";
-  const nombreChercheurs =
-    countChercheurs !== null ? countChercheurs : "Chargement...";
-  const nombreCitations =
-    countChercheurs !== null ? countCitations : "Chargement...";
+    countPublications !== null ? countPublications : "...";
+  const nombreChercheurs = countChercheurs !== null ? countChercheurs : "...";
+  const nombreCitations = countChercheurs !== null ? countCitations : "...";
   return (
     <div className="min-h-screen ">
       <div className="w-full bg-[var(--color-primary)] flex flex-col lg:flex-row gap-4 items-center p-4">
@@ -141,22 +174,23 @@ const Publications = () => {
         </section>
         <section>
           <div>
-          {publications.map((pub) => (
-  <div key={pub.id} className="mb-10">
-    <CardPublication
-      title={pub.titre}
-      auteur={`${pub.chercheur.prenom} ${pub.chercheur.nom}`}
-      university={pub.chercheur.university}
-      departement={pub.discipline.nom}
-      description={pub.abstract}
-      category={pub.discipline.keywords || []}
-      date={pub.date_publication}
-      citations={pub.citation_count}
-      pdf_path={pub.pdf_path}
-    />
-    <CommentsSection publicationId={pub.id} />
-  </div>
-))}
+            {publications.map((pub) => (
+              <div key={pub.id} className="mb-10">
+                <CardPublication
+                  title={pub.titre}
+                  auteur={`${pub.chercheur.prenom} ${pub.chercheur.nom}`}
+                  university={pub.chercheur.university}
+                  departement={pub.discipline.nom}
+                  description={pub.abstract}
+                  category={pub.discipline.keywords || []}
+                  date={pub.date_publication}
+                  citations={pub.citation_count}
+                  pdf_path={pub.pdf_path}
+                />
+                <CommentsSection publicationId={pub.id} />
+              </div>
+            ))}
+            <div ref={loader} className="h-10 w-full" />
           </div>
         </section>
       </main>

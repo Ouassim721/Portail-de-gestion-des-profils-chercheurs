@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Loader from "../components/ui/Loader";
 import DropdownButton from "../components/ui/DropdownButton";
 import TableGenerique from "../components/tables/TableGenerique";
 import Pagination from "../components/ui/Pagination";
@@ -113,7 +114,7 @@ function Chercheurs() {
         <div className="mx-auto mt-8 mb-12 bg-gray-300 h-0.5 w-3/4"></div>
 
         {isLoading ? (
-          <div className="text-center py-8">Chargement en cours...</div>
+          <Loader />
         ) : error ? (
           <div className="text-center py-8 text-red-500">{error}</div>
         ) : (

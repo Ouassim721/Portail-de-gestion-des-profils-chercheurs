@@ -20,15 +20,21 @@ class PublicationController extends Controller
         $publications = Publication::with(['chercheur', 'discipline'])->get();
         return view('publications.index', compact('publications'));
     }*/
-    public function index()
+    public function index(Request $request)
     {
-        $publications = Publication::with(['chercheur', 'discipline'])->get();
+        $perPage = $request->get('limit', 10);
+
+        $publications = Publication::with(['chercheur', 'discipline'])
+            ->orderBy('date_publication', 'desc')
+            ->paginate($perPage);
 
         return response()->json([
-            'status' => 'success',
-            'data' => $publications,
+            'data' => $publications->items(),
+            'hasMore' => $publications->hasMorePages()
         ]);
     }
+
+
 
     /**
      * Affiche le formulaire de création
@@ -135,5 +141,18 @@ class PublicationController extends Controller
                 'details' => $e->getMessage()
             ], 500);
         }
+    }
+    public function profilePublications(Request $request)
+    {
+
+        $chercheur = JWTAuth::user();
+
+        if (!$chercheur) {
+            return response()->json(['message' => 'Non autorisé'], 401);
+        }
+
+        $publications = Publication::where('chercheur_id', $chercheur->id)->get();
+
+        return response()->json(['publications' => $publications], 200);
     }
 }

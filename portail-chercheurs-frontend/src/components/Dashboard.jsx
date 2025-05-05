@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import axios from "../axios";
+import Loader from "../components/ui/Loader";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -69,9 +70,9 @@ function Dashboard() {
   }, []);
   // Génère des valeurs aléatoires pour les cartes statistiques
   const nombrePublications =
-    countPublications !== null ? countPublications : "Chargement...";
+    countPublications !== null ? countPublications : "Chargements...";
   const nombreChercheurs =
-    countChercheurs !== null ? countChercheurs : "Chargement...";
+    countChercheurs !== null ? countChercheurs : "Chargements...";
   const randomVisiteurs = Math.floor(Math.random() * 500);
 
   return (

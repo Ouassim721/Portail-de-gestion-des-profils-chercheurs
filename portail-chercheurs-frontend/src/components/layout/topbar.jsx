@@ -3,6 +3,7 @@ import { FaBars } from "react-icons/fa";
 import SideMenu from "./SideMenu";
 import ChercheurAvatar from "../ui/ChercheurAvatar";
 import axios from "../../axios";
+import Loader from "../../components/ui/Loader";
 
 function TopBar() {
   const [showSideMenu, setShowSideMenu] = useState(false);
@@ -36,7 +37,7 @@ function TopBar() {
   if (loading) {
     return (
       <header className="flex items-center justify-between bg-white border-b border-gray-200 p-4">
-        <div className="text-xl font-semibold">Chargement...</div>
+        <Loader />
       </header>
     );
   }

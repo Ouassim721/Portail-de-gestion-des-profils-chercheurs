@@ -80,6 +80,9 @@ Route::middleware('auth:api')->group(function () {
 
     // Enregistrer un batch de publications
     Route::post('/publications', [PublicationController::class, 'storeBatch']);
+
+    //Récuperer les publications d'un chercheur donnée
+    Route::get('/profile/publications', [PublicationController::class, 'profilePublications']);
 });
 
 // Récupérer les publications Scopus (via API externe)

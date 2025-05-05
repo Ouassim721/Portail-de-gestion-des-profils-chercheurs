@@ -1,6 +1,7 @@
 // ProfilUpdateForm.jsx
 import React, { useState, useEffect } from "react";
 import axios from "../../axios";
+import Loader from "../../components/ui/Loader";
 import { useNavigate } from "react-router-dom";
 
 const ProfilUpdateForm = () => {
@@ -18,7 +19,7 @@ const ProfilUpdateForm = () => {
       const { nom, prenom } = res.data;
       console.log(res.data);
 
-      setForm({ ...form, nom, prenom });
+      setForm((prevForm) => ({ ...prevForm, nom, prenom }));
       setLoading(false);
     });
   }, []);
@@ -34,7 +35,7 @@ const ProfilUpdateForm = () => {
       .then(() => navigate("/selection-publications"));
   };
 
-  if (loading) return <p className="text-center mt-8">Chargement...</p>;
+  if (loading) return <Loader />;
 
   return (
     <div className="max-w-xl mx-auto mt-10 bg-white p-6 rounded-2xl shadow">

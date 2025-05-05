@@ -63,3 +63,6 @@ footer .separator {
 button {
   cursor: pointer;
 }
+.grid {
+  transition: grid-template-columns 0.3s ease, grid-template-rows 0.3s ease;
+}
