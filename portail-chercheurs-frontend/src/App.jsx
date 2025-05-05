@@ -14,28 +14,26 @@ import DetailsPublication from "./pages/DetailsPublication";
 import NotFound from "./pages/NotFound";
 
 // Authentification
-import Connexion from "./pages/connexion";
-import ChangePassword from "./pages/ChangePassword";
-import ProfilUpdateForm from "./pages/ProfilUpdateForm";
-import SelectionPublication from "./pages/SelectionPublications.jsx";
+import Connexion from "./pages/auth/Login";
+import ChangePassword from "./pages/auth/ChangePassword";
+import ProfilUpdateForm from "./pages/auth/ProfilUpdateForm";
+import SelectionPublication from "./pages/auth/SelectionPublications";
 import AuthProvider from "./contexts/AuthProvider";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 // Pages protégées
 import Profil from "./pages/Profil";
-import AdminDashboard from "./pages/administration/AdminDashboard";
-import AdminChercheurs from "./pages/administration/AdminChercheurs";
-import CreationChercheur from "./pages/administration/CreationChercheur";
-import AdminActualite from "./pages/administration/AdminActualites";
-import CreationActualite from "./pages/administration/CreationActualite";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminChercheurs from "./pages/admin/AdminChercheurs";
+import CreationChercheur from "./pages/admin/CreationChercheur";
+import AdminActualite from "./pages/admin/AdminActualites";
+import CreationActualite from "./pages/admin/CreationActualite";
 
 // Loader
 // import { useLoading } from "./contexts/useLoading";
 import Loader from "./components/ui/Loader";
 
-import ProfileCompletion from "./pages/CompleteProfile.jsx";
-import ScopusPublications from "./pages/ScopusPublications";
-import SelectScopusProfile from "./pages/SelectScopusProfile";
+import ProfileCompletion from "./pages/auth/CompleteProfile";
 
 function App() {
   /*const { isLoading, showLoader, hideLoader } = useLoading();
@@ -84,10 +82,6 @@ function App() {
             <Route path="*" element={<NotFound />} />
 
             <Route path="complete-profile" element={<ProfileCompletion />} />
-            <Route
-              path="scopus-publications"
-              element={<ScopusPublications />}
-            />
 
             {/* Authentification */}
             <Route path="/connexion" element={<Connexion />} />

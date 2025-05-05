@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "../axios";
-import Button from "../components/ui/Button";
+import axios from "../../axios";
+import Button from "../../components/ui/Button";
 
 const ProfileCompletion = () => {
   const [form, setForm] = useState({

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../components/ui/Button";
+import Button from "../../components/ui/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   MdLock,
@@ -13,8 +13,8 @@ import {
 } from "react-icons/md";
 import { FaRegLightbulb } from "react-icons/fa";
 import { faSignIn, faMicroscope } from "@fortawesome/free-solid-svg-icons";
-import connexionImage from "../assets/connexion.png";
-import axios from "../axios";
+import connexionImage from "../../assets/connexion.png";
+import axios from "../../axios";
 
 function Connexion() {
   const navigate = useNavigate();
