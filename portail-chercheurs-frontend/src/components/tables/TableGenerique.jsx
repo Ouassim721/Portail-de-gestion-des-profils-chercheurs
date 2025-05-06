@@ -5,14 +5,14 @@ function TableGenerique({ columns, data, onRowClick, onSort, sortConfig }) {
   };
 
   return (
-    <div className="overflow-x-auto max-w-[100%] md:max-w-[80%] xl:max-w-[75%] mx-auto">
+    <div className="overflow-x-auto max-w-[100%] md:max-w-[80%] xl:max-w-[75%] mx-auto bg-[var(--color-bg-secondary)]">
       <table className="w-full border-collapse border border-gray-300 text-sm sm:text-md">
-        <thead className="bg-gray-200">
+        <thead className="bg-red-600 ">
           <tr>
             {columns.map((col, index) => (
               <th
                 key={index}
-                className={`px-4 py-2 text-left text-gray-700 uppercase font-semibold border-b hover:bg-gray-300 ${
+                className={`px-4 py-2 text-left text-gray-700 uppercase font-semibold border-b  ${
                   col.sortable ? "cursor-pointer" : ""
                 }`}
                 onClick={() => handleSort(col.key, col.sortable)}
@@ -34,10 +34,13 @@ function TableGenerique({ columns, data, onRowClick, onSort, sortConfig }) {
             <tr
               key={rowIndex}
               onClick={() => onRowClick && onRowClick(item)}
-              className="cursor-pointer hover:bg-gray-100 border-b"
+              className="cursor-pointer hover:bg-[var(--color-bg-primary)] border-b"
             >
               {columns.map((col, colIndex) => (
-                <td key={colIndex} className="px-4 py-2 text-gray-600">
+                <td
+                  key={colIndex}
+                  className="px-4 py-2 text-[var(--color-text-secondary)]"
+                >
                   {col.render ? col.render(item) : item[col.key]}
                 </td>
               ))}

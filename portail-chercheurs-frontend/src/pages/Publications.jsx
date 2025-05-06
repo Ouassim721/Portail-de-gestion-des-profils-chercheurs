@@ -89,7 +89,7 @@ const Publications = () => {
   const nombreDisciplines = countDiscipline !== null ? countDiscipline : "...";
   return (
     <div className="min-h-screen ">
-      <div className="w-full bg-[var(--color-primary)] flex flex-col lg:flex-row gap-4 items-center p-4">
+      {/* <div className="w-full bg-[var(--color-primary)] flex flex-col lg:flex-row gap-4 items-center p-4">
         <div className="w-full px-2">
           <SearchBar
             className="p-4 w-full"
@@ -155,7 +155,7 @@ const Publications = () => {
             Filtrer
           </Button>
         </div>
-      </div>
+      </div> */}
       <main className="max-w-7xl mx-auto p-8">
         <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-6 my-6 mb-10 place-items-center">
           <CardStatPublication

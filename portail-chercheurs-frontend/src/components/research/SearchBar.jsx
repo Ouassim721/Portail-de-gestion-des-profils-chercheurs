@@ -10,7 +10,7 @@ const SearchBar = ({ className = "", placeHolder = "Rechercher..." }) => {
       <input
         type="text"
         placeholder={placeHolder}
-        className={`bg-[var(--color-white)] text-[var(--color-text-secondary)] p-2 pl-12 rounded-xl outline-2 outline-gray-200 focus:outline-gray-400 ${className} `}
+        className={`bg-[var(--color-bg-primary)] text-[var(--color-text-secondary)] p-2 pl-12 rounded-xl outline-2 outline-gray-200 focus:outline-gray-400 ${className} `}
       />
     </div>
   );

@@ -23,7 +23,21 @@ function Navbar({ sticky = false }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [chercheur, setChercheur] = useState(null);
+  const [theme, setTheme] = useState("light");
 
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    setTheme(savedTheme);
+    document.documentElement.classList.remove("light", "dark");
+    document.documentElement.classList.add(savedTheme);
+  }, []);
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    document.documentElement.classList.remove("light", "dark");
+    document.documentElement.classList.add(newTheme);
+    localStorage.setItem("theme", newTheme);
+  };
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -73,22 +87,23 @@ function Navbar({ sticky = false }) {
   return (
     <nav
       className={`relative w-full h-[74px] p-4 pr-8 flex flex-row-reverse
- lg:flex-row items-center justify-between z-5 duration-300${
-   isSticky && sticky == true
-     ? "bg-[var(--color-white)] shadow-md sticky-top"
-     : "bg-[var(--color-white)] shadow-sm "
+ lg:flex-row items-center justify-between z-5 duration-300 bg-[var(--color-bg-primary)] ${
+   isSticky && sticky == true ? "shadow-md sticky-top" : " shadow-sm "
  } `}
     >
       {/* Logo et recherche */}
       <div className="hidden lg:flex items-center gap-4 sm:gap-8 md:gap-12 lg-gap-16">
         {/* <img src={logo} alt="Logo" className="w-[80px] h-[70px]" /> */}
-        <h1 className="text-xl sm:text-2xl font-bold text-[var(--color-primary)]">
+        <h1 className="text-xl sm:text-2xl font-bold text-[var(--color-text-primary)]">
           ScholarHub
         </h1>
 
         {/* Barre de recherche - Visible sur grand écran */}
         <div className="hidden xl:flex">
-          <SearchBar />
+          {/* <SearchBar /> */}
+          <button style={styles.button} onClick={toggleTheme}>
+            {theme === "light" ? "🌙 Mode sombre" : "☀️ Mode clair"}
+          </button>
         </div>
       </div>
 
@@ -203,7 +218,7 @@ function Navbar({ sticky = false }) {
 
       {/* Menu Mobile */}
       <div
-        className={`absolute top-0 left-0 w-full bg-[var(--color-bg)] p-6 flex flex-col gap-4 text-base text-[var(--color-gray)] shadow-md transition-all duration-300 ${
+        className={`absolute top-0 left-0 w-full bg-[var(--color-bg-secondary)] p-6 flex flex-col gap-4 text-base text-[var(--color-gray)] shadow-md transition-all duration-300 ${
           menuOpen ? "opacity-100 visible" : "opacity-0 invisible"
         } lg:hidden`}
       >
@@ -242,12 +257,21 @@ function Navbar({ sticky = false }) {
           <input
             type="text"
             placeholder="Rechercher..."
-            className="bg-[var(--color-white)] text-[var(--color-text-secondary)] p-3 pl-12 rounded-full w-full outline-none"
+            className="bg-[var(--color-bg-primary)] text-[var(--color-text-secondary)] p-3 pl-12 rounded-full w-full outline-none"
           />
         </div>
       </div>
     </nav>
   );
 }
-
+const styles = {
+  button: {
+    padding: "0.5rem 1rem",
+    backgroundColor: "var(--color-primary)",
+    color: "var(--color-white)",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+  },
+};
 export default Navbar;

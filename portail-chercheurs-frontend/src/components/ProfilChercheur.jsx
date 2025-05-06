@@ -80,7 +80,7 @@ function ProfilChercheur() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
       {/* ***************Section principale (toujours en haut) ********************************/}
-      <section className="col-span-3 p-8 md:p-8 rounded shadow-sm bg-[var(--color-white)] text-[var(--color-text-primary)] border-gray-200">
+      <section className="col-span-3 p-8 md:p-8 rounded shadow-sm bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] border-gray-200">
         <div className="col-span-3 relative flex flex-col sm:flex-row gap-2 sm:gap-12 lg:gap-16">
           <div className="flex-shrink-0">
             <ChercheurAvatar
@@ -119,8 +119,10 @@ function ProfilChercheur() {
         </div>
       </section>
       {/* ***************La section des Informations********************************/}
-      <section className="col-span-full lg:col-span-1 flex flex-col gap-4 md-gap-8 p-8 shadow-sm bg-[var(--color-white)] border-gray-200">
-        <h3 className="tracking-wide font-bold text-xl mb-4">Informations</h3>
+      <section className="col-span-full lg:col-span-1 flex flex-col gap-4 md-gap-8 p-8 shadow-sm bg-[var(--color-bg-primary)] border-gray-200">
+        <h3 className="tracking-wide font-bold text-xl mb-4 text-[var(--color-text-primary)]  ">
+          Informations
+        </h3>
         <ul className="flex flex-col gap-4 list-none text-[var(--color-text-primary)]">
           <li>
             <span className="mr-3">
@@ -143,7 +145,7 @@ function ProfilChercheur() {
         </ul>
       </section>
       {/* ***************La section des Statistiques********************************/}
-      <section className="col-span-full md:col lg:col-span-1 flex flex-col gap-4 md-gap-8 p-8 shadow-sm bg-[var(--color-white)] text-[var(--color-text-primary)] border-gray-200">
+      <section className="col-span-full md:col lg:col-span-1 flex flex-col gap-4 md-gap-8 p-8 shadow-sm bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] border-gray-200">
         <h3 className="tracking-wide font-bold text-xl mb-4">Statistiques</h3>
         <div className="flex flex-col gap-4">
           <div className="flex justify-between">
@@ -167,8 +169,8 @@ function ProfilChercheur() {
         </div>
       </section>
       {/* ***************La section de GRAPHE********************************/}
-      <section className="col-span-full lg:col-span-1 flex flex-col justify-center items-center gap-4 md-gap-8 p-8 shadow-sm bg-[var(--color-white)] border-gray-200">
-        <h3 className="text-md font-medium tracking-wider text-center">
+      <section className="col-span-full lg:col-span-1 flex flex-col justify-center items-center gap-4 md-gap-8 p-8 shadow-sm bg-[var(--color-bg-primary)] border-gray-200">
+        <h3 className="text-md font-medium tracking-wider text-center text-[var(--color-text-primary)]">
           Publications par Année
         </h3>
         <div className="h-40 md:h-50 max-w-[350px]">

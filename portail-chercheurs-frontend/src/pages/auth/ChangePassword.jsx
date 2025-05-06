@@ -55,7 +55,7 @@ const ChangePassword = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 bg-white p-8 rounded-xl shadow-md">
+    <div className="max-w-md mx-auto mt-10 bg-[var(--color-bg-primary)] p-8 rounded-xl shadow-md">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
         Changer le mot de passe
       </h2>

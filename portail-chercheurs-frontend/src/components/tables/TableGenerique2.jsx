@@ -61,7 +61,7 @@ const TableGenerique = ({
           </tr>
         </thead>
 
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="bg-[var(--color-bg-primary)] divide-y divide-gray-200">
           {data.map((researcher) => (
             <tr
               key={researcher.id}

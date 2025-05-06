@@ -98,7 +98,7 @@ export default function UpdateProfileModal({
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm data-[state=open]:animate-fadeIn" />
 
-        <Dialog.Content className="fixed left-1/2 px-2 py-4 top-1/2 z-50 w-[95vw] max-w-2xl -translate-x-1/2 -translate-y-1/2 transform rounded-xl bg-white shadow-xl transition-all duration-300 data-[state=open]:animate-slideUp data-[state=closed]:animate-slideDown focus:outline-none">
+        <Dialog.Content className="fixed left-1/2 px-2 py-4 top-1/2 z-50 w-[95vw] max-w-2xl -translate-x-1/2 -translate-y-1/2 transform rounded-xl bg-[var(--color-bg-primary)] shadow-xl transition-all duration-300 data-[state=open]:animate-slideUp data-[state=closed]:animate-slideDown focus:outline-none">
           <div className="border-b border-gray-200 px-6 py-4">
             <Dialog.Title className="text-2xl font-semibold text-gray-800">
               Modifier le profil
@@ -139,7 +139,7 @@ export default function UpdateProfileModal({
                       </span>
                     </div>
                   )}
-                  <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-white rounded-full p-1 shadow-sm">
+                  <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-[var(--color-bg-primary)] rounded-full p-1 shadow-sm">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-5 w-5 text-blue-500"
@@ -156,7 +156,7 @@ export default function UpdateProfileModal({
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <label className="cursor-pointer bg-white border border-blue-500 text-blue-500 px-4 py-2 rounded-lg hover:bg-blue-50 flex items-center justify-center gap-2 transition-colors">
+                  <label className="cursor-pointer bg-[var(--color-bg-primary)] border border-blue-500 text-blue-500 px-4 py-2 rounded-lg hover:bg-blue-50 flex items-center justify-center gap-2 transition-colors">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-4 w-4"
@@ -183,7 +183,7 @@ export default function UpdateProfileModal({
                     <button
                       type="button"
                       onClick={handlePhotoRemove}
-                      className="bg-white border border-red-500 text-red-500 px-4 py-2 rounded-lg hover:bg-red-50 flex items-center justify-center gap-2 transition-colors"
+                      className="bg-[var(--color-bg-primary)] border border-red-500 text-red-500 px-4 py-2 rounded-lg hover:bg-red-50 flex items-center justify-center gap-2 transition-colors"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

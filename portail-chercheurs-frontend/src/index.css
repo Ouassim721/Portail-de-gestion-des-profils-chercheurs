@@ -5,14 +5,32 @@
 @import "tailwindcss";
 
 :root {
-  --color-primary: #003366;
+  /* Couleurs communes */
   --color-secondary: #00c49a;
-  --color-text-primary: #2c2c2c;
-  --color-text-secondary: #535353;
-  --color-bg: #f9fafb;
-  --color-bg-secondary: #f1f1f1;
   --color-white: #fefefe;
   --color-gray: #b0b0b0;
+}
+
+/* Light mode par défaut */
+:root,
+:root.light {
+  --color-primary: #003366;
+  --color-text-primary: #2c2c2c;
+  --color-text-secondary: #535353;
+  --color-bg-primary: #fefefe;
+  --color-bg-secondary: #f9fafb;
+}
+
+/* Dark mode */
+:root.dark {
+  --color-primary: #0678eb;
+  --color-text-primary: #f1f1f1;
+  --color-text-secondary: #cfcfcf;
+  --color-bg-primary: #2a2a2a;
+  --color-bg-secondary: #1a1a1a;
+}
+
+:root {
   --font-base: "Poppins", sans-serif;
   --spacing-base: 1rem;
 }
@@ -26,11 +44,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 body {
-  background-color: var(--color-bg) !important;
+  background-color: var(--color-bg-secondary) !important;
 }
 body::selection {
   background-color: var(--color-primary);
-  color: var(--color-white);
+  color: var(--color-bg-primary);
 }
 @keyframes stickySlideDown {
   from {

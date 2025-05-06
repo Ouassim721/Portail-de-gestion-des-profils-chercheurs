@@ -28,7 +28,7 @@ const ProgressBar = ({ currentStep }) => {
                   {/* Tooltip for active step */}
                   {isActive && (
                     <div className="absolute right-0 -mr-2">
-                      <div className="relative bg-white shadow-lg px-2 py-1 rounded mt-16 -mr-12">
+                      <div className="relative bg-[var(--color-bg-primary)] shadow-lg px-2 py-1 rounded mt-16 -mr-12">
                         <svg
                           className="absolute top-0 -mt-1 w-full right-0 left-0"
                           width="16px"
@@ -89,7 +89,7 @@ const ProgressBar = ({ currentStep }) => {
                           <path d="M5 12l5 5l10 -10" />
                         </svg>
                       </div>
-                      <div className="bg-white h-6 w-6 rounded-full shadow flex items-center justify-center -mr-3 relative">
+                      <div className="bg-[var(--color-bg-primary)] h-6 w-6 rounded-full shadow flex items-center justify-center -mr-3 relative">
                         <div className="h-3 w-3 bg-indigo-700 rounded-full"></div>
                       </div>
                     </>
@@ -97,7 +97,7 @@ const ProgressBar = ({ currentStep }) => {
 
                   {/* Future step circle */}
                   {!isCompleted && !isActive && (
-                    <div className="bg-white h-6 w-6 rounded-full shadow"></div>
+                    <div className="bg-[var(--color-bg-primary)] h-6 w-6 rounded-full shadow"></div>
                   )}
                 </div>
               );

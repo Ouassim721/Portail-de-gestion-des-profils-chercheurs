@@ -11,7 +11,7 @@ const AdminLogin = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-500 to-purple-500">
-      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+      <div className="bg-[var(--color-bg-primary)] shadow-lg rounded-lg p-8 w-full max-w-md">
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
           Authentification Administrateur
         </h2>

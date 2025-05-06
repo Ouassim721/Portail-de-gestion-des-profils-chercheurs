@@ -153,7 +153,9 @@ function Chercheurs() {
       <div className="container mx-auto px-4 py-8">
         {/* Barre de titre et filtres */}
         <div className="flex flex-col md:flex-row justify-between items-center lg:px-40 mb-8 gap-4">
-          <h1 className="text-3xl font-bold text-gray-800">Chercheurs</h1>
+          <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">
+            Chercheurs
+          </h1>
 
           <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
             {/* Barre de recherche */}
@@ -166,7 +168,7 @@ function Chercheurs() {
                 placeholder="Rechercher..."
                 value={searchTerm}
                 onChange={handleSearch}
-                className="pl-10 pr-4 py-2 w-full border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="pl-10 pr-4 py-2 w-full border border-gray-400 text-[var(--color-text-secondary)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
 
@@ -258,7 +260,7 @@ function Chercheurs() {
           </div>
         ) : (
           <>
-            <div className="overflow-hidden rounded-lg shadow">
+            <div className="overflow-hidden rounded-lg shadow ">
               <TableGenerique
                 columns={tableColumns}
                 data={formatDataForTable(chercheurs)}
@@ -286,7 +288,7 @@ function Chercheurs() {
         {/* Popup de détail */}
         {chercheurSelectionne && (
           <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-auto">
+            <div className="bg-[var(--color-bg-primary)] rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-auto">
               <div className="flex justify-between items-center border-b p-4">
                 <h2 className="text-xl font-semibold">Profil du chercheur</h2>
                 <button

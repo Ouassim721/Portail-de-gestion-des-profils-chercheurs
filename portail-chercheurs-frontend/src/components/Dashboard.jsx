@@ -96,7 +96,7 @@ function Dashboard() {
       {/* Graphique et carte Événement */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Section graphique */}
-        <div className="bg-white rounded-md p-4 shadow">
+        <div className="bg-[var(--color-bg-primary)] rounded-md p-4 shadow">
           <h2 className="text-lg font-bold mb-2">
             Statistiques des chercheurs
           </h2>
@@ -115,7 +115,7 @@ function Dashboard() {
             Découvrez les nouveautés et préparez-vous pour le prochain événement
             qui aura lieu bientôt.
           </p>
-          <button className="mt-auto self-start bg-white text-orange-700 px-3 py-1 rounded-md hover:bg-orange-50">
+          <button className="mt-auto self-start bg-[var(--color-bg-primary)] text-orange-700 px-3 py-1 rounded-md hover:bg-orange-50">
             Voir plus
           </button>
         </div>

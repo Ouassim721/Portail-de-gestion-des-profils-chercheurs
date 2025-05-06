@@ -17,7 +17,7 @@ const CardPublication = ({
 }) => {
   return (
     <div
-      className="w-full p-4 lg:p-8 bg-[var(--color-white)] flex flex-col lg:flex-row gap-6 mx-auto my-4 drop-shadow-md hover:drop-shadow-lg
+      className="w-full p-4 lg:p-8 bg-[var(--color-bg-primary)] flex flex-col lg:flex-row gap-6 mx-auto my-4 drop-shadow-md hover:drop-shadow-lg
  hover:scale-101 duration-300"
     >
       <div className="flex flex-col gap-4">
@@ -31,13 +31,17 @@ const CardPublication = ({
             className="rounded-full w-15 h-15"
           />
           <div>
-            <h3 className="text-md font-medium md:text-lg">Dr. {auteur}</h3>
-            <p className="text-sm font-light md:text-md text-neutral-400">
+            <h3 className="text-md font-medium md:text-lg text-[var(--color-text-primary)]">
+              Dr. {auteur}
+            </h3>
+            <p className="text-sm font-light md:text-md text-[var(--color-text-secondary)]">
               {university} - Département {departement}
             </p>
           </div>
         </div>
-        <p className="text-md text-neutral-500 text-justify ">{description}</p>
+        <p className="text-md text-[var(--color-text-secondary)] text-justify ">
+          {description}
+        </p>
         <div className="flex gap-2">
           {category.map((item) => {
             return (
@@ -50,12 +54,12 @@ const CardPublication = ({
       </div>
       <div className="flex lg:flex-col justify-between lg:justify- items-center  lg:w-1/3 lg:min-w-42">
         <div className="lg:flex lg:flex-col lg:gap-2 lg:text-right lg:w-full lg:pr-3">
-          <h6 className="font-light text-sm text-neutral-500">
+          <h6 className="font-light text-sm text-[var(--color-text-secondary)]">
             Publié le {date}
           </h6>
-          <h5 className="hidden lg:block font-bold text-xl">
+          <h5 className="hidden lg:block font-bold text-xl text-[var(--color-text-primary)]">
             {citations}{" "}
-            <span className="font-light text-neutral-700 text-sm">
+            <span className="font-light text-[var(--color-text-secondary)] text-sm ">
               Citations
             </span>
           </h5>
@@ -66,7 +70,7 @@ const CardPublication = ({
               href={`http://localhost:8000/storage/${pdf_path}`}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-3 px-4 py-2 rounded-lg transition duration-300 ease-in-out cursor-pointer justify-center bg-[var(--color-secondary)] text-[var(--color-white)] hover:bg-emerald-400 font-light! h-10"
+              className="flex items-center gap-3 px-4 py-2 rounded-lg transition duration-300 ease-in-out cursor-pointer justify-center bg-[var(--color-secondary)] text-[var(--color-bg-primary)] hover:bg-emerald-400 font-light! h-10"
             >
               Voir le PDF
             </a>

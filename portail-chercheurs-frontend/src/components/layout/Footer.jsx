@@ -4,7 +4,7 @@ const Footer = () => {
       <div className="info flex flex-col lg:flex-row justify-around gap-8">
         <div className="flex flex-col sm:flex-row justify-around gap-8">
           <div className="apropos ">
-            <h3 className="text-[var(--color-white)] text-2xl mb-7 font-weight: 600">
+            <h3 className="text-white text-2xl mb-7 font-weight: 600">
               À propos
             </h3>
             <p className="text-[var(--color-gray)] text-sm">
@@ -14,7 +14,7 @@ const Footer = () => {
             </p>
           </div>
           <div className="liens">
-            <h3 className="text-[var(--color-white)] text-2xl sm:mb-7 font-weight: 600">
+            <h3 className="text-white text-2xl sm:mb-7 font-weight: 600">
               Liens rapides
             </h3>
             <ul className="liens-list text-[var(--color-gray)] text-sm">
@@ -27,7 +27,7 @@ const Footer = () => {
         </div>
         <div className="flex flex-col sm:flex-row justify-around gap-8">
           <div className="contact">
-            <h3 className="text-[var(--color-white)] text-2xl mb-7 font-weight: 600">
+            <h3 className="text-white text-2xl mb-7 font-weight: 600">
               Contact
             </h3>
             <ul className="contact-list text-[var(--color-gray)] text-sm">
@@ -37,7 +37,7 @@ const Footer = () => {
             </ul>
           </div>
           <div className="suivez-nous">
-            <h3 className="text-[var(--color-white)] text-2xl mb-7 font-weight: 600">
+            <h3 className="text-white text-2xl mb-7 font-weight: 600">
               Suivez-nous
             </h3>
             <ul className="suivez-nous-list text-[var(--color-gray)] text-sm">

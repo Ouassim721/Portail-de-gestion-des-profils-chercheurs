@@ -25,7 +25,7 @@ th {
 
 /* Contenu du pop-up */
 .popup-content {
-  background: var(--color-bg);
+  background: var(--color-bg-secondary);
   color: var(--color-text-primary);
   padding: 20px;
   border-radius: 10px;

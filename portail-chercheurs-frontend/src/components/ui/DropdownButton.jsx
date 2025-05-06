@@ -37,7 +37,7 @@ const DropdownButton = ({
       </Button>
 
       {isOpen && (
-        <div className="absolute left-0 w-40 bg-white border border-gray-200 rounded shadow-md">
+        <div className="absolute left-0 w-40 bg-[var(--color-bg-primary)] border border-gray-200 rounded shadow-md">
           {options.map((option, index) => (
             <button
               key={index}

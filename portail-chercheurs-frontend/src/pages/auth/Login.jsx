@@ -69,7 +69,7 @@ function Connexion() {
     // Conteneur principal centré verticalement et horizontalement
     <div className="h-screen flex items-center justify-center bg-gray-100 p-4 relative ">
       {/* Conteneur "carré" central responsive avec effet d'ombre supplémentaire au hover */}
-      <div className="bg-white shadow-lg hover:shadow-2xl transition-shadow duration-300 rounded-3xl overflow-hidden flex flex-col md:flex-row w-full max-x-[80%] md:max-x-[75%] lg:max-w-[70%] xl:max-w-[55%] h-full">
+      <div className="bg-[var(--color-bg-primary)] shadow-lg hover:shadow-2xl transition-shadow duration-300 rounded-3xl overflow-hidden flex flex-col md:flex-row w-full max-x-[80%] md:max-x-[75%] lg:max-w-[70%] xl:max-w-[55%] h-full">
         {/* Partie gauche (informations) : cachée sur mobile */}
         <div
           className="hidden md:flex md:flex-col md:justify-center md:w-1/2 relative p-8 bg-[var(--color-primary)] bg-cover bg-center"

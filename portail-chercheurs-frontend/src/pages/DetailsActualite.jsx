@@ -53,7 +53,7 @@ export default function DetailsActualite() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-      <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+      <div className="bg-[var(--color-bg-primary)] rounded-xl shadow-lg overflow-hidden">
         {/* Image header (optionnel) */}
         {actualite.image_url && (
           <div className="h-64 w-full overflow-hidden">
@@ -105,7 +105,7 @@ export default function DetailsActualite() {
       </div>
 
       {/* Section commentaires (optionnel) */}
-      <div className="mt-12 bg-white rounded-xl shadow-lg overflow-hidden">
+      <div className="mt-12 bg-[var(--color-bg-primary)] rounded-xl shadow-lg overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-200">
           <h3 className="text-lg font-medium text-gray-900">
             Commentaires (3)

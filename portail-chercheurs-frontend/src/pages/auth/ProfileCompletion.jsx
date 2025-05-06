@@ -43,7 +43,7 @@ const ProfileCompletion = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md mt-10">
+    <div className="max-w-2xl mx-auto p-6 bg-[var(--color-bg-primary)] rounded-lg shadow-md mt-10">
       <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
         Complétez votre profil
       </h2>

@@ -29,7 +29,7 @@ const PublicationsSection = ({
 
   return (
     <section
-      className={`p-4 md:p-6 rounded-2xl shadow-sm bg-[var(--color-white)] col-span-3 lg:px-12 ${className}`}
+      className={`p-4 md:p-6 rounded-2xl shadow-sm bg-[var(--color-bg-primary)] col-span-3 lg:px-12 ${className}`}
     >
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-semibold text-[var(--color-text-primary)]">

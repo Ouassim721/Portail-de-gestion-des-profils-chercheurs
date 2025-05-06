@@ -15,7 +15,7 @@ const CardProfilPublication = ({
 
   return (
     <div
-      className={`p-4 bg-white border-b-3 border-gray-100 mb-4 ${className}`}
+      className={`p-4 bg-[var(--color-bg-primary)] border-b-3 border-gray-100 mb-4 ${className}`}
     >
       {/* Titre de la publication */}
       {title && (

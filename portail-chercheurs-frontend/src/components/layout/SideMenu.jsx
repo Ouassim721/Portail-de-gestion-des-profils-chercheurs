@@ -27,7 +27,7 @@ const SideMenu = ({ isVisible, onClose }) => {
 
   return (
     <aside
-      className={`fixed top-0 left-0 h-full w-64 bg-white border-r border-gray-200 p-4 shadow-lg transform ${
+      className={`fixed top-0 left-0 h-full w-64 bg-[var(--color-bg-primary)] border-r border-gray-200 p-4 shadow-lg transform ${
         isVisible ? "translate-x-0" : "-translate-x-full"
       } transition-transform duration-300 ease-in-out z-50`}
       aria-label="Navigation latérale"

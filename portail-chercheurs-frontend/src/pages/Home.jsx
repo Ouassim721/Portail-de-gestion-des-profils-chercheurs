@@ -8,9 +8,9 @@ function Home() {
       {/* Contenu principal */}
       <section className="h-[calc(100vh-74px)] w-full bg-[var(--color-secondary)] relative ">
         <div className="flex h-full justify-center lg:justify-start">
-          <div className="bg-[var(--color-white)] h-full p-5 flex justify-center lg:justify-start  items-center w-full lg:w-[70%]">
+          <div className="bg-[var(--color-bg-primary)] h-full p-5 flex justify-center lg:justify-start  items-center w-full lg:w-[70%]">
             <div className="flex flex-col gap-10 mb-24 items-center lg:items-start">
-              <h1 className="font-bold text-4xl text-center lg:text-left max-w-125">
+              <h1 className="font-bold text-4xl text-center lg:text-left max-w-125 text-[var(--color-text-primary)]">
                 Facilitez l’Accès aux Profils de Recherche
               </h1>
               <p className="text-neutral-400 font-medium text-lg text-center lg:text-left max-w-125 xl:max-w-full">
@@ -29,7 +29,7 @@ function Home() {
               </div>
             </div>
           </div>
-          <div className="hidden lg:flex items-center bg-[var(--color-primary)] h-full p-5 w-[30%] relative">
+          <div className="hidden lg:flex items-center bg-[#111827] h-full p-5 w-[30%] relative">
             <img
               src={ChercheurImage}
               alt="Chercheur Image"
@@ -37,7 +37,7 @@ function Home() {
             />
           </div>
         </div>
-        <div className="hidden lg:flex justify-around items-center w-full h-26 absolute bottom-0 bg-[var(--color-primary)] font-bold text-white">
+        <div className="hidden lg:flex justify-around items-center w-full h-26 absolute bottom-0 bg-[#111827] font-bold text-white">
           <div>
             <h3 className="text-2xl">250+</h3>
             <p className="text-md text-neutral-300 font-light">Chercheurs</p>
@@ -57,11 +57,11 @@ function Home() {
         </div>
       </section>
       <main className="flex flex-col items-center justify-center flex-grow px-6 h-[500px]">
-        <h2 className="text-3xl font-bold mb-4 text-center">
+        <h2 className="text-3xl font-bold mb-4 text-center text-[var(--color-text-primary)]">
           Bienvenue sur le Portail des Chercheurs [Page en cours de
           développement]
         </h2>
-        <p className="text-gray-700 text-lg text-center max-w-2xl">
+        <p className="text-lg text-center max-w-2xl text-[var(--color-text-secondary)]">
           Accédez aux profils des chercheurs, découvrez leurs travaux et
           explorez les collaborations possibles.
         </p>

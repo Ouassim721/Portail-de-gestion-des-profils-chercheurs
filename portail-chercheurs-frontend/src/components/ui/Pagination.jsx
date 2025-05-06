@@ -49,7 +49,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
           className={`px-3 sm:px-4 py-2  cursor-pointer ${
             currentPage === 1
               ? "hidden"
-              : "bg-[var(--color-white)] text-[var(--color-text-primary)] border border-gray-200 hover:bg-gray-200"
+              : "bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] border border-gray-200 hover:bg-gray-200"
           }`}
           disabled={currentPage === 1}
           onClick={() => handlePageChange(currentPage - 1)}
@@ -62,7 +62,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
           page === "..." ? (
             <span
               key={`ellipsis-${index}`}
-              className="px-6 py-3 flex items-center bg-[var(--color-white)] border border-gray-200"
+              className="px-6 py-3 flex items-center bg-[var(--color-bg-primary)] border border-gray-200"
               aria-hidden="true"
             >
               ...
@@ -73,8 +73,8 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
               type="button"
               className={`px-6 py-3 sm:px-6 sm:py-3 cursor-pointer ${
                 currentPage === page
-                  ? "bg-[var(--color-primary)] text-[var(--color-white)] font-bold"
-                  : "bg-[var(--color-white)] border border-gray-200 hover:bg-gray-200 text-[var(--color-text-primary)]"
+                  ? "bg-[var(--color-primary)] text-[bg-[var(--color-bg-primary)]] font-bold"
+                  : "bg-[var(--color-bg-primary)] border border-gray-200 hover:bg-gray-200 text-[var(--color-text-primary)]"
               }`}
               onClick={() => handlePageChange(page)}
               aria-current={currentPage === page ? "page" : undefined}
@@ -90,7 +90,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
           className={`px-4 py-2 cursor-pointer ${
             currentPage === totalPages
               ? "opacity-50 cursor-not-allowed bg-gray-200"
-              : "bg-[var(--color-white)] text-[var(--color-text-primary)] border border-gray-200 hover:bg-gray-200"
+              : "bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] border border-gray-200 hover:bg-gray-200"
           }`}
           disabled={currentPage === totalPages}
           onClick={() => handlePageChange(currentPage + 1)}

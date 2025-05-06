@@ -63,7 +63,7 @@ const CreationActualite = () => {
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto bg-white shadow-lg rounded-lg">
+    <div className="p-4 max-w-md mx-auto bg-[var(--color-bg-primary)] shadow-lg rounded-lg">
       <h2 className="text-xl font-bold mb-4">Créer une actualité</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input

@@ -14,14 +14,12 @@ const Button = ({
     "flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition duration-300 ease-in-out cursor-pointer justify-center";
 
   const variantStyles = {
-    primary:
-      "bg-[var(--color-primary)] text-[var(--color-white)] hover:bg-blue-900",
-    secondary:
-      "bg-[var(--color-secondary)] text-[var(--color-white)] hover:bg-emerald-400",
+    primary: "bg-[var(--color-primary)] text-white hover:bg-blue-900",
+    secondary: "bg-[var(--color-secondary)] text-white hover:bg-emerald-400",
     secondaryoutline:
-      "bg-transparent text-[var(--color-secondary)] outline outline-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:text-[var(--color-white)]",
+      "bg-transparent text-[var(--color-secondary)] outline outline-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:text-[var(--color-bg-primary)]",
     neutral:
-      "bg-white px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors",
+      "var(--color-bg-primary) px-4 py-2 border border-gray-300 rounded-md text-[var(--color-text-secondary)] hover:bg-gray-50 transition-colors",
   };
 
   return (

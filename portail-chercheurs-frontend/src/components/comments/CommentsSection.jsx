@@ -27,7 +27,7 @@ export default function CommentsSection({ publicationId }) {
     axios
       .put(`/comments/${id}`, { contenu: text })
       .then(({ data }) => {
-        setComments(comments.map(c => (c.id === id ? data : c)));
+        setComments(comments.map((c) => (c.id === id ? data : c)));
         setEditingId(null);
       })
       .catch(console.error);
@@ -36,13 +36,15 @@ export default function CommentsSection({ publicationId }) {
   function handleDelete(id) {
     axios
       .delete(`/comments/${id}`)
-      .then(() => setComments(comments.filter(c => c.id !== id)))
+      .then(() => setComments(comments.filter((c) => c.id !== id)))
       .catch(console.error);
   }
 
   return (
-    <div className="mt-6 border-t pt-4">
-      <h4 className="font-semibold mb-3">Commentaires</h4>
+    <div className="mt-6 border-t pt-4 border-[var(--color-text-primary)]">
+      <h4 className="font-semibold mb-3 text-[var(--color-text-primary)]">
+        Commentaires
+      </h4>
       <CommentForm onSubmit={handleAdd} submitLabel="Publier" />
       <CommentList
         comments={comments}

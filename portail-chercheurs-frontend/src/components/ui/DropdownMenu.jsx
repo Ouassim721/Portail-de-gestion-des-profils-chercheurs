@@ -45,7 +45,7 @@ const DropdownMenu = ({ children, sections = [], userProfile }) => {
       </div>
 
       {isOpen && (
-        <div className="absolute right-0 w-72 mt-2 bg-white rounded-md shadow-lg z-50 border border-gray-200">
+        <div className="absolute right-0 w-72 mt-2 bg-[var(--color-bg-primary)] rounded-md shadow-lg z-50 border border-gray-300">
           {/* Section profil en haut */}
           {userProfile && (
             <div className="px-4 py-3 border-b border-gray-200">
@@ -57,7 +57,7 @@ const DropdownMenu = ({ children, sections = [], userProfile }) => {
                     className="w-10 h-10"
                   />
                 </div>
-                <div className="flex gap-1 text-gray-600">
+                <div className="flex gap-1 text-[var(--color-text-secondary)]">
                   <h2 className="">{userProfile.prenom} </h2>
                   <h2 className="uppercase font-medium">{userProfile.nom}</h2>
                 </div>
@@ -81,18 +81,20 @@ const DropdownMenu = ({ children, sections = [], userProfile }) => {
                     {option.icon && (
                       <FontAwesomeIcon
                         icon={option.icon}
-                        className="text-gray-500 w-5 text-center"
+                        className="text-[var(--color-text-secondary)] w-5 text-center"
                       />
                     )}
                     {option.link ? (
                       <Link
                         to={option.link}
-                        className="block w-full text-gray-700 no-underline hover:text-gray-900"
+                        className="block w-full text-[var(--color-text-secondary)] no-underline hover:text-gray-900"
                       >
                         {option.label}
                       </Link>
                     ) : (
-                      <span className="text-gray-700">{option.label}</span>
+                      <span className="text-[var(--color-text-secondary)]">
+                        {option.label}
+                      </span>
                     )}
                   </div>
                 ))}

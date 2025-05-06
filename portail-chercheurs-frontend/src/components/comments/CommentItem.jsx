@@ -26,10 +26,10 @@ export default function CommentItem({
   }
 
   return (
-    <li className="bg-white p-4 rounded shadow-sm flex justify-between items-start">
+    <li className="bg-[var(--color-bg-primary)] p-4 rounded shadow-sm flex justify-between items-start">
       <div>
-        <p className="text-gray-800">{comment.contenu}</p>
-        <small className="text-xs text-gray-500">
+        <p className="text-[var(--color-text-primary)]">{comment.contenu}</p>
+        <small className="text-xs text-[var(--color-gray)]">
           Le {new Date(comment.created_at).toLocaleString("fr-FR")}
         </small>
       </div>
@@ -40,12 +40,14 @@ export default function CommentItem({
             variant="outline"
             size="sm"
             onClick={onEdit}
+            className="text-blue-500"
           />
           <Button
             icon={faTrash}
             variant="outline"
             size="sm"
             onClick={() => onDelete(comment.id)}
+            className="text-red-500"
           />
         </div>
       )}

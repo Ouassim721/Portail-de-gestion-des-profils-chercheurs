@@ -34,7 +34,7 @@ export default function UpdateModal({ actualite, onUpdate }) {
 
       <Dialog.Portal>
         <Dialog.Overlay className="bg-black/50 fixed inset-0" />
-        <Dialog.Content className="fixed top-[20%] left-[50%] -translate-x-[50%] bg-white p-6 rounded-xl shadow-xl w-[400px]">
+        <Dialog.Content className="fixed top-[20%] left-[50%] -translate-x-[50%] bg-[var(--color-bg-primary)] p-6 rounded-xl shadow-xl w-[400px]">
           <Dialog.Title className="text-lg font-bold mb-4">
             Modifier l'actualité
           </Dialog.Title>

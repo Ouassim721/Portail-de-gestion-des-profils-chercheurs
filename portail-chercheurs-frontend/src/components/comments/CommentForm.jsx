@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import Button from "../ui/Button";
 export default function CommentForm({
   initialValue = "",
   submitLabel = "Envoyer",
@@ -18,7 +18,7 @@ export default function CommentForm({
   return (
     <form onSubmit={handle} className="flex flex-col gap-2 mb-4">
       <textarea
-        className="w-full border rounded p-2"
+        className="w-full border rounded p-2 text-[var(--color-text-primary)]"
         rows={3}
         value={text}
         onChange={(e) => setText(e.target.value)}
@@ -26,20 +26,11 @@ export default function CommentForm({
       />
       <div className="flex gap-2 justify-end">
         {onCancel && (
-          <button
-            type="button"
-            className="px-3 py-1 border rounded"
-            onClick={onCancel}
-          >
+          <Button variant="neutral" onClick={onCancel}>
             Annuler
-          </button>
+          </Button>
         )}
-        <button
-          type="submit"
-          className="px-4 py-1 bg-blue-600 text-white rounded"
-        >
-          {submitLabel}
-        </button>
+        <Button>{submitLabel}</Button>
       </div>
     </form>
   );

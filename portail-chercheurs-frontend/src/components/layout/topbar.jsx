@@ -36,7 +36,7 @@ function TopBar() {
   // Affichage conditionnel basé sur l'état de l'utilisateur et du chargement
   if (loading) {
     return (
-      <header className="flex items-center justify-between bg-white border-b border-gray-200 p-4">
+      <header className="flex items-center justify-between bg-[var(--color-bg-primary)] border-b border-gray-200 p-4">
         <Loader />
       </header>
     );
@@ -44,7 +44,7 @@ function TopBar() {
 
   if (!chercheur) {
     return (
-      <header className="flex items-center justify-between bg-white border-b border-gray-200 p-4">
+      <header className="flex items-center justify-between bg-[var(--color-bg-primary)] border-b border-gray-200 p-4">
         <div className="text-xl font-semibold">
           Utilisateur non trouvé ou non connecté
         </div>
@@ -54,7 +54,7 @@ function TopBar() {
 
   return (
     <>
-      <header className="flex items-center justify-between bg-white border-b border-gray-200 p-4">
+      <header className="flex items-center justify-between bg-[var(--color-bg-primary)] border-b border-gray-200 p-4">
         <div className="flex items-center space-x-4">
           <button
             type="button"
