@@ -20,6 +20,7 @@ const Publications = () => {
   const [countChercheurs, setcountChercheurs] = useState(null);
   const [countPublications, setcountPublications] = useState(null);
   const [countCitations, setcountCitations] = useState(null);
+  const [countDiscipline, setCountDiscipline] = useState(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -71,6 +72,7 @@ const Publications = () => {
         setcountChercheurs(response.data.chercheurs);
         setcountPublications(response.data.publications);
         setcountCitations(response.data.citations);
+        setCountDiscipline(response.data.disciplines);
       })
       .catch((error) => {
         console.error(
@@ -84,6 +86,7 @@ const Publications = () => {
     countPublications !== null ? countPublications : "...";
   const nombreChercheurs = countChercheurs !== null ? countChercheurs : "...";
   const nombreCitations = countChercheurs !== null ? countCitations : "...";
+  const nombreDisciplines = countDiscipline !== null ? countDiscipline : "...";
   return (
     <div className="min-h-screen ">
       <div className="w-full bg-[var(--color-primary)] flex flex-col lg:flex-row gap-4 items-center p-4">
@@ -162,6 +165,7 @@ const Publications = () => {
           />{" "}
           <CardStatPublication
             stat={nombrePublications}
+            title="Publications"
             variant="secondary"
             icon={faBook}
           />
@@ -170,7 +174,12 @@ const Publications = () => {
             title="Citations"
             icon={faQuoteRight}
           />
-          <CardStatPublication variant="secondary" />
+          <CardStatPublication
+            stat={nombreDisciplines}
+            title="Disciplines"
+            variant="secondary"
+            icon={faBook}
+          />{" "}
         </section>
         <section>
           <div>

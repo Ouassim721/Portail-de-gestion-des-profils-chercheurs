@@ -64,7 +64,7 @@ class AuthController extends Controller
         ])->cookie(
             'token',               // Nom du cookie
             $token,                // Le token JWT
-            60 * 24,               // Durée d'expiration (ici 24 heures)
+            60 * 24 * 30,               // Durée d'expiration (ici 1 mois)
             null,                  // Chemin (null pour tout le domaine)
             null,                  // Domaine (null pour le domaine actuel)
             true,                  // Secure (True pour HTTPS uniquement)

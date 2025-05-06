@@ -7,6 +7,7 @@ use App\Models\Chercheur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class ChercheurController extends Controller
 {
@@ -14,13 +15,63 @@ class ChercheurController extends Controller
     // Méthode API pour récupérer la liste paginée des chercheurs
     public function apiIndex(Request $request)
     {
-        $perPage = 10; // Nombre de chercheurs par page
-        $chercheurs = Chercheur::withPublicationsCount()->paginate($perPage);
+        $perPage = $request->get('per_page', 10); // Nombre d'éléments par page configurable
+
+        // Construction de la requête de base avec le count de publications
+        $query = Chercheur::query()
+            ->select([
+                'chercheurs.*',
+                DB::raw('(SELECT COUNT(*) FROM publications WHERE publications.chercheur_id = chercheurs.id) as publications_count')
+            ]);
+
+        // Recherche textuelle
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('nom', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('prenom', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('discipline', 'LIKE', "%{$searchTerm}%");
+            });
+        }
+
+        // Filtrage par département
+        if ($request->filled('departement')) {
+            $query->where('discipline', $request->departement);
+        }
+
+        // Filtrage par nombre minimum de publications
+        if ($request->filled('publications')) {
+            $minPublications = (int)$request->publications;
+            $query->having('publications_count', '>=', $minPublications);
+        }
+
+        // Gestion du tri
+        $sortableColumns = [
+            'nom' => DB::raw("CONCAT(prenom, ' ', nom)"), // Tri par nom complet
+            'departement' => 'discipline',
+            'publications' => 'publications_count'
+        ];
+
+        $sortColumn = $request->get('sort', 'nom');
+        $sortDirection = strtolower($request->get('direction', 'asc')) === 'asc' ? 'asc' : 'desc';
+
+        if (array_key_exists($sortColumn, $sortableColumns)) {
+            $query->orderBy($sortableColumns[$sortColumn], $sortDirection);
+        }
+
+        // Tri secondaire par nom pour plus de cohérence
+        if ($sortColumn !== 'nom') {
+            $query->orderBy(DB::raw("CONCAT(prenom, ' ', nom)"), 'asc');
+        }
+
+        // Pagination avec count du total exact
+        $chercheurs = $query->paginate($perPage);
 
         return response()->json([
-            'data' => $chercheurs->items(),       // Liste des chercheurs
+            'data' => $chercheurs->items(),
             'current_page' => $chercheurs->currentPage(),
             'last_page' => $chercheurs->lastPage(),
+            'per_page' => $chercheurs->perPage(),
             'total' => $chercheurs->total(),
         ]);
     }
