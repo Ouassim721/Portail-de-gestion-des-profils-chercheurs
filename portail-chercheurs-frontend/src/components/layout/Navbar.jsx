@@ -10,6 +10,7 @@ import {
   faSearch,
   faAngleDown,
   faSignOutAlt,
+  faTableColumns,
   faCog,
   faBars,
   faTimes,
@@ -133,6 +134,15 @@ function Navbar({ sticky = false }) {
               {
                 options: [
                   { label: "Mon compte", icon: faUser, link: "/profil" },
+                  ...(chercheur.role === "Administrateur"
+                    ? [
+                        {
+                          label: "Tableau de bord",
+                          icon: faTableColumns,
+                          link: "/dashboard",
+                        },
+                      ]
+                    : []),
                 ],
               },
               {

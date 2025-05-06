@@ -39,7 +39,6 @@ function Connexion() {
 
       const user = res.data.user;
       if (user && user.must_change_password) {
-        console.log("line 42 *****************");
         navigate("/change-password");
       } else {
         if (user.role === "Administrateur") {
