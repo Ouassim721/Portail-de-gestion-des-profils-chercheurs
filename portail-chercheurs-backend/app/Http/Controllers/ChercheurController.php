@@ -6,9 +6,11 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\Chercheur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ChercheurController extends Controller
 {
+    use SoftDeletes;
     // Méthode API pour récupérer la liste paginée des chercheurs
     public function apiIndex(Request $request)
     {
@@ -48,23 +50,32 @@ class ChercheurController extends Controller
     {
         $chercheur = Chercheur::findOrFail($id);
         $request->validate([
-            'photoProfil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // max 2 Mo
+            'photoProfil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        $chercheur->update($request->only(['nom', 'prenom', 'discipline', 'email']));
 
+        // Mise à jour des champs de base
+        $chercheur->update($request->only(['nom', 'prenom', 'discipline', 'email', 'status', 'about']));
+
+        // Gestion du CV (si applicable)
         if ($request->hasFile('cv')) {
             $path = $request->file('cv')->store('cvs', 'public');
             $chercheur->cv = $path;
         }
 
-        // 🔥 Gestion de l’image
-        if ($request->hasFile('photoProfil')) {
-            // Supprimer l’ancienne si elle existe
+        // 🔥 Gestion de la suppression de photo
+        if ($request->has('removePhoto') && $request->removePhoto == "true") {
+            if ($chercheur->photoProfil && Storage::exists($chercheur->photoProfil)) {
+                Storage::delete($chercheur->photoProfil);
+            }
+            $chercheur->photoProfil = null;
+        }
+        // Gestion de l'upload de nouvelle photo
+        elseif ($request->hasFile('photoProfil')) {
+            // Supprimer l'ancienne si elle existe
             if ($chercheur->photoProfil && Storage::exists($chercheur->photoProfil)) {
                 Storage::delete($chercheur->photoProfil);
             }
 
-            // Enregistrer la nouvelle image
             $path = $request->file('photoProfil')->store('images/profils', 'public');
             $chercheur->photoProfil = 'storage/' . $path;
         }

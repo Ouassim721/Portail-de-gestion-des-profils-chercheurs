@@ -17,7 +17,6 @@ export default function UpdateProfileModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState("Statut");
   const [about, setAbout] = useState("À propos de moi...");
-  const [activeTab, setActiveTab] = useState("informations");
 
   useEffect(() => {
     if (chercheur) {
@@ -42,9 +41,22 @@ export default function UpdateProfileModal({
     }
   };
 
-  const handlePhotoRemove = () => {
-    setPhotoFile(null);
-    setPhotoPreview(null);
+  const handlePhotoRemove = async () => {
+    try {
+      setIsSubmitting(true);
+      const response = await axios.post(
+        `/chercheurs/${chercheur.id}/update`,
+        { removePhoto: "true" },
+        { withCredentials: true }
+      );
+      setPhotoFile(null);
+      setPhotoPreview(null);
+      onUpdate(response.data);
+    } catch (error) {
+      console.error("Erreur lors de la suppression :", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -86,7 +98,7 @@ export default function UpdateProfileModal({
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm data-[state=open]:animate-fadeIn" />
 
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-[95vw] max-w-2xl -translate-x-1/2 -translate-y-1/2 transform rounded-xl bg-white shadow-xl transition-all duration-300 data-[state=open]:animate-slideUp data-[state=closed]:animate-slideDown focus:outline-none">
+        <Dialog.Content className="fixed left-1/2 px-2 py-4 top-1/2 z-50 w-[95vw] max-w-2xl -translate-x-1/2 -translate-y-1/2 transform rounded-xl bg-white shadow-xl transition-all duration-300 data-[state=open]:animate-slideUp data-[state=closed]:animate-slideDown focus:outline-none">
           <div className="border-b border-gray-200 px-6 py-4">
             <Dialog.Title className="text-2xl font-semibold text-gray-800">
               Modifier le profil
@@ -122,7 +134,7 @@ export default function UpdateProfileModal({
                     />
                   ) : (
                     <div className="w-24 h-24 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center shadow-inner">
-                      <span className="text-gray-500 text-sm">
+                      <span className="text-gray-500 text-sm text-center">
                         Aucune photo
                       </span>
                     </div>

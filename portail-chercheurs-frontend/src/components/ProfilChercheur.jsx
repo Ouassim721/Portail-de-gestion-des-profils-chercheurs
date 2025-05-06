@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Button from "./ui/Button";
-import PublicationSection from "./PublicationsSection";
+import PublicationsSection from "./PublicationsSection";
 import axios from "../axios";
 import Loader from "../components/ui/Loader";
 import UpdateProfileModal from "./modals/UpdateProfileModal";
@@ -12,7 +12,7 @@ import {
   faLocationDot,
   faGraduationCap,
 } from "@fortawesome/free-solid-svg-icons";
-import { faEnvelope, faFilePdf } from "@fortawesome/free-regular-svg-icons";
+import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import {
   BarChart,
   Bar,
@@ -77,22 +77,6 @@ function ProfilChercheur() {
     { year: "2023", publications: 15 },
   ];
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-  /* const [editPopup, setEditPopup] = useState(false);
-
-  const openPopup = () => {
-    setEditPopup(true);
-  };
-
-  const closePopup = () => {
-    setEditPopup(null);
-  };
-  useEffect(() => {
-    if (editPopup) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-  }, [editPopup]);*/
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
       {/* ***************Section principale (toujours en haut) ********************************/}
@@ -123,32 +107,13 @@ function ProfilChercheur() {
                 </Button>
                 <Button
                   variant="neutral"
-                  icon={faFilePdf}
+                  icon={faUserPen}
                   className="text-sm p-2!"
+                  onClick={() => setIsModalOpen(true)}
                 >
-                  Voir CV
+                  Modifier
                 </Button>
               </div>
-              {/* {editPopup && (
-                <div className="popup-overlay">
-                  <div className="popup-content w-[95%] h-[90%] sm:w-[80%] md:w-[65%] lg:w-[60%]  xl:w-[50%] ">
-                    <button className="close-btn" onClick={closePopup}>
-                      <FontAwesomeIcon icon={faTimes} />
-                    </button>
-                    <UserSettingsPopup></UserSettingsPopup>
-                  </div>
-                </div>
-              )} */}
-            </div>
-            <div className="flex justify-center sm:block sm:mr-8">
-              <Button
-                variant="primary"
-                icon={faUserPen}
-                className="text-sm p-2!"
-                onClick={() => setIsModalOpen(true)}
-              >
-                Modifier
-              </Button>
             </div>
           </div>
         </div>
@@ -218,7 +183,7 @@ function ProfilChercheur() {
         </div>
       </section>
       {/* ***************La section des Publication********************************/}
-      <PublicationSection
+      <PublicationsSection
         publications={publication}
         onToggleView={() => setShowAllPublications(!showAllPublications)}
         isExpanded={showAllPublications}
