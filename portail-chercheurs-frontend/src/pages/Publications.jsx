@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useContext } from "react";
 import {
   faFilter,
   faChevronDown,
@@ -13,6 +13,7 @@ import CardStatPublication from "../components/cards/CardStatPublication";
 import CardPublication from "../components/cards/CardPublication";
 import CommentsSection from "../components/comments/CommentsSection";
 import axios from "../axios";
+import { LanguageContext } from "../contexts/LanguageContext";
 import Loader from "../components/ui/Loader";
 
 const Publications = () => {
@@ -24,6 +25,7 @@ const Publications = () => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useContext(LanguageContext);
 
   const loader = useRef(null);
 
@@ -62,6 +64,9 @@ const Publications = () => {
         setPublications((prev) => [...prev, ...res.data.data]);
         setHasMore(res.data.hasMore);
       })
+      .catch((error) => {
+        console.error("Error fetching publications:", error);
+      })
       .finally(() => setIsLoading(false));
   }, [page]);
 
@@ -85,22 +90,21 @@ const Publications = () => {
   const nombrePublications =
     countPublications !== null ? countPublications : "...";
   const nombreChercheurs = countChercheurs !== null ? countChercheurs : "...";
-  const nombreCitations = countChercheurs !== null ? countCitations : "...";
-  const nombreDisciplines = countDiscipline !== null ? countDiscipline : "...";
+  const nombreCitations = countCitations !== null ? countCitations : "...";
   return (
-    <div className="min-h-screen ">
-      {/* <div className="w-full bg-[var(--color-primary)] flex flex-col lg:flex-row gap-4 items-center p-4">
+    <div className="min-h-screen bg-[var(--color-bg)]">
+      <div className="w-full bg-[var(--color-primary)] flex flex-col lg:flex-row gap-4 items-center p-4">
         <div className="w-full px-2">
           <SearchBar
-            className="p-4 w-full"
-            placeHolder="Rechercher des publications..."
+            placeHolder={t("searchPublications")}
+            className="bg-[var(--color-bg)] text-[var(--color-text-primary)]"
           />
         </div>
         <div className="w-full flex flex-col sm:flex-row gap-8 sm:justify-between items-center">
           <div className="w-full flex justify-between sm:justify-start lg:justify-end sm:gap-6 px-2">
             <DropdownButton
               icon={faChevronDown}
-              children="Année"
+              children={t("year")}
               variant="neutral"
               iconPosition="right"
               options={[
@@ -124,7 +128,7 @@ const Publications = () => {
             />
             <DropdownButton
               icon={faChevronDown}
-              children="Domaine"
+              children={t("domain")}
               variant="neutral"
               iconPosition="right"
               options={[
@@ -150,36 +154,31 @@ const Publications = () => {
           <Button
             variant="secondary"
             icon={faFilter}
-            className="w-full sm:w-auto flex justify-center items-center "
+            className="w-full sm:w-auto flex justify-center items-center"
           >
-            Filtrer
+            {t("filter")}
           </Button>
         </div>
-      </div> */}
+      </div>{" "}
+      */}
       <main className="max-w-7xl mx-auto p-8">
         <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-6 my-6 mb-10 place-items-center">
           <CardStatPublication
             stat={nombreChercheurs}
-            title="Chercheurs Actifs"
+            title={t("activeResearchers")}
             icon={faUsers}
-          />{" "}
+          />
           <CardStatPublication
             stat={nombrePublications}
-            title="Publications"
+            title={t("publications")}
             variant="secondary"
             icon={faBook}
           />
           <CardStatPublication
             stat={nombreCitations}
-            title="Citations"
+            title={t("citations")}
             icon={faQuoteRight}
           />
-          <CardStatPublication
-            stat={nombreDisciplines}
-            title="Disciplines"
-            variant="secondary"
-            icon={faBook}
-          />{" "}
         </section>
         <section>
           <div>
@@ -200,6 +199,7 @@ const Publications = () => {
               </div>
             ))}
             <div ref={loader} className="h-10 w-full" />
+            {isLoading && <Loader />}
           </div>
         </section>
       </main>

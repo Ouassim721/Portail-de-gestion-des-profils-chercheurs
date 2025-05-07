@@ -27,31 +27,36 @@ const SideMenu = ({ isVisible, onClose }) => {
 
   return (
     <aside
-      className={`fixed top-0 left-0 h-full w-64 bg-[var(--color-bg-primary)] border-r border-gray-200 p-4 shadow-lg transform ${
-        isVisible ? "translate-x-0" : "-translate-x-full"
-      } transition-transform duration-300 ease-in-out z-50`}
-      aria-label="Navigation latérale"
+      className={`fixed top-0 left-0 h-full w-64 p-4 shadow-lg transform transition-transform duration-300 ease-in-out z-50`}
+      style={{
+        backgroundColor: "var(--color-white)",
+        borderRight: "1px solid var(--color-bg-secondary)",
+        transform: isVisible ? "translateX(0)" : "translateX(-100%)",
+      }}
     >
       <button
         onClick={onClose}
-        aria-label="Fermer le menu"
-        className="text-gray-500 hover:text-gray-700 focus:outline-none mb-4"
+        className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] mb-4"
       >
         <FaTimes size={20} />
       </button>
+
       <nav>
         <ul className="space-y-2">
           {links.map(({ label, icon, to }) => (
-            <li key={label} className="rounded-md">
+            <li key={label}>
               <NavLink
                 to={`/dashboard${to}`}
                 className={({ isActive }) =>
-                  `flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md ${
-                    isActive ? "bg-gray-100 font-bold" : ""
+                  `flex items-center gap-3 px-4 py-2 rounded-md transition-colors
+                  ${
+                    isActive
+                      ? "bg-[var(--color-bg-secondary)] text-[var(--color-primary)]"
+                      : "text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)]"
                   }`
                 }
               >
-                {icon}
+                <span className="text-xl">{icon}</span>
                 <span>{label}</span>
               </NavLink>
             </li>

@@ -1,12 +1,13 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { useState } from "react";
+import React, { useState, useContext } from "react";
 import Button from "../ui/Button";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import axios from "../../axios";
+import { LanguageContext } from "../../contexts/LanguageContext";
 
 export default function UpdateModal({ actualite, onUpdate }) {
+  const { t } = useContext(LanguageContext);
   const [form, setForm] = useState({ ...actualite });
 
   const handleChange = (e) => {
@@ -17,18 +18,21 @@ export default function UpdateModal({ actualite, onUpdate }) {
     e.preventDefault();
     try {
       await axios.put(
-        `http://localhost:8000/api/actualites/${actualite.id}`,
+        `/api/actualites/${actualite.id}`,
         form
       );
       onUpdate();
     } catch (err) {
-      console.error("Erreur lors de la mise à jour :", err);
+      console.error(t("updateError"), err);
     }
   };
 
   return (
     <Dialog.Root>
-      <Dialog.Trigger className="text-blue-500 px-2 py-1 rounded text-xl">
+      <Dialog.Trigger
+        aria-label={t("editAction", { name: actualite.titre })}
+        className="text-blue-500 px-2 py-1 rounded text-xl"
+      >
         <FontAwesomeIcon icon={faPenToSquare} />
       </Dialog.Trigger>
 
@@ -36,7 +40,7 @@ export default function UpdateModal({ actualite, onUpdate }) {
         <Dialog.Overlay className="bg-black/50 fixed inset-0" />
         <Dialog.Content className="fixed top-[20%] left-[50%] -translate-x-[50%] bg-[var(--color-bg-primary)] p-6 rounded-xl shadow-xl w-[400px]">
           <Dialog.Title className="text-lg font-bold mb-4">
-            Modifier l'actualité
+            {t("modalTitleEditNews")}
           </Dialog.Title>
 
           <form onSubmit={handleSubmit} className="space-y-3">
@@ -45,7 +49,7 @@ export default function UpdateModal({ actualite, onUpdate }) {
               name="titre"
               value={form.titre}
               onChange={handleChange}
-              placeholder="Titre"
+              placeholder={t("titrePlaceholder")}
               className="w-full border p-2 rounded"
             />
             <input
@@ -53,7 +57,7 @@ export default function UpdateModal({ actualite, onUpdate }) {
               name="localisation"
               value={form.localisation}
               onChange={handleChange}
-              placeholder="Localisation"
+              placeholder={t("locationPlaceholder")}
               className="w-full border p-2 rounded"
             />
             <input
@@ -61,7 +65,7 @@ export default function UpdateModal({ actualite, onUpdate }) {
               name="categorie"
               value={form.categorie}
               onChange={handleChange}
-              placeholder="Catégorie"
+              placeholder={t("categoryPlaceholder")}
               className="w-full border p-2 rounded"
             />
             <input
@@ -75,16 +79,21 @@ export default function UpdateModal({ actualite, onUpdate }) {
               name="description"
               value={form.description}
               onChange={handleChange}
-              placeholder="Description"
+              placeholder={t("descriptionPlaceholder")}
               className="w-full border p-2 rounded"
             />
             <div className="flex justify-end space-x-2">
               <Dialog.Close asChild>
-                <button type="button" className="text-gray-500 px-3 py-1">
-                  Annuler
+                <button
+                  type="button"
+                  className="text-gray-500 px-3 py-1"
+                >
+                  {t("cancelButton")}
                 </button>
               </Dialog.Close>
-              <Button variant="secondary">Sauvegarder</Button>
+              <Button variant="secondary">
+                {t("saveButton")}
+              </Button>
             </div>
           </form>
         </Dialog.Content>

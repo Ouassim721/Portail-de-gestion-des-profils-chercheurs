@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Loader from "../components/ui/Loader";
 import DropdownButton from "../components/ui/DropdownButton";
@@ -13,8 +13,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import book from "../assets/book.jpg";
 import "./Chercheurs.css";
+import { LanguageContext } from "../contexts/LanguageContext";
 
 function Chercheurs() {
+  const { t } = useContext(LanguageContext);
+
   const [chercheurs, setChercheurs] = useState([]);
   const [chercheurSelectionne, setChercheurSelectionne] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,7 +34,6 @@ function Chercheurs() {
     publications: null,
   });
 
-  // Appel API avec gestion des erreurs améliorée
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -48,266 +50,122 @@ function Chercheurs() {
         };
 
         const response = await axios.get(
-          `http://localhost:8000/api/chercheurs`,
-          {
-            params,
-            paramsSerializer: { indexes: null },
-          }
+          `http://localhost:8000/api/chercheurs?page=${currentPage}`
         );
-
-        if (response.data && response.data.data) {
-          setChercheurs(response.data.data);
-          setTotalPages(response.data.last_page);
-          setError(null);
-        } else {
-          throw new Error("Format de réponse inattendu");
-        }
+        setChercheurs(response.data.data);
+        setTotalPages(response.data.last_page);
+        setError(null);
       } catch (err) {
-        console.error("Erreur:", err);
-        setError(
-          err.response?.data?.message || err.message || "Erreur de chargement"
-        );
-        setChercheurs([]);
+        console.error("Erreur API:", err);
+        setError(t("errorLoadingData"));
       } finally {
         setIsLoading(false);
       }
     };
+    fetchChercheurs();
+  }, [currentPage, t]);
 
-    const debounceTimer = setTimeout(fetchData, 300);
-    return () => clearTimeout(debounceTimer);
-  }, [currentPage, searchTerm, sortConfig, filters]);
-
-  // Gestion du tri
-  const handleSort = (key) => {
-    let direction = "asc";
-    if (sortConfig.key === key && sortConfig.direction === "asc") {
-      direction = "desc";
-    }
-    setSortConfig({ key, direction });
-    setCurrentPage(1); // Reset à la première page lors d'un nouveau tri
-  };
-
-  // Gestion de la recherche avec debounce intégré
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-    setCurrentPage(1);
-  };
-
-  // Gestion des filtres
-  const handleFilter = (type, value) => {
-    setFilters((prev) => ({
-      ...prev,
-      [type]: value === "all" ? null : value,
+  const formatDataForTable = (data) =>
+    data.map((c) => ({
+      id: c.id,
+      nom: `${c.prenom} ${c.nom}`,
+      departement: c.discipline,
+      publications: c.publications_count || 0,
+      rawData: c,
     }));
-    setCurrentPage(1);
+
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) setCurrentPage(newPage);
   };
 
-  const resetFilters = () => {
-    setSearchTerm("");
-    setFilters({ departement: null, publications: null });
-    setSortConfig({ key: "nom", direction: "asc" });
-    setCurrentPage(1);
-  };
+  const openPopup = (ligne) => setChercheurSelectionne(ligne.rawData);
+  const closePopup = () => setChercheurSelectionne(null);
 
-  // Formatage des données pour la table
-  const formatDataForTable = (data) => {
-    return data.map((chercheur) => ({
-      id: chercheur.id,
-      nom: `${chercheur.prenom || ""} ${chercheur.nom || ""}`.trim(),
-      departement: chercheur.discipline || "Non spécifié",
-      publications: chercheur.publications_count || 0,
-      rawData: chercheur,
-    }));
-  };
-
-  // Colonnes configurables
-  const tableColumns = [
-    {
-      key: "nom",
-      label: "Nom",
-      sortable: true,
-      render: (item) => item.nom || "Inconnu",
-    },
-    {
-      key: "departement",
-      label: "Département",
-      sortable: true,
-      render: (item) => item.departement,
-    },
-    {
-      key: "publications",
-      label: "Publications",
-      sortable: true,
-      render: (item) => item.publications,
-      className: "text-center", // Pour aligner les nombres
-    },
-  ];
+  useEffect(() => {
+    document.body.style.overflow = chercheurSelectionne ? "hidden" : "auto";
+  }, [chercheurSelectionne]);
 
   return (
     <div className="chercheurs-container">
       {/* En-tête */}
-      <div className="header-image">
-        <img src={book} alt="Chercheurs" className="w-full h-48 object-cover" />
+      <img
+        src={book}
+        alt={t("chercheursTitle")}
+        className="w-full h-100 object-cover"
+      />
+
+      {/* Titre & Filtre */}
+      <div className="flex flex-col sm:flex-row gap-4 sm:justify-between items-center mx-12 sm:mx-28 xl:mx-38 mt-12">
+        <h1 className="font-bold text-xl sm:text-2xl md:text-3xl">
+          {t("chercheursTitle")}
+        </h1>
+        <DropdownButton
+          icon={faSliders}
+          variant="neutral"
+          children={t("filterButton")}
+          options={[
+            {
+              label: t("filterByName"),
+              onClick: () => console.log("Filtrer par nom"),
+            },
+            {
+              label: t("filterByDepartment"),
+              onClick: () => console.log("Filtrer par département"),
+            },
+            {
+              label: t("filterByPublications"),
+              onClick: () => console.log("Filtrer par publications"),
+            },
+          ]}
+        />
       </div>
+      <div className="mx-auto mt-8 mb-12 bg-gray-300 h-0.5 w-3/4"></div>
 
-      <div className="container mx-auto px-4 py-8">
-        {/* Barre de titre et filtres */}
-        <div className="flex flex-col md:flex-row justify-between items-center lg:px-40 mb-8 gap-4">
-          <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">
-            Chercheurs
-          </h1>
+      {/* Contenu */}
+      {isLoading ? (
+        <Loader />
+      ) : error ? (
+        <div className="text-center py-8 text-red-500">{error}</div>
+      ) : chercheurs.length === 0 ? (
+        <div className="text-center py-8">{t("noResults")}</div>
+      ) : (
+        <div className="mx-auto my-5">
+          <TableGenerique
+            className="bg-[var(--color-bg)]"
+            columns={[
+              { key: "nom", label: t("filterByName") },
+              { key: "departement", label: t("filterByDepartment") },
+              { key: "publications", label: t("filterByPublications") },
+            ]}
+            data={formatDataForTable(chercheurs)}
+            onRowClick={openPopup}
+          />
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      )}
 
-          <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
-            {/* Barre de recherche */}
-            <div className="relative flex-grow md:w-64">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FontAwesomeIcon icon={faSearch} className="text-gray-400" />
-              </div>
-              <input
-                type="text"
-                placeholder="Rechercher..."
-                value={searchTerm}
-                onChange={handleSearch}
-                className="pl-10 pr-4 py-2 w-full border border-gray-400 text-[var(--color-text-secondary)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-
-            {/* Menu déroulant des filtres */}
-            <DropdownButton
-              icon={faSliders}
-              text="Filtrer"
-              variant="neutral"
-              options={[
-                {
-                  label: "Par département",
-                  children: [
-                    {
-                      label: "Tous",
-                      value: "all",
-                      onClick: () => handleFilter("departement", "all"),
-                    },
-                    {
-                      label: "Informatique",
-                      value: "Informatique",
-                      onClick: () =>
-                        handleFilter("departement", "Informatique"),
-                    },
-                    {
-                      label: "Mathématiques",
-                      value: "Mathématiques",
-                      onClick: () =>
-                        handleFilter("departement", "Mathématiques"),
-                    },
-                    {
-                      label: "Physique",
-                      value: "Physique",
-                      onClick: () => handleFilter("departement", "Physique"),
-                    },
-                  ],
-                },
-                {
-                  label: "Par publications",
-                  children: [
-                    {
-                      label: "Tous",
-                      value: "all",
-                      onClick: () => handleFilter("publications", "all"),
-                    },
-                    {
-                      label: "10+",
-                      value: 10,
-                      onClick: () => handleFilter("publications", 10),
-                    },
-                    {
-                      label: "5+",
-                      value: 5,
-                      onClick: () => handleFilter("publications", 5),
-                    },
-                    {
-                      label: "1+",
-                      value: 1,
-                      onClick: () => handleFilter("publications", 1),
-                    },
-                  ],
-                },
-                {
-                  label: "Réinitialiser",
-                  onClick: resetFilters,
-                  variant: "danger",
-                },
-              ]}
+      {/* Popup profil */}
+      {chercheurSelectionne && (
+        <div className="popup-overlay">
+          <div className="popup-content bg-[var(--color-bg)] text-[var(--color-text-primary)]">
+            <button
+              aria-label={t("closeButtonAria")}
+              className="close-btn"
+              onClick={closePopup}
+            >
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
+            <ProfilChercheur
+              chercheur={chercheurSelectionne}
+              onClose={closePopup}
             />
           </div>
         </div>
-
-        {/* Séparateur */}
-        <div className="border-t border-gray-300 my-6"></div>
-
-        {/* Contenu principal */}
-        {isLoading ? (
-          <div className="flex justify-center items-center h-64">
-            <Loader size="lg" />
-          </div>
-        ) : error ? (
-          <div className="text-center py-12">
-            <p className="text-red-500 text-lg">{error}</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-              Réessayer
-            </button>
-          </div>
-        ) : (
-          <>
-            <div className="overflow-hidden rounded-lg shadow ">
-              <TableGenerique
-                columns={tableColumns}
-                data={formatDataForTable(chercheurs)}
-                onRowClick={(item) => setChercheurSelectionne(item.rawData)}
-                onSort={handleSort}
-                sortConfig={sortConfig}
-                emptyMessage="Aucun chercheur trouvé"
-              />
-            </div>
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="mt-6 flex justify-center">
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={setCurrentPage}
-                  className="justify-center"
-                />
-              </div>
-            )}
-          </>
-        )}
-
-        {/* Popup de détail */}
-        {chercheurSelectionne && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-            <div className="bg-[var(--color-bg-primary)] rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-auto">
-              <div className="flex justify-between items-center border-b p-4">
-                <h2 className="text-xl font-semibold">Profil du chercheur</h2>
-                <button
-                  onClick={() => setChercheurSelectionne(null)}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  <FontAwesomeIcon icon={faTimes} size="lg" />
-                </button>
-              </div>
-              <div className="p-6">
-                <ProfilChercheur
-                  chercheur={chercheurSelectionne}
-                  onClose={() => setChercheurSelectionne(null)}
-                />
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 }

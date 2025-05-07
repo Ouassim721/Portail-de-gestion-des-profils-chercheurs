@@ -41,8 +41,14 @@ export default function CommentsSection({ publicationId }) {
   }
 
   return (
-    <div className="mt-6 border-t pt-4 border-[var(--color-text-primary)]">
-      <h4 className="font-semibold mb-3 text-[var(--color-text-primary)]">
+    <div
+      className="mt-6 pt-4"
+      style={{ borderTop: "1px solid var(--color-bg-secondary)" }}
+    >
+      <h4
+        className="font-semibold mb-3"
+        style={{ color: "var(--color-text-primary)" }}
+      >
         Commentaires
       </h4>
       <CommentForm onSubmit={handleAdd} submitLabel="Publier" />
