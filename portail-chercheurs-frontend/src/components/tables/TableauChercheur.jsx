@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../ui/Pagination";
 import TableGenerique2 from "./TableGenerique2";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Button from "../ui/Button";
 import axios from "../../axios";
+import { LanguageContext } from "../../contexts/LanguageContext";
 
 export default function ChercheursList() {
   const navigate = useNavigate();
+  const { t } = useContext(LanguageContext);
+
   const [researchers, setResearchers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRows, setSelectedRows] = useState(new Set());
@@ -21,105 +24,100 @@ export default function ChercheursList() {
     const fetchResearchers = async () => {
       setIsLoading(true);
       setError(null);
-
       try {
         const res = await axios.get(`/chercheurs?page=${currentPage}`);
-
-        // Vérification de la structure de la réponse
-        if (!res.data || !res.data.data || !res.data.last_page) {
-          throw new Error("Structure de réponse inattendue");
+        if (!res.data?.data || res.data.last_page == null) {
+          throw new Error("Unexpected response structure");
         }
-
         setTotalPages(res.data.last_page);
-
-        // Format data for display
         const formatted = res.data.data.map((c) => ({
           id: c.id,
           name: `${c.prenom} ${c.nom}`,
           email: c.email,
-          domain: c.discipline || "Non spécifié", // Valeur par défaut
-          status: "Online", // Peut être dynamique si disponible dans les données
+          domain: c.discipline || t("notSpecified"),
+          status: t("statusOnline"),
         }));
-
         setResearchers(formatted);
-      } catch (error) {
-        console.error("Erreur lors du chargement des chercheurs :", error);
-        setError("Erreur lors du chargement des chercheurs");
+      } catch (err) {
+        console.error(t("loadResearchersError"), err);
+        setError(t("loadResearchersError"));
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchResearchers();
-  }, [currentPage]);
+  }, [currentPage, t]);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value.toLowerCase());
-    setCurrentPage(1); // Réinitialiser à la première page lors d'une nouvelle recherche
+    setCurrentPage(1);
   };
+
   const deleteResearcher = async (id) => {
-    if (window.confirm("Supprimer ce chercheur ?")) {
-      try {
-        await axios.delete(`/chercheurs/${id}`);
-
-        // Calculer la nouvelle liste avant de mettre à jour l'état
-        const updatedResearchers = researchers.filter((r) => r.id !== id);
-        setResearchers(updatedResearchers);
-
-        if (updatedResearchers.length === 0 && currentPage > 1) {
-          setCurrentPage((prev) => prev - 1);
-        }
-      } catch (error) {
-        console.error("Erreur lors de la suppression :", error);
-        alert("Échec de la suppression. Veuillez réessayer.");
+    if (!window.confirm(t("confirmDeleteResearcher"))) return;
+    try {
+      await axios.delete(`/chercheurs/${id}`);
+      const updated = researchers.filter((r) => r.id !== id);
+      setResearchers(updated);
+      if (updated.length === 0 && currentPage > 1) {
+        setCurrentPage((p) => p - 1);
       }
+    } catch (err) {
+      console.error(t("deleteResearcherError"), err);
+      alert(t("deleteResearcherError"));
     }
   };
 
   const filteredData = researchers
-    .filter((r) => {
-      const term = searchTerm.toLowerCase();
-      return (
-        r.name.toLowerCase().includes(term) ||
-        (r.email && r.email.toLowerCase().includes(term)) ||
-        (r.domain && r.domain.toLowerCase().includes(term))
-      );
-    })
+    .filter((r) =>
+      [r.name, r.email || "", r.domain || ""]
+        .some((field) => field.toLowerCase().includes(searchTerm))
+    )
     .sort((a, b) => {
       if (!sortConfig.key) return 0;
-
-      const aValue = a[sortConfig.key] || "";
-      const bValue = b[sortConfig.key] || "";
-
-      if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
-      if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
+      const av = a[sortConfig.key] || "";
+      const bv = b[sortConfig.key] || "";
+      if (av < bv) return sortConfig.direction === "asc" ? -1 : 1;
+      if (av > bv) return sortConfig.direction === "asc" ? 1 : -1;
       return 0;
     });
 
-  if (isLoading) return <div className="text-center py-8">Chargement...</div>;
+  if (isLoading)
+    return <div className="text-center py-8">{t("loading")}</div>;
   if (error)
     return <div className="text-center py-8 text-red-500">{error}</div>;
 
   return (
-    <div className="container mx-auto p-6">
+    <div
+      className="container mx-auto p-6"
+      style={{ backgroundColor: "var(--color-bg)" }}
+    >
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-        <h1 className="text-2xl font-bold text-gray-800">
-          Gestion des Chercheurs
+        <h1
+          className="text-2xl font-bold"
+          style={{ color: "var(--color-text-primary)" }}
+        >
+          {t("manageResearchers")}
         </h1>
         <div className="flex gap-4 w-full md:w-auto">
           <input
             type="text"
-            placeholder="Rechercher par nom, email ou domaine..."
-            className="px-4 py-2 border rounded-lg flex-grow md:w-64"
+            placeholder={t("searchResearchersPlaceholder")}
+            className="px-4 py-2 rounded-lg flex-grow md:w-64"
+            style={{
+              backgroundColor: "var(--color-bg-secondary)",
+              border: "1px solid var(--color-gray)",
+            }}
             onChange={handleSearch}
             value={searchTerm}
           />
           <Button
-            onClick={() => navigate("creation-chercheur")}
+            onClick={() => navigate("creationchercheur")}
             icon={faPlus}
-            aria-label="Ajouter un chercheur"
+            aria-label={t("addResearcher")}
+            style={{ backgroundColor: "var(--color-secondary)" }}
           >
-            Ajouter
+            {t("addResearcher")}
           </Button>
         </div>
       </div>

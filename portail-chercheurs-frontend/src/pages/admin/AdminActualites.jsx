@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
@@ -7,11 +7,14 @@ import axios from "../../axios";
 import TopBar from "../../components/layout/topbar";
 import Button from "../../components/ui/Button";
 import UpdateModal from "../../components/modals/UpdateModal";
+import { LanguageContext } from "../../contexts/LanguageContext";
 
 const AdminActualite = () => {
   const navigate = useNavigate();
+  const { t, formatDate } = useContext(LanguageContext);
   const [actualites, setActualites] = useState([]);
   const [filtre, setFiltre] = useState("toutes");
+
   useEffect(() => {
     fetchActualites();
   }, []);
@@ -21,87 +24,82 @@ const AdminActualite = () => {
       const res = await axios.get("http://localhost:8000/api/actualites");
       setActualites(res.data);
     } catch (err) {
-      console.error("Erreur lors du chargement :", err);
+      console.error(t("errorLoadingData"), err);
     }
   };
 
   const supprimerActualite = async (id) => {
-    if (!window.confirm("Confirmer la suppression ?")) return;
+    if (!window.confirm(t("confirmDelete"))) return;
 
     try {
       await axios.delete(`http://localhost:8000/api/actualites/${id}`);
       setActualites(actualites.filter((a) => a.id !== id));
     } catch (err) {
-      console.error("Erreur suppression :", err);
+      console.error(t("errorDelete"), err);
     }
   };
 
   const filtrerActualites = () => {
-    const maintenant = moment();
-
+    const now = moment();
     if (filtre === "avenir") {
-      return actualites.filter((a) =>
-        moment(a.date_publication).isAfter(maintenant)
-      );
+      return actualites.filter((a) => moment(a.date_publication).isAfter(now));
     } else if (filtre === "archive") {
-      return actualites.filter((a) =>
-        moment(a.date_publication).isBefore(maintenant)
-      );
+      return actualites.filter((a) => moment(a.date_publication).isBefore(now));
     }
-
     return actualites;
   };
+
+  const liste = filtrerActualites();
+
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Contenu principal */}
       <div className="flex-1 flex flex-col">
-        {/* Barre supérieure */}
         <TopBar />
 
-        {/* Contenu principal avec le Dashboard */}
         <main className="flex-1 overflow-y-auto p-6">
+          {/* En-tête */}
           <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
             <h1 className="text-2xl font-bold text-gray-800">
-              Gestion des Actualités
+              {t("adminNewsTitle")}
             </h1>
-            <div className="flex gap-4 w-full md:w-auto">
-              <Button
-                onClick={() =>
-                  navigate("creationactualite", { relative: "path" })
-                }
-                icon={faPlus}
-              >
-                Ajouter
-              </Button>
-            </div>
+            <Button
+              onClick={() => navigate("creationactualite", { relative: "path" })}
+              icon={faPlus}
+            >
+              {t("addButton")}
+            </Button>
           </div>
+
+          {/* Filtre */}
           <div className="p-4">
             <select
+              value={filtre}
               onChange={(e) => setFiltre(e.target.value)}
               className="mb-4 border p-2 rounded"
             >
-              <option value="toutes">Toutes</option>
-              <option value="avenir">À venir</option>
-              <option value="archive">Archivées</option>
+              <option value="toutes">{t("filterAll")}</option>
+              <option value="avenir">{t("filterFuture")}</option>
+              <option value="archive">{t("filterArchive")}</option>
             </select>
 
+            {/* Tableau */}
             <table className="w-full border text-left shadow">
               <thead className="bg-gray-100">
                 <tr>
-                  <th className="p-2">Titre</th>
-                  <th className="p-2">Localisation</th>
-                  <th className="p-2">Date</th>
-                  <th className="p-2">Catégorie</th>
-                  <th className="p-2">Actions</th>
+                  <th className="p-2">{t("tableHeaderTitle")}</th>
+                  <th className="p-2">{t("tableHeaderLocation")}</th>
+                  <th className="p-2">{t("tableHeaderDate")}</th>
+                  <th className="p-2">{t("tableHeaderCategory")}</th>
+                  <th className="p-2">{t("tableHeaderActions")}</th>
                 </tr>
               </thead>
               <tbody>
-                {filtrerActualites().map((a) => (
+                {liste.map((a) => (
                   <tr key={a.id} className="border-t hover:bg-gray-50">
                     <td className="p-2">{a.titre}</td>
                     <td className="p-2">{a.localisation}</td>
                     <td className="p-2">
-                      {moment(a.date_publication).format("DD/MM/YYYY")}
+                      {formatDate(a.date_publication, { dateStyle: "short" })}
                     </td>
                     <td className="p-2">{a.categorie}</td>
                     <td className="p-2 space-x-2">
@@ -115,10 +113,10 @@ const AdminActualite = () => {
                     </td>
                   </tr>
                 ))}
-                {filtrerActualites().length === 0 && (
+                {liste.length === 0 && (
                   <tr>
                     <td colSpan="5" className="text-center p-4">
-                      Aucune actualité trouvée.
+                      {t("noNewsFound")}
                     </td>
                   </tr>
                 )}

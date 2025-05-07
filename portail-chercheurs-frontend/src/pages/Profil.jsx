@@ -1,28 +1,58 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProfilChercheur from "../components/ProfilChercheur";
+import { LanguageContext } from "../contexts/LanguageContext";
 import axios from "../axios";
+
 const Profil = () => {
+  const { t } = useContext(LanguageContext);
   const navigate = useNavigate();
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    // Assurez-vous que les cookies sont envoyés avec la requête
+    let isMounted = true;
     axios
-      .get("/profile", {
-        withCredentials: true, // Ceci permet d'envoyer les cookies HTTPOnly avec la requête
-      })
+      .get("/profile", { withCredentials: true })
       .then((response) => {
-        // Traitement si la requête réussit
-        console.log("Profil récupéré:", response.data);
+        if (isMounted) {
+          setProfile(response.data);
+        }
       })
       .catch((error) => {
-        // Si l'authentification échoue ou si le token est invalide, rediriger vers la page de connexion
-        console.error("Erreur de récupération du profil:", error);
+        console.error("Erreur de récupération du profil :", error);
         navigate("/connexion");
+      })
+      .finally(() => {
+        if (isMounted) {
+          setLoading(false);
+        }
       });
+
+    return () => {
+      isMounted = false;
+    };
   }, [navigate]);
+
+  if (loading) {
+    return (
+      <div className="p-4 text-center">
+        {t("loading")}
+      </div>
+    );
+  }
+
+  if (!profile) {
+    // Si profile est null après chargement, on peut afficher un message ou rediriger
+    return null;
+  }
+
   return (
-    <div className=" p-2 sm:p-4 md:pd-7 lg:pd-10 xl:p-12">
-      <ProfilChercheur />
+    <div className="p-2 sm:p-4 md:p-7 lg:p-10 xl:p-12">
+      <h1 className="text-2xl font-bold mb-6">
+        {t("profile")}
+      </h1>
+      <ProfilChercheur data={profile} />
     </div>
   );
 };

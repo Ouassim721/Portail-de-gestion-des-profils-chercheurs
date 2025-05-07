@@ -1,6 +1,10 @@
 import "./index.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-// import React, { useEffect } from "react";
+import { LanguageProvider } from "./contexts/LanguageContext"; // Import ajouté
+import AuthProvider from "./contexts/AuthProvider";
+import Layout from "./components/layout/Layout";
+import Loader from "./components/ui/Loader";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 // Pages publiques
 import Home from "./pages/Home";
@@ -8,7 +12,6 @@ import Chercheurs from "./pages/Chercheurs";
 import Actualites from "./pages/Actualites";
 import DetailsActualite from "./pages/DetailsActualite";
 import ProfilChercheur from "./components/ProfilChercheur";
-import Layout from "./components/layout/Layout";
 import Publications from "./pages/Publications";
 import DetailsPublication from "./pages/DetailsPublication";
 import NotFound from "./pages/NotFound";
@@ -18,8 +21,6 @@ import Connexion from "./pages/auth/Login";
 import ChangePassword from "./pages/auth/ChangePassword";
 import ProfilUpdateForm from "./pages/auth/ProfilUpdateForm";
 import SelectionPublication from "./pages/auth/SelectionPublications";
-import AuthProvider from "./contexts/AuthProvider";
-import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 // Pages protégées
 import Profil from "./pages/Profil";
@@ -29,26 +30,9 @@ import CreationChercheur from "./pages/admin/CreationChercheur";
 import AdminActualite from "./pages/admin/AdminActualites";
 import CreationActualite from "./pages/admin/CreationActualite";
 
-// Loader
-// import { useLoading } from "./contexts/useLoading";
-import Loader from "./components/ui/Loader";
-
-import ProfileCompletion from "./pages/auth/CompleteProfile";
-
 function App() {
-  /*const { isLoading, showLoader, hideLoader } = useLoading();
-
-  useEffect(() => {
-    showLoader();
-    setTimeout(() => {
-      hideLoader();
-    }, 300);
-  }, [showLoader, hideLoader]);*/
-
   return (
-    <>
-      {/* {isLoading && <Loader />} */}
-
+    <LanguageProvider> {/* Contexte de langue ajouté */}
       <AuthProvider>
         <BrowserRouter>
           <Routes>
@@ -62,14 +46,13 @@ function App() {
               />
               <Route path="/actualites" element={<Actualites />} />
               <Route path="/actualites/:id" element={<DetailsActualite />} />
-
               <Route path="/publications" element={<Publications />} />
               <Route
                 path="/details-publication/:id"
                 element={<DetailsPublication />}
               />
 
-              {/* Page Profil chercheur protégée */}
+              {/* Page Profil protégée */}
               <Route
                 path="/profil"
                 element={
@@ -79,9 +62,6 @@ function App() {
                 }
               />
             </Route>
-            <Route path="*" element={<NotFound />} />
-
-            <Route path="complete-profile" element={<ProfileCompletion />} />
 
             {/* Authentification */}
             <Route path="/connexion" element={<Connexion />} />
@@ -136,7 +116,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </AuthProvider>
-    </>
+    </LanguageProvider>
   );
 }
 
