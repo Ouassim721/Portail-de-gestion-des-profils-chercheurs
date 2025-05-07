@@ -36,15 +36,10 @@ const ProfilUpdateForm = () => {
   if (loading) return <Loader text={t("loading")} />;
 
   return (
-<<<<<<< HEAD
-    <div className="max-w-xl mx-auto mt-10 bg-[var(--color-bg-primary)] p-6 rounded-2xl shadow">
-      <h2 className="text-2xl font-bold mb-4">Complétez votre profil</h2>
-=======
     <div className="max-w-xl mx-auto mt-10 bg-white p-6 rounded-2xl shadow">
       <h2 className="text-2xl font-bold mb-4">
         {t("completeProfileFormTitle")}
       </h2>
->>>>>>> badreddine
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"

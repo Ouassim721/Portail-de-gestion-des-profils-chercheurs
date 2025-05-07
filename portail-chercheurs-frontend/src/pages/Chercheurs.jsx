@@ -35,7 +35,7 @@ function Chercheurs() {
   });
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchChercheurs = async () => {
       try {
         setIsLoading(true);
         const params = {

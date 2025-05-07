@@ -34,7 +34,9 @@ const CreationActualite = () => {
     e.preventDefault();
     try {
       const data = new FormData();
-      Object.entries(formData).forEach(([key, value]) => data.append(key, value));
+      Object.entries(formData).forEach(([key, value]) =>
+        data.append(key, value)
+      );
       if (documentPdf) data.append("document_pdf", documentPdf);
 
       await axios.post("/api/actualites", data, {
@@ -54,13 +56,8 @@ const CreationActualite = () => {
   }
 
   return (
-<<<<<<< HEAD
-    <div className="p-4 max-w-md mx-auto bg-[var(--color-bg-primary)] shadow-lg rounded-lg">
-      <h2 className="text-xl font-bold mb-4">Créer une actualité</h2>
-=======
     <div className="p-4 max-w-md mx-auto bg-white shadow-lg rounded-lg">
       <h2 className="text-xl font-bold mb-4">{t("createNewsTitle")}</h2>
->>>>>>> badreddine
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"

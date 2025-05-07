@@ -65,12 +65,7 @@ const TableGenerique = ({
             ))}
           </tr>
         </thead>
-<<<<<<< HEAD
-
-        <tbody className="bg-[var(--color-bg-primary)] divide-y divide-gray-200">
-=======
         <tbody className="bg-white divide-y divide-gray-200">
->>>>>>> badreddine
           {data.map((researcher) => (
             <tr
               key={researcher.id}

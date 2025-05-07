@@ -35,11 +35,7 @@ function Connexion() {
         { withCredentials: true }
       );
       const user = res.data.user;
-<<<<<<< HEAD
-      if (user && user.must_change_password) {
-=======
       if (user.must_change_password) {
->>>>>>> badreddine
         navigate("/change-password");
       } else if (user.role === "Administrateur") {
         window.location.href = "/dashboard";
@@ -57,17 +53,9 @@ function Connexion() {
   };
 
   return (
-<<<<<<< HEAD
-    // Conteneur principal centré verticalement et horizontalement
-    <div className="h-screen flex items-center justify-center bg-gray-100 p-4 relative ">
-      {/* Conteneur "carré" central responsive avec effet d'ombre supplémentaire au hover */}
-      <div className="bg-[var(--color-bg-primary)] shadow-lg hover:shadow-2xl transition-shadow duration-300 rounded-3xl overflow-hidden flex flex-col md:flex-row w-full max-x-[80%] md:max-x-[75%] lg:max-w-[70%] xl:max-w-[55%] h-full">
-        {/* Partie gauche (informations) : cachée sur mobile */}
-=======
     <div className="h-screen flex items-center justify-center bg-gray-100 p-4">
       <div className="bg-white shadow-lg hover:shadow-2xl transition-shadow duration-300 rounded-3xl overflow-hidden flex flex-col md:flex-row w-full max-w-[80%] lg:max-w-[70%] xl:max-w-[55%] h-full">
         {/* Gauche - visuel */}
->>>>>>> badreddine
         <div
           className="hidden md:flex md:flex-col md:justify-center md:w-1/2 relative p-8 bg-[var(--color-primary)] bg-cover bg-center"
           style={{ backgroundImage: `url(${connexionImage})` }}
@@ -196,7 +184,9 @@ function Connexion() {
               </Button>
 
               {error && (
-                <p className="mt-3 text-red-500 text-center">{t("loginError")}</p>
+                <p className="mt-3 text-red-500 text-center">
+                  {t("loginError")}
+                </p>
               )}
             </form>
           </div>
