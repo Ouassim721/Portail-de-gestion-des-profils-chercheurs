@@ -1,43 +1,36 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 const CardStatPublication = ({
   stat = "300",
   title = "Publications Totales",
   className = "",
-  icon = faSearch,
+  icon,
   variant = "primary",
 }) => {
   return (
     <div className={className}>
-      <div className="w-74 h-24 flex gap-3 bg-[var(--color-white)] rounded-xl shadow-xs hover:scale-101 duration-300">
+      <div className="w-74 h-24 flex gap-3 bg-[var(--color-white)] rounded-xl shadow-sm hover:scale-101 transition-transform duration-300">
         <div className="flex justify-center items-center p-5">
-          <div
-            className={`rounded-xl ${
-              variant === "secondary" ? "bg-green-100" : "bg-blue-100"
-            } p-3`}
-          >
-            <FontAwesomeIcon
-              icon={icon}
-              className={`p-0.5 text-xl ${
-                variant === "secondary"
-                  ? "text-[var(--color-secondary)]"
-                  : "text-[var(--color-primary)]"
-              }`}
-            />
+          <div 
+            className="rounded-xl p-3"
+            style={{
+              backgroundColor: variant === "secondary" 
+                ? 'var(--color-secondary-light)' 
+                : 'var(--color-primary-light)',
+              color: variant === "secondary" 
+                ? 'var(--color-secondary)' 
+                : 'var(--color-primary)'
+            }}>
+            <FontAwesomeIcon icon={icon} className="text-xl" />
           </div>
         </div>
         <div className="p-3 my-auto">
-          <h3
-            className={`font-bold text-3xl ${
-              variant === "secondary"
-                ? "text-[var(--color-secondary)]"
-                : "text-[var(--color-primary)]"
-            }`}
-          >
+          <h3 className="font-bold text-3xl" style={{ color: variant === "secondary" 
+            ? 'var(--color-secondary)' 
+            : 'var(--color-primary)' }}>
             {stat}
           </h3>
-          <p className="text-gray-500">{title}</p>
+          <p className="text-[var(--color-text-secondary)]">{title}</p>
         </div>
       </div>
     </div>

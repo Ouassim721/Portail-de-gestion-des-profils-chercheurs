@@ -1,5 +1,6 @@
-import { useState } from "react";
+import React, { useState, useContext } from "react";
 import CardProfilPublication from "./cards/CardProfilPublication";
+import { LanguageContext } from "../contexts/LanguageContext";
 
 const PublicationsSection = ({
   publications,
@@ -7,6 +8,7 @@ const PublicationsSection = ({
   isExpanded,
   className,
 }) => {
+  const { t } = useContext(LanguageContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("all");
 
@@ -27,13 +29,19 @@ const PublicationsSection = ({
     ? filteredPublications
     : filteredPublications.slice(0, 5);
 
+  const filterOptions = [
+    { key: "all", label: t("pubFilterAll") },
+    { key: "recent", label: t("pubFilterRecent") },
+    { key: "mostCited", label: t("pubFilterMostCited") },
+  ];
+
   return (
     <section
-      className={`p-4 md:p-6 rounded-2xl shadow-sm bg-[var(--color-white)] col-span-3 lg:px-12 ${className}`}
+      className={`p-4 md:p-6 rounded-2xl shadow-sm bg-[var(--color-white)] ${className}`}
     >
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-semibold text-[var(--color-text-primary)]">
-          Publications {isExpanded ? "" : "récentes"}
+          {t("publicationsTitle")} {isExpanded ? "" : t("publicationsRecent")}
         </h1>
 
         {!isExpanded && publications.length > 5 && (
@@ -41,7 +49,7 @@ const PublicationsSection = ({
             onClick={onToggleView}
             className="text-sm text-[var(--color-primary)] hover:underline"
           >
-            Voir toutes ({publications.length})
+            {t("viewAll", { count: publications.length })}
           </button>
         )}
         {isExpanded && (
@@ -49,7 +57,7 @@ const PublicationsSection = ({
             onClick={onToggleView}
             className="mt-4 text-sm text-[var(--color-primary)] hover:underline"
           >
-            Voir moins
+            {t("viewLess")}
           </button>
         )}
       </div>
@@ -58,52 +66,45 @@ const PublicationsSection = ({
         <div className="mb-6 flex flex-col md:flex-row gap-4">
           <input
             type="text"
-            placeholder="Rechercher par titre..."
-            className="flex-1 p-2 border border-gray-300 rounded"
+            placeholder={t("pubSearchPlaceholder")}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            className="flex-1 p-2 border rounded"
+            style={{
+              backgroundColor: "var(--color-bg-secondary)",
+              borderColor: "var(--color-gray)",
+            }}
           />
           <div className="flex gap-2">
-            {["Toutes", "Récentes", "Plus citées"].map((option) => (
+            {filterOptions.map(({ key, label }) => (
               <button
-                key={option}
+                key={key}
+                onClick={() => setFilter(key)}
                 className={`px-3 py-1 text-sm rounded ${
-                  filter === option.toLowerCase().replace(" ", "")
-                    ? "bg-[var(--color-primary)] text-white"
-                    : "bg-gray-200"
+                  filter === key
+                    ? "bg-[var(--color-primary)] text-[var(--color-white)]"
+                    : "bg-[var(--color-bg-secondary)]"
                 }`}
-                onClick={() => setFilter(option.toLowerCase().replace(" ", ""))}
               >
-                {option}
+                {label}
               </button>
             ))}
           </div>
         </div>
       )}
 
+      {/* Affichage des cartes */}
       <div className="space-y-4">
-        {publicationsToShow.length > 0 ? (
-          publicationsToShow.map((pub) => (
-            <CardProfilPublication
-              key={pub.identifiant}
-              title={pub.titre}
-              publicationDate={pub.date_publication}
-              citationCount={pub.citation_count}
-              abstract={pub.abstract}
-            />
-          ))
-        ) : (
-          <p className="text-gray-500 italic">Aucune publication trouvée</p>
-        )}
+        {publicationsToShow.map((pub) => (
+          <CardProfilPublication key={pub.id} publication={pub} />
+        ))}
       </div>
 
-      {isExpanded && (
-        <button
-          onClick={onToggleView}
-          className="mt-4 text-sm text-[var(--color-primary)] hover:underline"
-        >
-          Voir moins
-        </button>
+      {/* Si réduit et pas assez de publications */}
+      {!isExpanded && publications.length <= 5 && (
+        <p className="mt-4 text-center text-sm text-[var(--color-text-secondary)]">
+          {t("noMorePublications")}
+        </p>
       )}
     </section>
   );

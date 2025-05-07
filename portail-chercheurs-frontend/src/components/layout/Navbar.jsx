@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { LanguageContext } from "../../contexts/LanguageContext";
 import Button from "../ui/Button";
 import DropdownMenu from "../ui/DropdownMenu";
 import axios from "../../axios";
@@ -7,7 +8,6 @@ import SearchBar from "../research/SearchBar";
 import ChercheurAvatar from "../ui/ChercheurAvatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faSearch,
   faAngleDown,
   faSignOutAlt,
   faCog,
@@ -16,226 +16,229 @@ import {
   faQuestionCircle,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { faBell as faRegularBell } from "@fortawesome/free-regular-svg-icons"; // Style Regular
+import { faBell as faRegularBell } from "@fortawesome/free-regular-svg-icons";
+import SettingsModal from "../modals/SettingsModal";
 
 function Navbar({ sticky = false }) {
+  const { language, switchLanguage, t } = useContext(LanguageContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [chercheur, setChercheur] = useState(null);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [currentTheme, setCurrentTheme] = useState('light');
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await axios.get("/profile", {
-          withCredentials: true,
-        });
-        setChercheur(res.data);
-      } catch {
-        setChercheur(null);
-      }
-    };
-
-    fetchUser();
-  }, []);
-
-  const handleLogout = async () => {
-    try {
-      await axios.post("/logout"); // route backend qui supprime le token côté serveur
-      setChercheur(null);
-      window.location.href = "/connexion"; // ou navigation via React Router
-    } catch (err) {
-      console.error("Erreur lors de la déconnexion :", err);
-    }
+  const routesMap = {
+    [t('home')]: "/",
+    [t('researchers')]: "/chercheurs",
+    [t('publications')]: "/publications",
+    [t('news')]: "/actualites",
+    [t('about')]: "/about-us",
+    [t('contact')]: "/contact",
   };
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsSticky(window.scrollY > 80);
+    const abortController = new AbortController();
+    
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get("/profile", { 
+          withCredentials: true,
+          signal: abortController.signal
+        });
+        setChercheur(res.data);
+      } catch (err) {
+        if (!abortController.signal.aborted) {
+          setChercheur(null);
+        }
+      }
     };
+    
+    fetchUser();
+    return () => abortController.abort();
+  }, []);
 
+  useEffect(() => {
+    const handleScroll = () => setIsSticky(window.scrollY > 80);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const location = useLocation(); // Récupérer l'URL actuelle
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setCurrentTheme(savedTheme);
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  }, []);
 
-  // Mapping des chemins personnalisés
-  const routesMap = {
-    Accueil: "/",
-    Chercheurs: "/chercheurs",
-    Publications: "/publications",
-    Actualités: "/actualites",
-    "À propos": "/about-us",
-    Contact: "/contact",
+  const handleLogout = async () => {
+    try {
+      await axios.post("/logout");
+      setChercheur(null);
+      navigate("/connexion");
+    } catch (err) {
+      console.error(t('logoutError'), err);
+    }
+  };
+
+  const handleThemeChange = (theme) => {
+    setCurrentTheme(theme);
+    localStorage.setItem('theme', theme);
+    document.documentElement.setAttribute('data-theme', theme);
   };
 
   return (
-    <nav
-      className={`relative w-full h-[74px] p-4 pr-8 flex flex-row-reverse
- lg:flex-row items-center justify-between z-5 duration-300${
-   isSticky && sticky == true
-     ? "bg-[var(--color-white)] shadow-md sticky-top"
-     : "bg-[var(--color-white)] shadow-sm "
- } `}
+    <nav 
+      key={language}
+      className={`w-full h-[74px] p-4 pr-8 flex items-center justify-between
+        ${isSticky && sticky ? "sticky-top" : ""}
+        navbar-transition`}
+      style={{
+        backgroundColor: 'var(--color-white)',
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+      }}
     >
-      {/* Logo et recherche */}
-      <div className="hidden lg:flex items-center gap-4 sm:gap-8 md:gap-12 lg-gap-16">
-        {/* <img src={logo} alt="Logo" className="w-[80px] h-[70px]" /> */}
-        <h1 className="text-xl sm:text-2xl font-bold text-[var(--color-primary)]">
+      <div className="hidden lg:flex items-center gap-8">
+        <Link 
+          to="/" 
+          className="text-xl sm:text-2xl font-bold"
+          style={{ color: 'var(--color-primary)' }}
+        >
           ScholarHub
-        </h1>
-
-        {/* Barre de recherche - Visible sur grand écran */}
-        <div className="hidden xl:flex">
-          <SearchBar />
+        </Link>
+        <div className="hidden xl:block">
+          <SearchBar placeholder={t('searchPublications')} />
         </div>
       </div>
 
-      {/* Navigation - Desktop */}
-      <div className="flex gap-4 sm:gap-6 md:gap-8 lg:gap-12 xl:gap-16 items-center">
-        <ul className="hidden lg:flex items-center gap-4 xl:gap-6 text-md text-[var(--color-gray)]">
-          {[
-            "Accueil",
-            "Chercheurs",
-            "Publications",
-            "Actualités",
-            "À propos",
-            "Contact",
-          ].map((item, index) => {
-            const path =
-              routesMap[item] || `/${item.toLowerCase().replace(" ", "-")}`;
-            return (
-              <li key={index}>
-                <Link
-                  to={path}
-                  className={`hover:text-[var(--color-text-primary)] transition-colors duration-300 ${
-                    location.pathname === path
-                      ? "text-[var(--color-text-primary)]"
-                      : ""
-                  }`}
-                >
-                  {item}
-                </Link>
-              </li>
-            );
-          })}
+      <div className="flex items-center gap-6">
+        <ul className="hidden lg:flex gap-6" style={{ color: 'var(--color-text-secondary)' }}>
+          {Object.entries(routesMap).map(([label, path]) => (
+            <li key={path}>
+              <Link
+                to={path}
+                className={`hover:text-[var(--color-primary)] transition-colors duration-300 ${
+                  location.pathname === path ? 
+                  "text-[var(--color-primary)] font-medium" : 
+                  ""
+                }`}
+              >
+                {label}
+              </Link>
+            </li>
+          ))}
         </ul>
-        <div>
-          <FontAwesomeIcon
-            icon={faRegularBell}
-            className="text-xl text-gray-700 cursor-pointer "
-          />
-        </div>
+
+        <button style={{ color: 'var(--color-text-secondary)' }}>
+          <FontAwesomeIcon icon={faRegularBell} className="text-xl" />
+        </button>
+
         {chercheur ? (
           <DropdownMenu
-            userProfile={chercheur} // Ajoutez cette prop pour le profil en haut
+            userProfile={chercheur}
             sections={[
-              {
+              { options: [{ 
+                label: t('myAccount'), 
+                icon: faUser, 
+                link: "/profil" 
+              }] },
+              { 
                 options: [
-                  { label: "Mon compte", icon: faUser, link: "/profil" },
-                ],
-              },
-              {
-                options: [
-                  {
-                    label: "Paramètres",
-                    icon: faCog,
-                    onClick: () => console.log("Settings clicked"),
+                  { 
+                    label: t('settings'), 
+                    icon: faCog, 
+                    onClick: () => setShowSettingsModal(true) 
                   },
-                  { label: "Aide", icon: faQuestionCircle, link: "/help" },
-                ],
+                  { 
+                    label: t('help'), 
+                    icon: faQuestionCircle, 
+                    link: "/aide" 
+                  }
+                ]
               },
-              {
-                options: [
-                  {
-                    label: "Déconnexion",
-                    icon: faSignOutAlt,
-                    onClick: handleLogout,
-                  },
-                ],
-              },
+              { options: [{ 
+                label: t('logout'), 
+                icon: faSignOutAlt, 
+                onClick: handleLogout 
+              }] }
             ]}
           >
-            {/* Votre déclencheur de menu */}
-            <div className="flex gap-3 items-center">
-              <div className="flex-shrink-0">
-                <ChercheurAvatar
-                  chercheur={chercheur}
-                  size="md"
-                  className="w-12 h-12"
-                />
-              </div>
-              <FontAwesomeIcon
-                icon={faAngleDown}
-                className="text-gray-500 ml-1 transition-transform duration-200"
+            <div className="flex items-center gap-2 cursor-pointer">
+              <ChercheurAvatar chercheur={chercheur} size="md" />
+              <FontAwesomeIcon 
+                icon={faAngleDown} 
+                style={{ color: 'var(--color-gray)' }} 
               />
             </div>
           </DropdownMenu>
         ) : (
-          <Button
-            variant="secondary"
-            onClick={() => (window.location.href = "/connexion")}
+          <Button 
+            variant="secondary" 
+            onClick={() => navigate("/connexion")}
+            style={{ 
+              backgroundColor: 'var(--color-secondary)', 
+              color: 'var(--color-white)'
+            }}
           >
-            Connexion
+            {t('login')}
           </Button>
         )}
       </div>
-      <h1 className="lg:hidden text-xl sm:text-2xl font-bold text-[var(--color-primary)]">
-        ScholarHub
-      </h1>
-      {/* Bouton Menu Burger - Mobile */}
-      <button
-        className="lg:hidden text-2xl text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] z-10 cursor-pointer duration-300"
-        onClick={() => setMenuOpen(!menuOpen)}
-      >
-        <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} />
-      </button>
 
-      {/* Menu Mobile */}
-      <div
-        className={`absolute top-0 left-0 w-full bg-[var(--color-bg)] p-6 flex flex-col gap-4 text-base text-[var(--color-gray)] shadow-md transition-all duration-300 ${
-          menuOpen ? "opacity-100 visible" : "opacity-0 invisible"
-        } lg:hidden`}
-      >
-        {[
-          "Accueil",
-          "Chercheurs",
-          "Publications",
-          "Actualités",
-          "À propos",
-          "Contact",
-        ].map((item, index) => {
-          const path =
-            routesMap[item] || `/${item.toLowerCase().replace(" ", "-")}`;
-          return (
-            <Link
-              key={index}
-              to={path}
-              className={`hover:text-[var(--color-text-primary)] pl-10 sm:pl-0 transition-all duration-300 ${
-                location.pathname === path
-                  ? "text-[var(--color-text-primary)]"
-                  : ""
-              }`}
-              onClick={() => setMenuOpen(false)}
-            >
-              {item}
-            </Link>
-          );
-        })}
-
-        {/* Barre de recherche - Visible dans le menu mobile */}
-        <div className="relative">
-          <FontAwesomeIcon
-            icon={faSearch}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[var(--color-gray)] text-lg"
-          />
-          <input
-            type="text"
-            placeholder="Rechercher..."
-            className="bg-[var(--color-white)] text-[var(--color-text-secondary)] p-3 pl-12 rounded-full w-full outline-none"
-          />
-        </div>
+      <div className="lg:hidden flex items-center gap-4">
+        <Link 
+          to="/" 
+          className="text-xl font-bold"
+          style={{ color: 'var(--color-primary)' }}
+        >
+          ScholarHub
+        </Link>
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          style={{ color: 'var(--color-text-secondary)' }}
+          className="text-2xl hover:text-[var(--color-primary)]"
+        >
+          <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} />
+        </button>
       </div>
+
+      {menuOpen && (
+        <div 
+          className="lg:hidden absolute top-full left-0 w-full p-4 shadow-lg"
+          style={{
+            backgroundColor: 'var(--color-bg)',
+            color: 'var(--color-text-primary)'
+          }}
+        >
+          <div className="flex flex-col gap-4">
+            {Object.entries(routesMap).map(([label, path]) => (
+              <Link
+                key={path}
+                to={path}
+                onClick={() => setMenuOpen(false)}
+                className={`p-2 hover:bg-[var(--color-bg-secondary)] rounded ${
+                  location.pathname === path ? 
+                  "text-[var(--color-primary)] font-medium" : 
+                  ""
+                }`}
+              >
+                {label}
+              </Link>
+            ))}
+            <div className="mt-4">
+              <SearchBar placeholder={t('searchPublications')} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      <SettingsModal
+        show={showSettingsModal}
+        onClose={() => setShowSettingsModal(false)}
+        theme={currentTheme}
+        onThemeChange={handleThemeChange}
+        onLanguageChange={switchLanguage}
+      />
     </nav>
   );
 }

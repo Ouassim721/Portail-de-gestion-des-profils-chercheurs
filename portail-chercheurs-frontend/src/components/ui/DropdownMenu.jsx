@@ -45,10 +45,10 @@ const DropdownMenu = ({ children, sections = [], userProfile }) => {
       </div>
 
       {isOpen && (
-        <div className="absolute right-0 w-72 mt-2 bg-white rounded-md shadow-lg z-50 border border-gray-200">
+        <div className="absolute right-0 w-72 mt-2 bg-[var(--color-dropdown-bg)] rounded-md shadow-lg z-50 border border-[var(--color-border)]">
           {/* Section profil en haut */}
           {userProfile && (
-            <div className="px-4 py-3 border-b border-gray-200">
+            <div className="px-4 py-3 border-b border-[var(--color-border)]">
               <div className="flex items-center gap-3">
                 <div className="flex-shrink-0">
                   <ChercheurAvatar
@@ -76,7 +76,7 @@ const DropdownMenu = ({ children, sections = [], userProfile }) => {
                       if (option.onClick) option.onClick();
                       setIsOpen(false);
                     }}
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3"
+                     className="px-4 py-2 hover:bg-[var(--color-hover-bg)] cursor-pointer flex items-center gap-3 text-[var(--color-text)]"
                   >
                     {option.icon && (
                       <FontAwesomeIcon

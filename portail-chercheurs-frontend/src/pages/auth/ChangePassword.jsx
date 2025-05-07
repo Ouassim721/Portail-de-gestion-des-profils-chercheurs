@@ -1,18 +1,26 @@
-import { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/ui/Button";
+import { LanguageContext } from "../../contexts/LanguageContext";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 
 const ChangePassword = () => {
+  const { t } = useContext(LanguageContext);
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
+    currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
-
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-
-  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState({
+    current: false,
+    new: false,
+    confirm: false,
+  });
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -20,36 +28,34 @@ const ChangePassword = () => {
     setSuccess("");
   };
 
+  const togglePasswordVisibility = (field) => {
+    setShowPassword(prev => ({
+      ...prev,
+      [field]: !prev[field]
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (form.newPassword !== form.confirmPassword) {
-      setError("Les mots de passe ne correspondent pas.");
+      setError(t("passwordMismatch"));
       return;
     }
-
     try {
       await axios.post(
         "http://localhost:8000/api/change-password",
         {
+          current_password: form.currentPassword,
           password: form.newPassword,
           password_confirmation: form.confirmPassword,
         },
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
-      setSuccess("Mot de passe changé avec succès !");
-      setForm({
-        newPassword: "",
-        confirmPassword: "",
-      });
-
-      setTimeout(() => {
-        navigate("/profil-update-form");
-      }, 1500);
+      setSuccess(t("passwordChangeSuccess"));
+      setForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
+      setTimeout(() => navigate("/profil-update-form"), 1500);
     } catch (err) {
-      const msg = err.response?.data?.message || "Une erreur s'est produite.";
+      const msg = err.response?.data?.message || t("passwordChangeError");
       setError(msg);
     }
   };
@@ -57,55 +63,105 @@ const ChangePassword = () => {
   return (
     <div className="max-w-md mx-auto mt-10 bg-white p-8 rounded-xl shadow-md">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
-        Changer le mot de passe
+        {t("changePasswordTitle")}
       </h2>
       <form onSubmit={handleSubmit} className="space-y-5">
+        {/* Current Password */}
         <div>
           <label className="block text-gray-700 font-medium mb-1">
-            Mot de passe actuel
+            {t("currentPasswordLabel")}
           </label>
-          <input
-            type="password"
-            name="currentPassword"
-            value={form.currentPassword}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
+          <div className="relative">
+            <input
+              type={showPassword.current ? "text" : "password"}
+              name="currentPassword"
+              value={form.currentPassword}
+              onChange={handleChange}
+              required
+              placeholder={t("currentPasswordPlaceholder")}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => togglePasswordVisibility("current")}
+              className="absolute right-3 top-1/2 -translate-y-1/2"
+              aria-label={showPassword.current ? t("hidePassword") : t("showPassword")}
+            >
+              {showPassword.current ? (
+                <EyeSlashIcon className="h-5 w-5 text-gray-500 hover:text-gray-700" />
+              ) : (
+                <EyeIcon className="h-5 w-5 text-gray-500 hover:text-gray-700" />
+              )}
+            </button>
+          </div>
         </div>
 
+        {/* New Password */}
         <div>
           <label className="block text-gray-700 font-medium mb-1">
-            Nouveau mot de passe
+            {t("newPasswordLabel")}
           </label>
-          <input
-            type="password"
-            name="newPassword"
-            value={form.newPassword}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
+          <div className="relative">
+            <input
+              type={showPassword.new ? "text" : "password"}
+              name="newPassword"
+              value={form.newPassword}
+              onChange={handleChange}
+              required
+              placeholder={t("newPasswordPlaceholder")}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => togglePasswordVisibility("new")}
+              className="absolute right-3 top-1/2 -translate-y-1/2"
+              aria-label={showPassword.new ? t("hidePassword") : t("showPassword")}
+            >
+              {showPassword.new ? (
+                <EyeSlashIcon className="h-5 w-5 text-gray-500 hover:text-gray-700" />
+              ) : (
+                <EyeIcon className="h-5 w-5 text-gray-500 hover:text-gray-700" />
+              )}
+            </button>
+          </div>
         </div>
 
+        {/* Confirm Password */}
         <div>
           <label className="block text-gray-700 font-medium mb-1">
-            Confirmer le nouveau mot de passe
+            {t("confirmPasswordLabel")}
           </label>
-          <input
-            type="password"
-            name="confirmPassword"
-            value={form.confirmPassword}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
+          <div className="relative">
+            <input
+              type={showPassword.confirm ? "text" : "password"}
+              name="confirmPassword"
+              value={form.confirmPassword}
+              onChange={handleChange}
+              required
+              placeholder={t("confirmPasswordPlaceholder")}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => togglePasswordVisibility("confirm")}
+              className="absolute right-3 top-1/2 -translate-y-1/2"
+              aria-label={showPassword.confirm ? t("hidePassword") : t("showPassword")}
+            >
+              {showPassword.confirm ? (
+                <EyeSlashIcon className="h-5 w-5 text-gray-500 hover:text-gray-700" />
+              ) : (
+                <EyeIcon className="h-5 w-5 text-gray-500 hover:text-gray-700" />
+              )}
+            </button>
+          </div>
         </div>
 
         {error && <p className="text-red-600 text-sm">{error}</p>}
         {success && <p className="text-green-600 text-sm">{success}</p>}
 
-        <Button className="w-full">Enregistrer</Button>
+        <Button className="w-full" type="submit">
+          {t("saveButton")}
+        </Button>
       </form>
     </div>
   );

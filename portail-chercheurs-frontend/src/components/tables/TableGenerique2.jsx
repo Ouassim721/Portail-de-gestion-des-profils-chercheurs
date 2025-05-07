@@ -1,4 +1,6 @@
+import React, { useContext } from "react";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { LanguageContext } from "../../contexts/LanguageContext";
 
 const TableGenerique = ({
   data,
@@ -8,12 +10,14 @@ const TableGenerique = ({
   setSortConfig,
   deleteResearcher,
 }) => {
+  const { t } = useContext(LanguageContext);
+
   const columns = [
-    { key: "name", label: "Nom" },
-    { key: "email", label: "Email" },
-    { key: "domain", label: "Domaine" },
-    { key: "status", label: "Statut" },
-    { label: "Actions" },
+    { key: "name", label: t("tableHeaderName") },
+    { key: "email", label: t("tableHeaderEmail") },
+    { key: "domain", label: t("tableHeaderDomain") },
+    { key: "status", label: t("tableHeaderStatus") },
+    { label: t("tableHeaderActions") },
   ];
 
   const handleSelectAll = (e) => {
@@ -31,6 +35,7 @@ const TableGenerique = ({
             <th className="px-4 py-3">
               <input
                 type="checkbox"
+                aria-label={t("selectAll")}
                 onChange={handleSelectAll}
                 checked={selectedRows.size === data.length}
               />
@@ -60,7 +65,6 @@ const TableGenerique = ({
             ))}
           </tr>
         </thead>
-
         <tbody className="bg-white divide-y divide-gray-200">
           {data.map((researcher) => (
             <tr
@@ -70,6 +74,7 @@ const TableGenerique = ({
               <td className="px-4 py-3">
                 <input
                   type="checkbox"
+                  aria-label={t("selectRow", { name: researcher.name })}
                   checked={selectedRows.has(researcher.id)}
                   onChange={(e) => {
                     const newSelected = new Set(selectedRows);
@@ -84,13 +89,13 @@ const TableGenerique = ({
                 <div className="relative">
                   <img
                     src={researcher.avatar}
-                    alt={researcher.name}
+                    alt={t("avatarAlt", { name: researcher.name })}
                     className="w-8 h-8 rounded-full object-cover"
                   />
                   <div
                     className={`absolute -bottom-0 -right-0 w-3 h-3 rounded-full 
                     ${
-                      researcher.status === "Online"
+                      researcher.status === t("statusOnline")
                         ? "bg-green-500"
                         : "bg-gray-400"
                     } 
@@ -109,7 +114,7 @@ const TableGenerique = ({
                 <span
                   className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
                   ${
-                    researcher.status === "Online"
+                    researcher.status === t("statusOnline")
                       ? "bg-green-100 text-green-800"
                       : "bg-gray-100 text-gray-800"
                   }`}
@@ -118,10 +123,14 @@ const TableGenerique = ({
                 </span>
               </td>
               <td className="px-4 py-3 flex gap-3">
-                <button className="text-blue-600 hover:text-blue-800 transition-colors">
+                <button
+                  aria-label={t("editAction", { name: researcher.name })}
+                  className="text-blue-600 hover:text-blue-800 transition-colors"
+                >
                   <PencilSquareIcon className="w-5 h-5" />
                 </button>
                 <button
+                  aria-label={t("deleteAction", { name: researcher.name })}
                   className="text-red-600 hover:text-red-800 transition-colors"
                   onClick={() => deleteResearcher(researcher.id)}
                 >

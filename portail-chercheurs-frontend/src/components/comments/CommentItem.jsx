@@ -26,26 +26,28 @@ export default function CommentItem({
   }
 
   return (
-    <li className="bg-white p-4 rounded shadow-sm flex justify-between items-start">
+    <li 
+      className="p-4 rounded-lg shadow-sm flex justify-between items-start"
+      style={{ backgroundColor: 'var(--color-white)' }}>
       <div>
-        <p className="text-gray-800">{comment.contenu}</p>
-        <small className="text-xs text-gray-500">
+        <p className="text-[var(--color-text-primary)]">{comment.contenu}</p>
+        <small className="text-xs text-[var(--color-text-secondary)]">
           Le {new Date(comment.created_at).toLocaleString("fr-FR")}
         </small>
       </div>
       {canModify && (
-        <div className="flex flex-col gap-2 text-sm">
-          <Button
-            icon={faEdit}
-            variant="outline"
-            size="sm"
+        <div className="flex flex-col gap-2">
+          <Button 
+            icon={faEdit} 
+            variant="ghost" 
             onClick={onEdit}
+            iconColor="var(--color-primary)"
           />
-          <Button
-            icon={faTrash}
-            variant="outline"
-            size="sm"
+          <Button 
+            icon={faTrash} 
+            variant="ghost" 
             onClick={() => onDelete(comment.id)}
+            iconColor="var(--color-secondary)"
           />
         </div>
       )}

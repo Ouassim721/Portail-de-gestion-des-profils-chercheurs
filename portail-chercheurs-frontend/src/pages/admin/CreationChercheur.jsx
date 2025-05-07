@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "../../components/ui/Button";
 import axios from "../../axios";
+import { LanguageContext } from "../../contexts/LanguageContext";
 
 const CreateResearcher = () => {
+  const navigate = useNavigate();
+  const { t } = useContext(LanguageContext);
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -11,17 +16,17 @@ const CreateResearcher = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8000/api/admin/create-chercheur", {
+      await axios.post("admin/create-chercheur", {
         prenom: firstName,
         nom: lastName,
         email: email,
       });
-      alert("Chercheur créé avec succès !");
-      window.location.href = "/dashboard/adminchercheurs";
+      alert(t("researcherCreationSuccess"));
+      navigate("/dashboard/adminchercheurs");
     } catch (err) {
+      const msg = err.response?.data?.message;
       setError(
-        "Erreur lors de la création : " + err.response?.data?.message ||
-          "Erreur inconnue"
+        t("researcherCreationErrorPrefix") + (msg || t("unknownError"))
       );
     }
   };
@@ -30,7 +35,7 @@ const CreateResearcher = () => {
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="w-full max-w-md">
         <h2 className="text-center text-2xl font-bold mb-6 uppercase">
-          Créer un compte Chercheur
+          {t("createResearcherTitle")}
         </h2>
         <form
           className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
@@ -42,7 +47,7 @@ const CreateResearcher = () => {
               className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="firstName"
             >
-              Prénom
+              {t("firstNameLabel")}
             </label>
             <input
               value={firstName}
@@ -50,7 +55,7 @@ const CreateResearcher = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
               id="firstName"
               type="text"
-              placeholder="Prénom"
+              placeholder={t("firstNamePlaceholder")}
               required
             />
           </div>
@@ -59,7 +64,7 @@ const CreateResearcher = () => {
               className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="lastName"
             >
-              Nom
+              {t("lastNameLabel")}
             </label>
             <input
               value={lastName}
@@ -67,7 +72,7 @@ const CreateResearcher = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
               id="lastName"
               type="text"
-              placeholder="Nom"
+              placeholder={t("lastNamePlaceholder")}
               required
             />
           </div>
@@ -76,7 +81,7 @@ const CreateResearcher = () => {
               className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="email"
             >
-              Email
+              {t("emailLabel")}
             </label>
             <input
               value={email}
@@ -84,13 +89,15 @@ const CreateResearcher = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
               id="email"
               type="email"
-              placeholder="exemple@domaine.com"
+              placeholder={t("emailPlaceholder")}
               required
             />
           </div>
 
           <div className="flex items-center justify-between mt-6">
-            <Button className="w-full">Créer le compte</Button>
+            <Button className="w-full" type="submit">
+              {t("createAccountButton")}
+            </Button>
           </div>
         </form>
       </div>
