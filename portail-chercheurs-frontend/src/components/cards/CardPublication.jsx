@@ -59,7 +59,7 @@ const CardPublication = ({
           </h6>
           <h5 className="hidden lg:block font-bold text-xl text-[var(--color-text-primary)]">
             {citations}{" "}
-            <span className="font-light text-[var(--color-text-secondary)] text-sm ">
+            <span className="font-light text-sm text-[var(--color-text-secondary)]">
               Citations
             </span>
           </h5>

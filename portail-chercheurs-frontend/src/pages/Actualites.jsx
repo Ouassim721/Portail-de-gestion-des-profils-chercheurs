@@ -9,7 +9,7 @@ import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
 import { fr } from "date-fns/locale";
 import { Link } from "react-router-dom";
-
+import "./Actualites.css";
 const locales = {
   fr: fr,
 };
@@ -67,7 +67,7 @@ const Actualites = () => {
           className={`relative pb-2 px-4 text-lg font-medium transition-colors duration-300 ${
             view === "liste"
               ? "text-[var(--color-primary)]"
-              : "text-gray-600 hover:text-blue-900"
+              : "text-gray-400 hover:text-[var(--color-primary)]"
           }`}
         >
           Liste
@@ -78,12 +78,11 @@ const Actualites = () => {
           className={`relative pb-2 px-4 text-lg font-medium transition-colors duration-300 ${
             view === "calendrier"
               ? "text-[var(--color-primary)]"
-              : "text-gray-600 hover:text-blue-900"
+              : "text-gray-400 hover:text-[var(--color-primary)]"
           }`}
         >
           Calendrier
         </button>
-
         <span
           className="absolute bottom-0 h-1 bg-[var(--color-primary)] transition-all duration-300 ease-in-out"
           style={{
@@ -207,82 +206,6 @@ const Actualites = () => {
               />
             </div>
             {/* Styles CSS pour le calendrier */}
-            <style>{`
-              .custom-calendar .rbc-toolbar {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                align-items: center;
-                margin-bottom: 10px;
-                color: var(--color-text);
-              }
-              
-              .custom-calendar .rbc-toolbar button {
-                color: var(--color-text-primary);
-                background: none;
-                border: 1px solid var(--color-border);
-                padding: 5px 10px;
-                margin: 0 3px;
-                border-radius: 4px;
-                transition: all 0.2s;
-              }
-              
-              .custom-calendar .rbc-toolbar button:hover {
-                background-color: var(--color-primary);
-                color: white;
-                border-color: var(--color-primary);
-              }
-              
-              .custom-calendar .rbc-toolbar button.rbc-active {
-                background-color: var(--color-primary);
-                color: white;
-                border-color: var(--color-primary);
-              }
-              
-              .custom-calendar .rbc-toolbar-label {
-                font-size: 1.2em;
-                font-weight: bold;
-                padding: 0 10px;
-                color: var(--color-text-primary);
-              }
-              
-              .custom-calendar .rbc-header {
-                background-color: var(--color-bg-secondary);
-                color: var(--color-text-primary);
-                padding: 10px 0;
-                border: none;
-              }
-              
-              .custom-calendar .rbc-today {
-              border-right: 3px solid #555;
-              background-color: transparent;
-              }
-              
-              .custom-calendar .rbc-month-view {
-                border: none;
-              }
-              
-              .custom-calendar .rbc-month-row {
-              color: var(--color-text-primary);
-                border: none;
-              }
-              
-              .custom-calendar .rbc-day-bg + .rbc-day-bg {
-                border-left: 1px solid var(--color-border);
-              }
-              
-              .custom-calendar .rbc-off-range-bg {
-                background: var(--color-bg-secondary);
-              }
-              
-              .custom-calendar .rbc-button-link {
-                color: var(--color-text);
-              }
-              
-              .custom-calendar .rbc-current-time-indicator {
-                background-color: var(--color-primary);
-              }
-            `}</style>
           </motion.div>
         )}
 
@@ -299,13 +222,17 @@ const Actualites = () => {
                 <Link to={`/actualites/${event.id}`} key={index}>
                   <div
                     key={index}
-                    className="p-4 bg-[var(--color-bg-primary)] rounded shadow border-l-4 border-[var(--color-primary)]"
+                    className="p-4 bg-[var(--color-bg-primary)] rounded shadow border-l-4 border-[var(--color-primary)] my-2"
                   >
-                    <h3 className="text-lg font-semibold">{event.title}</h3>
-                    <p className="text-sm text-gray-500">
+                    <h3 className="text-lg font-semibold text-[var(--color-text-primary)]">
+                      {event.title}
+                    </h3>
+                    <p className="text-sm text-[var(--color-gray)]">
                       {format(event.start, "dd MMMM yyyy", { locale: fr })}
                     </p>
-                    <p className="text-sm">{event.resource.categorie}</p>
+                    <p className="text-sm text-[var(--color-text-secondary)]">
+                      {event.resource.categorie}
+                    </p>
                   </div>
                 </Link>
               ))}

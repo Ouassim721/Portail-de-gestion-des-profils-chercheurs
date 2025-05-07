@@ -100,7 +100,7 @@ export default function UpdateProfileModal({
 
         <Dialog.Content className="fixed left-1/2 px-2 py-4 top-1/2 z-50 w-[95vw] max-w-2xl -translate-x-1/2 -translate-y-1/2 transform rounded-xl bg-[var(--color-bg-primary)] shadow-xl transition-all duration-300 data-[state=open]:animate-slideUp data-[state=closed]:animate-slideDown focus:outline-none">
           <div className="border-b border-gray-200 px-6 py-4">
-            <Dialog.Title className="text-2xl font-semibold text-gray-800">
+            <Dialog.Title className="text-2xl font-semibold text-[var(--color-primary)] ">
               Modifier le profil
             </Dialog.Title>
             <Dialog.Close className="absolute right-4 top-4 rounded-sm p-1 hover:bg-gray-100">
@@ -207,67 +207,67 @@ export default function UpdateProfileModal({
 
               <div className="space-y-5">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-2">
                     Nom
                   </label>
                   <input
                     type="text"
                     value={nom}
                     onChange={(e) => setNom(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    className="w-full px-4 py-2 border border-gray-300 text-[var(--color-text-primary)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                     placeholder="Votre nom"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-2">
                     Prénom
                   </label>
                   <input
                     type="text"
                     value={prenom}
                     onChange={(e) => setPrenom(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg text-[var(--color-text-primary)] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                     placeholder="Votre prénom"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-2">
                     Discipline
                   </label>
                   <input
                     type="text"
                     value={discipline}
                     onChange={(e) => setDiscipline(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg text-[var(--color-text-primary)] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                     placeholder="Votre discipline"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-2">
                     Statut
                   </label>
                   <input
                     type="text"
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg text-[var(--color-text-primary)] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                     placeholder="Votre statut professionnel"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-2">
                     À propos
                   </label>
                   <textarea
                     value={about}
                     onChange={(e) => setAbout(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all min-h-[100px]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg text-[var(--color-text-primary)] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all min-h-[100px]"
                     rows="3"
                     placeholder="Décrivez-vous en quelques mots..."
                   ></textarea>

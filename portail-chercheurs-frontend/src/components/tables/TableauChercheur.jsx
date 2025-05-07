@@ -70,8 +70,9 @@ export default function ChercheursList() {
 
   const filteredData = researchers
     .filter((r) =>
-      [r.name, r.email || "", r.domain || ""]
-        .some((field) => field.toLowerCase().includes(searchTerm))
+      [r.name, r.email || "", r.domain || ""].some((field) =>
+        field.toLowerCase().includes(searchTerm)
+      )
     )
     .sort((a, b) => {
       if (!sortConfig.key) return 0;
@@ -82,15 +83,14 @@ export default function ChercheursList() {
       return 0;
     });
 
-  if (isLoading)
-    return <div className="text-center py-8">{t("loading")}</div>;
+  if (isLoading) return <div className="text-center py-8">{t("loading")}</div>;
   if (error)
     return <div className="text-center py-8 text-red-500">{error}</div>;
 
   return (
     <div
       className="container mx-auto p-6"
-      style={{ backgroundColor: "var(--color-bg)" }}
+      style={{ backgroundColor: "var(--color-bg-secondary)" }}
     >
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
         <h1
@@ -103,11 +103,7 @@ export default function ChercheursList() {
           <input
             type="text"
             placeholder={t("searchResearchersPlaceholder")}
-            className="px-4 py-2 rounded-lg flex-grow md:w-64"
-            style={{
-              backgroundColor: "var(--color-bg-secondary)",
-              border: "1px solid var(--color-gray)",
-            }}
+            className="text-[var(--color-text-secondary)] border px-4 py-2 rounded-lg flex-grow md:w-64"
             onChange={handleSearch}
             value={searchTerm}
           />
@@ -115,7 +111,6 @@ export default function ChercheursList() {
             onClick={() => navigate("creationchercheur")}
             icon={faPlus}
             aria-label={t("addResearcher")}
-            style={{ backgroundColor: "var(--color-secondary)" }}
           >
             {t("addResearcher")}
           </Button>

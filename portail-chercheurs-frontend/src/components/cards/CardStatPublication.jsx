@@ -37,7 +37,7 @@ const CardStatPublication = ({
           >
             {stat}
           </h3>
-          <p className="text-gray-500">{title}</p>
+          <p className="text-[var(--color-text-secondary)]">{title}</p>
         </div>
       </div>
     </div>

@@ -61,7 +61,7 @@ const TableGenerique = ({
           </tr>
         </thead>
 
-        <tbody className="bg-[var(--color-bg-primary)] divide-y divide-gray-200">
+        <tbody className="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] divide-y divide-gray-200">
           {data.map((researcher) => (
             <tr
               key={researcher.id}
@@ -99,7 +99,9 @@ const TableGenerique = ({
                 </div>
                 <span className="font-medium">{researcher.name}</span>
               </td>
-              <td className="px-4 py-3 text-gray-600">{researcher.email}</td>
+              <td className="px-4 py-3 text-[var(--color-text-secondary)]">
+                {researcher.email}
+              </td>
               <td className="px-4 py-3">
                 <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
                   {researcher.domain}

@@ -100,7 +100,11 @@ const Publications = () => {
           <div className="w-full flex justify-between sm:justify-start lg:justify-end sm:gap-6 px-2">
             <DropdownButton
               icon={faChevronDown}
+<<<<<<< HEAD
               children="Année"
+=======
+              children={t("year")}
+>>>>>>> main
               variant="neutral"
               iconPosition="right"
               options={[
@@ -124,7 +128,11 @@ const Publications = () => {
             />
             <DropdownButton
               icon={faChevronDown}
+<<<<<<< HEAD
               children="Domaine"
+=======
+              children={t("domain")}
+>>>>>>> main
               variant="neutral"
               iconPosition="right"
               options={[
@@ -155,7 +163,8 @@ const Publications = () => {
             Filtrer
           </Button>
         </div>
-      </div> */}
+      </div>{" "}
+      */}
       <main className="max-w-7xl mx-auto p-8">
         <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-6 my-6 mb-10 place-items-center">
           <CardStatPublication

@@ -15,7 +15,7 @@ const CardProfilPublication = ({
 
   return (
     <div
-      className={`p-4 bg-[var(--color-bg-primary)] border-b-3 border-gray-100 mb-4 ${className}`}
+      className={`p-4 bg-[var(--color-bg-primary)] border-b-3 border-gray-300 mb-4 ${className}`}
     >
       {/* Titre de la publication */}
       {title && (
@@ -25,14 +25,16 @@ const CardProfilPublication = ({
       )}
 
       {/* Date de publication et nombre de citations */}
-      <div className="flex justify-between text-sm text-gray-500 mb-3">
+      <div className="flex justify-between text-sm text-[var(--color-gray)] mb-3">
         {publicationDate && <span>Publié le: {publicationDate}</span>}
         {citationCount !== undefined && <span>Citations: {citationCount}</span>}
       </div>
 
       {/* Abstract avec troncation si nécessaire */}
       {abstract && (
-        <p className="text-sm text-gray-700">{truncateAbstract(abstract)}</p>
+        <p className="text-sm text-[var(--color-text-secondary)]">
+          {truncateAbstract(abstract)}
+        </p>
       )}
     </div>
   );

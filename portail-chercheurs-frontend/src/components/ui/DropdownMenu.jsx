@@ -76,25 +76,23 @@ const DropdownMenu = ({ children, sections = [], userProfile }) => {
                       if (option.onClick) option.onClick();
                       setIsOpen(false);
                     }}
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3"
+                    className="px-4 py-2 text-[var(--color-text-secondary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-white)] cursor-pointer flex items-center gap-3"
                   >
                     {option.icon && (
                       <FontAwesomeIcon
                         icon={option.icon}
-                        className="text-[var(--color-text-secondary)] w-5 text-center"
+                        className="w-5 text-center"
                       />
                     )}
                     {option.link ? (
                       <Link
                         to={option.link}
-                        className="block w-full text-[var(--color-text-secondary)] no-underline hover:text-gray-900"
+                        className="block w-full  no-underline "
                       >
                         {option.label}
                       </Link>
                     ) : (
-                      <span className="text-[var(--color-text-secondary)]">
-                        {option.label}
-                      </span>
+                      <span>{option.label}</span>
                     )}
                   </div>
                 ))}

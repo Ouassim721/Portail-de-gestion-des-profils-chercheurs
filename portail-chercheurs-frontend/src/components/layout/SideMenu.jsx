@@ -27,7 +27,7 @@ const SideMenu = ({ isVisible, onClose }) => {
 
   return (
     <aside
-      className={`fixed top-0 left-0 h-full w-64 bg-[var(--color-bg-primary)] border-r border-gray-200 p-4 shadow-lg transform ${
+      className={`fixed top-0 left-0 h-full w-64 bg-[var(--color-bg-primary)] border-r border-gray-400 p-4 shadow-lg transform ${
         isVisible ? "translate-x-0" : "-translate-x-full"
       } transition-transform duration-300 ease-in-out z-50`}
       aria-label="Navigation latérale"
@@ -46,8 +46,10 @@ const SideMenu = ({ isVisible, onClose }) => {
               <NavLink
                 to={`/dashboard${to}`}
                 className={({ isActive }) =>
-                  `flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md ${
-                    isActive ? "bg-gray-100 font-bold" : ""
+                  `flex items-center space-x-2 px-4 py-2 text-[var(--color-text-primary)] hover:bg-gray-300 hover:text-black rounded-md ${
+                    isActive
+                      ? "hover:bg-gray-300 hover:text-black font-bold"
+                      : ""
                   }`
                 }
               >

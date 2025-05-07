@@ -5,9 +5,9 @@ function TableGenerique({ columns, data, onRowClick, onSort, sortConfig }) {
   };
 
   return (
-    <div className="overflow-x-auto max-w-[100%] md:max-w-[80%] xl:max-w-[75%] mx-auto bg-[var(--color-bg-secondary)]">
+    <div className="overflow-x-auto max-w-[100%] md:max-w-[80%] xl:max-w-[75%] mx-auto bg-[var(--color-bg-primary)] text-[var(--color-text-primary)]">
       <table className="w-full border-collapse border border-gray-300 text-sm sm:text-md">
-        <thead className="bg-red-600 ">
+        <thead className="">
           <tr>
             {columns.map((col, index) => (
               <th
@@ -39,7 +39,7 @@ function TableGenerique({ columns, data, onRowClick, onSort, sortConfig }) {
               {columns.map((col, colIndex) => (
                 <td
                   key={colIndex}
-                  className="px-4 py-2 text-[var(--color-text-secondary)]"
+                  className="px-4 py-2 text-[var(--color-text)]"
                 >
                   {col.render ? col.render(item) : item[col.key]}
                 </td>

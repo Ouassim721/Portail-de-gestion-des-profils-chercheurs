@@ -33,7 +33,7 @@ function Chercheurs() {
 
   // Appel API avec gestion des erreurs améliorée
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchChercheurs = async () => {
       try {
         setIsLoading(true);
         const params = {
@@ -48,11 +48,7 @@ function Chercheurs() {
         };
 
         const response = await axios.get(
-          `http://localhost:8000/api/chercheurs`,
-          {
-            params,
-            paramsSerializer: { indexes: null },
-          }
+          `http://localhost:8000/api/chercheurs?page=${currentPage}`
         );
 
         if (response.data && response.data.data) {
@@ -73,7 +69,7 @@ function Chercheurs() {
       }
     };
 
-    const debounceTimer = setTimeout(fetchData, 300);
+    const debounceTimer = setTimeout(fetchChercheurs, 300);
     return () => clearTimeout(debounceTimer);
   }, [currentPage, searchTerm, sortConfig, filters]);
 

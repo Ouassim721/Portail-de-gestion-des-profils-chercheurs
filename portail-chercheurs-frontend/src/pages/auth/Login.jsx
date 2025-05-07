@@ -67,7 +67,7 @@ function Connexion() {
 
   return (
     // Conteneur principal centré verticalement et horizontalement
-    <div className="h-screen flex items-center justify-center bg-gray-100 p-4 relative ">
+    <div className="h-screen flex items-center justify-center bg-[var(--color-bg-secondary)] p-4 relative ">
       {/* Conteneur "carré" central responsive avec effet d'ombre supplémentaire au hover */}
       <div className="bg-[var(--color-bg-primary)] shadow-lg hover:shadow-2xl transition-shadow duration-300 rounded-3xl overflow-hidden flex flex-col md:flex-row w-full max-x-[80%] md:max-x-[75%] lg:max-w-[70%] xl:max-w-[55%] h-full">
         {/* Partie gauche (informations) : cachée sur mobile */}
@@ -76,7 +76,7 @@ function Connexion() {
           style={{ backgroundImage: `url(${connexionImage})` }}
         >
           {/* Overlay sombre pour la lisibilité */}
-          <div className="absolute inset-0 bg-[var(--color-primary)] opacity-80"></div>
+          <div className="absolute inset-0 bg-[#003366] opacity-80"></div>
           <div className="relative z-10 h-full flex flex-col justify-between">
             <div>
               <h1 className="mb-8 text-3xl font-extrabold text-white text-center">
@@ -138,14 +138,14 @@ function Connexion() {
                   Email Institutionnel
                 </label>
                 <div className="flex items-center rounded border border-gray-300">
-                  <MdEmail className="ml-2 text-gray-500" />
+                  <MdEmail className="ml-2 text-[var(--color-text-primary)]" />
                   <input
                     type="email"
                     id="email"
                     placeholder="nom@institution.edu"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full border-none px-3 py-2 text-sm text-gray-700 focus:outline-none"
+                    className="w-full border-none px-3 py-2 text-sm text-[var(--color-text-primary)] focus:outline-none"
                     required
                   />
                 </div>
@@ -159,18 +159,18 @@ function Connexion() {
                   Mot de passe
                 </label>
                 <div className="relative flex items-center rounded border border-gray-300">
-                  <MdLock className="ml-2 text-gray-500" />
+                  <MdLock className="ml-2 text-[var(--color-text-primary)]" />
                   <input
                     type={showPassword ? "text" : "password"}
                     id="password"
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full border-none text-sm px-3 py-2 text-gray-700 focus:outline-none"
+                    className="w-full border-none text-sm px-3 py-2 text-[var(--color-text-primary)] focus:outline-none"
                     required
                   />
                   <div
-                    className="absolute right-2 cursor-pointer text-gray-500"
+                    className="absolute right-2 cursor-pointer text-[var(--color-text-primary)]"
                     onClick={toggleShowPassword}
                   >
                     {showPassword ? (
@@ -191,12 +191,15 @@ function Connexion() {
                   />
                   <label
                     htmlFor="remember"
-                    className="ml-2 text-sm text-gray-600 cursor-pointer"
+                    className="ml-2 text-sm text-[var(--color-text-secondary)] cursor-pointer"
                   >
                     Se souvenir de moi
                   </label>
                 </div>
-                <a href="#" className="text-sm text-blue-700 hover:underline">
+                <a
+                  href="#"
+                  className="text-sm text-[var(--color-text-primary)] font-medium hover:underline"
+                >
                   Mot de passe oublié ?
                 </a>
               </div>

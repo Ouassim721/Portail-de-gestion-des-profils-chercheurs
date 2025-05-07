@@ -35,11 +35,7 @@ const Profil = () => {
   }, [navigate]);
 
   if (loading) {
-    return (
-      <div className="p-4 text-center">
-        {t("loading")}
-      </div>
-    );
+    return <div className="p-4 text-center">{t("loading")}</div>;
   }
 
   if (!profile) {
@@ -49,9 +45,6 @@ const Profil = () => {
 
   return (
     <div className="p-2 sm:p-4 md:p-7 lg:p-10 xl:p-12">
-      <h1 className="text-2xl font-bold mb-6">
-        {t("profile")}
-      </h1>
       <ProfilChercheur data={profile} />
     </div>
   );

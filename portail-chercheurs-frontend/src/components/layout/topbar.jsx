@@ -36,7 +36,7 @@ function TopBar() {
   // Affichage conditionnel basé sur l'état de l'utilisateur et du chargement
   if (loading) {
     return (
-      <header className="flex items-center justify-between bg-[var(--color-bg-primary)] border-b border-gray-200 p-4">
+      <header className="flex items-center justify-between bg-[var(--color-bg-primary)] border-b border-gray-400 p-4">
         <Loader />
       </header>
     );
@@ -44,7 +44,7 @@ function TopBar() {
 
   if (!chercheur) {
     return (
-      <header className="flex items-center justify-between bg-[var(--color-bg-primary)] border-b border-gray-200 p-4">
+      <header className="flex items-center justify-between bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] border-b border-gray-200 p-4">
         <div className="text-xl font-semibold">
           Utilisateur non trouvé ou non connecté
         </div>
@@ -54,11 +54,11 @@ function TopBar() {
 
   return (
     <>
-      <header className="flex items-center justify-between bg-[var(--color-bg-primary)] border-b border-gray-200 p-4">
+      <header className="flex items-center justify-between bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] border-b border-gray-200 p-4">
         <div className="flex items-center space-x-4">
           <button
             type="button"
-            className="text-gray-500 hover:text-gray-700 focus:outline-none"
+            className="text-gray-500 hover:text-gray-600 focus:outline-none"
             onClick={toggleSideMenu}
           >
             <FaBars size={20} />

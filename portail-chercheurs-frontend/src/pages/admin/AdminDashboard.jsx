@@ -26,7 +26,7 @@ function AdminDashboard() {
   }, [navigate, t]);
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-[var(--color-bg-secondary)] text-[var(--color-text-primary)]">
       {/* Contenu principal */}
       <div className="flex-1 flex flex-col">
         {/* Barre supérieure */}

@@ -52,18 +52,20 @@ const AdminActualite = () => {
   const liste = filtrerActualites();
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-[var(--color-bg-secondary)] ">
       <div className="flex-1 flex flex-col">
         <TopBar />
 
         <main className="flex-1 overflow-y-auto p-6">
           {/* En-tête */}
           <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-            <h1 className="text-2xl font-bold text-gray-800">
+            <h1 className="text-2xl font-bold text-[var(--color-text-primary)]">
               {t("adminNewsTitle")}
             </h1>
             <Button
-              onClick={() => navigate("creationactualite", { relative: "path" })}
+              onClick={() =>
+                navigate("creationactualite", { relative: "path" })
+              }
               icon={faPlus}
             >
               {t("addButton")}
@@ -84,7 +86,7 @@ const AdminActualite = () => {
 
             {/* Tableau */}
             <table className="w-full border text-left shadow">
-              <thead className="bg-gray-100">
+              <thead className="bg-[var(--color-bg-primary)]">
                 <tr>
                   <th className="p-2">{t("tableHeaderTitle")}</th>
                   <th className="p-2">{t("tableHeaderLocation")}</th>
@@ -95,7 +97,10 @@ const AdminActualite = () => {
               </thead>
               <tbody>
                 {liste.map((a) => (
-                  <tr key={a.id} className="border-t hover:bg-gray-50">
+                  <tr
+                    key={a.id}
+                    className="border-t bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] hover:bg-gray-50 hover:text-black cursor-pointer"
+                  >
                     <td className="p-2">{a.titre}</td>
                     <td className="p-2">{a.localisation}</td>
                     <td className="p-2">
