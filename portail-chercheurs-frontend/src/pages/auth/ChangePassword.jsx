@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../../components/ui/Button";
 import { LanguageContext } from "../../contexts/LanguageContext";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+import ProgressBar from "../../components/ui/ProgressBar";
 
 const ChangePassword = () => {
   const { t } = useContext(LanguageContext);
@@ -29,9 +30,9 @@ const ChangePassword = () => {
   };
 
   const togglePasswordVisibility = (field) => {
-    setShowPassword(prev => ({
+    setShowPassword((prev) => ({
       ...prev,
-      [field]: !prev[field]
+      [field]: !prev[field],
     }));
   };
 
@@ -61,109 +62,111 @@ const ChangePassword = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 bg-[var(--color-bg-primary)] p-8 rounded-xl shadow-md">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
-        {t("changePasswordTitle")}
-      </h2>
-      <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Current Password */}
-        <div>
-          <label className="block text-gray-700 font-medium mb-1">
-            {t("currentPasswordLabel")}
-          </label>
-          <div className="relative">
-            <input
-              type={showPassword.current ? "text" : "password"}
-              name="currentPassword"
-              value={form.currentPassword}
-              onChange={handleChange}
-              required
-              placeholder={t("currentPasswordPlaceholder")}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10"
-            />
-            <button
-              type="button"
-              onClick={() => togglePasswordVisibility("current")}
-              className="absolute right-3 top-1/2 -translate-y-1/2"
-              aria-label={showPassword.current ? t("hidePassword") : t("showPassword")}
-            >
-              {showPassword.current ? (
-                <EyeSlashIcon className="h-5 w-5 text-gray-500 hover:text-gray-700" />
-              ) : (
-                <EyeIcon className="h-5 w-5 text-gray-500 hover:text-gray-700" />
-              )}
-            </button>
+    <>
+      <ProgressBar currentStep={0} />
+      <div className="max-w-md mx-auto mt-10 bg-[var(--color-bg-primary)] p-8 rounded-xl shadow-md">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Current Password */}
+          <div>
+            <label className="block text-[var(--color-text-secondary)] font-medium mb-1">
+              {t("currentPasswordLabel")}
+            </label>
+            <div className="relative">
+              <input
+                type={showPassword.current ? "text" : "password"}
+                name="currentPassword"
+                value={form.currentPassword}
+                onChange={handleChange}
+                required
+                placeholder={t("currentPasswordPlaceholder")}
+                className="w-full px-4 py-2 border rounded-lg text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => togglePasswordVisibility("current")}
+                className="absolute right-3 top-1/2 -translate-y-1/2"
+                aria-label={
+                  showPassword.current ? t("hidePassword") : t("showPassword")
+                }
+              >
+                {showPassword.current ? (
+                  <EyeSlashIcon className="h-5 w-5 text-gray-500 hover:text-gray-700" />
+                ) : (
+                  <EyeIcon className="h-5 w-5 text-[var(--color-gray)] hover:text-gray-400" />
+                )}
+              </button>
+            </div>
           </div>
-        </div>
-
-        {/* New Password */}
-        <div>
-          <label className="block text-gray-700 font-medium mb-1">
-            {t("newPasswordLabel")}
-          </label>
-          <div className="relative">
-            <input
-              type={showPassword.new ? "text" : "password"}
-              name="newPassword"
-              value={form.newPassword}
-              onChange={handleChange}
-              required
-              placeholder={t("newPasswordPlaceholder")}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10"
-            />
-            <button
-              type="button"
-              onClick={() => togglePasswordVisibility("new")}
-              className="absolute right-3 top-1/2 -translate-y-1/2"
-              aria-label={showPassword.new ? t("hidePassword") : t("showPassword")}
-            >
-              {showPassword.new ? (
-                <EyeSlashIcon className="h-5 w-5 text-gray-500 hover:text-gray-700" />
-              ) : (
-                <EyeIcon className="h-5 w-5 text-gray-500 hover:text-gray-700" />
-              )}
-            </button>
+          {/* New Password */}
+          <div>
+            <label className="block text-[var(--color-text-secondary)] font-medium mb-1">
+              {t("newPasswordLabel")}
+            </label>
+            <div className="relative">
+              <input
+                type={showPassword.new ? "text" : "password"}
+                name="newPassword"
+                value={form.newPassword}
+                onChange={handleChange}
+                required
+                placeholder={t("newPasswordPlaceholder")}
+                className="w-full px-4 py-2 border rounded-lg text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => togglePasswordVisibility("new")}
+                className="absolute right-3 top-1/2 -translate-y-1/2"
+                aria-label={
+                  showPassword.new ? t("hidePassword") : t("showPassword")
+                }
+              >
+                {showPassword.new ? (
+                  <EyeSlashIcon className="h-5 w-5 text-gray-500 hover:text-gray-700" />
+                ) : (
+                  <EyeIcon className="h-5 w-5 text-gray-500 hover:text-gray-700" />
+                )}
+              </button>
+            </div>
           </div>
-        </div>
-
-        {/* Confirm Password */}
-        <div>
-          <label className="block text-gray-700 font-medium mb-1">
-            {t("confirmPasswordLabel")}
-          </label>
-          <div className="relative">
-            <input
-              type={showPassword.confirm ? "text" : "password"}
-              name="confirmPassword"
-              value={form.confirmPassword}
-              onChange={handleChange}
-              required
-              placeholder={t("confirmPasswordPlaceholder")}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10"
-            />
-            <button
-              type="button"
-              onClick={() => togglePasswordVisibility("confirm")}
-              className="absolute right-3 top-1/2 -translate-y-1/2"
-              aria-label={showPassword.confirm ? t("hidePassword") : t("showPassword")}
-            >
-              {showPassword.confirm ? (
-                <EyeSlashIcon className="h-5 w-5 text-gray-500 hover:text-gray-700" />
-              ) : (
-                <EyeIcon className="h-5 w-5 text-gray-500 hover:text-gray-700" />
-              )}
-            </button>
+          {/* Confirm Password */}
+          <div>
+            <label className="block text-[var(--color-text-secondary)] font-medium mb-1">
+              {t("confirmPasswordLabel")}
+            </label>
+            <div className="relative">
+              <input
+                type={showPassword.confirm ? "text" : "password"}
+                name="confirmPassword"
+                value={form.confirmPassword}
+                onChange={handleChange}
+                required
+                placeholder={t("confirmPasswordPlaceholder")}
+                className="w-full px-4 py-2 border rounded-lg text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => togglePasswordVisibility("confirm")}
+                className="absolute right-3 top-1/2 -translate-y-1/2"
+                aria-label={
+                  showPassword.confirm ? t("hidePassword") : t("showPassword")
+                }
+              >
+                {showPassword.confirm ? (
+                  <EyeSlashIcon className="h-5 w-5 text-gray-500 hover:text-gray-700" />
+                ) : (
+                  <EyeIcon className="h-5 w-5 text-gray-500 hover:text-gray-700" />
+                )}
+              </button>
+            </div>
           </div>
-        </div>
-
-        {error && <p className="text-red-600 text-sm">{error}</p>}
-        {success && <p className="text-green-600 text-sm">{success}</p>}
-
-        <Button className="w-full" type="submit">
-          {t("saveButton")}
-        </Button>
-      </form>
-    </div>
+          {error && <p className="text-red-600 text-sm">{error}</p>}
+          {success && <p className="text-green-600 text-sm">{success}</p>}
+          <Button className="w-full" type="submit">
+            {t("saveButton")}
+          </Button>
+        </form>
+      </div>
+    </>
   );
 };
 

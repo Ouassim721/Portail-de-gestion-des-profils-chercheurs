@@ -4,98 +4,68 @@ namespace App\Http\Controllers;
 
 use App\Models\Discipline;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class DisciplineController extends Controller
 {
-    /**
-     * Affiche la liste des disciplines
-     */
+    // GET /api/disciplines
     public function index()
     {
-        $disciplines = Discipline::all();
-        return view('disciplines.index', compact('disciplines'));
+        return response()->json(Discipline::all(), 200);
     }
 
-    /**
-     * Affiche le formulaire de création
-     */
-    public function create()
-    {
-        return view('disciplines.create');
-    }
-
-    /**
-     * Stocke une nouvelle discipline
-     */
+    // POST /api/disciplines
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'nom' => 'required|string|max:100|unique:disciplines'
+        $validated = $request->validate([
+            'nom' => 'required|string|max:255',
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
+        $discipline = Discipline::create($validated);
+
+        return response()->json($discipline, 201);
+    }
+
+    // GET /api/disciplines/{id}
+    public function show($id)
+    {
+        $discipline = Discipline::find($id);
+
+        if (!$discipline) {
+            return response()->json(['message' => 'Discipline non trouvée'], 404);
         }
 
-        Discipline::create($request->all());
-
-        return redirect()->route('disciplines.index')
-            ->with('success', 'Discipline créée avec succès');
+        return response()->json($discipline, 200);
     }
 
-    /**
-     * Affiche les détails d'une discipline
-     */
-    public function show(Discipline $discipline)
+    // PUT /api/disciplines/{id}
+    public function update(Request $request, $id)
     {
-        return view('disciplines.show', compact('discipline'));
-    }
+        $discipline = Discipline::find($id);
 
-    /**
-     * Affiche le formulaire d'édition
-     */
-    public function edit(Discipline $discipline)
-    {
-        return view('disciplines.edit', compact('discipline'));
-    }
+        if (!$discipline) {
+            return response()->json(['message' => 'Discipline non trouvée'], 404);
+        }
 
-    /**
-     * Met à jour une discipline
-     */
-    public function update(Request $request, Discipline $discipline)
-    {
-        $validator = Validator::make($request->all(), [
-            'nom' => 'required|string|max:100|unique:disciplines,nom,'.$discipline->id
+        $validated = $request->validate([
+            'nom' => 'sometimes|required|string|max:255',
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
+        $discipline->update($validated);
 
-        $discipline->update($request->all());
-
-        return redirect()->route('disciplines.index')
-            ->with('success', 'Discipline mise à jour');
+        return response()->json($discipline, 200);
     }
 
-    /**
-     * Supprime une discipline
-     */
-    public function destroy(Discipline $discipline)
+    // DELETE /api/disciplines/{id}
+    public function destroy($id)
     {
-        try {
-            $discipline->delete();
-            return redirect()->route('disciplines.index')
-                ->with('success', 'Discipline supprimée');
-                
-        } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Impossible de supprimer : des publications sont liées');
+        $discipline = Discipline::find($id);
+
+        if (!$discipline) {
+            return response()->json(['message' => 'Discipline non trouvée'], 404);
         }
+
+        $discipline->delete();
+
+        return response()->json(['message' => 'Discipline supprimée'], 200);
     }
 }

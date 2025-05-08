@@ -29,10 +29,12 @@ import AdminChercheurs from "./pages/admin/AdminChercheurs";
 import CreationChercheur from "./pages/admin/CreationChercheur";
 import AdminActualite from "./pages/admin/AdminActualites";
 import CreationActualite from "./pages/admin/CreationActualite";
-
+import AdminDisciplines from "./pages/admin/AdminDisciplines";
 function App() {
   return (
-    <LanguageProvider> {/* Contexte de langue ajouté */}
+    <LanguageProvider>
+      {" "}
+      {/* Contexte de langue ajouté */}
       <AuthProvider>
         <BrowserRouter>
           <Routes>
@@ -94,6 +96,14 @@ function App() {
               element={
                 <ProtectedRoute redirectTo="/connexion" adminOnly>
                   <AdminActualite />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/admindisciplines"
+              element={
+                <ProtectedRoute redirectTo="/connexion" adminOnly>
+                  <AdminDisciplines />
                 </ProtectedRoute>
               }
             />

@@ -22,7 +22,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-function ProfilChercheur() {
+function ProfilChercheur({ me = false }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [chercheur, setChercheur] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -105,14 +105,18 @@ function ProfilChercheur() {
                 >
                   Contacter
                 </Button>
-                <Button
-                  variant="neutral"
-                  icon={faUserPen}
-                  className="text-sm p-2!"
-                  onClick={() => setIsModalOpen(true)}
-                >
-                  Modifier
-                </Button>
+                {me == true ? (
+                  <Button
+                    variant="neutral"
+                    icon={faUserPen}
+                    className="text-sm p-2!"
+                    onClick={() => setIsModalOpen(true)}
+                  >
+                    Modifier
+                  </Button>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </div>

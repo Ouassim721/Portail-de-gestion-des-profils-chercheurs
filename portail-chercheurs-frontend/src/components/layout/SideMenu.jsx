@@ -19,8 +19,8 @@ const SideMenu = ({ isVisible, onClose }) => {
       to: "/",
     },
     { label: "Chercheurs", icon: <FaUser />, to: "/AdminChercheurs" },
-    { label: "Institutions", icon: <FaUniversity />, to: "/institutions" },
     { label: "Evénements", icon: <FaCalendarAlt />, to: "/adminactualite" },
+    { label: "Disciplines", icon: <FaUniversity />, to: "/admindisciplines" },
     { label: "Sécurité", icon: <FaShieldAlt />, to: "/securite" },
     { label: "Paramètres", icon: <FaCog />, to: "/parametres" },
   ];

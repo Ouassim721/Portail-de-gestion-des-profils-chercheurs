@@ -59,7 +59,7 @@ const PublicationsSection = ({
           <input
             type="text"
             placeholder="Rechercher par titre..."
-            className="flex-1 p-2 border border-gray-300 rounded"
+            className="flex-1 p-2 border text-[var(--color-text-secondary)] border-gray-300 rounded"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />

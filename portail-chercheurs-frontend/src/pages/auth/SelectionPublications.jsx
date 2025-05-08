@@ -3,7 +3,7 @@ import axios from "../../axios";
 import Loader from "../../components/ui/Loader";
 import Button from "../../components/ui/Button";
 import { useNavigate } from "react-router-dom";
-
+import ProgressBar from "../../components/ui/ProgressBar";
 /**
  * Composant pour sélectionner et enregistrer des publications Scopus
  */
@@ -148,102 +148,98 @@ const SelectionPublications = () => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto mt-10 p-4">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">
-        Gestion des publications
-      </h2>
-
-      <div className="flex justify-between items-center mb-6">
-        <p className="text-gray-600">
-          {publications.length} publications trouvées | {selected.length}{" "}
-          sélectionnées
-        </p>
-        <Button
-          onClick={handleSave}
-          disabled={selected.length === 0}
-          className={`${
-            selected.length === 0
-              ? "opacity-50 cursor-not-allowed"
-              : "hover:bg-blue-600"
-          }`}
-        >
-          Enregistrer les sélections
-        </Button>
-      </div>
-
-      {saveStatus.message && (
-        <div
-          className={`mb-4 p-3 rounded ${
-            saveStatus.success
-              ? "bg-green-100 text-green-800"
-              : "bg-red-100 text-red-800"
-          }`}
-        >
-          {saveStatus.message}
+    <>
+      <ProgressBar currentStep={2} />
+      <div className="max-w-5xl mx-auto mt-10 p-4">
+        <div className="flex justify-between items-center mb-6">
+          <p className="text-gray-600">
+            {publications.length} publications trouvées | {selected.length}{" "}
+            sélectionnées
+          </p>
+          <Button
+            onClick={handleSave}
+            disabled={selected.length === 0}
+            className={`${
+              selected.length === 0
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-blue-600"
+            }`}
+          >
+            Enregistrer les sélections
+          </Button>
         </div>
-      )}
-
-      <div className="space-y-3">
-        {publications.length > 0 ? (
-          publications.map((pub) => {
-            const isSelected = selected.some(
-              (p) => p.identifiant === pub.identifiant
-            );
-
-            return (
-              <div
-                key={pub.identifiant} // Utilisation de l'identifiant unique
-                className={`border rounded-lg p-4 transition-all ${
-                  isSelected
-                    ? "border-blue-500 bg-blue-50"
-                    : "border-gray-200 hover:border-gray-300"
-                }`}
-              >
-                <label className="flex items-start space-x-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    onChange={() => handleCheck(pub)}
-                    checked={isSelected}
-                    className="mt-1"
-                  />
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-800">
-                      {pub["dc:title"] || pub.titre}
-                    </h3>
-                    <p className="text-sm text-gray-600 mt-1">
-                      {Array.isArray(pub["dc:creator"])
-                        ? pub["dc:creator"].join(", ")
-                        : pub["dc:creator"] || pub.auteurs}
-                    </p>
-                    <div className="flex justify-between mt-2 text-sm text-gray-500">
-                      <span>
-                        {pub["prism:coverDate"] || pub.date_publication}
-                      </span>
-                      <span>
-                        Citations:{" "}
-                        {pub["citedby-count"] || pub.citation_count || 0}
-                      </span>
-                    </div>
-                    {(pub["dc:description"] || pub.abstract) && (
-                      <details className="mt-2 text-sm text-gray-600">
-                        <summary className="cursor-pointer">Résumé</summary>
-                        <p className="mt-1 italic">
-                          {pub["dc:description"] || pub.abstract}
-                        </p>
-                      </details>
-                    )}
-                  </div>
-                </label>
-              </div>
-            );
-          })
-        ) : (
-          <div className="text-center py-10 text-gray-500">
-            Aucune publication disponible
+        {saveStatus.message && (
+          <div
+            className={`mb-4 p-3 rounded ${
+              saveStatus.success
+                ? "bg-green-100 text-green-800"
+                : "bg-red-100 text-red-800"
+            }`}
+          >
+            {saveStatus.message}
           </div>
         )}
+        <div className="space-y-3">
+          {publications.length > 0 ? (
+            publications.map((pub) => {
+              const isSelected = selected.some(
+                (p) => p.identifiant === pub.identifiant
+              );
+              return (
+                <div
+                  key={pub.identifiant} // Utilisation de l'identifiant unique
+                  className={`border rounded-lg p-4 transition-all ${
+                    isSelected
+                      ? "border-blue-500 bg-blue-50"
+                      : "border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  <label className="flex items-start space-x-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      onChange={() => handleCheck(pub)}
+                      checked={isSelected}
+                      className="mt-1"
+                    />
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-gray-800">
+                        {pub["dc:title"] || pub.titre}
+                      </h3>
+                      <p className="text-sm text-gray-600 mt-1">
+                        {Array.isArray(pub["dc:creator"])
+                          ? pub["dc:creator"].join(", ")
+                          : pub["dc:creator"] || pub.auteurs}
+                      </p>
+                      <div className="flex justify-between mt-2 text-sm text-gray-500">
+                        <span>
+                          {pub["prism:coverDate"] || pub.date_publication}
+                        </span>
+                        <span>
+                          Citations:{" "}
+                          {pub["citedby-count"] || pub.citation_count || 0}
+                        </span>
+                      </div>
+                      {(pub["dc:description"] || pub.abstract) && (
+                        <details className="mt-2 text-sm text-gray-600">
+                          <summary className="cursor-pointer">Résumé</summary>
+                          <p className="mt-1 italic">
+                            {pub["dc:description"] || pub.abstract}
+                          </p>
+                        </details>
+                      )}
+                    </div>
+                  </label>
+                </div>
+              );
+            })
+          ) : (
+            <div className="text-center py-10 text-gray-500">
+              Aucune publication disponible
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

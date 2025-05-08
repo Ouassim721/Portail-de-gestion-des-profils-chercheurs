@@ -1,110 +1,134 @@
-import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { CheckIcon } from "@heroicons/react/24/solid";
 
 const steps = [
-  { label: "Step 1: Starting" },
-  { label: "Step 2: Processing" },
-  { label: "Step 3: Analyzing" },
+  {
+    id: "step1",
+    title: "Changer mot de passe",
+    icon: <CheckIcon className="w-4 h-4" />,
+  },
+  {
+    id: "step2",
+    title: "Compléter profil",
+    icon: <CheckIcon className="w-4 h-4" />,
+  },
+  {
+    id: "step3",
+    title: "Sélectionner publications",
+    icon: <CheckIcon className="w-4 h-4" />,
+  },
 ];
 
 const ProgressBar = ({ currentStep }) => {
   return (
-    <div className="h-full w-full py-16">
-      <div className="container mx-auto">
-        <div className="w-11/12 lg:w-2/6 mx-auto">
-          <div className="bg-gray-200 h-1 flex items-center justify-between">
-            {steps.map((step, index) => {
-              const isCompleted = index < currentStep;
-              const isActive = index === currentStep;
+    <div className="w-full px-4 pt-6 sm:px-8">
+      {/* Progress bar background */}
 
-              return (
-                <div
-                  key={index}
-                  className={`w-1/3 flex items-center ${
-                    index !== steps.length - 1
-                      ? "justify-between"
-                      : "justify-end"
-                  } ${isCompleted || isActive ? "bg-indigo-700 h-1" : "h-1"}`}
-                >
-                  {/* Tooltip for active step */}
-                  {isActive && (
-                    <div className="absolute right-0 -mr-2">
-                      <div className="relative bg-[var(--color-bg-primary)] shadow-lg px-2 py-1 rounded mt-16 -mr-12">
-                        <svg
-                          className="absolute top-0 -mt-1 w-full right-0 left-0"
-                          width="16px"
-                          height="8px"
-                          viewBox="0 0 16 8"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <polygon
-                            points="20 0 28 8 12 8"
-                            fill="#FFFFFF"
-                          ></polygon>
-                        </svg>
-                        <p className="text-indigo-700 text-xs font-bold">
-                          {step.label}
-                        </p>
-                      </div>
-                    </div>
-                  )}
+      <div className="relative flex justify-between items-start">
+        {/* Background line */}
+        <div className="absolute top-4 left-0 right-0 h-1 bg-gray-100 -z-10" />
 
-                  {/* Completed step circle */}
-                  {isCompleted && (
-                    <div className="bg-indigo-700 h-6 w-6 rounded-full shadow flex items-center justify-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="icon icon-tabler icon-tabler-check"
-                        width="18"
-                        height="18"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="#FFFFFF"
-                        fill="none"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <path d="M5 12l5 5l10 -10" />
-                      </svg>
-                    </div>
-                  )}
+        {/* Progress line */}
+        <motion.div
+          className="absolute top-4 left-0 h-1 bg-gradient-to-r from-indigo-500 to-indigo-600 -z-10"
+          initial={{ width: 0 }}
+          animate={{
+            width: `${(currentStep / (steps.length - 1)) * 100}%`,
+          }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        />
 
-                  {/* Active step dual circle */}
-                  {isActive && (
-                    <>
-                      <div className="bg-indigo-700 h-6 w-6 rounded-full shadow flex items-center justify-center -ml-2">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="icon icon-tabler icon-tabler-check"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          strokeWidth="1.5"
-                          stroke="#FFFFFF"
-                          fill="none"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path stroke="none" d="M0 0h24v24H0z" />
-                          <path d="M5 12l5 5l10 -10" />
-                        </svg>
-                      </div>
-                      <div className="bg-[var(--color-bg-primary)] h-6 w-6 rounded-full shadow flex items-center justify-center -mr-3 relative">
-                        <div className="h-3 w-3 bg-indigo-700 rounded-full"></div>
-                      </div>
-                    </>
-                  )}
+        {steps.map((step, index) => {
+          const isCompleted = index < currentStep;
+          const isActive = index === currentStep;
 
-                  {/* Future step circle */}
-                  {!isCompleted && !isActive && (
-                    <div className="bg-[var(--color-bg-primary)] h-6 w-6 rounded-full shadow"></div>
+          return (
+            <div
+              key={step.id}
+              className="flex flex-col items-center text-center w-1/3"
+            >
+              {/* Step circle */}
+              <motion.div
+                className={`flex items-center justify-center w-8 h-8 rounded-full border-2 text-sm font-semibold transition-colors duration-300 ${
+                  isCompleted
+                    ? "bg-indigo-600 border-indigo-600 text-white"
+                    : isActive
+                    ? "border-indigo-600 bg-white text-indigo-600 shadow-md"
+                    : "border-gray-300 bg-white text-gray-400"
+                }`}
+                initial={{ scale: 0.8 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              >
+                <AnimatePresence mode="wait">
+                  {isCompleted ? (
+                    <motion.div
+                      key="icon"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0 }}
+                    >
+                      {step.icon}
+                    </motion.div>
+                  ) : (
+                    <motion.span
+                      key="number"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0 }}
+                    >
+                      {index + 1}
+                    </motion.span>
                   )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
+                </AnimatePresence>
+              </motion.div>
+
+              {/* Step title */}
+              <motion.div
+                className={`mt-3 max-w-[120px] text-xs sm:text-sm font-medium ${
+                  isActive
+                    ? "text-indigo-600 font-semibold"
+                    : isCompleted
+                    ? "text-gray-600"
+                    : "text-gray-400"
+                }`}
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                {step.title}
+                {isActive && (
+                  <motion.div
+                    className="h-1 w-6 bg-indigo-600 rounded-full mt-1 mx-auto"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ delay: 0.4 }}
+                  />
+                )}
+              </motion.div>
+            </div>
+          );
+        })}
       </div>
+
+      {/* Current step info */}
+      <AnimatePresence>
+        {steps[currentStep] && (
+          <motion.div
+            className="mt-4 text-center"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <span className="inline-block px-3 py-1 text-xs font-medium bg-indigo-100 text-indigo-800 rounded-full">
+              Étape {currentStep + 1} sur {steps.length}
+            </span>
+            <h3 className="mt-4 text-xl md:text-2xl font-bold text-[var(--color-text-primary)]">
+              {steps[currentStep].title}
+            </h3>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

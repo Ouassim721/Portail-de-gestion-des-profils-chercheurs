@@ -95,6 +95,10 @@ Route::apiResource('disciplines', DisciplineController::class);
 Route::apiResource('actualites', ActualiteController::class);
 Route::get('/actualites', [ActualiteController::class, 'index']);
 Route::get('/actualites/{id}', [ActualiteController::class, 'show']);
+/* ==================== ROUTES POUR LES DISCIPLINES ==================== */
+Route::apiResource('disciplines', DisciplineController::class);
+Route::get('/disciplines', [DisciplineController::class, 'index']);
+Route::get('/disciplines/{id}', [DisciplineController::class, 'show']);
 
 /* ==================== ROUTES POUR LES COMMENTAIRES ==================== */
 Route::middleware(['auth:api'])->group(function () {

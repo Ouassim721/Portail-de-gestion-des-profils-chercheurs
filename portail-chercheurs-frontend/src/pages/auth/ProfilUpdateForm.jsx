@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "../../axios";
 import Loader from "../../components/ui/Loader";
 import { useNavigate } from "react-router-dom";
+import ProgressBar from "../../components/ui/ProgressBar";
 
 const ProfilUpdateForm = () => {
   const [form, setForm] = useState({
@@ -38,48 +39,50 @@ const ProfilUpdateForm = () => {
   if (loading) return <Loader />;
 
   return (
-    <div className="max-w-xl mx-auto mt-10 bg-[var(--color-bg-primary)] p-6 rounded-2xl shadow">
-      <h2 className="text-2xl font-bold mb-4">Complétez votre profil</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          name="nom"
-          value={form.nom}
-          disabled
-          className="w-full p-2 border rounded"
-        />
-        <input
-          type="text"
-          name="prenom"
-          value={form.prenom}
-          disabled
-          className="w-full p-2 border rounded"
-        />
-        <input
-          type="text"
-          name="scopus_author_id"
-          placeholder="ID Scopus"
-          required
-          value={form.scopus_author_id}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-        <input
-          type="text"
-          name="discipline"
-          placeholder="Discipline"
-          value={form.discipline}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Valider
-        </button>
-      </form>
-    </div>
+    <>
+      <ProgressBar currentStep={1} />
+      <div className="max-w-xl mx-auto mt-10 bg-[var(--color-bg-primary)] p-6 rounded-2xl shadow">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            name="nom"
+            value={form.nom}
+            disabled
+            className="w-full p-2 border rounded"
+          />
+          <input
+            type="text"
+            name="prenom"
+            value={form.prenom}
+            disabled
+            className="w-full p-2 border rounded"
+          />
+          <input
+            type="text"
+            name="scopus_author_id"
+            placeholder="ID Scopus"
+            required
+            value={form.scopus_author_id}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+          />
+          <input
+            type="text"
+            name="discipline"
+            placeholder="Discipline"
+            value={form.discipline}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+          />
+          <button
+            type="submit"
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Valider
+          </button>
+        </form>
+      </div>
+    </>
   );
 };
 
