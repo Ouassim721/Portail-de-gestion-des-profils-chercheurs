@@ -5,32 +5,39 @@ import axios from "../axios";
 import Loader from "../components/ui/Loader";
 
 function MonProfil() {
-  const { id } = useParams();
   const [chercheurData, setChercheurData] = useState(null);
+  const [publicationsData, setPublicationsData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchChercheur = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get("/profile");
+        const [profileRes, publicationsRes] = await Promise.all([
+          axios.get("/profile"),
+          axios.get("/profile/publications"),
+        ]);
 
-        setChercheurData(response.data);
+        setChercheurData(profileRes.data);
+        setPublicationsData(publicationsRes.data.publications);
+        console.log("Données publications récupérées :", publicationsRes.data);
       } catch (error) {
-        console.error("Erreur lors du chargement du chercheur :", error);
+        console.error("Erreur lors du chargement des données :", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchChercheur();
-  }, [id]);
+    fetchData();
+  }, []);
 
   if (loading) return <Loader />;
   if (!chercheurData) return <p>Erreur lors du chargement de ton profil</p>;
+
   return (
     <ProfilChercheur
       isPublic={false}
       chercheur={chercheurData}
+      publications={publicationsData || []}
       isOwner={true}
     />
   );

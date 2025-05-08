@@ -1,9 +1,7 @@
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
-
+import ChercheurAvatar from "../ui/ChercheurAvatar";
 const TableGenerique = ({
   data,
-  selectedRows,
-  setSelectedRows,
   sortConfig,
   setSortConfig,
   deleteResearcher,
@@ -16,25 +14,11 @@ const TableGenerique = ({
     { label: "Actions" },
   ];
 
-  const handleSelectAll = (e) => {
-    const newSelected = e.target.checked
-      ? new Set(data.map((r) => r.id))
-      : new Set();
-    setSelectedRows(newSelected);
-  };
-
   return (
     <div className="overflow-x-auto rounded-lg shadow">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>
-            <th className="px-4 py-3">
-              <input
-                type="checkbox"
-                onChange={handleSelectAll}
-                checked={selectedRows.size === data.length}
-              />
-            </th>
             {columns.map((header) => (
               <th
                 key={header.key || header.label}
@@ -67,26 +51,13 @@ const TableGenerique = ({
               key={researcher.id}
               className="hover:bg-gray-50 transition-colors"
             >
-              <td className="px-4 py-3">
-                <input
-                  type="checkbox"
-                  checked={selectedRows.has(researcher.id)}
-                  onChange={(e) => {
-                    const newSelected = new Set(selectedRows);
-                    e.target.checked
-                      ? newSelected.add(researcher.id)
-                      : newSelected.delete(researcher.id);
-                    setSelectedRows(newSelected);
-                  }}
-                />
-              </td>
               <td className="px-4 py-3 flex items-center gap-3">
                 <div className="relative">
-                  <img
-                    src={researcher.avatar}
-                    alt={researcher.name}
-                    className="w-8 h-8 rounded-full object-cover"
-                  />
+                  <ChercheurAvatar
+                    chercheur={researcher}
+                    size="md"
+                    className="w-6 mx-auto sm:mx-0"
+                  />{" "}
                   <div
                     className={`absolute -bottom-0 -right-0 w-3 h-3 rounded-full 
                     ${
@@ -120,9 +91,7 @@ const TableGenerique = ({
                 </span>
               </td>
               <td className="px-4 py-3 flex gap-3">
-                <button className="text-blue-600 hover:text-blue-800 transition-colors">
-                  <PencilSquareIcon className="w-5 h-5" />
-                </button>
+                <button className="text-blue-600 hover:text-blue-800 transition-colors"></button>
                 <button
                   className="text-red-600 hover:text-red-800 transition-colors"
                   onClick={() => deleteResearcher(researcher.id)}

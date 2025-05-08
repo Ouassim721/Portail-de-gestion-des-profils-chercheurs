@@ -100,6 +100,7 @@ export const translations = {
     closeButtonAria: "Fermer",
     agenda: "Agenda",
     adminNewsTitle: "Gestion des Actualités",
+    adminDisciplineTitle: "Gestion des Disciplines",
     addButton: "Ajouter",
     filterAll: "Toutes",
     filterFuture: "À venir",
@@ -249,7 +250,7 @@ export const translations = {
     step2: "Compléter profil",
     step3: "Sélectionner publications",
     stepLabel: "Étape {current} sur {total}",
-    dateFormat: "dd MMMM yyyy"
+    dateFormat: "dd MMMM yyyy",
   },
 
   en: {
@@ -481,6 +482,7 @@ export const translations = {
     updateError: "Error updating",
     userNotFound: "User not found or not logged in",
     adminRole: "Administrator",
+    adminDisciplineTitle: "Disciplines Management",
     sideMenuAriaLabel: "Side navigation",
     closeMenu: "Close menu",
     institutions: "Institutions",
@@ -494,7 +496,7 @@ export const translations = {
     step2: "Complete Profile",
     step3: "Select Publications",
     stepLabel: "Step {current} of {total}",
-    dateFormat: "dd MMMM yyyy"
+    dateFormat: "dd MMMM yyyy",
   },
 };
 

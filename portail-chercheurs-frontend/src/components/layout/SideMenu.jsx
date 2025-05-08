@@ -17,11 +17,17 @@ const SideMenu = ({ isVisible, onClose }) => {
 
   const links = [
     { labelKey: "dashboardTitle", icon: <FaTachometerAlt />, to: "/" },
-    { labelKey: "adminResearchersTitle", icon: <FaUser />, to: "/AdminChercheurs" },
-    { labelKey: "institutions", icon: <FaUniversity />, to: "/institutions" },
-    { labelKey: "upcomingEventTitle", icon: <FaCalendarAlt />, to: "/adminactualite" },
-    { labelKey: "security", icon: <FaShieldAlt />, to: "/securite" },
-    { labelKey: "settings", icon: <FaCog />, to: "/parametres" },
+    {
+      labelKey: "adminResearchersTitle",
+      icon: <FaUser />,
+      to: "/AdminChercheurs",
+    },
+    { labelKey: "Discipline", icon: <FaUniversity />, to: "/admindisciplines" },
+    {
+      labelKey: "upcomingEventTitle",
+      icon: <FaCalendarAlt />,
+      to: "/adminactualite",
+    },
   ];
 
   return (
@@ -42,7 +48,7 @@ const SideMenu = ({ isVisible, onClose }) => {
         <ul className="space-y-2">
           {links.map(({ labelKey, icon, to }) => (
             <li key={labelKey} className="rounded-md">
-              <NavLink 
+              <NavLink
                 to={`/dashboard${to}`}
                 className={({ isActive }) =>
                   `flex items-center space-x-2 px-4 py-2 text-[var(--color-text-primary)] hover:bg-gray-300 hover:text-black rounded-md ${
@@ -69,4 +75,3 @@ SideMenu.propTypes = {
 };
 
 export default SideMenu;
-

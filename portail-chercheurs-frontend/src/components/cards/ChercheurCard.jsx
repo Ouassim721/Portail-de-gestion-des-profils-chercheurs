@@ -35,10 +35,6 @@ export default function ChercheurCard({ chercheur }) {
             <FontAwesomeIcon icon={faBook} className="mr-1" />
             <span>{chercheur.publications_count || 0} publications</span>
           </div>
-          {/* le boutton de Follow a l'interieir de la carte */}
-          {/* <div className="flex justify-end mt-2 text-sm text-gray-500">
-            <FollowButton targetUserId={chercheur.id} />
-          </div> */}
         </div>
       </div>
     </div>
