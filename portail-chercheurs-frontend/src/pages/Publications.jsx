@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useContext } from "react";
 import {
   faFilter,
   faChevronDown,
@@ -14,8 +14,10 @@ import CardPublication from "../components/cards/CardPublication";
 import CommentsSection from "../components/comments/CommentsSection";
 import axios from "../axios";
 import Loader from "../components/ui/Loader";
+import { LanguageContext } from "../contexts/LanguageContext";
 
 const Publications = () => {
+  const { t } = useContext(LanguageContext);
   const [publications, setPublications] = useState([]);
   const [countChercheurs, setcountChercheurs] = useState(null);
   const [countPublications, setcountPublications] = useState(null);
@@ -75,10 +77,7 @@ const Publications = () => {
         setCountDiscipline(response.data.disciplines);
       })
       .catch((error) => {
-        console.error(
-          "Erreur lors de la récupération du nombre de chercheurs:",
-          error
-        );
+        console.error(t("errorLoadingData"), error);
       });
   }, []);
 
@@ -89,106 +88,74 @@ const Publications = () => {
   const nombreDisciplines = countDiscipline !== null ? countDiscipline : "...";
   return (
     <div className="min-h-screen ">
-      {/* <div className="w-full bg-[var(--color-primary)] flex flex-col lg:flex-row gap-4 items-center p-4">
+      <div className="w-full bg-[var(--color-primary)] flex flex-col lg:flex-row gap-4 items-center p-4">
         <div className="w-full px-2">
           <SearchBar
             className="p-4 w-full"
-            placeHolder="Rechercher des publications..."
+            placeHolder={t("searchPublications")}
           />
         </div>
         <div className="w-full flex flex-col sm:flex-row gap-8 sm:justify-between items-center">
           <div className="w-full flex justify-between sm:justify-start lg:justify-end sm:gap-6 px-2">
             <DropdownButton
               icon={faChevronDown}
-<<<<<<< HEAD
-              children="Année"
-=======
               children={t("year")}
->>>>>>> main
               variant="neutral"
               iconPosition="right"
               options={[
-                {
-                  label: "2025",
-                  onClick: () => console.log("2025"),
-                },
-                {
-                  label: "2024",
-                  onClick: () => console.log("2024"),
-                },
-                {
-                  label: "2023",
-                  onClick: () => console.log("2023"),
-                },
-                {
-                  label: "2022",
-                  onClick: () => console.log("2022"),
-                },
+                { label: "2025", onClick: () => console.log("2025") },
+                { label: "2024", onClick: () => console.log("2024") },
+                { label: "2023", onClick: () => console.log("2023") },
+                { label: "2022", onClick: () => console.log("2022") },
               ]}
             />
             <DropdownButton
               icon={faChevronDown}
-<<<<<<< HEAD
-              children="Domaine"
-=======
               children={t("domain")}
->>>>>>> main
               variant="neutral"
               iconPosition="right"
               options={[
-                {
-                  label: "IA",
-                  onClick: () => console.log("IA"),
-                },
-                {
-                  label: "Math",
-                  onClick: () => console.log("Math"),
-                },
-                {
-                  label: "Data Science",
-                  onClick: () => console.log("Data Science"),
-                },
-                {
-                  label: "Machine Learning",
-                  onClick: () => console.log("Machine Learning"),
-                },
+                { label: "IA", onClick: () => console.log("IA") },
+                { label: "Math", onClick: () => console.log("Math") },
+                { label: "Data Science", onClick: () => console.log("Data Science") },
+                { label: "Machine Learning", onClick: () => console.log("Machine Learning") },
               ]}
             />
           </div>
           <Button
             variant="secondary"
             icon={faFilter}
-            className="w-full sm:w-auto flex justify-center items-center "
+            className="w-full sm:w-auto flex justify-center items-center"
           >
-            Filtrer
+            {t("filter")}
           </Button>
         </div>
-      </div>{" "}
-      */}
+      </div>
+
       <main className="max-w-7xl mx-auto p-8">
         <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-6 my-6 mb-10 place-items-center">
           <CardStatPublication
             stat={nombreChercheurs}
-            title="Chercheurs Actifs"
+            title={t("activeResearchers")}
             icon={faUsers}
-          />{" "}
+          />
           <CardStatPublication
             stat={nombrePublications}
-            title="Publications"
+            title={t("publications")}
             variant="secondary"
             icon={faBook}
           />
           <CardStatPublication
             stat={nombreCitations}
-            title="Citations"
+            title={t("citations")}
             icon={faQuoteRight}
           />
           <CardStatPublication
             stat={nombreDisciplines}
-            title="Disciplines"
+            title={t("domain")} // or create a new key "disciplines" if needed
             variant="secondary"
             icon={faBook}
-          />{" "}
+          />
         </section>
         <section>
           <div>
@@ -209,6 +176,7 @@ const Publications = () => {
               </div>
             ))}
             <div ref={loader} className="h-10 w-full" />
+            {isLoading && <Loader text={t("loading")} />}
           </div>
         </section>
       </main>

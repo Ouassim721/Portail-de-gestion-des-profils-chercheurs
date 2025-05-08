@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Loader from "../components/ui/Loader";
 import DropdownButton from "../components/ui/DropdownButton";
@@ -13,8 +13,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import book from "../assets/book.jpg";
 import "./Chercheurs.css";
+import { LanguageContext } from "../contexts/LanguageContext";
 
 function Chercheurs() {
+  const { t } = useContext(LanguageContext);
   const [chercheurs, setChercheurs] = useState([]);
   const [chercheurSelectionne, setChercheurSelectionne] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -48,7 +50,8 @@ function Chercheurs() {
         };
 
         const response = await axios.get(
-          `http://localhost:8000/api/chercheurs?page=${currentPage}`
+          `http://localhost:8000/api/chercheurs`,
+          { params }
         );
 
         if (response.data && response.data.data) {
@@ -61,7 +64,7 @@ function Chercheurs() {
       } catch (err) {
         console.error("Erreur:", err);
         setError(
-          err.response?.data?.message || err.message || "Erreur de chargement"
+          err.response?.data?.message || err.message || t("errorLoadingData")
         );
         setChercheurs([]);
       } finally {
@@ -71,7 +74,7 @@ function Chercheurs() {
 
     const debounceTimer = setTimeout(fetchChercheurs, 300);
     return () => clearTimeout(debounceTimer);
-  }, [currentPage, searchTerm, sortConfig, filters]);
+  }, [currentPage, searchTerm, sortConfig, filters, t]);
 
   // Gestion du tri
   const handleSort = (key) => {
@@ -120,114 +123,96 @@ function Chercheurs() {
   const tableColumns = [
     {
       key: "nom",
-      label: "Nom",
+      label: t("name"),
       sortable: true,
-      render: (item) => item.nom || "Inconnu",
+      render: (item) => item.nom || t("notSpecified"),
     },
     {
       key: "departement",
-      label: "Département",
+      label: t("department"),
       sortable: true,
       render: (item) => item.departement,
     },
     {
       key: "publications",
-      label: "Publications",
+      label: t("publications"),
       sortable: true,
       render: (item) => item.publications,
-      className: "text-center", // Pour aligner les nombres
+      className: "text-center",
     },
   ];
 
   return (
     <div className="chercheurs-container">
-      {/* En-tête */}
       <div className="header-image">
-        <img src={book} alt="Chercheurs" className="w-full h-48 object-cover" />
+        <img src={book} alt={t("researchersImageAlt")} className="w-full h-48 object-cover" />
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        {/* Barre de titre et filtres */}
         <div className="flex flex-col md:flex-row justify-between items-center lg:px-40 mb-8 gap-4">
           <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">
-            Chercheurs
+            {t("researchers")}
           </h1>
 
           <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
-            {/* Barre de recherche */}
             <div className="relative flex-grow md:w-64">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <FontAwesomeIcon icon={faSearch} className="text-gray-400" />
               </div>
               <input
                 type="text"
-                placeholder="Rechercher..."
+                placeholder={t("searchResearchersPlaceholder")}
                 value={searchTerm}
                 onChange={handleSearch}
                 className="pl-10 pr-4 py-2 w-full border border-gray-400 text-[var(--color-text-secondary)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
 
-            {/* Menu déroulant des filtres */}
             <DropdownButton
               icon={faSliders}
-              text="Filtrer"
+              text={t("filter")}
               variant="neutral"
               options={[
                 {
-                  label: "Par département",
+                  label: t("filterByDepartment"),
                   children: [
                     {
-                      label: "Tous",
+                      label: t("filterAll"),
                       value: "all",
                       onClick: () => handleFilter("departement", "all"),
                     },
                     {
-                      label: "Informatique",
+                      label: t("computerScience"),
                       value: "Informatique",
-                      onClick: () =>
-                        handleFilter("departement", "Informatique"),
+                      onClick: () => handleFilter("departement", "Informatique"),
                     },
                     {
-                      label: "Mathématiques",
+                      label: t("mathematics"),
                       value: "Mathématiques",
-                      onClick: () =>
-                        handleFilter("departement", "Mathématiques"),
+                      onClick: () => handleFilter("departement", "Mathématiques"),
                     },
                     {
-                      label: "Physique",
+                      label: t("physics"),
                       value: "Physique",
                       onClick: () => handleFilter("departement", "Physique"),
                     },
                   ],
                 },
                 {
-                  label: "Par publications",
+                  label: t("filterByPublications"),
                   children: [
                     {
-                      label: "Tous",
+                      label: t("filterAll"),
                       value: "all",
                       onClick: () => handleFilter("publications", "all"),
                     },
-                    {
-                      label: "10+",
-                      value: 10,
-                      onClick: () => handleFilter("publications", 10),
-                    },
-                    {
-                      label: "5+",
-                      value: 5,
-                      onClick: () => handleFilter("publications", 5),
-                    },
-                    {
-                      label: "1+",
-                      value: 1,
-                      onClick: () => handleFilter("publications", 1),
-                    },
+                    { label: "10+", value: 10, onClick: () => handleFilter("publications", 10) },
+                    { label: "5+", value: 5, onClick: () => handleFilter("publications", 5) },
+                    { label: "1+", value: 1, onClick: () => handleFilter("publications", 1) },
                   ],
                 },
                 {
-                  label: "Réinitialiser",
+                  label: t("resetFilters"),
                   onClick: resetFilters,
                   variant: "danger",
                 },
@@ -242,7 +227,7 @@ function Chercheurs() {
         {/* Contenu principal */}
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
-            <Loader size="lg" />
+            <Loader size="lg" text={t("loading")} />
           </div>
         ) : error ? (
           <div className="text-center py-12">
@@ -251,7 +236,7 @@ function Chercheurs() {
               onClick={() => window.location.reload()}
               className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
             >
-              Réessayer
+              {t("retry")}
             </button>
           </div>
         ) : (
@@ -263,7 +248,7 @@ function Chercheurs() {
                 onRowClick={(item) => setChercheurSelectionne(item.rawData)}
                 onSort={handleSort}
                 sortConfig={sortConfig}
-                emptyMessage="Aucun chercheur trouvé"
+                emptyMessage={t("noResults")}
               />
             </div>
 
@@ -286,10 +271,11 @@ function Chercheurs() {
           <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
             <div className="bg-[var(--color-bg-primary)] rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-auto">
               <div className="flex justify-between items-center border-b p-4">
-                <h2 className="text-xl font-semibold">Profil du chercheur</h2>
+                <h2 className="text-xl font-semibold">{t("researcherProfile")}</h2>
                 <button
                   onClick={() => setChercheurSelectionne(null)}
                   className="text-gray-500 hover:text-gray-700"
+                  aria-label={t("close")}
                 >
                   <FontAwesomeIcon icon={faTimes} size="lg" />
                 </button>

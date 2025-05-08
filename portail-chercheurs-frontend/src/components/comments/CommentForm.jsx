@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Button from "../ui/Button";
+import { LanguageContext } from "../../contexts/LanguageContext";
+
 export default function CommentForm({
   initialValue = "",
-  submitLabel = "Envoyer",
+  submitLabel,
   onSubmit,
   onCancel,
 }) {
+  const { t } = useContext(LanguageContext);
   const [text, setText] = useState(initialValue);
 
   const handle = (e) => {
@@ -22,15 +25,17 @@ export default function CommentForm({
         rows={3}
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder="Écrire un commentaire..."
+        placeholder={t("addCommentPlaceholder")}
       />
       <div className="flex gap-2 justify-end">
         {onCancel && (
           <Button variant="neutral" onClick={onCancel}>
-            Annuler
+            {t("cancelButton")}
           </Button>
         )}
-        <Button>{submitLabel}</Button>
+        <Button>
+          {submitLabel || t("postCommentButton")}
+        </Button>
       </div>
     </form>
   );

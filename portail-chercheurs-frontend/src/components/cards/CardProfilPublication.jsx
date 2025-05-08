@@ -1,3 +1,6 @@
+import React, { useContext } from "react";
+import { LanguageContext } from "../../contexts/LanguageContext";
+
 const CardProfilPublication = ({
   title,
   publicationDate,
@@ -5,6 +8,8 @@ const CardProfilPublication = ({
   abstract,
   className,
 }) => {
+  const { t, formatDate } = useContext(LanguageContext);
+
   const truncateAbstract = (text) => {
     const words = text.split(" ");
     if (words.length > 15) {
@@ -25,9 +30,17 @@ const CardProfilPublication = ({
       )}
 
       {/* Date de publication et nombre de citations */}
-      <div className="flex justify-between text-sm text-[var(--color-gray)] mb-3">
-        {publicationDate && <span>Publié le: {publicationDate}</span>}
-        {citationCount !== undefined && <span>Citations: {citationCount}</span>}
+      <div className="flex justify-between text-sm text-[var(--color-text-secondary)] mb-3">
+        {publicationDate && (
+          <span>
+            {t("publishedOn")} {formatDate(publicationDate, { dateStyle: 'medium' })}
+          </span>
+        )}
+        {citationCount !== undefined && (
+          <span>
+            {t("citationsLabel")} {citationCount}
+          </span>
+        )}
       </div>
 
       {/* Abstract avec troncation si nécessaire */}
