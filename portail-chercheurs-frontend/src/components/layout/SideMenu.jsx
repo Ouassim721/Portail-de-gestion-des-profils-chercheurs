@@ -16,16 +16,12 @@ const SideMenu = ({ isVisible, onClose }) => {
   const { t } = useContext(LanguageContext);
 
   const links = [
-    {
-      label: "Tableau de bord",
-      icon: <FaTachometerAlt />,
-      to: "/",
-    },
-    { label: "Chercheurs", icon: <FaUser />, to: "/AdminChercheurs" },
-    { label: "Institutions", icon: <FaUniversity />, to: "/institutions" },
-    { label: "Evénements", icon: <FaCalendarAlt />, to: "/adminactualite" },
-    { label: "Sécurité", icon: <FaShieldAlt />, to: "/securite" },
-    { label: "Paramètres", icon: <FaCog />, to: "/parametres" },
+    { labelKey: "dashboardTitle", icon: <FaTachometerAlt />, to: "/" },
+    { labelKey: "adminResearchersTitle", icon: <FaUser />, to: "/AdminChercheurs" },
+    { labelKey: "institutions", icon: <FaUniversity />, to: "/institutions" },
+    { labelKey: "upcomingEventTitle", icon: <FaCalendarAlt />, to: "/adminactualite" },
+    { labelKey: "security", icon: <FaShieldAlt />, to: "/securite" },
+    { labelKey: "settings", icon: <FaCog />, to: "/parametres" },
   ];
 
   return (
@@ -73,3 +69,4 @@ SideMenu.propTypes = {
 };
 
 export default SideMenu;
+
