@@ -11,7 +11,7 @@ import Home from "./pages/Home";
 import Chercheurs from "./pages/Chercheurs";
 import Actualites from "./pages/Actualites";
 import DetailsActualite from "./pages/DetailsActualite";
-import ProfilChercheur from "./components/ProfilChercheur";
+import ProfilChercheurPublic from "./pages/ProfilChercheurPublic";
 import Publications from "./pages/Publications";
 import DetailsPublication from "./pages/DetailsPublication";
 import NotFound from "./pages/NotFound";
@@ -23,7 +23,7 @@ import ProfilUpdateForm from "./pages/auth/ProfilUpdateForm";
 import SelectionPublication from "./pages/auth/SelectionPublications";
 
 // Pages protégées
-import Profil from "./pages/Profil";
+import MonProfil from "./pages/MonProfil";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminChercheurs from "./pages/admin/AdminChercheurs";
 import CreationChercheur from "./pages/admin/CreationChercheur";
@@ -42,10 +42,12 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="chercheurs" element={<Chercheurs />} />
+
               <Route
-                path="/profil-chercheur/:id"
-                element={<ProfilChercheur />}
+                path="/chercheurs/:id"
+                element={<ProfilChercheurPublic />}
               />
+
               <Route path="/actualites" element={<Actualites />} />
               <Route path="/actualites/:id" element={<DetailsActualite />} />
               <Route path="/publications" element={<Publications />} />
@@ -56,10 +58,10 @@ function App() {
 
               {/* Page Profil protégée */}
               <Route
-                path="/profil"
+                path="/mon-profil"
                 element={
                   <ProtectedRoute redirectTo="/connexion">
-                    <Profil />
+                    <MonProfil />
                   </ProtectedRoute>
                 }
               />

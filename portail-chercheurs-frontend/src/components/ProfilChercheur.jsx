@@ -1,12 +1,17 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import Button from "./ui/Button";
+import FollowButton from "./ui/FollowButton";
 import PublicationsSection from "./PublicationsSection";
-import axios from "../axios";
 import Loader from "../components/ui/Loader";
 import UpdateProfileModal from "./modals/UpdateProfileModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ChercheurAvatar from "./ui/ChercheurAvatar";
-import { faBuildingColumns, faUserPen, faLocationDot, faGraduationCap } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBuildingColumns,
+  faUserPen,
+  faLocationDot,
+  faGraduationCap,
+} from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import {
   BarChart,
@@ -18,47 +23,15 @@ import {
 } from "recharts";
 import { LanguageContext } from "../contexts/LanguageContext";
 
-function ProfilChercheur() {
+function ProfilChercheur({
+  chercheur,
+  publications = [],
+  isOwner = false,
+  onUpdate,
+}) {
   const { t } = useContext(LanguageContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [chercheur, setChercheur] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [publication, setPublication] = useState([]);
   const [showAllPublications, setShowAllPublications] = useState(false);
-
-  const handleUpdate = (updatedChercheur) => {
-    setChercheur(updatedChercheur);
-  };
-
-  useEffect(() => {
-    const fetchChercheur = async () => {
-      try {
-        const response = await axios.get("/profile", { withCredentials: true });
-        setChercheur(response.data);
-      } catch (error) {
-        console.error(t("profileLoadError"), error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const fetchPublications = async () => {
-      try {
-        const response = await axios.get("/profile/publications", { withCredentials: true });
-        setPublication(response.data.publications);
-      } catch (error) {
-        console.error(t("errorLoadingData"), error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchChercheur();
-    fetchPublications();
-  }, [t]);
-
-  if (loading) return <Loader />;
-  if (!chercheur) return <p>{t("profileLoadError")}</p>;
 
   const dataBar = [
     { year: "2019", publications: 5 },
@@ -67,7 +40,6 @@ function ProfilChercheur() {
     { year: "2022", publications: 10 },
     { year: "2023", publications: 15 },
   ];
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
       <section className="col-span-3 p-8 rounded shadow-sm bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] border-gray-200">
@@ -88,17 +60,25 @@ function ProfilChercheur() {
                 {t("universityLabel")} {chercheur.university}
               </p>
               <div className="flex gap-4 justify-center my-3 sm:my-2">
-                <Button variant="secondary" icon={faEnvelope} className="text-sm p-2!">
+                <Button
+                  variant="secondary"
+                  icon={faEnvelope}
+                  className="text-sm p-2!"
+                >
                   {t("contactButton")}
                 </Button>
-                <Button
-                  variant="neutral"
-                  icon={faUserPen}
-                  className="text-sm p-2!"
-                  onClick={() => setIsModalOpen(true)}
-                >
-                  {t("editButton")}
-                </Button>
+                {isOwner ? (
+                  <Button
+                    variant="neutral"
+                    icon={faUserPen}
+                    className="text-sm p-2!"
+                    onClick={() => setIsModalOpen(true)}
+                  >
+                    {t("editButton")}
+                  </Button>
+                ) : (
+                  <FollowButton targetUserId={chercheur.id} />
+                )}
               </div>
             </div>
           </div>
@@ -132,7 +112,9 @@ function ProfilChercheur() {
       </section>
 
       <section className="col-span-full md:col lg:col-span-1 p-8 shadow-sm bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] border-gray-200">
-        <h3 className="tracking-wide font-bold text-xl mb-4">{t("statsTitle")}</h3>
+        <h3 className="tracking-wide font-bold text-xl mb-4">
+          {t("statsTitle")}
+        </h3>
         <div className="flex flex-col gap-4">
           <div className="flex justify-between">
             <h3>{t("statsPublications")}</h3>
@@ -170,16 +152,19 @@ function ProfilChercheur() {
       </section>
 
       <PublicationsSection
-        publications={publication}
+        publications={publications}
         onToggleView={() => setShowAllPublications(!showAllPublications)}
         isExpanded={showAllPublications}
       />
-      <UpdateProfileModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        chercheur={chercheur}
-        onUpdate={handleUpdate}
-      />
+
+      {isOwner && (
+        <UpdateProfileModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          chercheur={chercheur}
+          onUpdate={onUpdate}
+        />
+      )}
     </div>
   );
 }

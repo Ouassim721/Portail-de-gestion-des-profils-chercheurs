@@ -129,7 +129,7 @@ function Navbar({ sticky = false }) {
                   {
                     label: t("myAccount"),
                     icon: faUser,
-                    link: "/profil",
+                    link: "/mon-profil",
                   },
                   ...(chercheur.role === "Administrateur"
                     ? [
