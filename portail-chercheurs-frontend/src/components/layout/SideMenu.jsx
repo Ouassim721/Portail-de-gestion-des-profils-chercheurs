@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
@@ -10,19 +10,18 @@ import {
   FaCog,
   FaTimes,
 } from "react-icons/fa";
+import { LanguageContext } from "../../contexts/LanguageContext";
 
 const SideMenu = ({ isVisible, onClose }) => {
+  const { t } = useContext(LanguageContext);
+
   const links = [
-    {
-      label: "Tableau de bord",
-      icon: <FaTachometerAlt />,
-      to: "/",
-    },
-    { label: "Chercheurs", icon: <FaUser />, to: "/AdminChercheurs" },
-    { label: "Institutions", icon: <FaUniversity />, to: "/institutions" },
-    { label: "Evénements", icon: <FaCalendarAlt />, to: "/adminactualite" },
-    { label: "Sécurité", icon: <FaShieldAlt />, to: "/securite" },
-    { label: "Paramètres", icon: <FaCog />, to: "/parametres" },
+    { labelKey: "dashboardTitle", icon: <FaTachometerAlt />, to: "/" },
+    { labelKey: "adminResearchersTitle", icon: <FaUser />, to: "/AdminChercheurs" },
+    { labelKey: "institutions", icon: <FaUniversity />, to: "/institutions" },
+    { labelKey: "upcomingEventTitle", icon: <FaCalendarAlt />, to: "/adminactualite" },
+    { labelKey: "security", icon: <FaShieldAlt />, to: "/securite" },
+    { labelKey: "settings", icon: <FaCog />, to: "/parametres" },
   ];
 
   return (
@@ -30,19 +29,19 @@ const SideMenu = ({ isVisible, onClose }) => {
       className={`fixed top-0 left-0 h-full w-64 bg-[var(--color-bg-primary)] border-r border-gray-400 p-4 shadow-lg transform ${
         isVisible ? "translate-x-0" : "-translate-x-full"
       } transition-transform duration-300 ease-in-out z-50`}
-      aria-label="Navigation latérale"
+      aria-label={t("sideMenuAriaLabel")}
     >
       <button
         onClick={onClose}
-        aria-label="Fermer le menu"
+        aria-label={t("closeMenu")}
         className="text-gray-500 hover:text-gray-700 focus:outline-none mb-4"
       >
         <FaTimes size={20} />
       </button>
       <nav>
         <ul className="space-y-2">
-          {links.map(({ label, icon, to }) => (
-            <li key={label} className="rounded-md">
+          {links.map(({ labelKey, icon, to }) => (
+            <li key={labelKey} className="rounded-md">
               <NavLink
                 to={`/dashboard${to}`}
                 className={({ isActive }) =>
@@ -54,7 +53,7 @@ const SideMenu = ({ isVisible, onClose }) => {
                 }
               >
                 {icon}
-                <span>{label}</span>
+                <span>{t(labelKey)}</span>
               </NavLink>
             </li>
           ))}

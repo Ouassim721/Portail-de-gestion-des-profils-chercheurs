@@ -1,11 +1,13 @@
-import { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import Button from "../../components/ui/Button";
 import { Navigate } from "react-router-dom";
+import { LanguageContext } from "../../contexts/LanguageContext";
 
 axios.defaults.withCredentials = true;
 
 const CreationActualite = () => {
+  const { t } = useContext(LanguageContext);
   const [formData, setFormData] = useState({
     titre: "",
     localisation: "",
@@ -13,63 +15,46 @@ const CreationActualite = () => {
     categorie: "",
     date_publication: "",
   });
-
-  const [documentPdf, setDocumentPdf] = useState(null); // pour gérer le fichier PDF séparément
+  const [documentPdf, setDocumentPdf] = useState(null);
   const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleFileChange = (e) => {
-    setDocumentPdf(e.target.files[0]); // récupère le fichier sélectionné
+    setDocumentPdf(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const data = new FormData();
-      data.append("titre", formData.titre);
-      data.append("localisation", formData.localisation);
-      data.append("description", formData.description);
-      data.append("categorie", formData.categorie);
-      data.append("date_publication", formData.date_publication);
-
-      if (documentPdf) {
-        data.append("document_pdf", documentPdf); // très important pour ajouter le fichier
-      }
+      Object.entries(formData).forEach(([key, val]) => data.append(key, val));
+      if (documentPdf) data.append("document_pdf", documentPdf);
 
       const response = await axios.post(
-        "http://localhost:8000/api/actualites",
+        "/api/actualites",
         data,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
 
-      setMessage("Actualité ajoutée avec succès !");
-      console.log("Réponse :", response.data);
+      setMessage(t("creationSuccess"));
       window.location.href = "/dashboard/adminactualite";
     } catch (error) {
-      console.error("Erreur :", error.response?.data);
-      setMessage("Erreur lors de l'ajout !");
+      console.error(error.response?.data || error);
+      setMessage(t("creationError"));
     }
   };
 
   return (
     <div className="p-4 max-w-md mx-auto bg-[var(--color-bg-primary)] shadow-lg rounded-lg">
-      <h2 className="text-xl font-bold mb-4">Créer une actualité</h2>
+      <h2 className="text-xl font-bold mb-4">{t("createNewsTitle")}</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
           name="titre"
-          placeholder="Titre"
+          placeholder={t("titrePlaceholder")}
           onChange={handleChange}
           className="w-full border p-2 rounded"
           required
@@ -77,15 +62,14 @@ const CreationActualite = () => {
         <input
           type="text"
           name="localisation"
-          placeholder="Localisation"
+          placeholder={t("locationPlaceholder")}
           onChange={handleChange}
           className="w-full border p-2 rounded"
           required
         />
-        <input
-          type="text"
+        <textarea
           name="description"
-          placeholder="Description"
+          placeholder={t("descriptionPlaceholder")}
           onChange={handleChange}
           className="w-full border p-2 rounded"
           required
@@ -93,7 +77,7 @@ const CreationActualite = () => {
         <input
           type="text"
           name="categorie"
-          placeholder="Catégorie"
+          placeholder={t("categoryPlaceholder")}
           onChange={handleChange}
           className="w-full border p-2 rounded"
           required
@@ -110,8 +94,9 @@ const CreationActualite = () => {
           name="date_publication"
           onChange={handleChange}
           className="w-full border p-2 rounded"
+          required
         />
-        <Button className="w-full">Ajouter</Button>
+        <Button className="w-full">{t("addButton")}</Button>
       </form>
       {message && <p className="mt-4 text-sm">{message}</p>}
     </div>

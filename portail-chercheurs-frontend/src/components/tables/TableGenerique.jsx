@@ -1,4 +1,9 @@
+import { useContext } from "react";
+import { LanguageContext } from "../../contexts/LanguageContext";
+
 function TableGenerique({ columns, data, onRowClick, onSort, sortConfig }) {
+  const { t } = useContext(LanguageContext);
+
   const handleSort = (key, isSortable) => {
     if (!isSortable) return;
     onSort(key);
@@ -12,7 +17,7 @@ function TableGenerique({ columns, data, onRowClick, onSort, sortConfig }) {
             {columns.map((col, index) => (
               <th
                 key={index}
-                className={`px-4 py-2 text-left text-gray-700 uppercase font-semibold border-b  ${
+                className={`px-4 py-2 text-left text-gray-700 uppercase font-semibold border-b ${
                   col.sortable ? "cursor-pointer" : ""
                 }`}
                 onClick={() => handleSort(col.key, col.sortable)}
@@ -21,7 +26,9 @@ function TableGenerique({ columns, data, onRowClick, onSort, sortConfig }) {
                   {col.label}
                   {sortConfig && sortConfig.key === col.key && (
                     <span className="ml-2">
-                      {sortConfig.direction === "asc" ? "↑" : "↓"}
+                      {sortConfig.direction === "asc"
+                        ? t("sortAsc")
+                        : t("sortDesc")}
                     </span>
                   )}
                 </div>

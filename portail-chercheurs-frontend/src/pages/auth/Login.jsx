@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/ui/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,8 +15,10 @@ import { FaRegLightbulb } from "react-icons/fa";
 import { faSignIn, faMicroscope } from "@fortawesome/free-solid-svg-icons";
 import connexionImage from "../../assets/connexion.png";
 import axios from "../../axios";
+import { LanguageContext } from "../../contexts/LanguageContext";
 
 function Connexion() {
+  const { t } = useContext(LanguageContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,187 +30,142 @@ function Connexion() {
     try {
       const res = await axios.post(
         "/login",
-        {
-          email,
-          password,
-        },
-        {
-          withCredentials: true,
-        }
+        { email, password },
+        { withCredentials: true }
       );
-
       const user = res.data.user;
-      if (user && user.must_change_password) {
+      if (user?.must_change_password) {
         navigate("/change-password");
       } else {
-        if (user.role === "Administrateur") {
-          window.location.href = "/dashboard";
-        } else {
-          window.location.href = "/";
-        }
+        window.location.href =
+          user.role === "Administrateur" ? "/dashboard" : "/";
       }
     } catch (err) {
-      if (err.response) {
-        console.error(
-          "Réponse de l'API :",
-          err.response.status,
-          err.response.data
-        );
-      } else {
-        console.error("Erreur réseau ou client :", err);
-      }
-      setError("Identifiants invalides ou erreur serveur.");
+      setError(t("loginError"));
     }
   };
 
-  const toggleShowPassword = () => {
-    setShowPassword((prev) => !prev);
-  };
-
   return (
-    // Conteneur principal centré verticalement et horizontalement
-    <div className="h-screen flex items-center justify-center bg-[var(--color-bg-secondary)] p-4 relative ">
-      {/* Conteneur "carré" central responsive avec effet d'ombre supplémentaire au hover */}
-      <div className="bg-[var(--color-bg-primary)] shadow-lg hover:shadow-2xl transition-shadow duration-300 rounded-3xl overflow-hidden flex flex-col md:flex-row w-full max-x-[80%] md:max-x-[75%] lg:max-w-[70%] xl:max-w-[55%] h-full">
-        {/* Partie gauche (informations) : cachée sur mobile */}
+    <div className="h-screen flex items-center justify-center bg-[var(--color-bg-secondary)] p-4">
+      <div className="bg-[var(--color-bg-primary)] shadow-lg hover:shadow-2xl rounded-3xl overflow-hidden flex flex-col md:flex-row w-full max-w-4xl h-full">
+        {/* Info panel */}
         <div
           className="hidden md:flex md:flex-col md:justify-center md:w-1/2 relative p-8 bg-[var(--color-primary)] bg-cover bg-center"
           style={{ backgroundImage: `url(${connexionImage})` }}
         >
-          {/* Overlay sombre pour la lisibilité */}
-          <div className="absolute inset-0 bg-[#003366] opacity-80"></div>
-          <div className="relative z-10 h-full flex flex-col justify-between">
-            <div>
-              <h1 className="mb-8 text-3xl font-extrabold text-white text-center">
-                ScholarHub
-              </h1>
-            </div>
-            <div className="flex flex-col justify-between h-1/2">
-              <p className="text-indigo-100 text-lg font-light line-clamp-5">
-                Gérez votre profil de recherche et connectez-vous avec la
-                communauté scientifique.
-              </p>
-              <ul className="space-y-4 text-white">
-                <li className="flex items-center gap-4">
-                  <span className="bg-[rgba(255,255,255,0.1)] rounded-full flex justify-center items-center w-12 h-12">
-                    <MdScience className="text-3xl text-white" />
-                  </span>
-                  <span>Innovation et Recherche</span>
-                </li>
-                <li className="flex items-center gap-4">
-                  <span className="bg-[rgba(255,255,255,0.1)] rounded-full flex justify-center items-center w-12 h-12">
-                    <MdPublic className="text-3xl text-white" />
-                  </span>
-                  <span>Collaboration Mondiale</span>
-                </li>
-                <li className="flex items-center gap-4">
-                  <span className="bg-[rgba(255,255,255,0.1)] rounded-full flex justify-center items-center w-12 h-12">
-                    <MdArticle className="text-3xl text-white" />
-                  </span>
-                  <span>Publications Scientifiques</span>
-                </li>
-              </ul>
-            </div>
+          <div className="absolute inset-0 bg-[#003366] opacity-80" />
+          <div className="relative z-10 flex-grow flex flex-col justify-between">
+            <h1 className="text-3xl font-extrabold text-white text-center">
+              ScholarHub
+            </h1>
+            <p className="text-indigo-100 text-lg font-light">
+              {t("heroText")}
+            </p>
+            <ul className="space-y-4 text-white">
+              <li className="flex items-center gap-4">
+                <span className="bg-[rgba(255,255,255,0.1)] rounded-full p-3">
+                  <MdScience className="text-3xl" />
+                </span>
+                {t("feature1")}
+              </li>
+              <li className="flex items-center gap-4">
+                <span className="bg-[rgba(255,255,255,0.1)] rounded-full p-3">
+                  <MdPublic className="text-3xl" />
+                </span>
+                {t("feature2")}
+              </li>
+              <li className="flex items-center gap-4">
+                <span className="bg-[rgba(255,255,255,0.1)] rounded-full p-3">
+                  <MdArticle className="text-3xl" />
+                </span>
+                {t("feature3")}
+              </li>
+            </ul>
           </div>
         </div>
 
-        {/* Partie droite (formulaire de connexion) */}
+        {/* Form panel */}
         <div className="flex flex-col justify-center p-8 md:w-1/2">
-          <div className="w-full flex flex-col gap-12">
-            <div className="flex flex-col gap-4">
-              <div className="flex justify-center items-center">
-                <FontAwesomeIcon
-                  icon={faMicroscope}
-                  className="text-4xl text-[var(--color-primary)] bg-indigo-100 rounded-full p-3"
-                />
-              </div>
-              <h2 className="text-2xl font-bold text-[var(--color-text-primary)] text-center">
-                Connexion Chercheur
+          <div className="space-y-8">
+            <div className="text-center space-y-2">
+              <FontAwesomeIcon
+                icon={faMicroscope}
+                className="text-4xl text-[var(--color-primary)] bg-indigo-100 rounded-full p-3"
+              />
+              <h2 className="text-2xl font-bold text-[var(--color-text-primary)]">
+                {t("loginTitle")}
               </h2>
-              <p className="text-gray-500 text-center">
-                Accédez à votre espace de recherche
+              <p className="text-sm text-[var(--color-text-secondary)]">
+                {t("loginSubtitle")}
               </p>
             </div>
-            <form onSubmit={handleLogin}>
-              <div className="mb-6">
-                <label
-                  htmlFor="email"
-                  className="mb-2 block text-sm font-medium text-[var(--color-text-secondary)]"
-                >
-                  Email Institutionnel
+
+            <form onSubmit={handleLogin} className="space-y-6">
+              {/* Email */}
+              <div>
+                <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">
+                  {t("emailLabel")}
                 </label>
                 <div className="flex items-center rounded border border-gray-300">
                   <MdEmail className="ml-2 text-[var(--color-text-primary)]" />
                   <input
                     type="email"
-                    id="email"
-                    placeholder="nom@institution.edu"
+                    placeholder={t("emailPlaceholder")}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full border-none px-3 py-2 text-sm text-[var(--color-text-primary)] focus:outline-none"
+                    className="w-full px-3 py-2 text-sm text-[var(--color-text-primary)] focus:outline-none"
                     required
                   />
                 </div>
               </div>
 
-              <div className="mb-6">
-                <label
-                  htmlFor="password"
-                  className="mb-2 block text-sm font-medium text-[var(--color-text-secondary)]"
-                >
-                  Mot de passe
+              {/* Password */}
+              <div>
+                <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">
+                  {t("passwordLabel")}
                 </label>
                 <div className="relative flex items-center rounded border border-gray-300">
                   <MdLock className="ml-2 text-[var(--color-text-primary)]" />
                   <input
                     type={showPassword ? "text" : "password"}
-                    id="password"
-                    placeholder="••••••••"
+                    placeholder={t("passwordPlaceholder")}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full border-none text-sm px-3 py-2 text-[var(--color-text-primary)] focus:outline-none"
+                    className="w-full px-3 py-2 text-sm text-[var(--color-text-primary)] focus:outline-none"
                     required
                   />
                   <div
-                    className="absolute right-2 cursor-pointer text-[var(--color-text-primary)]"
-                    onClick={toggleShowPassword}
+                    onClick={() => setShowPassword((v) => !v)}
+                    className="absolute right-2 cursor-pointer"
                   >
                     {showPassword ? (
-                      <MdVisibilityOff size={24} />
+                      <MdVisibilityOff size={20} />
                     ) : (
-                      <MdVisibility size={24} />
+                      <MdVisibility size={20} />
                     )}
                   </div>
                 </div>
               </div>
 
-              <div className="mb-4 flex items-center justify-between">
-                <div className="flex items-center cursor-pointer">
-                  <input
-                    id="remember"
-                    type="checkbox"
-                    className="h-4 w-4 text-[var(--color-primary)] focus:ring-blue-900 cursor-pointer"
-                  />
-                  <label
-                    htmlFor="remember"
-                    className="ml-2 text-sm text-[var(--color-text-secondary)] cursor-pointer"
-                  >
-                    Se souvenir de moi
-                  </label>
-                </div>
-                <a
-                  href="#"
-                  className="text-sm text-[var(--color-text-primary)] font-medium hover:underline"
-                >
-                  Mot de passe oublié ?
+              {/* Remember & forgot */}
+              <div className="flex justify-between items-center text-sm">
+                <label className="flex items-center">
+                  <input type="checkbox" className="mr-2" />
+                  {t("rememberMe")}
+                </label>
+                <a href="#" className="hover:underline">
+                  {t("forgotPassword")}
                 </a>
               </div>
 
-              <Button icon={faSignIn} className="w-full p-3! font-light!">
-                Se Connecter
+              {/* Submit */}
+              <Button icon={faSignIn} className="w-full">
+                {t("loginButton")}
               </Button>
+
+              {/* Error */}
               {error && (
-                <p className="mt-3 text-red-500 text-center">{error}</p>
+                <p className="text-red-500 text-center">{error}</p>
               )}
             </form>
           </div>
@@ -217,4 +174,5 @@ function Connexion() {
     </div>
   );
 }
+
 export default Connexion;

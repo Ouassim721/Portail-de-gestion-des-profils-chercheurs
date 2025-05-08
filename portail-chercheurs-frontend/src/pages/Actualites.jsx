@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext, useMemo } from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -7,43 +7,47 @@ import format from "date-fns/format";
 import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
-import { fr } from "date-fns/locale";
+import { fr, enUS } from "date-fns/locale";
 import { Link } from "react-router-dom";
+import { LanguageContext } from "../contexts/LanguageContext";
 import "./Actualites.css";
-const locales = {
-  fr: fr,
-};
 
-const localizer = dateFnsLocalizer({
-  format: (date, formatStr, options) =>
-    format(date, formatStr, { ...options, locale: fr }),
-  parse: (dateString, formatString, backupDate, options) =>
-    parse(dateString, formatString, backupDate, { ...options, locale: fr }),
-  startOfWeek: (date, options) => startOfWeek(date, { ...options, locale: fr }),
-  getDay: (date) => getDay(new Date(date)),
-  locales,
-});
+const localeMap = { fr, en: enUS };
 
 const Actualites = () => {
+  const { t, language } = useContext(LanguageContext);
   const [events, setEvents] = useState([]);
   const [view, setView] = useState("liste");
   const [underlineStyle, setUnderlineStyle] = useState({});
   const listeRef = useRef(null);
   const calendrierRef = useRef(null);
 
+  // Memoize localizer to rebuild when language changes
+  const localizer = useMemo(() => {
+    const locale = localeMap[language] || fr;
+    return dateFnsLocalizer({
+      format: (date, fmt, opts) => format(date, fmt, { ...opts, locale }),
+      parse: (str, fmt, bd, opts) => parse(str, fmt, bd, { ...opts, locale }),
+      startOfWeek: (date, opts) => startOfWeek(date, { ...opts, locale }),
+      getDay: (date) => getDay(new Date(date)),
+      locales: { [language]: locale },
+    });
+  }, [language]);
+
   useEffect(() => {
     axios
       .get("http://localhost:8000/api/actualites", { withCredentials: true })
-      .then((res) => {
-        const formatted = res.data.map((actu) => ({
-          id: `${actu.id}`,
-          title: `${actu.titre} (${actu.categorie})`,
-          start: new Date(actu.date_publication),
-          end: new Date(actu.date_publication),
-          allDay: true,
-          resource: actu,
-        }));
-        setEvents(formatted);
+      .then(({ data }) => {
+        setEvents(
+          data.map((actu) => ({
+            id: `${actu.id}`,
+            title: `${actu.titre} (${actu.categorie})`, 
+            start: new Date(actu.date_publication),
+            end: new Date(actu.date_publication),
+            allDay: true,
+            resource: actu,
+          }))
+        );
       });
   }, []);
 
@@ -51,44 +55,34 @@ const Actualites = () => {
     const activeRef = view === "liste" ? listeRef : calendrierRef;
     if (activeRef.current) {
       const { offsetLeft, offsetWidth } = activeRef.current;
-      setUnderlineStyle({
-        left: offsetLeft,
-        width: offsetWidth,
-      });
+      setUnderlineStyle({ left: offsetLeft, width: offsetWidth });
     }
   }, [view]);
 
   return (
-    <div className="md:p-6 bg-[var(--color-bg-primary)] rounded-2xl shadow-md text-xs sm:text-sm md:text-base 2xl:text:lg">
+    <div className="md:p-6 bg-[var(--color-bg-primary)] rounded-2xl shadow-md text-xs sm:text-sm md:text-base 2xl:text-lg">
       <div className="flex space-x-4 border-b border-gray-300 relative mb-4">
         <button
           ref={listeRef}
           onClick={() => setView("liste")}
           className={`relative pb-2 px-4 text-lg font-medium transition-colors duration-300 ${
-            view === "liste"
-              ? "text-[var(--color-primary)]"
-              : "text-gray-400 hover:text-[var(--color-primary)]"
+            view === "liste" ? "text-[var(--color-primary)]" : "text-gray-400 hover:text-[var(--color-primary)]"
           }`}
         >
-          Liste
+          {t("list")}
         </button>
         <button
           ref={calendrierRef}
           onClick={() => setView("calendrier")}
           className={`relative pb-2 px-4 text-lg font-medium transition-colors duration-300 ${
-            view === "calendrier"
-              ? "text-[var(--color-primary)]"
-              : "text-gray-400 hover:text-[var(--color-primary)]"
+            view === "calendrier" ? "text-[var(--color-primary)]" : "text-gray-400 hover:text-[var(--color-primary)]"
           }`}
         >
-          Calendrier
+          {t("calendar")}
         </button>
         <span
           className="absolute bottom-0 h-1 bg-[var(--color-primary)] transition-all duration-300 ease-in-out"
-          style={{
-            left: underlineStyle.left,
-            width: underlineStyle.width,
-          }}
+          style={underlineStyle}
         />
       </div>
 
@@ -107,22 +101,22 @@ const Actualites = () => {
                 events={events}
                 startAccessor="start"
                 endAccessor="end"
-                culture="fr"
+                culture={language}
                 style={{ height: 600 }}
                 messages={{
-                  next: "Suivant",
-                  previous: "Précédent",
-                  today: "Aujourd'hui",
-                  month: "Mois",
-                  week: "Semaine",
-                  day: "Jour",
-                  agenda: "Agenda",
-                  date: "Date",
-                  time: "Heure",
-                  event: "Événement",
-                  showMore: (total) => `+${total} de plus`,
+                  next: t("next"),
+                  previous: t("previous"),
+                  today: t("today"),
+                  month: t("month"),
+                  week: t("week"),
+                  day: t("day"),
+                  agenda: t("agenda"),
+                  date: t("dateLabel"),
+                  time: t("timeLabel"),
+                  event: t("event"),
+                  showMore: (total) => `+${total} ${t("showMore")}`,
                 }}
-                eventPropGetter={(event) => ({
+                eventPropGetter={() => ({
                   style: {
                     backgroundColor: "var(--color-primary)",
                     color: "white",
@@ -134,66 +128,28 @@ const Actualites = () => {
                   toolbar: (props) => (
                     <div className="rbc-toolbar">
                       <span className="rbc-btn-group">
-                        <button
-                          type="button"
-                          onClick={() => props.onNavigate("PREV")}
-                          className="rbc-btn"
-                        >
-                          Précédent
+                        <button type="button" onClick={() => props.onNavigate("PREV")} className="rbc-btn">
+                          {t("previous")}
                         </button>
-                        <button
-                          type="button"
-                          onClick={() => props.onNavigate("TODAY")}
-                          className="rbc-btn"
-                        >
-                          Aujourd'hui
+                        <button type="button" onClick={() => props.onNavigate("TODAY")} className="rbc-btn">
+                          {t("today")}
                         </button>
-                        <button
-                          type="button"
-                          onClick={() => props.onNavigate("NEXT")}
-                          className="rbc-btn"
-                        >
-                          Suivant
+                        <button type="button" onClick={() => props.onNavigate("NEXT")} className="rbc-btn">
+                          {t("next")}
                         </button>
                       </span>
                       <span className="rbc-toolbar-label">{props.label}</span>
                       <span className="rbc-btn-group">
-                        <button
-                          type="button"
-                          onClick={() => props.onView("month")}
-                          className={`rbc-btn ${
-                            props.view === "month" ? "rbc-active" : ""
-                          }`}
-                        >
-                          Mois
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => props.onView("week")}
-                          className={`rbc-btn ${
-                            props.view === "week" ? "rbc-active" : ""
-                          }`}
-                        >
-                          Semaine
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => props.onView("day")}
-                          className={`rbc-btn ${
-                            props.view === "day" ? "rbc-active" : ""
-                          }`}
-                        >
-                          Jour
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => props.onView("agenda")}
-                          className={`rbc-btn ${
-                            props.view === "agenda" ? "rbc-active" : ""
-                          }`}
-                        >
-                          Agenda
-                        </button>
+                        {["month", "week", "day", "agenda"].map((v) => (
+                          <button
+                            key={v}
+                            type="button"
+                            onClick={() => props.onView(v)}
+                            className={`rbc-btn ${props.view === v ? "rbc-active" : ""}`}
+                          >
+                            {t(v)}
+                          </button>
+                        ))}
                       </span>
                     </div>
                   ),
@@ -205,7 +161,6 @@ const Actualites = () => {
                 }}
               />
             </div>
-            {/* Styles CSS pour le calendrier */}
           </motion.div>
         )}
 
@@ -218,17 +173,14 @@ const Actualites = () => {
             transition={{ duration: 0.4 }}
           >
             <div className="space-y-4 mt-6">
-              {events.map((event, index) => (
-                <Link to={`/actualites/${event.id}`} key={index}>
-                  <div
-                    key={index}
-                    className="p-4 bg-[var(--color-bg-primary)] rounded shadow border-l-4 border-[var(--color-primary)] my-2"
-                  >
+              {events.map((event) => (
+                <Link to={`/actualites/${event.id}`} key={event.id}>
+                  <div className="p-4 bg-[var(--color-bg-primary)] rounded shadow border-l-4 border-[var(--color-primary)] my-2">
                     <h3 className="text-lg font-semibold text-[var(--color-text-primary)]">
                       {event.title}
                     </h3>
-                    <p className="text-sm text-[var(--color-gray)]">
-                      {format(event.start, "dd MMMM yyyy", { locale: fr })}
+                    <p className="text-sm text-[var(--color-text-secondary)]">
+                      {format(event.start, t("dateFormat"), { locale: localeMap[language] || fr })}
                     </p>
                     <p className="text-sm text-[var(--color-text-secondary)]">
                       {event.resource.categorie}
