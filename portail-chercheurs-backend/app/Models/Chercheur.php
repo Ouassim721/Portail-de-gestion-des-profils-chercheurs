@@ -59,6 +59,19 @@ class Chercheur extends Authenticatable implements JWTSubject
     {
         return $query->withCount('publications');
     }
+
+    // Un utilisateur peut suivre plusieurs autres utilisateurs
+    public function following()
+    {
+        return $this->belongsToMany(Chercheur::class, 'follows', 'follower_id', 'followed_id')->withTimestamps();
+    }
+
+    // Un utilisateur peut être suivi par plusieurs autres
+    public function followers()
+    {
+        return $this->belongsToMany(Chercheur::class, 'follows', 'followed_id', 'follower_id')->withTimestamps();
+    }
+
     /**
      * Get the attributes that should be cast.
      *

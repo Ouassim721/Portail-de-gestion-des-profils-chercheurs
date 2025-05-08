@@ -20,6 +20,7 @@ class ChercheurSeeder extends Seeder
             'role' => 'Administrateur',
             'discipline' => 'Informatique',
             'photoProfil' => null,
+            'must_change_password' => false,
             'remember_token' => Str::random(10),
             'scopus_author_id' => null,
         ]);

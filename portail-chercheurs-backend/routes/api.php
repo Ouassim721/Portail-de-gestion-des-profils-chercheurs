@@ -9,6 +9,7 @@ use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\ActualiteController;
 use App\Http\Controllers\ChercheurController;
+use App\Http\Controllers\FollowController;
 use App\Http\Controllers\ScopusPublicationController;
 use App\Http\Controllers\CommentController;
 
@@ -50,9 +51,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/chercheurs', [ChercheurController::class, 'apiIndex']);
 
     // Récupérer un chercheur spécifique
-    Route::get('/chercheurs/{id}', function ($id) {
-        return Chercheur::findOrFail($id);
-    });
 
     // Supprimer un chercheur
     Route::delete('/chercheurs/{id}', [ChercheurController::class, 'destroy']);
@@ -67,6 +65,9 @@ Route::middleware('auth:api')->group(function () {
     Route::put('/chercheur/profile', [ChercheurController::class, 'updateProfile']);
 });
 
+Route::get('/chercheurs/{id}', function ($id) {
+    return Chercheur::findOrFail($id);
+});
 /* ==================== ROUTES POUR LES PUBLICATIONS ==================== */
 Route::middleware('auth:api')->group(function () {
     // Lister les publications
@@ -88,13 +89,18 @@ Route::middleware('auth:api')->group(function () {
 // Récupérer les publications Scopus (via API externe)
 Route::middleware('auth:api')->get('/scopus-publications', [ScopusPublicationController::class, 'fetchPublications']);
 
-/* ==================== ROUTES POUR LES DISCIPLINES ==================== */
-Route::apiResource('disciplines', DisciplineController::class);
-
 /* ==================== ROUTES POUR LES ACTUALITES ==================== */
 Route::apiResource('actualites', ActualiteController::class);
 Route::get('/actualites', [ActualiteController::class, 'index']);
 Route::get('/actualites/{id}', [ActualiteController::class, 'show']);
+
+/* ==================== ROUTES POUR LES FOLLOWS ==================== */
+Route::middleware('auth:api')->group(function () {
+    Route::post('/follow/{userToFollow}', [FollowController::class, 'follow']);
+    Route::delete('/unfollow/{userToUnfollow}', [FollowController::class, 'unfollow']);
+    Route::get('/is-following/{user}', [FollowController::class, 'isFollowing']);
+});
+
 /* ==================== ROUTES POUR LES DISCIPLINES ==================== */
 Route::apiResource('disciplines', DisciplineController::class);
 Route::get('/disciplines', [DisciplineController::class, 'index']);
