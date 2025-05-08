@@ -34,7 +34,7 @@ function Navbar({ sticky = false }) {
     [t("researchers")]: "/chercheurs",
     [t("publications")]: "/publications",
     [t("news")]: "/actualites",
-    [t("about")]: "/about-us",
+    [t("about")]: "/about",
     [t("contact")]: "/contact",
   };
 

@@ -15,6 +15,7 @@ import ProfilChercheurPublic from "./pages/ProfilChercheurPublic";
 import Publications from "./pages/Publications";
 import DetailsPublication from "./pages/DetailsPublication";
 import NotFound from "./pages/NotFound";
+import AboutPage from "./pages/AboutPage";
 
 // Authentification
 import Connexion from "./pages/auth/Login";
@@ -51,6 +52,7 @@ function App() {
               <Route path="/actualites" element={<Actualites />} />
               <Route path="/actualites/:id" element={<DetailsActualite />} />
               <Route path="/publications" element={<Publications />} />
+              <Route path="/about" element={<AboutPage />} />
               <Route
                 path="/details-publication/:id"
                 element={<DetailsPublication />}
