@@ -46,7 +46,7 @@ const SideMenu = ({ isVisible, onClose }) => {
         <ul className="space-y-2">
           {links.map(({ labelKey, icon, to }) => (
             <li key={labelKey} className="rounded-md">
-              <NavLink
+              <NavLink 
                 to={`/dashboard${to}`}
                 className={({ isActive }) =>
                   `flex items-center space-x-2 px-4 py-2 text-[var(--color-text-primary)] hover:bg-gray-300 hover:text-black rounded-md ${
