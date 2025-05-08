@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Button from "./ui/Button";
 import PublicationsSection from "./PublicationsSection";
 import axios from "../axios";
@@ -16,8 +16,10 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { LanguageContext } from "../contexts/LanguageContext";
 
 function ProfilChercheur() {
+  const { t } = useContext(LanguageContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [chercheur, setChercheur] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -71,7 +73,11 @@ function ProfilChercheur() {
       <section className="col-span-3 p-8 rounded shadow-sm bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] border-gray-200">
         <div className="col-span-3 relative flex flex-col sm:flex-row gap-2 sm:gap-12 lg:gap-16">
           <div className="flex-shrink-0">
-            <ChercheurAvatar chercheur={chercheur} size="xl" className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 mx-auto sm:mx-0" />
+            <ChercheurAvatar
+              chercheur={chercheur}
+              size="xl"
+              className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 mx-auto sm:mx-0"
+            />
           </div>
           <div className="sm:flex sm:justify-between w-full mx-auto">
             <div>
@@ -91,7 +97,7 @@ function ProfilChercheur() {
                   className="text-sm p-2!"
                   onClick={() => setIsModalOpen(true)}
                 >
-                  Modifier
+                  {t("editButton")}
                 </Button>
               </div>
             </div>
@@ -104,19 +110,46 @@ function ProfilChercheur() {
           {t("infoTitle")}
         </h3>
         <ul className="flex flex-col gap-4 list-none text-[var(--color-text-primary)]">
-          <li><span className="mr-3"><FontAwesomeIcon icon={faBuildingColumns} /></span>{t("departmentLabel")} {chercheur.discipline}</li>
-          <li><span className="mr-3"><FontAwesomeIcon icon={faLocationDot} /></span>Safi, Maroc</li>
-          <li><span className="mr-3"><FontAwesomeIcon icon={faGraduationCap} /></span>PhD en Intelligence Artificielle</li>
+          <li>
+            <span className="mr-3">
+              <FontAwesomeIcon icon={faBuildingColumns} />
+            </span>
+            {t("departmentLabel")} {chercheur.discipline}
+          </li>
+          <li>
+            <span className="mr-3">
+              <FontAwesomeIcon icon={faLocationDot} />
+            </span>
+            {t("locationLabel")} Safi, Maroc
+          </li>
+          <li>
+            <span className="mr-3">
+              <FontAwesomeIcon icon={faGraduationCap} />
+            </span>
+            {t("degreeLabel")} PhD en Intelligence Artificielle
+          </li>
         </ul>
       </section>
 
       <section className="col-span-full md:col lg:col-span-1 p-8 shadow-sm bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] border-gray-200">
         <h3 className="tracking-wide font-bold text-xl mb-4">{t("statsTitle")}</h3>
         <div className="flex flex-col gap-4">
-          <div className="flex justify-between"><h3>{t("statsPublications")}</h3><h3 className="font-semibold text-lg">47</h3></div>
-          <div className="flex justify-between"><h3>{t("statsCitations")}</h3><h3 className="font-semibold text-lg">1250</h3></div>
-          <div className="flex justify-between"><h3>{t("statsHIndex")}</h3><h3 className="font-semibold text-lg">15</h3></div>
-          <div className="flex justify-between"><h3>{t("statsProjects")}</h3><h3 className="font-semibold text-lg">12</h3></div>
+          <div className="flex justify-between">
+            <h3>{t("statsPublications")}</h3>
+            <h3 className="font-semibold text-lg">47</h3>
+          </div>
+          <div className="flex justify-between">
+            <h3>{t("statsCitations")}</h3>
+            <h3 className="font-semibold text-lg">1250</h3>
+          </div>
+          <div className="flex justify-between">
+            <h3>{t("statsHIndex")}</h3>
+            <h3 className="font-semibold text-lg">15</h3>
+          </div>
+          <div className="flex justify-between">
+            <h3>{t("statsProjects")}</h3>
+            <h3 className="font-semibold text-lg">12</h3>
+          </div>
         </div>
       </section>
 
@@ -136,8 +169,17 @@ function ProfilChercheur() {
         </div>
       </section>
 
-      <PublicationsSection publications={publication} onToggleView={() => setShowAllPublications(!showAllPublications)} isExpanded={showAllPublications} />
-      <UpdateProfileModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} chercheur={chercheur} onUpdate={handleUpdate} />
+      <PublicationsSection
+        publications={publication}
+        onToggleView={() => setShowAllPublications(!showAllPublications)}
+        isExpanded={showAllPublications}
+      />
+      <UpdateProfileModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        chercheur={chercheur}
+        onUpdate={handleUpdate}
+      />
     </div>
   );
 }

@@ -40,7 +40,7 @@ const PublicationsSection = ({ publications, onToggleView, isExpanded, className
         <div className="mb-6 flex flex-col md:flex-row gap-4">
           <input
             type="text"
-            placeholder="Rechercher par titre..."
+            placeholder={t("pubSearchPlaceholder")}
             className="flex-1 p-2 border border-gray-300 rounded"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -65,9 +65,9 @@ const PublicationsSection = ({ publications, onToggleView, isExpanded, className
 
       <div className="space-y-4">
         {publicationsToShow.length > 0 ? (
-          publicationsToShow.map((pub) => (
+          publicationsToShow.map((pub, index) => (
             <CardProfilPublication
-              key={pub.identifiant}
+              key={`${pub.identifiant}-${index}`}
               title={pub.titre}
               publicationDate={pub.date_publication}
               citationCount={pub.citation_count}
