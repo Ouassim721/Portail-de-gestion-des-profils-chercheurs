@@ -30,7 +30,6 @@ function Navbar({ sticky = false }) {
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-
   const routesMap = {
     [t("home")]: "/",
     [t("researchers")]: "/chercheurs",
