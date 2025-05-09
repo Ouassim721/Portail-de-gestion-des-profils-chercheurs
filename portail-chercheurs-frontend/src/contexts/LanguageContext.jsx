@@ -373,6 +373,7 @@ export const translations = {
     featuredResearchers: "Chercheurs en vedette",
     viewAllResearchers: "Voir tous les chercheurs",
     errorLoadingResearchers: "Erreur lors du chargement des chercheurs",
+    contact: "Contact",
     errorLoadingData: "Erreur de chargement des données"
   },
 
@@ -742,7 +743,8 @@ export const translations = {
     featuredResearchers: "Featured Researchers",
     viewAllResearchers: "View All Researchers",
     errorLoadingResearchers: "Error loading researchers",
-    errorLoadingData: "Data loading error"
+    contact: "Contact",
+    errorLoadingData: "Data loading error",
   }
 };
 export const LanguageContext = createContext({

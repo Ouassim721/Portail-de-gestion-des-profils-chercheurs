@@ -7,6 +7,7 @@ import ChercheurImage from "../assets/chercheurImage-HomePage.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CardPublication from "../components/cards/CardPublication";
 import pdp from "../assets/chercheur-place-holder.jpg";
+import logo from "../assets/logo_scholarhubplusTagligne.jpg";
 import {
   faUsers,
   faBook,
@@ -120,13 +121,16 @@ function Home() {
                 {t("homeSubtitle")}
               </p>
               <div className="flex flex-col lg:flex-row items-center gap-4">
-                <Link to="/chercheurs">
-                  <Button variant="primary">{t("exploreResearchers")}</Button>
-                  </Link>
-                <Link to="/about">
-                  <Button variant="neutral">{t("learnMore")}</Button>
-                </Link>
-              </div>
+  <Link to="/chercheurs">
+    <Button variant="primary">{t("exploreResearchers")}</Button>
+  </Link>
+  <Link to="/about">
+    <Button variant="neutral">{t("learnMore")}</Button>
+  </Link>
+  <Link to="/contact">
+    <Button variant="neutral">{t("contact")}</Button>
+  </Link>
+</div>
             </div>
           </div>
           <div className="hidden lg:flex items-center bg-[#111827] h-full p-5 w-[30%] relative">
@@ -260,6 +264,12 @@ function Home() {
         )}
       </section>
        {/* Nouvelle section Chercheurs */}
+        {/* Bannière avec image */}
+    <img
+      src={ logo}
+      alt={t("researchTeamAlt")}
+      className="w-full h-full object-cover"
+    />
        <section className="max-w-7xl mx-auto py-16 px-4">
         <div className="flex justify-between items-center mb-12">
           <h2 className="text-3xl font-bold text-[var(--color-text-primary)]">
