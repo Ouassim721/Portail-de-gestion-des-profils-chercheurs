@@ -21,7 +21,7 @@ class Comment extends Model
      */
     public function chercheur(): BelongsTo
     {
-        return $this->belongsTo(Chercheur::class);
+        return $this->belongsTo(Chercheur::class, 'chercheur_id');
     }
 
     /**

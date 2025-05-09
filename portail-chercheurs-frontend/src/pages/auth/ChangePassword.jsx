@@ -162,7 +162,7 @@ const ChangePassword = () => {
           {error && <p className="text-red-600 text-sm">{error}</p>}
           {success && <p className="text-green-600 text-sm">{success}</p>}
           <Button className="w-full" type="submit">
-            {t("saveButton")}
+            {t("submitButton")}
           </Button>
         </form>
       </div>

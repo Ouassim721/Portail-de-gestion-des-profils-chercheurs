@@ -117,7 +117,7 @@ export const translations = {
     emailLabel: "Email",
     emailPlaceholder: "admin@example.com",
     passwordLabel: "Mot de passe",
-    passwordPlaceholder: "",
+    passwordPlaceholder: "••••••••",
     loginButton: "Se connecter",
     dashboardTitle: "Tableau de bord",
     createNewsTitle: "Créer une actualité",
@@ -245,6 +245,152 @@ export const translations = {
     stepLabel: "Étape {current} sur {total}",
     dateFormat: "dd MMMM yyyy",
     ResearchersTitle: "Chercheurs",
+    aboutTitle: "À propos de ScholarHub",
+    aboutSubtitle: "Portail de gestion des profils chercheurs",
+
+    missionTitle: "Notre Mission",
+    missionItems: [
+      "Centraliser et structurer les informations des chercheurs (profils, publications, événements)",
+      "Faciliter la recherche et le partage d'informations scientifiques",
+      "Faciliter les collaborations scientifiques interdisciplinaires",
+      "Automatiser la mise à jour via sources externes (Scopus)"
+    ],
+
+    featuresTitle: "Fonctionnalités Clés",
+    functionalTitle: "Fonctionnalités Principales",
+    functionalItems: [
+      "CRUD complet des profils et publications",
+      "Import automatisé depuis Scopus",
+      "Génération dynamique de CVthèques",
+      "Alertes personnalisées pour appels à projets",
+      "Recherche multicritères avec filtres dynamiques",
+      "Tableau de bord avec statistiques temps réel",
+      "Design responsive et accessible (WCAG 2.1)"
+    ],
+    securityTitle: "Sécurité & Conformité",
+    securityItems: [
+      "Authentification JWT sécurisée",
+      "Chiffrement AES-256 des données sensibles",
+      "Protection contre XSS/CSRF/SQL Injection",
+      "Conformité RGPD stricte",
+      "Gestion fine des permissions (3 rôles)",
+      "Sauvegardes automatisées et chiffrées"
+    ],
+
+    architectureTitle: "Architecture Technique",
+    architectureSections: [
+      {
+        id: "frontend",
+        title: "Frontend",
+        features: [
+          "React 19 + Server Components",
+          "Tailwind CSS 3.3 + Vite",
+          "Figma pour le design"
+        ]
+      },
+      {
+        id: "backend",
+        title: "Backend",
+        features: [
+          "Laravel 11 (PHP 8.3)",
+          "API REST avec Sanctum/JWT",
+          "Intégration Scopus API"
+        ]
+      },
+      {
+        id: "database",
+        title: "Persistance",
+        features: [
+          "MySQL 8.2 Clusterisé",
+          "Migrations Eloquent ORM",
+          "Stockage S3 pour documents"
+        ]
+      }
+    ],
+
+    teamTitle: "Équipe du Projet",
+    teamMembers: [
+      {
+        name: "Badreddine BENHILA",
+        role: "Développeur Full-Stack",
+        responsibility: "Interface utilisateur & UX"
+      },
+      {
+        name: "Ouassim DERJA",
+        role: "Développeur Full-Stack",
+        responsibility: "Architecture backend & Sécurité"
+      },
+      {
+        name: "Mr. Benamrane",
+        role: "Encadrant Pédagogique",
+        responsibility: "Supervision générale"
+      },
+      {
+        name: "Mr. Mourdi",
+        role: "Encadrant Technique",
+        responsibility: "Validation architecture"
+      }
+    ],
+    homeTitle: "Bienvenue sur le Portail de Recherche",
+    homeSubtitle: "Découvrez les chercheurs, publications et projets.",
+    exploreResearchers: "Explorer les Chercheurs",
+    learnMore: "En savoir plus",
+    researcherImageAlt: "Chercheur en pleine activité",
+    researchersCount: "Chercheurs",
+    publicationsCount: "Publications",
+    projectsCount: "Projets",
+    countriesCount: "Pays",
+    statsTitle: "Notre impact en chiffres",
+    citations: "Citations",
+    domain: "Disciplines",
+    upcomingEvents: "Événements scientifiques à venir",
+    conferenceTitle: "Conférence",
+    dateLabel: "Date :",
+    viewMoreButton: "Voir plus",
+    recentPublications: "Publications Récentes",
+    viewAll: "Voir Toutes",
+    discoverLatestResearch: "Découvrez les dernières recherches",
+    tryAgain: "Réessayer",
+    noUpcomingEvents: "Aucun événement à venir",
+    footerAboutTitle: "À propos",
+    footerAboutText:
+      "Le portail de gestion des profils des chercheurs vise à centraliser les publications scientifiques et à faciliter la collaboration interdisciplinaire entre chercheurs.",
+    footerQuickLinksTitle: "Liens rapides",
+    footerContactTitle: "Contact",
+    footerFollowUsTitle: "Suivez-nous",
+    footerAddress: "Sidi Bouzid, B.P. 4162, 46000 SAFI - MAROC -",
+    footerEmail: "contact@portail-chercheurs.com",
+    footerPhone: "+212 600 000 000",
+    footerCopyright: "&copy; {year} Portail des Chercheurs. Tous droits réservés.",
+    navHome: "Accueil",
+    navResearchers: "Chercheurs",
+    navNews: "Actualités",
+    navPublications: "Publications",
+    navAbout: "À propos",
+    socialFacebook: "Facebook",
+    socialTwitter: "Twitter",
+    socialLinkedIn: "LinkedIn",
+    featuredResearchers: "Chercheurs en vedette",
+    viewAllResearchers: "Voir tous les chercheurs",
+    errorLoadingResearchers: "Erreur lors du chargement des chercheurs",
+    contact: "Contact",
+    contactTitle: "Contactez notre équipe",
+contactSubtitle: "Nous sommes là pour répondre à vos questions",
+contactInfoTitle: "Informations de contact",
+contactInfoDescription: "Notre équipe vous répondra dans les plus brefs délais.",
+sendMessageTitle: "Envoyer un message",
+subjectLabel: "Sujet",
+subjectPlaceholder: "Quel est l'objet de votre message ?",
+messageLabel: "Message",
+messagePlaceholder: "Décrivez votre demande en détails...",
+sendButton: "Envoyer le message",
+sending: "Envoi en cours...",
+successTitle: "Message envoyé avec succès !",
+successMessage: "Nous avons bien reçu votre message et vous répondrons rapidement.",
+errorTitle: "Erreur lors de l'envoi",
+errorMessage: "Une erreur est survenue. Veuillez réessayer plus tard.",
+responseTimeInfo: "Nous nous engageons à vous répondre dans les 24 heures.",
+    errorLoadingData: "Erreur de chargement des données"
   },
 
   en: {
@@ -360,7 +506,7 @@ export const translations = {
     emailLabel: "Email",
     emailPlaceholder: "admin@example.com",
     passwordLabel: "Password",
-    passwordPlaceholder: "",
+    passwordPlaceholder: "••••••••",
     loginButton: "Log in",
     dashboardTitle: "Dashboard",
     searchProfiles: "Search a Profil...",
@@ -485,9 +631,154 @@ export const translations = {
     stepLabel: "Step {current} of {total}",
     dateFormat: "dd MMMM yyyy",
     ResearchersTitle: "Resarchers",
-  },
-};
+    aboutTitle: "About ScholarHub",
+    aboutSubtitle: "Researcher profile management portal",
 
+    missionTitle: "Our Mission",
+    missionItems: [
+      "Centralize and structure researcher information (profiles, publications, events)",
+      "Facilitate scientific information sharing",
+      "Encourage interdisciplinary collaborations",
+      "Automate updates via external sources (Scopus)"
+    ],
+
+    featuresTitle: "Key Features",
+    functionalTitle: "Core Features",
+    functionalItems: [
+      "Full CRUD on profiles & publications",
+      "Automated import from Scopus",
+      "Dynamic CV library generation",
+      "Custom alerts for calls for proposals",
+      "Multi-criteria search with dynamic filters",
+      "Real-time stats dashboard",
+      "Responsive & accessible design (WCAG 2.1)"
+    ],
+    securityTitle: "Security & Compliance",
+    securityItems: [
+      "Secure JWT authentication",
+      "AES-256 encryption for sensitive data",
+      "Protection against XSS/CSRF/SQL Injection",
+      "Strict GDPR compliance",
+      "Granular permissions (3 roles)",
+      "Automated encrypted backups"
+    ],
+
+    architectureTitle: "Technical Architecture",
+    architectureSections: [
+      {
+        id: "frontend",
+        title: "Frontend",
+        features: [
+          "React 19 + Server Components",
+          "Tailwind CSS 3.3 + Vite",
+          "Figma for design"
+        ]
+      },
+      {
+        id: "backend",
+        title: "Backend",
+        features: [
+          "Laravel 11 (PHP 8.3)",
+          "REST API with Sanctum/JWT",
+          "Scopus API integration"
+        ]
+      },
+      {
+        id: "database",
+        title: "Persistence",
+        features: [
+          "MySQL 8.2 Clustered",
+          "Eloquent ORM migrations",
+          "S3 storage for documents"
+        ]
+      }
+    ],
+
+    teamTitle: "Project Team",
+    teamMembers: [
+      {
+        name: "Badreddine BENHILA",
+        role: "Full-Stack Developer",
+        responsibility: "UI & UX"
+      },
+      {
+        name: "Ouassim DERJA",
+        role: "Full-Stack Developer",
+        responsibility: "Backend Architecture & Security"
+      },
+      {
+        name: "Mr. Benamrane",
+        role: "Educational Supervisor",
+        responsibility: "Overall supervision"
+      },
+      {
+        name: "Mr. Mourdi",
+        role: "Technical Supervisor",
+        responsibility: "Architecture validation"
+      }
+    ],
+    homeTitle: "Welcome to the Research Portal",
+    homeSubtitle: "Discover researchers, publications and projects.",
+    exploreResearchers: "Explore Researchers",
+    learnMore: "Learn More",
+    researcherImageAlt: "Researcher at work",
+    researchersCount: "Researchers",
+    publicationsCount: "Publications",
+    projectsCount: "Projects",
+    countriesCount: "Countries",
+    statsTitle: "Our Impact in Numbers",
+    citations: "Citations",
+    domain: "Disciplines",
+    upcomingEvents: "Upcoming Scientific Events",
+    conferenceTitle: "Conference",
+    dateLabel: "Date:",
+    viewMoreButton: "View More",
+    recentPublications: "Recent publications",
+    viewAll: "See All",
+    discoverLatestResearch: "Découvrez les dernières recherches",
+    tryAgain: "Try again",
+    noUpcomingEvents: "No upcoming events",
+    footerAboutTitle: "About",
+    footerAboutText:
+      "The research profile management portal aims to centralize scientific publications and facilitate interdisciplinary collaboration between researchers.",
+    footerQuickLinksTitle: "Quick Links",
+    footerContactTitle: "Contact",
+    footerFollowUsTitle: "Follow Us",
+    footerAddress: "Sidi Bouzid, B.P. 4162, 46000 SAFI - MOROCCO -",
+    footerEmail: "contact@portail-chercheurs.com",
+    footerPhone: "+212 600 000 000",
+    footerCopyright: "&copy; {year} Research Portal. All rights reserved.",
+    navHome: "Home",
+    navResearchers: "Researchers",
+    navNews: "News",
+    navPublications: "Publications",
+    navAbout: "About",
+    socialFacebook: "Facebook",
+    socialTwitter: "Twitter",
+    socialLinkedIn: "LinkedIn",
+    featuredResearchers: "Featured Researchers",
+    viewAllResearchers: "View All Researchers",
+    errorLoadingResearchers: "Error loading researchers",
+    contact: "Contact",
+    contactTitle: "Contact our team",
+contactSubtitle: "We are here to answer your questions",
+contactInfoTitle: "Contact Information",
+contactInfoDescription: "Our team will get back to you as soon as possible.",
+sendMessageTitle: "Send a message",
+subjectLabel: "Subject",
+subjectPlaceholder: "What is the subject of your message?",
+messageLabel: "Message",
+messagePlaceholder: "Describe your request in detail...",
+sendButton: "Send message",
+sending: "Sending...",
+successTitle: "Message sent successfully!",
+successMessage: "We have received your message and will get back to you shortly.",
+errorTitle: "Error sending message",
+errorMessage: "An error occurred. Please try again later.",
+responseTimeInfo: "We are committed to responding within 24 hours.",
+    errorLoadingData: "Data loading error",
+  }
+};
 export const LanguageContext = createContext({
   language: "fr",
   t: (key) => key,
@@ -507,19 +798,19 @@ export const LanguageProvider = ({ children }) => {
     document.documentElement.lang = savedLang;
   }, []);
 
+  // Fonction de traduction
   const t = (key, params = {}) => {
     let translation =
       translations[language]?.[key] ||
       translations[fallbackLanguage][key] ||
       key;
-
     Object.entries(params).forEach(([paramKey, value]) => {
       translation = translation.replace(`{${paramKey}}}`, value);
     });
-
     return translation;
   };
 
+  // Changer la langue
   const switchLanguage = (newLang) => {
     if (!translations[newLang]) return;
     localStorage.setItem("language", newLang);
@@ -527,16 +818,24 @@ export const LanguageProvider = ({ children }) => {
     document.documentElement.lang = newLang;
   };
 
-  const formatDate = (date, options = {}) => {
-    try {
-      return new Intl.DateTimeFormat(language, options).format(new Date(date));
-    } catch {
-      return new Intl.DateTimeFormat(fallbackLanguage, options).format(
-        new Date(date)
+  // Formatage sécurisé des dates
+  const formatDate = (dateInput, options = {}) => {
+    const date = new Date(dateInput);
+    if (isNaN(date.getTime())) {
+      return (
+        translations[language]?.["dateNotAvailable"] ||
+        translations[fallbackLanguage]?.["dateNotAvailable"] ||
+        "–"
       );
+    }
+    try {
+      return new Intl.DateTimeFormat(language, options).format(date);
+    } catch {
+      return new Intl.DateTimeFormat(fallbackLanguage, options).format(date);
     }
   };
 
+  // Formatage sécurisé des nombres
   const formatNumber = (number, options = {}) => {
     try {
       return new Intl.NumberFormat(language, options).format(number);
@@ -560,3 +859,6 @@ export const LanguageProvider = ({ children }) => {
     </LanguageContext.Provider>
   );
 };
+
+// Export par défaut pour faciliter l'import
+export default LanguageContext;

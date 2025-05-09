@@ -1,6 +1,6 @@
 import "./index.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { LanguageProvider } from "./contexts/LanguageContext"; // Import ajouté
+import { LanguageProvider } from "./contexts/LanguageContext"; 
 import AuthProvider from "./contexts/AuthProvider";
 import Layout from "./components/layout/Layout";
 import Loader from "./components/ui/Loader";

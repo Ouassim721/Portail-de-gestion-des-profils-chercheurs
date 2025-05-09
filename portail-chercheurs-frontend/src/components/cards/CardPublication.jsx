@@ -54,9 +54,9 @@ const CardPublication = ({
       </div>
       <div className="flex lg:flex-col justify-between items-center lg:w-1/3 lg:min-w-42">
         <div className="lg:flex lg:flex-col lg:gap-2 lg:text-right lg:w-full lg:pr-3">
-          <h6 className="font-light text-sm text-[var(--color-text-secondary)]">
-            {t("publishedOn")} {formatDate(date, { dateStyle: 'medium' })}
-          </h6>
+        <h6 className="font-light text-sm text-[var(--color-text-secondary)]">
+  {t("publishedOn")} {date ? formatDate(date, { dateStyle: 'medium' }) : t("dateInvalid")}
+</h6>
           <h5 className="hidden lg:block font-bold text-xl text-[var(--color-text-primary)]">
             {citations} <span className="font-light text-sm text-[var(--color-text-secondary)]">{t("citationsLabel")}</span>
           </h5>

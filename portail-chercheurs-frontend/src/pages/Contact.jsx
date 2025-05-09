@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "../axios";
 import {
   FiSend,
@@ -8,8 +8,11 @@ import {
   FiAlertCircle,
   FiLoader,
 } from "react-icons/fi";
+import { LanguageContext } from "../contexts/LanguageContext";
 
 const Contact = () => {
+  const { t } = useContext(LanguageContext);
+
   const [sujet, setSujet] = useState("");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("");
@@ -35,10 +38,10 @@ const Contact = () => {
         {/* Header Section */}
         <div className="text-center mb-10">
           <h1 className="text-3xl font-extrabold text-[var(--color-text-primary)] sm:text-4xl">
-            Contactez notre équipe
+            {t("contactTitle")}
           </h1>
           <p className="mt-3 text-xl text-gray-500">
-            Nous sommes là pour répondre à vos questions
+            {t("contactSubtitle")}
           </p>
         </div>
 
@@ -46,10 +49,10 @@ const Contact = () => {
           {/* Contact Information */}
           <div className="bg-[var(--color-primary)] p-6 text-[var(--color-white)]">
             <h2 className="text-2xl font-bold flex items-center">
-              <FiMail className="mr-2" /> Informations de contact
+              <FiMail className="mr-2" /> {t("contactInfoTitle")}
             </h2>
             <p className="mt-2 opacity-90">
-              Notre équipe vous répondra dans les plus brefs délais.
+              {t("contactInfoDescription")}
             </p>
           </div>
 
@@ -57,7 +60,7 @@ const Contact = () => {
           <div className="p-6 sm:p-8">
             <h2 className="text-xl font-semibold text-[var(--color-text-secondary)] mb-6 flex items-center">
               <FiMessageSquare className="mr-2 text-[var(--color-primary)]" />{" "}
-              Envoyer un message
+              {t("sendMessageTitle")}
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -66,7 +69,7 @@ const Contact = () => {
                   htmlFor="sujet"
                   className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1"
                 >
-                  Sujet
+                  {t("subjectLabel")}
                 </label>
                 <div className="relative">
                   <input
@@ -76,7 +79,7 @@ const Contact = () => {
                     onChange={(e) => setSujet(e.target.value)}
                     required
                     className="w-full px-4 py-3 border text-[var(--color-text-primary)] border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                    placeholder="Quel est l'objet de votre message ?"
+                    placeholder={t("subjectPlaceholder")}
                   />
                 </div>
               </div>
@@ -86,7 +89,7 @@ const Contact = () => {
                   htmlFor="message"
                   className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1"
                 >
-                  Message
+                  {t("messageLabel")}
                 </label>
                 <textarea
                   id="message"
@@ -95,7 +98,7 @@ const Contact = () => {
                   required
                   rows="6"
                   className="w-full px-4 py-3 border border-gray-300 text-[var(--color-text-primary)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                  placeholder="Décrivez votre demande en détails..."
+                  placeholder={t("messagePlaceholder")}
                 ></textarea>
               </div>
 
@@ -110,12 +113,12 @@ const Contact = () => {
                   {status === "loading" ? (
                     <>
                       <FiLoader className="animate-spin mr-2" />
-                      Envoi en cours...
+                      {t("sending")}
                     </>
                   ) : (
                     <>
                       <FiSend className="mr-2" />
-                      Envoyer le message
+                      {t("sendButton")}
                     </>
                   )}
                 </button>
@@ -128,11 +131,10 @@ const Contact = () => {
                 <FiCheckCircle className="text-green-500 text-xl mr-2 mt-0.5" />
                 <div>
                   <p className="font-medium text-green-800">
-                    Message envoyé avec succès !
+                    {t("successTitle")}
                   </p>
                   <p className="text-sm text-green-600 mt-1">
-                    Nous avons bien reçu votre message et vous répondrons
-                    rapidement.
+                    {t("successMessage")}
                   </p>
                 </div>
               </div>
@@ -143,10 +145,10 @@ const Contact = () => {
                 <FiAlertCircle className="text-red-500 text-xl mr-2 mt-0.5" />
                 <div>
                   <p className="font-medium text-red-800">
-                    Erreur lors de l'envoi
+                    {t("errorTitle")}
                   </p>
                   <p className="text-sm text-red-600 mt-1">
-                    Une erreur est survenue. Veuillez réessayer plus tard.
+                    {t("errorMessage")}
                   </p>
                 </div>
               </div>
@@ -156,7 +158,7 @@ const Contact = () => {
 
         {/* Additional Info */}
         <div className="mt-8 text-center text-[var(--color-gray)] text-sm">
-          <p>Nous nous engageons à vous répondre dans les 24 heures.</p>
+          <p>{t("responseTimeInfo")}</p>
         </div>
       </div>
     </div>
