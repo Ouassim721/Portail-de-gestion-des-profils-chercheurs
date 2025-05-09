@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import Button from "./ui/Button";
 import FollowButton from "./ui/FollowButton";
 import PublicationsSection from "./PublicationsSection";
+import useAuth from "../hooks/useAuth";
 import Loader from "../components/ui/Loader";
 import UpdateProfileModal from "./modals/UpdateProfileModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -32,6 +33,7 @@ function ProfilChercheur({
   const { t } = useContext(LanguageContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showAllPublications, setShowAllPublications] = useState(false);
+  const { isAuthenticated } = useAuth();
 
   const dataBar = [
     { year: "2019", publications: 5 },
@@ -67,18 +69,19 @@ function ProfilChercheur({
                 >
                   {t("contactButton")}
                 </Button>
-                {isOwner ? (
-                  <Button
-                    variant="neutral"
-                    icon={faUserPen}
-                    className="text-sm p-2!"
-                    onClick={() => setIsModalOpen(true)}
-                  >
-                    {t("editButton")}
-                  </Button>
-                ) : (
-                  <FollowButton targetUserId={chercheur.id} />
-                )}
+                {isAuthenticated &&
+                  (isOwner ? (
+                    <Button
+                      variant="neutral"
+                      icon={faUserPen}
+                      className="text-sm p-2!"
+                      onClick={() => setIsModalOpen(true)}
+                    >
+                      {t("editButton")}
+                    </Button>
+                  ) : (
+                    <FollowButton targetUserId={chercheur.id} />
+                  ))}
               </div>
             </div>
           </div>

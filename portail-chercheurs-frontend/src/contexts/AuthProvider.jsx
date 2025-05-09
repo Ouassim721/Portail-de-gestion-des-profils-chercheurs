@@ -22,9 +22,15 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     fetchUser();
   }, []);
+  const logout = async () => {
+    await axios.post("/logout", {}, { withCredentials: true });
+    setUser(null);
+  };
 
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider
+      value={{ user, loading, isAuthenticated: !!user, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

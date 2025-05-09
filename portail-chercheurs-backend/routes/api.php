@@ -48,11 +48,6 @@ Route::middleware('auth:api')->post('/change-password', [AuthController::class, 
 
 /* ==================== ROUTES POUR LES CHERCHEURS ==================== */
 Route::middleware('auth:api')->group(function () {
-    // Lister tous les chercheurs
-    Route::get('/chercheurs', [ChercheurController::class, 'apiIndex']);
-
-    // Récupérer un chercheur spécifique
-
     // Supprimer un chercheur
     Route::delete('/chercheurs/{id}', [ChercheurController::class, 'destroy']);
 
@@ -65,18 +60,18 @@ Route::middleware('auth:api')->group(function () {
     // Mettre à jour le profil général
     Route::put('/chercheur/profile', [ChercheurController::class, 'updateProfile']);
 });
+// Lister tous les chercheurs
+Route::get('/chercheurs', [ChercheurController::class, 'apiIndex']);
+
 //recherche rapide (barre de recherche)
 Route::get('/chercheurs/search', [ChercheurController::class, 'search']);
 
-//get chercheur via son id
+// Récupérer un chercheur spécifique
 Route::get('/chercheurs/{id}', function ($id) {
     return Chercheur::findOrFail($id);
 });
 /* ==================== ROUTES POUR LES PUBLICATIONS ==================== */
 Route::middleware('auth:api')->group(function () {
-    // Lister les publications
-    Route::get('/publications', [PublicationController::class, 'index']);
-
     // Récupérer les publications Scopus d'un chercheur
     Route::get('/chercheur/publications', [PublicationController::class, 'fetchScopusPublications']);
 
@@ -85,10 +80,12 @@ Route::middleware('auth:api')->group(function () {
 
     // Enregistrer un batch de publications
     Route::post('/publications', [PublicationController::class, 'storeBatch']);
-
-    //Récuperer les publications d'un chercheur donnée
-    Route::get('/profile/publications', [PublicationController::class, 'profilePublications']);
 });
+//Récuperer les publications d'un chercheur donnée
+Route::get('/profile/publications', [PublicationController::class, 'profilePublications']);
+
+// Lister les publications
+Route::get('/publications', [PublicationController::class, 'index']);
 
 // Récupérer les publications Scopus (via API externe)
 Route::middleware('auth:api')->get('/scopus-publications', [ScopusPublicationController::class, 'fetchPublications']);

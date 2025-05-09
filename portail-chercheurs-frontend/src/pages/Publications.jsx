@@ -15,6 +15,7 @@ import CommentsSection from "../components/comments/CommentsSection";
 import axios from "../axios";
 import Loader from "../components/ui/Loader";
 import { LanguageContext } from "../contexts/LanguageContext";
+import useAuth from "../hooks/useAuth";
 
 const Publications = () => {
   const { t } = useContext(LanguageContext);
@@ -26,9 +27,8 @@ const Publications = () => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-
+  const isAuthenticated = useAuth();
   const loader = useRef(null);
-
   const handleObserver = useCallback(
     (entries) => {
       const target = entries[0];
@@ -117,8 +117,14 @@ const Publications = () => {
               options={[
                 { label: "IA", onClick: () => console.log("IA") },
                 { label: "Math", onClick: () => console.log("Math") },
-                { label: "Data Science", onClick: () => console.log("Data Science") },
-                { label: "Machine Learning", onClick: () => console.log("Machine Learning") },
+                {
+                  label: "Data Science",
+                  onClick: () => console.log("Data Science"),
+                },
+                {
+                  label: "Machine Learning",
+                  onClick: () => console.log("Machine Learning"),
+                },
               ]}
             />
           </div>
@@ -172,7 +178,7 @@ const Publications = () => {
                   citations={pub.citation_count}
                   pdf_path={pub.pdf_path}
                 />
-                <CommentsSection publicationId={pub.id} />
+                {!isAuthenticated && <CommentsSection publicationId={pub.id} />}
               </div>
             ))}
             <div ref={loader} className="h-10 w-full" />

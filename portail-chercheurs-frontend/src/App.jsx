@@ -53,7 +53,14 @@ function App() {
               <Route path="/actualites/:id" element={<DetailsActualite />} />
               <Route path="/publications" element={<Publications />} />
               <Route path="/about" element={<AboutPage />} />
-              <Route path="/contact" element={<Contact />} />
+              <Route
+                path="/contact"
+                element={
+                  <ProtectedRoute>
+                    <Contact />
+                  </ProtectedRoute>
+                }
+              />
 
               <Route
                 path="/details-publication/:id"

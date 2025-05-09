@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import useAuth from "../../hooks/useAuth";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LanguageContext } from "../../contexts/LanguageContext";
 import Button from "../ui/Button";
@@ -21,6 +22,7 @@ import { faBell as faRegularBell } from "@fortawesome/free-regular-svg-icons";
 import SettingsModal from "../modals/SettingsModal";
 
 function Navbar({ sticky = false }) {
+  const { isAuthenticated } = useAuth();
   const { language, switchLanguage, t } = useContext(LanguageContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
@@ -35,8 +37,11 @@ function Navbar({ sticky = false }) {
     [t("publications")]: "/publications",
     [t("news")]: "/actualites",
     [t("about")]: "/about",
-    [t("contact")]: "/contact",
   };
+
+  if (isAuthenticated) {
+    routesMap[t("contact")] = "/contact";
+  }
 
   useEffect(() => {
     const abortController = new AbortController();
