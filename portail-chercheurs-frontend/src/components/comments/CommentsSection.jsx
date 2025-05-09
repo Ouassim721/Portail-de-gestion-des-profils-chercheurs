@@ -27,19 +27,26 @@ export default function CommentsSection({ publicationId }) {
 
   function handleUpdate(id, text) {
     axios
-      .put(`/comments/${id}`, { contenu: text })
+      .put(`/comments/${id}`, { contenu: text }) // Utilisez le même endpoint que le backend
       .then(({ data }) => {
         setComments(comments.map((c) => (c.id === id ? data : c)));
         setEditingId(null);
       })
-      .catch(console.error);
+      .catch((err) => console.error("Update error:", err)); // Log détaillé
   }
-
+  
   function handleDelete(id) {
     axios
-      .delete(`/comments/${id}`)
+      .delete(`/comments/${id}`) // Endpoint cohérent avec le backend
       .then(() => setComments(comments.filter((c) => c.id !== id)))
-      .catch(console.error);
+      .catch((err) => {
+        console.error("Delete error:", err); // Log détaillé
+        if (err.response) {
+          console.error("Server response:", err.response.data); // Log server response
+        } else {
+          console.error("An unknown error occurred."); // Fallback message
+        }
+      });
   }
 
   return (

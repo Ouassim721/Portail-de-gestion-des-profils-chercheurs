@@ -42,13 +42,17 @@ export default function CommentItem({
             onClick={onEdit}
             className="text-blue-500"
           />
-          <Button
-            icon={faTrash}
-            variant="outline"
-            size="sm"
-            onClick={() => onDelete(comment.id)}
-            className="text-red-500"
-          />
+ <Button
+  icon={faTrash}
+  variant="outline"
+  size="sm"
+  onClick={() => {
+    if (window.confirm("Supprimer ce commentaire ?")) {
+      onDelete(comment.id);
+    }
+  }}
+  className="text-red-500"
+/>
         </div>
       )}
     </li>

@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Models\Publication;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller; 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests; // Add this import
 
 class CommentController extends Controller
 {
+    use AuthorizesRequests; // Add this trait
+
     public function index(Publication $publication)
     {
         // Charge les commentaires avec l'auteur
@@ -46,8 +50,14 @@ class CommentController extends Controller
 
     public function destroy(Comment $comment)
     {
-        $this->authorize('delete', $comment);
-        $comment->delete();
-        return response()->noContent();
+        try {
+            $this->authorize('delete', $comment); // ✅ Utilise 'delete' (nom de la politique)
+            $comment->delete();
+            return response()->noContent();
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Action non autorisée'
+            ], 403);
+        }
     }
 }

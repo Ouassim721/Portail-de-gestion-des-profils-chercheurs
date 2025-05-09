@@ -113,10 +113,10 @@ Route::get('/disciplines/{id}', [DisciplineController::class, 'show']);
 
 /* ==================== ROUTES POUR LES COMMENTAIRES ==================== */
 Route::middleware(['auth:api'])->group(function () {
-    Route::get('publications/{publication}/comments', [CommentController::class, 'index']);
-    Route::post('comments',                         [CommentController::class, 'store']);
-    Route::put('comments/{comment}',                [CommentController::class, 'update']);
-    Route::delete('comments/{comment}',             [CommentController::class, 'destroy']);
+    Route::get('/publications/{publication}/comments', [CommentController::class, 'index']);
+    Route::post('/comments', [CommentController::class, 'store']);
+    Route::put('/comments/{comment}', [CommentController::class, 'update']); 
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
 });
 /* ==================== ROUTES POUR LES STATISTIQUES ==================== */
 Route::get('/stats', [StatisticsController::class, 'getStats']);
