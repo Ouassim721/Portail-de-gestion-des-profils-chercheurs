@@ -10,7 +10,6 @@ const TableGenerique = ({
     { key: "name", label: "Nom" },
     { key: "email", label: "Email" },
     { key: "domain", label: "Domaine" },
-    { key: "status", label: "Statut" },
     { label: "Actions" },
   ];
 
@@ -58,15 +57,6 @@ const TableGenerique = ({
                     size="md"
                     className="w-6 mx-auto sm:mx-0"
                   />{" "}
-                  <div
-                    className={`absolute -bottom-0 -right-0 w-3 h-3 rounded-full 
-                    ${
-                      researcher.status === "Online"
-                        ? "bg-green-500"
-                        : "bg-gray-400"
-                    } 
-                    border-2 border-white`}
-                  />
                 </div>
                 <span className="font-medium">{researcher.name}</span>
               </td>
@@ -76,18 +66,6 @@ const TableGenerique = ({
               <td className="px-4 py-3">
                 <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
                   {researcher.domain}
-                </span>
-              </td>
-              <td className="px-4 py-3">
-                <span
-                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                  ${
-                    researcher.status === "Online"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-gray-100 text-gray-800"
-                  }`}
-                >
-                  {researcher.status}
                 </span>
               </td>
               <td className="px-4 py-3 flex gap-3">

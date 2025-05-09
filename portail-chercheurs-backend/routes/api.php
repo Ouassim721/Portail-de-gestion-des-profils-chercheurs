@@ -12,6 +12,7 @@ use App\Http\Controllers\ChercheurController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\ScopusPublicationController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ContactController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,7 +65,10 @@ Route::middleware('auth:api')->group(function () {
     // Mettre à jour le profil général
     Route::put('/chercheur/profile', [ChercheurController::class, 'updateProfile']);
 });
+//recherche rapide (barre de recherche)
+Route::get('/chercheurs/search', [ChercheurController::class, 'search']);
 
+//get chercheur via son id
 Route::get('/chercheurs/{id}', function ($id) {
     return Chercheur::findOrFail($id);
 });
@@ -94,6 +98,7 @@ Route::apiResource('actualites', ActualiteController::class);
 Route::get('/actualites', [ActualiteController::class, 'index']);
 Route::get('/actualites/{id}', [ActualiteController::class, 'show']);
 
+
 /* ==================== ROUTES POUR LES FOLLOWS ==================== */
 Route::middleware('auth:api')->group(function () {
     Route::post('/follow/{userToFollow}', [FollowController::class, 'follow']);
@@ -115,3 +120,6 @@ Route::middleware(['auth:api'])->group(function () {
 });
 /* ==================== ROUTES POUR LES STATISTIQUES ==================== */
 Route::get('/stats', [StatisticsController::class, 'getStats']);
+
+/* ==================== ROUTES POUR LE CONTACT ==================== */
+Route::middleware('auth:api')->post('/contact', [ContactController::class, 'sendMessage']);

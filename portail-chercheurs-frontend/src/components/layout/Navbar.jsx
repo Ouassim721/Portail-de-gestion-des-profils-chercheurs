@@ -91,7 +91,7 @@ function Navbar({ sticky = false }) {
           ScholarHub
         </Link>
         <div className="hidden xl:block">
-          <SearchBar placeholder={t("searchPublications")} />
+          <SearchBar placeholder={t("searchProfiles")} />
         </div>
       </div>
 
