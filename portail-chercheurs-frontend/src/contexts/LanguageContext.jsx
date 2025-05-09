@@ -117,7 +117,7 @@ export const translations = {
     emailLabel: "Email",
     emailPlaceholder: "admin@example.com",
     passwordLabel: "Mot de passe",
-    passwordPlaceholder: "",
+    passwordPlaceholder: "••••••••",
     loginButton: "Se connecter",
     dashboardTitle: "Tableau de bord",
     createNewsTitle: "Créer une actualité",
@@ -329,7 +329,50 @@ export const translations = {
         role: "Encadrant Technique",
         responsibility: "Validation architecture"
       }
-    ]
+    ],
+    homeTitle: "Bienvenue sur le Portail de Recherche",
+    homeSubtitle: "Découvrez les chercheurs, publications et projets.",
+    exploreResearchers: "Explorer les Chercheurs",
+    learnMore: "En savoir plus",
+    researcherImageAlt: "Chercheur en pleine activité",
+    researchersCount: "Chercheurs",
+    publicationsCount: "Publications",
+    projectsCount: "Projets",
+    countriesCount: "Pays",
+    statsTitle: "Notre impact en chiffres",
+    citations: "Citations",
+    domain: "Disciplines",
+    upcomingEvents: "Événements scientifiques à venir",
+    conferenceTitle: "Conférence",
+    dateLabel: "Date :",
+    viewMoreButton: "Voir plus",
+    recentPublications: "Publications Récentes",
+    viewAll: "Voir Toutes",
+    discoverLatestResearch: "Découvrez les dernières recherches",
+    tryAgain: "Réessayer",
+    noUpcomingEvents: "Aucun événement à venir",
+    footerAboutTitle: "À propos",
+    footerAboutText:
+      "Le portail de gestion des profils des chercheurs vise à centraliser les publications scientifiques et à faciliter la collaboration interdisciplinaire entre chercheurs.",
+    footerQuickLinksTitle: "Liens rapides",
+    footerContactTitle: "Contact",
+    footerFollowUsTitle: "Suivez-nous",
+    footerAddress: "Sidi Bouzid, B.P. 4162, 46000 SAFI - MAROC -",
+    footerEmail: "contact@portail-chercheurs.com",
+    footerPhone: "+212 600 000 000",
+    footerCopyright: "&copy; {year} Portail des Chercheurs. Tous droits réservés.",
+    navHome: "Accueil",
+    navResearchers: "Chercheurs",
+    navNews: "Actualités",
+    navPublications: "Publications",
+    navAbout: "À propos",
+    socialFacebook: "Facebook",
+    socialTwitter: "Twitter",
+    socialLinkedIn: "LinkedIn",
+    featuredResearchers: "Chercheurs en vedette",
+    viewAllResearchers: "Voir tous les chercheurs",
+    errorLoadingResearchers: "Erreur lors du chargement des chercheurs",
+    errorLoadingData: "Erreur de chargement des données"
   },
 
   en: {
@@ -445,7 +488,7 @@ export const translations = {
     emailLabel: "Email",
     emailPlaceholder: "admin@example.com",
     passwordLabel: "Password",
-    passwordPlaceholder: "",
+    passwordPlaceholder: "••••••••",
     loginButton: "Log in",
     dashboardTitle: "Dashboard",
     createNewsTitle: "Create News",
@@ -654,7 +697,50 @@ export const translations = {
         role: "Technical Supervisor",
         responsibility: "Architecture validation"
       }
-    ]
+    ],
+    homeTitle: "Welcome to the Research Portal",
+    homeSubtitle: "Discover researchers, publications and projects.",
+    exploreResearchers: "Explore Researchers",
+    learnMore: "Learn More",
+    researcherImageAlt: "Researcher at work",
+    researchersCount: "Researchers",
+    publicationsCount: "Publications",
+    projectsCount: "Projects",
+    countriesCount: "Countries",
+    statsTitle: "Our Impact in Numbers",
+    citations: "Citations",
+    domain: "Disciplines",
+    upcomingEvents: "Upcoming Scientific Events",
+    conferenceTitle: "Conference",
+    dateLabel: "Date:",
+    viewMoreButton: "View More",
+    recentPublications: "Recent publications",
+    viewAll: "See All",
+    discoverLatestResearch: "Découvrez les dernières recherches",
+    tryAgain: "Try again",
+    noUpcomingEvents: "No upcoming events",
+    footerAboutTitle: "About",
+    footerAboutText:
+      "The research profile management portal aims to centralize scientific publications and facilitate interdisciplinary collaboration between researchers.",
+    footerQuickLinksTitle: "Quick Links",
+    footerContactTitle: "Contact",
+    footerFollowUsTitle: "Follow Us",
+    footerAddress: "Sidi Bouzid, B.P. 4162, 46000 SAFI - MOROCCO -",
+    footerEmail: "contact@portail-chercheurs.com",
+    footerPhone: "+212 600 000 000",
+    footerCopyright: "&copy; {year} Research Portal. All rights reserved.",
+    navHome: "Home",
+    navResearchers: "Researchers",
+    navNews: "News",
+    navPublications: "Publications",
+    navAbout: "About",
+    socialFacebook: "Facebook",
+    socialTwitter: "Twitter",
+    socialLinkedIn: "LinkedIn",
+    featuredResearchers: "Featured Researchers",
+    viewAllResearchers: "View All Researchers",
+    errorLoadingResearchers: "Error loading researchers",
+    errorLoadingData: "Data loading error"
   }
 };
 export const LanguageContext = createContext({
@@ -676,19 +762,19 @@ export const LanguageProvider = ({ children }) => {
     document.documentElement.lang = savedLang;
   }, []);
 
+  // Fonction de traduction
   const t = (key, params = {}) => {
     let translation =
       translations[language]?.[key] ||
       translations[fallbackLanguage][key] ||
       key;
-
     Object.entries(params).forEach(([paramKey, value]) => {
       translation = translation.replace(`{${paramKey}}}`, value);
     });
-
     return translation;
   };
 
+  // Changer la langue
   const switchLanguage = (newLang) => {
     if (!translations[newLang]) return;
     localStorage.setItem("language", newLang);
@@ -696,16 +782,24 @@ export const LanguageProvider = ({ children }) => {
     document.documentElement.lang = newLang;
   };
 
-  const formatDate = (date, options = {}) => {
-    try {
-      return new Intl.DateTimeFormat(language, options).format(new Date(date));
-    } catch {
-      return new Intl.DateTimeFormat(fallbackLanguage, options).format(
-        new Date(date)
+  // Formatage sécurisé des dates
+  const formatDate = (dateInput, options = {}) => {
+    const date = new Date(dateInput);
+    if (isNaN(date.getTime())) {
+      return (
+        translations[language]?.["dateNotAvailable"] ||
+        translations[fallbackLanguage]?.["dateNotAvailable"] ||
+        "–"
       );
+    }
+    try {
+      return new Intl.DateTimeFormat(language, options).format(date);
+    } catch {
+      return new Intl.DateTimeFormat(fallbackLanguage, options).format(date);
     }
   };
 
+  // Formatage sécurisé des nombres
   const formatNumber = (number, options = {}) => {
     try {
       return new Intl.NumberFormat(language, options).format(number);
@@ -729,3 +823,6 @@ export const LanguageProvider = ({ children }) => {
     </LanguageContext.Provider>
   );
 };
+
+// Export par défaut pour faciliter l'import
+export default LanguageContext;
