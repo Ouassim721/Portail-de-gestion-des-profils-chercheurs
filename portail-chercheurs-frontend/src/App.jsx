@@ -5,7 +5,6 @@ import AuthProvider from "./contexts/AuthProvider";
 import Layout from "./components/layout/Layout";
 import Loader from "./components/ui/Loader";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
-
 // Pages publiques
 import Home from "./pages/Home";
 import Chercheurs from "./pages/Chercheurs";
@@ -31,6 +30,7 @@ import CreationChercheur from "./pages/admin/CreationChercheur";
 import AdminActualite from "./pages/admin/AdminActualites";
 import CreationActualite from "./pages/admin/CreationActualite";
 import AdminDisciplines from "./pages/admin/AdminDisciplines";
+import Contact from "./pages/Contact";
 function App() {
   return (
     <LanguageProvider>
@@ -53,6 +53,8 @@ function App() {
               <Route path="/actualites/:id" element={<DetailsActualite />} />
               <Route path="/publications" element={<Publications />} />
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/contact" element={<Contact />} />
+
               <Route
                 path="/details-publication/:id"
                 element={<DetailsPublication />}

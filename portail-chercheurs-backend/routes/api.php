@@ -12,6 +12,7 @@ use App\Http\Controllers\ChercheurController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\ScopusPublicationController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ContactController;
 
 /*
 |--------------------------------------------------------------------------
@@ -119,3 +120,6 @@ Route::middleware(['auth:api'])->group(function () {
 });
 /* ==================== ROUTES POUR LES STATISTIQUES ==================== */
 Route::get('/stats', [StatisticsController::class, 'getStats']);
+
+/* ==================== ROUTES POUR LE CONTACT ==================== */
+Route::middleware('auth:api')->post('/contact', [ContactController::class, 'sendMessage']);

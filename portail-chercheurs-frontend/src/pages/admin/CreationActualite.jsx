@@ -33,7 +33,7 @@ const CreationActualite = () => {
       Object.entries(formData).forEach(([key, val]) => data.append(key, val));
       if (documentPdf) data.append("document_pdf", documentPdf);
 
-      const response = await axios.post("/actualites", data, {
+      await axios.post("/actualites", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
