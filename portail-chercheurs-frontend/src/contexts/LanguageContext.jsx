@@ -244,6 +244,92 @@ export const translations = {
     stepLabel: "Étape {current} sur {total}",
     dateFormat: "dd MMMM yyyy",
     ResearchersTitle: "Chercheurs",
+    aboutTitle: "À propos de ScholarHub",
+    aboutSubtitle: "Portail de gestion des profils chercheurs",
+
+    missionTitle: "Notre Mission",
+    missionItems: [
+      "Centraliser et structurer les informations des chercheurs (profils, publications, événements)",
+      "Faciliter la recherche et le partage d'informations scientifiques",
+      "Faciliter les collaborations scientifiques interdisciplinaires",
+      "Automatiser la mise à jour via sources externes (Scopus)"
+    ],
+
+    featuresTitle: "Fonctionnalités Clés",
+    functionalTitle: "Fonctionnalités Principales",
+    functionalItems: [
+      "CRUD complet des profils et publications",
+      "Import automatisé depuis Scopus",
+      "Génération dynamique de CVthèques",
+      "Alertes personnalisées pour appels à projets",
+      "Recherche multicritères avec filtres dynamiques",
+      "Tableau de bord avec statistiques temps réel",
+      "Design responsive et accessible (WCAG 2.1)"
+    ],
+    securityTitle: "Sécurité & Conformité",
+    securityItems: [
+      "Authentification JWT sécurisée",
+      "Chiffrement AES-256 des données sensibles",
+      "Protection contre XSS/CSRF/SQL Injection",
+      "Conformité RGPD stricte",
+      "Gestion fine des permissions (3 rôles)",
+      "Sauvegardes automatisées et chiffrées"
+    ],
+
+    architectureTitle: "Architecture Technique",
+    architectureSections: [
+      {
+        id: "frontend",
+        title: "Frontend",
+        features: [
+          "React 19 + Server Components",
+          "Tailwind CSS 3.3 + Vite",
+          "Figma pour le design"
+        ]
+      },
+      {
+        id: "backend",
+        title: "Backend",
+        features: [
+          "Laravel 11 (PHP 8.3)",
+          "API REST avec Sanctum/JWT",
+          "Intégration Scopus API"
+        ]
+      },
+      {
+        id: "database",
+        title: "Persistance",
+        features: [
+          "MySQL 8.2 Clusterisé",
+          "Migrations Eloquent ORM",
+          "Stockage S3 pour documents"
+        ]
+      }
+    ],
+
+    teamTitle: "Équipe du Projet",
+    teamMembers: [
+      {
+        name: "Badreddine BENHILA",
+        role: "Développeur Full-Stack",
+        responsibility: "Interface utilisateur & UX"
+      },
+      {
+        name: "Ouassim DERJA",
+        role: "Développeur Full-Stack",
+        responsibility: "Architecture backend & Sécurité"
+      },
+      {
+        name: "Mr. Benamrane",
+        role: "Encadrant Pédagogique",
+        responsibility: "Supervision générale"
+      },
+      {
+        name: "Mr. Mourdi",
+        role: "Encadrant Technique",
+        responsibility: "Validation architecture"
+      }
+    ]
   },
 
   en: {
@@ -483,9 +569,94 @@ export const translations = {
     stepLabel: "Step {current} of {total}",
     dateFormat: "dd MMMM yyyy",
     ResearchersTitle: "Resarchers",
-  },
-};
+    aboutTitle: "About ScholarHub",
+    aboutSubtitle: "Researcher profile management portal",
 
+    missionTitle: "Our Mission",
+    missionItems: [
+      "Centralize and structure researcher information (profiles, publications, events)",
+      "Facilitate scientific information sharing",
+      "Encourage interdisciplinary collaborations",
+      "Automate updates via external sources (Scopus)"
+    ],
+
+    featuresTitle: "Key Features",
+    functionalTitle: "Core Features",
+    functionalItems: [
+      "Full CRUD on profiles & publications",
+      "Automated import from Scopus",
+      "Dynamic CV library generation",
+      "Custom alerts for calls for proposals",
+      "Multi-criteria search with dynamic filters",
+      "Real-time stats dashboard",
+      "Responsive & accessible design (WCAG 2.1)"
+    ],
+    securityTitle: "Security & Compliance",
+    securityItems: [
+      "Secure JWT authentication",
+      "AES-256 encryption for sensitive data",
+      "Protection against XSS/CSRF/SQL Injection",
+      "Strict GDPR compliance",
+      "Granular permissions (3 roles)",
+      "Automated encrypted backups"
+    ],
+
+    architectureTitle: "Technical Architecture",
+    architectureSections: [
+      {
+        id: "frontend",
+        title: "Frontend",
+        features: [
+          "React 19 + Server Components",
+          "Tailwind CSS 3.3 + Vite",
+          "Figma for design"
+        ]
+      },
+      {
+        id: "backend",
+        title: "Backend",
+        features: [
+          "Laravel 11 (PHP 8.3)",
+          "REST API with Sanctum/JWT",
+          "Scopus API integration"
+        ]
+      },
+      {
+        id: "database",
+        title: "Persistence",
+        features: [
+          "MySQL 8.2 Clustered",
+          "Eloquent ORM migrations",
+          "S3 storage for documents"
+        ]
+      }
+    ],
+
+    teamTitle: "Project Team",
+    teamMembers: [
+      {
+        name: "Badreddine BENHILA",
+        role: "Full-Stack Developer",
+        responsibility: "UI & UX"
+      },
+      {
+        name: "Ouassim DERJA",
+        role: "Full-Stack Developer",
+        responsibility: "Backend Architecture & Security"
+      },
+      {
+        name: "Mr. Benamrane",
+        role: "Educational Supervisor",
+        responsibility: "Overall supervision"
+      },
+      {
+        name: "Mr. Mourdi",
+        role: "Technical Supervisor",
+        responsibility: "Architecture validation"
+      }
+    ]
+  }
+};
 export const LanguageContext = createContext({
   language: "fr",
   t: (key) => key,
