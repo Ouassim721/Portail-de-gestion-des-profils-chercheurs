@@ -24,13 +24,18 @@ class ContactController extends Controller
         if (is_null($user) || is_null($validated['sujet']) || is_null($validated['message'])) {
             return response()->json(['message' => 'Données manquantes ou invalides.'], 400);
         }
-
         // Envoyer l'email
         try {
-            Mail::to(env('MAIL_FROM_ADDRESS'))->send(new ContactMessage($user, $validated['sujet'], $validated['message']));
+            Mail::to(env('MAIL_FROM_ADDRESS'))->send(
+                (new ContactMessage($user, $validated['sujet'], $validated['message']))
+                    ->replyTo($user->email, $user->prenom . ' ' . $user->nom)
+            );
             return response()->json(['message' => 'Email envoyé avec succès'], 200);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Erreur lors de l\'envoi de l\'email.'], 500);
+            return response()->json([
+                'message' => 'Erreur lors de l\'envoi de l\'email.',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 }

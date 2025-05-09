@@ -8,24 +8,22 @@ class ContactMessage extends Mailable
 {
     public $user;
     public $sujet;
-    public $message;
+    public $contenu;
 
-    public function __construct($user, $sujet, $message)
+    public function __construct($user, $sujet, $contenu)
     {
         $this->user = $user;
         $this->sujet = $sujet;
-        $this->message = $message;
+        $this->contenu = $contenu;
     }
 
     public function build()
     {
-        return $this->to(env('MAIL_FROM_ADDRESS'))
-            ->subject('Nouveau message de contact')
-            ->view('emails.contact')
+        return $this->view('emails.contact')
             ->with([
                 'user' => $this->user,
                 'sujet' => $this->sujet,
-                'message' => $this->message,
+                'contenu' => $this->contenu,
             ]);
     }
 }
