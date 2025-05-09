@@ -11,7 +11,7 @@ function AdminPage() {
         <TopBar />
 
         {/* Contenu principal avec le Dashboard */}
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto lg:p-6">
           <TableauChercheur />
         </main>
       </div>

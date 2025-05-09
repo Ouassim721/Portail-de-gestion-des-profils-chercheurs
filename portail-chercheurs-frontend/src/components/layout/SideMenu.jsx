@@ -18,7 +18,7 @@ const SideMenu = ({ isVisible, onClose }) => {
   const links = [
     { labelKey: "dashboardTitle", icon: <FaTachometerAlt />, to: "/" },
     {
-      labelKey: "adminResearchersTitle",
+      labelKey: "ResearchersTitle",
       icon: <FaUser />,
       to: "/AdminChercheurs",
     },

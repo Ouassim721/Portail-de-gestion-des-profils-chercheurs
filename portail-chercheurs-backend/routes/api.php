@@ -64,7 +64,10 @@ Route::middleware('auth:api')->group(function () {
     // Mettre à jour le profil général
     Route::put('/chercheur/profile', [ChercheurController::class, 'updateProfile']);
 });
+//recherche rapide (barre de recherche)
+Route::get('/chercheurs/search', [ChercheurController::class, 'search']);
 
+//get chercheur via son id
 Route::get('/chercheurs/{id}', function ($id) {
     return Chercheur::findOrFail($id);
 });
@@ -93,6 +96,7 @@ Route::middleware('auth:api')->get('/scopus-publications', [ScopusPublicationCon
 Route::apiResource('actualites', ActualiteController::class);
 Route::get('/actualites', [ActualiteController::class, 'index']);
 Route::get('/actualites/{id}', [ActualiteController::class, 'show']);
+
 
 /* ==================== ROUTES POUR LES FOLLOWS ==================== */
 Route::middleware('auth:api')->group(function () {

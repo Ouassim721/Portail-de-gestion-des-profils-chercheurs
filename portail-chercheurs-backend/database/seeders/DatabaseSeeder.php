@@ -27,7 +27,8 @@ class DatabaseSeeder extends Seeder
             DisciplineSeeder::class,
             ChercheurSeeder::class,
             CommentSeeder::class,
-            PublicationSeeder::class
+            PublicationSeeder::class,
+            ActualiteSeeder::class
         ]);
     }
 

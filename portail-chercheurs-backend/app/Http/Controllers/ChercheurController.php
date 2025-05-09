@@ -156,6 +156,24 @@ class ChercheurController extends Controller
 
         return response()->json(['message' => 'Profil mis à jour avec succès']);
     }
+    /**
+     * Méthode pour la barre de recherche
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function search(Request $request)
+    {
+        $search = $request->query('q');
+
+        $results = Chercheur::where('nom', 'like', "%{$search}%")
+            ->orWhere('prenom', 'like', "%{$search}%")
+            ->limit(5)
+            ->get(['id', 'nom', 'prenom']);
+
+        return response()->json($results);
+    }
+
 
     /**
      * Méthode pour la récupération de nombre des chercheurs inscrit dans le portail

@@ -32,6 +32,8 @@ export default function ChercheursList() {
         setTotalPages(res.data.last_page);
         const formatted = res.data.data.map((c) => ({
           id: c.id,
+          prenom: c.prenom,
+          nom: c.nom,
           name: `${c.prenom} ${c.nom}`,
           email: c.email,
           domain: c.discipline || t("notSpecified"),
@@ -89,7 +91,7 @@ export default function ChercheursList() {
 
   return (
     <div
-      className="container mx-auto p-6"
+      className="container mx-auto lg:p-6"
       style={{ backgroundColor: "var(--color-bg-secondary)" }}
     >
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">

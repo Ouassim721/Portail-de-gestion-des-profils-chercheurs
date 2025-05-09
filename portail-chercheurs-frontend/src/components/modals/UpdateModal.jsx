@@ -17,10 +17,7 @@ export default function UpdateModal({ actualite, onUpdate }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(
-        `/api/actualites/${actualite.id}`,
-        form
-      );
+      await axios.put(`/actualites/${actualite.id}`, form);
       onUpdate();
     } catch (err) {
       console.error(t("updateError"), err);
@@ -84,16 +81,11 @@ export default function UpdateModal({ actualite, onUpdate }) {
             />
             <div className="flex justify-end space-x-2">
               <Dialog.Close asChild>
-                <button
-                  type="button"
-                  className="text-gray-500 px-3 py-1"
-                >
+                <button type="button" className="text-gray-500 px-3 py-1">
                   {t("cancelButton")}
                 </button>
               </Dialog.Close>
-              <Button variant="secondary">
-                {t("saveButton")}
-              </Button>
+              <Button variant="secondary">{t("saveButton")}</Button>
             </div>
           </form>
         </Dialog.Content>

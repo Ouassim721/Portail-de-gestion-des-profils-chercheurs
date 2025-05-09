@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import axios from "axios";
+import axios from "../../axios";
 import Button from "../../components/ui/Button";
 import { Navigate } from "react-router-dom";
 import { LanguageContext } from "../../contexts/LanguageContext";
@@ -33,11 +33,9 @@ const CreationActualite = () => {
       Object.entries(formData).forEach(([key, val]) => data.append(key, val));
       if (documentPdf) data.append("document_pdf", documentPdf);
 
-      const response = await axios.post(
-        "/api/actualites",
-        data,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
+      const response = await axios.post("/actualites", data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       setMessage(t("creationSuccess"));
       window.location.href = "/dashboard/adminactualite";
