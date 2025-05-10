@@ -37,7 +37,7 @@ const DropdownButton = ({
       </Button>
 
       {isOpen && (
-        <div className="absolute left-0 w-40 bg-[var(--color-bg-primary)] border border-gray-200 rounded shadow-md">
+        <div className="absolute left-0 mt-2 w-full bg-[var(--color-bg-primary)] border border-gray-200 rounded shadow-md z-10">
           {options.map((option, index) => (
             <button
               key={index}
@@ -47,7 +47,7 @@ const DropdownButton = ({
                 setIsOpen(false); // Fermer le dropdown après clic
               }}
             >
-              <FontAwesomeIcon icon={option.icon} className="mr-2" />
+              {option.icon && <FontAwesomeIcon icon={option.icon} className="mr-2" />}
               {option.label}
             </button>
           ))}

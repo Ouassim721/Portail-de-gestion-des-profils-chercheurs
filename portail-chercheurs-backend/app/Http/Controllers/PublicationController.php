@@ -155,4 +155,18 @@ class PublicationController extends Controller
 
         return response()->json(['publications' => $publications], 200);
     }
+
+    public function getPublicationYears()
+    {
+        $years = Publication::selectRaw('YEAR(date_publication) as year')
+            ->distinct()
+            ->orderBy('year', 'DESC')
+            ->pluck('year');
+
+        if ($years->isEmpty()) {
+            return response()->json(['message' => 'No publication years found'], 404);
+        }
+
+        return response()->json($years);
+    }
 }

@@ -87,6 +87,9 @@ Route::get('/profile/publications', [PublicationController::class, 'profilePubli
 // Lister les publications
 Route::get('/publications', [PublicationController::class, 'index']);
 
+// Récupérer liste publications par année
+Route::get('/publications/years', [PublicationController::class, 'getPublicationYears']);
+
 // Récupérer les publications Scopus (via API externe)
 Route::middleware('auth:api')->get('/scopus-publications', [ScopusPublicationController::class, 'fetchPublications']);
 

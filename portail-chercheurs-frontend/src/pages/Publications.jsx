@@ -19,6 +19,8 @@ import useAuth from "../hooks/useAuth";
 
 const Publications = () => {
   const { t } = useContext(LanguageContext);
+  const [disciplines, setDisciplines] = useState([]);
+  const [availableYears, setAvailableYears] = useState([]);
   const [publications, setPublications] = useState([]);
   const [countChercheurs, setcountChercheurs] = useState(null);
   const [countPublications, setcountPublications] = useState(null);
@@ -81,6 +83,27 @@ const Publications = () => {
       });
   }, []);
 
+  useEffect(() => {
+    axios.get("/disciplines")
+      .then((response) => {
+        setDisciplines(response.data);
+      })
+      .catch((error) => {
+        console.error(t("errorLoadingData"), error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get("/publications/years")
+      .then((response) => {
+        setAvailableYears(response.data);
+      })
+      .catch((error) => {
+        console.error(t("errorLoadingData"), error);
+      });
+  }, []);
+
   const nombrePublications =
     countPublications !== null ? countPublications : "...";
   const nombreChercheurs = countChercheurs !== null ? countChercheurs : "...";
@@ -97,36 +120,28 @@ const Publications = () => {
         </div>
         <div className="w-full flex flex-col sm:flex-row gap-8 sm:justify-between items-center">
           <div className="w-full flex justify-between sm:justify-start lg:justify-end sm:gap-6 px-2">
-            <DropdownButton
-              icon={faChevronDown}
-              children={t("year")}
-              variant="neutral"
-              iconPosition="right"
-              options={[
-                { label: "2025", onClick: () => console.log("2025") },
-                { label: "2024", onClick: () => console.log("2024") },
-                { label: "2023", onClick: () => console.log("2023") },
-                { label: "2022", onClick: () => console.log("2022") },
-              ]}
-            />
-            <DropdownButton
-              icon={faChevronDown}
-              children={t("domain")}
-              variant="neutral"
-              iconPosition="right"
-              options={[
-                { label: "IA", onClick: () => console.log("IA") },
-                { label: "Math", onClick: () => console.log("Math") },
-                {
-                  label: "Data Science",
-                  onClick: () => console.log("Data Science"),
-                },
-                {
-                  label: "Machine Learning",
-                  onClick: () => console.log("Machine Learning"),
-                },
-              ]}
-            />
+          <DropdownButton
+  icon={faChevronDown}
+  children={t("year")}
+  variant="neutral"
+  iconPosition="right"
+  options={availableYears.map((year) => ({
+    label: year.toString(),
+    onClick: () => console.log("Filtrer pour", year), // Replace with actual filtering logic
+  }))}
+  className="w-full sm:w-auto" // Ensure proper width for dropdown
+/>
+<DropdownButton
+  icon={faChevronDown}
+  children={t("domain")}
+  variant="neutral"
+  iconPosition="right"
+  options={disciplines.map((discipline) => ({
+    label: discipline.nom,
+    onClick: () => console.log(discipline.id), // Adapt for filtering
+  }))}
+  className="w-full sm:w-auto" // Ensure proper width for dropdown
+/>
           </div>
           <Button
             variant="secondary"
