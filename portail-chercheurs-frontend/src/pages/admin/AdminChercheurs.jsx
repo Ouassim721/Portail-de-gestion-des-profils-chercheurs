@@ -1,6 +1,5 @@
 import TopBar from "../../components/layout/topbar";
 import TableauChercheur from "../../components/tables/TableauChercheur";
-import { LanguageContext } from "../../contexts/LanguageContext";
 
 function AdminPage() {
   return (
