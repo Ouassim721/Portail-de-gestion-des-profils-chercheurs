@@ -422,6 +422,8 @@ computerScience: "Informatique",
     currentMonth:        "Mois courant",
     monthlyAverage:      "Moyenne mensuelle",
     publicationTrend:    "Tendance des publications",
+    unknownDiscipline: "Non spécifiée",
+    publicationDistribution: "Répartition des publications par discipline",
     monthlyComparison:   "Comparaison mensuelle"
   },
 
@@ -841,6 +843,8 @@ responseTimeInfo: "We are committed to responding within 24 hours.",
     currentMonth:        "Current month",
     monthlyAverage:      "Monthly average",
     publicationTrend:    "Publication trend",
+    unknownDiscipline: "Not specified",
+    publicationDistribution: "Publication distribution by discipline",
     monthlyComparison:   "Monthly comparison"
   }
 };

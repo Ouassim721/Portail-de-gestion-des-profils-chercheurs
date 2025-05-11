@@ -36,14 +36,12 @@ function Dashboard() {
     publications: null,
     chartData: { chercheurs: [], publications: [] },
   });
+  const [disciplinesData, setDisciplinesData] = useState({
+    labels: [],
+    data: [],
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Génération de données fictives pour la démo
-  const mockDepartmentData = {
-    labels: [t("computerScience"), t("biology"), t("physics")],
-    data: [45, 30, 25],
-  };
 
   const generateChartData = (rawData) => {
     const currentYear = new Date().getFullYear();
@@ -54,7 +52,6 @@ function Dashboard() {
       return match?.count || 0;
     });
     
-    // Données de publications fictives
     const publicationsData = chercheursData.map(c => Math.round(c * 0.8));
     
     return { chercheurs: chercheursData, publications: publicationsData };
@@ -79,12 +76,40 @@ function Dashboard() {
     return getLastSixMonths().map(m => t(monthKeys[m]));
   };
 
+  const processDisciplinesData = (chercheurs) => {
+    const disciplineCounts = {};
+    chercheurs.forEach((chercheur) => {
+      const discipline = chercheur.discipline || t("unknownDiscipline");
+      const count = chercheur.publications_count || 0;
+      disciplineCounts[discipline] = (disciplineCounts[discipline] || 0) + count;
+    });
+
+    return {
+      labels: Object.keys(disciplineCounts),
+      data: Object.values(disciplineCounts),
+    };
+  };
+
+  const generateColors = (count) => {
+    const baseColors = [
+      'rgba(59, 130, 246, 0.8)',
+      'rgba(16, 185, 129, 0.8)',
+      'rgba(245, 158, 11, 0.8)',
+      'rgba(139, 92, 246, 0.8)',
+      'rgba(20, 184, 166, 0.8)',
+      'rgba(236, 72, 153, 0.8)',
+      'rgba(249, 115, 22, 0.8)',
+    ];
+    return Array.from({ length: count }, (_, i) => baseColors[i % baseColors.length]);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [statsRes, chercheursRes] = await Promise.all([
+        const [statsRes, chercheursRes, chercheursDataRes] = await Promise.all([
           axios.get("/stats"),
           axios.get("/stats/chercheurs"),
+          axios.get("/chercheurs?per_page=1000"),
         ]);
 
         setStats({
@@ -92,6 +117,8 @@ function Dashboard() {
           publications: statsRes.data.publications,
           chartData: generateChartData(chercheursRes.data),
         });
+
+        setDisciplinesData(processDisciplinesData(chercheursDataRes.data.data));
         setLoading(false);
       } catch (err) {
         setError(t("errorLoadingData"));
@@ -148,20 +175,12 @@ function Dashboard() {
   };
 
   const pieChartConfig = {
-    labels: mockDepartmentData.labels,
+    labels: disciplinesData.labels,
     datasets: [{
-      data: mockDepartmentData.data,
-      backgroundColor: [
-        'rgba(59, 130, 246, 0.8)',
-        'rgba(16, 185, 129, 0.8)',
-        'rgba(245, 158, 11, 0.8)'
-      ],
-      borderColor: [
-        'rgba(59, 130, 246, 1)',
-        'rgba(16, 185, 129, 1)',
-        'rgba(245, 158, 11, 1)'
-      ],
-      borderWidth: 1
+      data: disciplinesData.data,
+      backgroundColor: generateColors(disciplinesData.labels.length),
+      borderColor: 'rgba(255, 255, 255, 0.8)',
+      borderWidth: 2,
     }]
   };
 
@@ -213,7 +232,10 @@ function Dashboard() {
   const pieOptions = {
     responsive: true,
     plugins: {
-      legend: { position: 'right' },
+      legend: { 
+        position: 'right',
+        labels: { padding: 20 }
+      },
       title: { 
         display: true, 
         text: t("publicationDistribution"),
@@ -224,7 +246,7 @@ function Dashboard() {
           label: (context) => {
             const total = context.dataset.data.reduce((a, b) => a + b, 0);
             const value = context.raw || 0;
-            const percentage = ((value / total) * 100).toFixed(1);
+            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
             return `${context.label}: ${value} (${percentage}%)`;
           }
         }
@@ -269,7 +291,6 @@ function Dashboard() {
   );
 }
 
-// Composants d'affichage pour le chargement et les erreurs
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center min-h-screen">
     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500" />
