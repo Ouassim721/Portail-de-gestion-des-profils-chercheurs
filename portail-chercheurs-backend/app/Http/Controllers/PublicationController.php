@@ -156,6 +156,7 @@ class PublicationController extends Controller
         return response()->json(['publications' => $publications], 200);
     }
 
+<<<<<<< HEAD
     public function getPublicationsByChercheur($id)
     {
         // Vérifie d'abord si le chercheur existe
@@ -171,5 +172,19 @@ class PublicationController extends Controller
             ->get();
 
         return response()->json($publications);
+=======
+    public function getPublicationYears()
+    {
+        $years = Publication::selectRaw('YEAR(date_publication) as year')
+            ->distinct()
+            ->orderBy('year', 'DESC')
+            ->pluck('year');
+
+        if ($years->isEmpty()) {
+            return response()->json(['message' => 'No publication years found'], 404);
+        }
+
+        return response()->json($years);
+>>>>>>> 7ed38013fbb00332be6bb9c13494411bfc791e77
     }
 }

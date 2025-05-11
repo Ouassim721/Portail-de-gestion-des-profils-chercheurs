@@ -68,4 +68,27 @@ class DisciplineController extends Controller
 
         return response()->json(['message' => 'Discipline supprimée'], 200);
     }
+
+    public function stats()
+    {
+        try {
+            $stats = Discipline::query()
+                ->select('disciplines.id', 'disciplines.nom')
+                ->withCount('publications')
+                ->withSum('publications as total_citations', 'citation_count') // Ensure correct column name
+                ->get();
+
+            return response()->json($stats, 200, ['Content-Type' => 'application/json']); // Ensure JSON response
+        } catch (\Exception $e) {
+            \Log::error('Erreur stats disciplines', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'error'   => 'Erreur technique lors de la récupération des stats.',
+                'details' => $e->getMessage()
+            ], 500, ['Content-Type' => 'application/json']); // Ensure JSON response for errors
+        }
+    }
 }

@@ -90,6 +90,9 @@ Route::get('/chercheurs/{id}/publications', [PublicationController::class, 'getP
 // Lister les publications
 Route::get('/publications', [PublicationController::class, 'index']);
 
+// Récupérer liste des annees de publication
+Route::get('/publications/years', [PublicationController::class, 'getPublicationYears']);
+
 // Récupérer les publications Scopus (via API externe)
 Route::middleware('auth:api')->get('/scopus-publications', [ScopusPublicationController::class, 'fetchPublications']);
 
@@ -107,6 +110,7 @@ Route::middleware('auth:api')->group(function () {
 });
 
 /* ==================== ROUTES POUR LES DISCIPLINES ==================== */
+Route::get('/disciplines/stats', [DisciplineController::class, 'stats']);
 Route::apiResource('disciplines', DisciplineController::class);
 Route::get('/disciplines', [DisciplineController::class, 'index']);
 Route::get('/disciplines/{id}', [DisciplineController::class, 'show']);
@@ -123,3 +127,8 @@ Route::get('/stats', [StatisticsController::class, 'getStats']);
 
 /* ==================== ROUTES POUR LE CONTACT ==================== */
 Route::middleware('auth:api')->post('/contact', [ContactController::class, 'sendMessage']);
+
+/* ==================== ROUTES POUR LES STATISTIQUES ==================== */
+Route::get('/stats/chercheurs', [StatisticsController::class, 'getChercheursStats']);
+Route::get('/stats/publications', [StatisticsController::class, 'getPublicationsStats']);
+Route::get('/stats/comments', [StatisticsController::class, 'getCommentsStats']);
