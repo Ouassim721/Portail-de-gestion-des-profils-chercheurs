@@ -61,7 +61,7 @@ const SelectionPublications = () => {
         setPublications(pubsWithIds);
         setError(null);
       } catch (err) {
-        console.error("Erreur lors du chargement des publications:", err);
+        console.error("Erreur détaillée:", err.response?.data || err.message);
         setError("Erreur lors du chargement des publications");
         setPublications([]);
       } finally {
