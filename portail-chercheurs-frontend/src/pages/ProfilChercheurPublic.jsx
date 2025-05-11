@@ -8,27 +8,46 @@ function ProfilChercheurPublic() {
   const { id } = useParams();
   const [chercheurData, setChercheurData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [publicationsData, setPublicationsData] = useState(null);
+  const [loadingPublications, setLoadingPublications] = useState(true);
 
   useEffect(() => {
-    const fetchChercheur = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(`/chercheurs/${id}`);
+        setLoading(true);
+        setLoadingPublications(true);
 
-        setChercheurData(response.data);
+        // Récupération des données du chercheur
+        const chercheurResponse = await axios.get(`/chercheurs/${id}`);
+        setChercheurData(chercheurResponse.data);
+
+        // Récupération des publications du chercheur
+        const publicationsResponse = await axios.get(
+          `/chercheurs/${id}/publications`
+        );
+        setPublicationsData(publicationsResponse.data);
       } catch (error) {
-        console.error("Erreur lors du chargement du chercheur :", error);
+        console.error("Erreur lors du chargement des données :", error);
       } finally {
         setLoading(false);
+        setLoadingPublications(false);
       }
     };
 
-    fetchChercheur();
+    fetchData();
   }, [id]);
 
   if (loading) return <Loader />;
   if (!chercheurData) return <p>Erreur lors du chargement du profil public</p>;
 
-  return <ProfilChercheur isPublic={true} chercheur={chercheurData} />;
+  return (
+    <ProfilChercheur
+      isPublic={true}
+      chercheur={chercheurData}
+      publications={publicationsData || []}
+      loadingPublications={loadingPublications}
+    />
+  );
 }
 
 export default ProfilChercheurPublic;

@@ -84,6 +84,9 @@ Route::middleware('auth:api')->group(function () {
 //Récuperer les publications d'un chercheur donnée
 Route::get('/profile/publications', [PublicationController::class, 'profilePublications']);
 
+// Récupérer les publications d'un chercheur spécifique par son ID
+Route::get('/chercheurs/{id}/publications', [PublicationController::class, 'getPublicationsByChercheur']);
+
 // Lister les publications
 Route::get('/publications', [PublicationController::class, 'index']);
 
@@ -112,7 +115,7 @@ Route::get('/disciplines/{id}', [DisciplineController::class, 'show']);
 Route::middleware(['auth:api'])->group(function () {
     Route::get('/publications/{publication}/comments', [CommentController::class, 'index']);
     Route::post('/comments', [CommentController::class, 'store']);
-    Route::put('/comments/{comment}', [CommentController::class, 'update']); 
+    Route::put('/comments/{comment}', [CommentController::class, 'update']);
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
 });
 /* ==================== ROUTES POUR LES STATISTIQUES ==================== */

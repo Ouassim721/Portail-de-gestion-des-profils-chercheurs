@@ -155,4 +155,21 @@ class PublicationController extends Controller
 
         return response()->json(['publications' => $publications], 200);
     }
+
+    public function getPublicationsByChercheur($id)
+    {
+        // Vérifie d'abord si le chercheur existe
+        $chercheur = Chercheur::find($id);
+
+        if (!$chercheur) {
+            return response()->json(['message' => 'Chercheur non trouvé'], 404);
+        }
+
+        // Récupère les publications du chercheur
+        $publications = Publication::where('chercheur_id', $id)
+            ->orderBy('annee', 'desc')
+            ->get();
+
+        return response()->json($publications);
+    }
 }
