@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->unsignedInteger('chercheur_id');
             $table->string('pdf_path')->nullable();
             $table->timestamps();
-
+            $table->boolean('visible')->default(true);
             $table->foreign('chercheur_id')
                 ->references('id')
                 ->on('chercheurs')
