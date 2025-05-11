@@ -132,3 +132,4 @@ Route::middleware('auth:api')->post('/contact', [ContactController::class, 'send
 Route::get('/stats/chercheurs', [StatisticsController::class, 'getChercheursStats']);
 Route::get('/stats/publications', [StatisticsController::class, 'getPublicationsStats']);
 Route::get('/stats/comments', [StatisticsController::class, 'getCommentsStats']);
+Route::get('/stats/authors', [StatisticsController::class, 'getAuthorsStats']);

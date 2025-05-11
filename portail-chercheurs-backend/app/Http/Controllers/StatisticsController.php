@@ -107,5 +107,37 @@ public function getCommentsStats()
         ], 500);
     }
 }
+public function getAuthorsStats()
+{
+    try {
+        $authors = Publication::pluck('auteurs')
+            ->flatMap(function ($authorsList) {
+                return array_map('trim', explode(',', $authorsList));
+            })
+            ->countBy()
+            ->sortDesc()
+            ->take(10)
+            ->map(function ($count, $author) {
+                return [
+                    'author' => $author,
+                    'count' => $count
+                ];
+            })
+            ->values();
+
+        return response()->json($authors);
+
+    } catch (\Exception $e) {
+        \Log::error('Erreur getAuthorsStats:', [
+            'message' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ]);
+
+        return response()->json([
+            'error' => 'Erreur lors du calcul des statistiques auteurs',
+            'code' => 'AUTHOR_STATS_ERROR'
+        ], 500);
+    }
+}
 
 }

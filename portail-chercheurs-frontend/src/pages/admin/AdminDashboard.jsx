@@ -5,6 +5,7 @@ import DashboardChercheur from "../../components/ChercheursDashboard.jsx";
 import CommentsDashboard from "../../components/CommentsDashboard.jsx";
 import DashboardPublication from "../../components/PublicationsDashboard.jsx";
 import DisciplineStatsPage from "../../components/DisciplineStatsPage.jsx";
+import AuthorStats from "../../components/AuthorStats.jsx";
 import axios from "../../axios";
 import { LanguageContext } from "../../contexts/LanguageContext";
 
@@ -42,6 +43,7 @@ function AdminDashboard() {
           <DashboardPublication />
           <CommentsDashboard />
           <DisciplineStatsPage />
+          <AuthorStats />
         </main>
       </div>
     </div>

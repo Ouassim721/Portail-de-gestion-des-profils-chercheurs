@@ -178,28 +178,30 @@ const Publications = () => {
             icon={faBook}
           />
         </section>
-        <section>
-          <div>
-            {publications.map((pub) => (
-              <div key={pub.id} className="mb-10">
-                <CardPublication
-                  title={pub.titre}
-                  auteur={`${pub.chercheur.prenom} ${pub.chercheur.nom}`}
-                  university={pub.chercheur.university}
-                  departement={pub.discipline.nom}
-                  description={pub.abstract}
-                  category={pub.discipline.keywords || []}
-                  date={pub.date_publication}
-                  citations={pub.citation_count}
-                  pdf_path={pub.pdf_path}
-                />
-                {!isAuthenticated && <CommentsSection publicationId={pub.id} />}
-              </div>
-            ))}
-            <div ref={loader} className="h-10 w-full" />
-            {isLoading && <Loader text={t("loading")} />}
-          </div>
-        </section>
+<section>
+  <div>
+    {publications
+      .filter(pub => pub.visible) // Filtre les publications visibles
+      .map((pub) => (
+        <div key={pub.id} className="mb-10">
+          <CardPublication
+            title={pub.titre}
+            auteur={`${pub.chercheur.prenom} ${pub.chercheur.nom}`}
+            university={pub.chercheur.university}
+            departement={pub.discipline.nom}
+            description={pub.abstract}
+            category={pub.discipline.keywords || []}
+            date={pub.date_publication}
+            citations={pub.citation_count}
+            pdf_path={pub.pdf_path}
+          />
+          {!isAuthenticated && <CommentsSection publicationId={pub.id} />}
+        </div>
+      ))}
+    <div ref={loader} className="h-10 w-full" />
+    {isLoading && <Loader text={t("loading")} />}
+  </div>
+</section>
       </main>
     </div>
   );
