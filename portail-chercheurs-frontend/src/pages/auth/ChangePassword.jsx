@@ -92,7 +92,7 @@ const ChangePassword = () => {
                 {showPassword.current ? (
                   <EyeSlashIcon className="h-5 w-5 text-gray-500 hover:text-gray-700" />
                 ) : (
-                  <EyeIcon className="h-5 w-5 text-[var(--color-gray)] hover:text-gray-400" />
+                  <EyeIcon className="h-5 w-5 text-gray-500 hover:text-gray-700" />
                 )}
               </button>
             </div>
