@@ -7,6 +7,8 @@ const CardProfilPublication = ({
   citationCount,
   abstract,
   className,
+  isVisible,
+  onToggleVisibility,
 }) => {
   const { t, formatDate } = useContext(LanguageContext);
 
@@ -48,6 +50,20 @@ const CardProfilPublication = ({
         <p className="text-sm text-[var(--color-text-secondary)]">
           {truncateAbstract(abstract)}
         </p>
+      )}
+
+      {/* Bouton de visibilité */}
+      {onToggleVisibility && (
+        <button
+          onClick={onToggleVisibility}
+          className={`mt-2 px-3 py-1 text-xs rounded ${
+            isVisible 
+              ? "bg-green-600 text-white hover:bg-green-700"
+              : "bg-red-600 text-white hover:bg-red-700"
+          }`}
+        >
+          {isVisible ? t("makePrivate") : t("makePublic")}
+        </button>
       )}
     </div>
   );

@@ -1,13 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import ProfilChercheur from "../components/ProfilChercheur";
-import { useParams } from "react-router-dom";
 import axios from "../axios";
 import Loader from "../components/ui/Loader";
+import { LanguageContext } from "../contexts/LanguageContext";
 
 function MonProfil() {
+  const { t } = useContext(LanguageContext);
   const [chercheurData, setChercheurData] = useState(null);
   const [publicationsData, setPublicationsData] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const toggleVisibility = async (publicationId) => {
+    try {
+      await axios.put(`/publications/${publicationId}/toggle-visibility`);
+      const publicationsRes = await axios.get("/profile/publications");
+      setPublicationsData(publicationsRes.data.publications);
+    } catch (error) {
+      console.error("Erreur lors du changement de visibilité :", error);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,10 +27,8 @@ function MonProfil() {
           axios.get("/profile"),
           axios.get("/profile/publications"),
         ]);
-
         setChercheurData(profileRes.data);
         setPublicationsData(publicationsRes.data.publications);
-        console.log("Données publications récupérées :", publicationsRes.data);
       } catch (error) {
         console.error("Erreur lors du chargement des données :", error);
       } finally {
@@ -31,7 +40,7 @@ function MonProfil() {
   }, []);
 
   if (loading) return <Loader />;
-  if (!chercheurData) return <p>Erreur lors du chargement de ton profil</p>;
+  if (!chercheurData) return <p>{t("profileLoadingError")}</p>;
 
   return (
     <ProfilChercheur
@@ -39,6 +48,7 @@ function MonProfil() {
       chercheur={chercheurData}
       publications={publicationsData || []}
       isOwner={true}
+      onToggleVisibility={toggleVisibility}
     />
   );
 }

@@ -82,7 +82,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/publications', [PublicationController::class, 'storeBatch']);
 });
 //Récuperer les publications d'un chercheur donnée
-Route::get('/profile/publications', [PublicationController::class, 'profilePublications']);
+Route::middleware('auth:api')->get('/profile/publications', [PublicationController::class, 'profilePublications']);
 
 // Récupérer les publications d'un chercheur spécifique par son ID
 Route::get('/chercheurs/{id}/publications', [PublicationController::class, 'getPublicationsByChercheur']);
@@ -133,3 +133,13 @@ Route::get('/stats/chercheurs', [StatisticsController::class, 'getChercheursStat
 Route::get('/stats/publications', [StatisticsController::class, 'getPublicationsStats']);
 Route::get('/stats/comments', [StatisticsController::class, 'getCommentsStats']);
 Route::get('/stats/authors', [StatisticsController::class, 'getAuthorsStats']);
+
+Route::middleware('auth:api')->group(function () {
+    // Stats personnelles
+    Route::get('/chercheurs/stats-personnelles', [ChercheurController::class, 'personalStats']);
+    
+    // Nombre d'abonnés
+    Route::get('/chercheurs/followers', [ChercheurController::class, 'getFollowersCount']);
+});
+
+Route::middleware('auth:api')->put('/publications/{id}/toggle-visibility', [PublicationController::class, 'toggleVisibility']);

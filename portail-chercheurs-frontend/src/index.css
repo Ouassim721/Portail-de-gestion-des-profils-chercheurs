@@ -128,3 +128,20 @@ select {
 .hover\:text-primary:hover {
   color: var(--color-primary);
 }
+
+.visibility-toggle {
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+.visibility-toggle.visible {
+  background: var(--color-success);
+  color: white;
+}
+
+.visibility-toggle.hidden {
+  background: var(--color-error);
+  color: white;
+}

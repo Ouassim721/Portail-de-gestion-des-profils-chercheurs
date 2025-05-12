@@ -29,6 +29,7 @@ function ProfilChercheur({
   publications = [],
   isOwner = false,
   onUpdate,
+  onToggleVisibility,
 }) {
   const { t } = useContext(LanguageContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,6 +43,7 @@ function ProfilChercheur({
     { year: "2022", publications: 10 },
     { year: "2023", publications: 15 },
   ];
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
       <section className="col-span-3 p-8 rounded shadow-sm bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] border-gray-200">
@@ -158,6 +160,7 @@ function ProfilChercheur({
         publications={publications}
         onToggleView={() => setShowAllPublications(!showAllPublications)}
         isExpanded={showAllPublications}
+        onToggleVisibility={onToggleVisibility}
       />
 
       {isOwner && (

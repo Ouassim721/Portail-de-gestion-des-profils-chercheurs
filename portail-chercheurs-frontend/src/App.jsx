@@ -30,6 +30,7 @@ import CreationChercheur from "./pages/admin/CreationChercheur";
 import AdminActualite from "./pages/admin/AdminActualites";
 import CreationActualite from "./pages/admin/CreationActualite";
 import AdminDisciplines from "./pages/admin/AdminDisciplines";
+import ResearcherStats from "./pages/ResearcherStats";
 import Contact from "./pages/Contact";
 function App() {
   return (
@@ -53,6 +54,7 @@ function App() {
               <Route path="/actualites/:id" element={<DetailsActualite />} />
               <Route path="/publications" element={<Publications />} />
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/chercheurs-stats" element={<ResearcherStats />} />
               <Route
                 path="/contact"
                 element={

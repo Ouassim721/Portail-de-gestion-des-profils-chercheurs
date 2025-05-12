@@ -2,7 +2,13 @@ import { useState, useContext } from "react";
 import CardProfilPublication from "./cards/CardProfilPublication";
 import { LanguageContext } from "../contexts/LanguageContext";
 
-const PublicationsSection = ({ publications, onToggleView, isExpanded, className }) => {
+const PublicationsSection = ({ 
+  publications, 
+  onToggleView, 
+  isExpanded, 
+  className,
+  onToggleVisibility 
+}) => {
   const { t } = useContext(LanguageContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("all");
@@ -72,6 +78,8 @@ const PublicationsSection = ({ publications, onToggleView, isExpanded, className
               publicationDate={pub.date_publication}
               citationCount={pub.citation_count}
               abstract={pub.abstract}
+              isVisible={pub.visible}
+              onToggleVisibility={() => onToggleVisibility(pub.id)}
             />
           ))
         ) : (

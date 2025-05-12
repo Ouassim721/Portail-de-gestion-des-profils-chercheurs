@@ -424,7 +424,11 @@ computerScience: "Informatique",
     publicationTrend:    "Tendance des publications",
     unknownDiscipline: "Non spécifiée",
     publicationDistribution: "Répartition des publications par discipline",
-    monthlyComparison:   "Comparaison mensuelle"
+    myDashboard: "Mon tableau de bord",
+profileLoadingError: "Erreur lors du chargement de ton profil",
+    monthlyComparison:   "Comparaison mensuelle",
+    makePublic: "Rendre publique",
+  makePrivate: "Rendre privée",
   },
 
   en: {
@@ -845,7 +849,11 @@ responseTimeInfo: "We are committed to responding within 24 hours.",
     publicationTrend:    "Publication trend",
     unknownDiscipline: "Not specified",
     publicationDistribution: "Publication distribution by discipline",
-    monthlyComparison:   "Monthly comparison"
+    myDashboard: "My Dashboard",
+    profileLoadingError: "Error loading your profile",
+    monthlyComparison:   "Monthly comparison",
+    makePublic: "Make public",
+  makePrivate: "Make private",
   }
 };
 export const LanguageContext = createContext({

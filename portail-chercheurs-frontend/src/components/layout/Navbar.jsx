@@ -17,6 +17,8 @@ import {
   faQuestionCircle,
   faUser,
   faTableColumns,
+  faWindowRestore,
+  faScrewdriverWrench,
 } from "@fortawesome/free-solid-svg-icons";
 import { faBell as faRegularBell } from "@fortawesome/free-regular-svg-icons";
 import SettingsModal from "../modals/SettingsModal";
@@ -125,52 +127,57 @@ function Navbar({ sticky = false }) {
         </button>
 
         {chercheur ? (
-          <DropdownMenu
-            userProfile={chercheur}
-            sections={[
+<DropdownMenu
+  userProfile={chercheur}
+  sections={[
+    {
+      options: [
+        {
+          label: t("myAccount"),
+          icon: faUser,
+          link: "/mon-profil",
+        },
+        {
+          label: t("myDashboard"), 
+          icon: faWindowRestore,
+          link: "/chercheurs-stats",
+        },
+        ...(chercheur.role === "Administrateur"
+          ? [
               {
-                options: [
-                  {
-                    label: t("myAccount"),
-                    icon: faUser,
-                    link: "/mon-profil",
-                  },
-                  ...(chercheur.role === "Administrateur"
-                    ? [
-                        {
-                          label: t("dashboard"),
-                          icon: faTableColumns,
-                          link: "/dashboard",
-                        },
-                      ]
-                    : []),
-                ],
+                label: t("dashboard"),
+                icon: faScrewdriverWrench, 
+                link: "/dashboard",
               },
-              {
-                options: [
-                  {
-                    label: t("settings"),
-                    icon: faCog,
-                    onClick: () => setShowSettingsModal(true),
-                  },
-                  {
-                    label: t("help"),
-                    icon: faQuestionCircle,
-                    link: "/aide",
-                  },
-                ],
-              },
-              {
-                options: [
-                  {
-                    label: t("logout"),
-                    icon: faSignOutAlt,
-                    onClick: handleLogout,
-                  },
-                ],
-              },
-            ]}
-          >
+            ]
+          : []),
+      ],
+    },
+    {
+      options: [
+        {
+          label: t("settings"),
+          icon: faCog,
+          onClick: () => setShowSettingsModal(true),
+        },
+        {
+          label: t("help"),
+          icon: faQuestionCircle,
+          link: "/aide",
+        },
+      ],
+    },
+    {
+      options: [
+        {
+          label: t("logout"),
+          icon: faSignOutAlt,
+          onClick: handleLogout,
+        },
+      ],
+    },
+  ]}
+>
             <div className="flex items-center gap-2 cursor-pointer">
               <ChercheurAvatar chercheur={chercheur} size="md" />
               <FontAwesomeIcon

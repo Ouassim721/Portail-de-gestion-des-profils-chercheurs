@@ -113,7 +113,7 @@ class ChercheurController extends Controller
             $chercheur->cv = $path;
         }
 
-        // 🔥 Gestion de la suppression de photo
+        //  Gestion de la suppression de photo
         if ($request->has('removePhoto') && $request->removePhoto == "true") {
             if ($chercheur->photoProfil && Storage::exists($chercheur->photoProfil)) {
                 Storage::delete($chercheur->photoProfil);
@@ -185,4 +185,34 @@ class ChercheurController extends Controller
         $compteur = Chercheur::count();
         return response()->json(['count' => $compteur]);
     }
+
+public function getFollowersCount()
+{
+    try {
+        $chercheur = JWTAuth::user();
+        return response()->json([
+            'count' => $chercheur->followers()->count()
+        ]);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+}
+
+public function personalStats()
+{
+    try {
+        $chercheur = JWTAuth::user();
+        return response()->json([
+            'publications' => $chercheur->publications()->count(),
+            'citations' => $chercheur->publications()->sum('citation_count'),
+            'collaborations' => count(array_unique(
+                $chercheur->publications->flatMap(function($pub) {
+                    return explode(',', $pub->auteurs);
+                })->toArray()
+            )) - 1
+        ]);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+}
 }

@@ -155,23 +155,7 @@ class PublicationController extends Controller
 
         return response()->json(['publications' => $publications], 200);
     }
-
-    public function getPublicationsByChercheur($id)
-    {
-        // Vérifie d'abord si le chercheur existe
-        $chercheur = Chercheur::find($id);
-
-        if (!$chercheur) {
-            return response()->json(['message' => 'Chercheur non trouvé'], 404);
-        }
-
-        // Récupère les publications du chercheur
-        $publications = Publication::where('chercheur_id', $id)
-            ->orderBy('annee', 'desc')
-            ->get();
-
-        return response()->json($publications);
-    }
+    
     public function getPublicationYears()
     {
         $years = Publication::selectRaw('YEAR(date_publication) as year')
@@ -185,4 +169,23 @@ class PublicationController extends Controller
 
         return response()->json($years);
     }
+
+    public function toggleVisibility($id)
+{
+    $publication = Publication::findOrFail($id);
+    $user = auth()->user();
+
+    if ($publication->chercheur_id !== $user->id) {
+        return response()->json(['error' => 'Unauthorized'], 403);
+    }
+
+    $publication->visible = !$publication->visible;
+    $publication->save();
+
+    return response()->json([
+        'message' => 'Visibilité mise à jour',
+        'visible' => $publication->visible
+    ]);
+}
+    
 }
