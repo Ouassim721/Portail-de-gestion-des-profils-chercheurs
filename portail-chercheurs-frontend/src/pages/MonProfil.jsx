@@ -24,7 +24,7 @@ function MonProfil() {
     const fetchData = async () => {
       try {
         const [profileRes, publicationsRes] = await Promise.all([
-          axios.get("/profile"),
+          axios.get("/me"),
           axios.get("/profile/publications"),
         ]);
         setChercheurData(profileRes.data);

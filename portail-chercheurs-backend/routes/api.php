@@ -39,7 +39,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 // Profil utilisateur
-Route::middleware('auth:api')->get('/profile', function (Request $request) {
+Route::middleware('auth:api')->get('/me', function (Request $request) {
     return $request->user();
 });
 
@@ -136,10 +136,10 @@ Route::get('/stats/authors', [StatisticsController::class, 'getAuthorsStats']);
 
 Route::middleware('auth:api')->group(function () {
     // Stats personnelles
-    Route::get('/chercheurs/stats-personnelles', [ChercheurController::class, 'personalStats']);
-    
+    Route::get('/chercheurs/me/stats', [ChercheurController::class, 'personalStats']);
+
     // Nombre d'abonnés
-    Route::get('/chercheurs/followers', [ChercheurController::class, 'getFollowersCount']);
+    Route::get('/chercheurs/followers/count', [ChercheurController::class, 'getFollowersCount']);
 });
 
 Route::middleware('auth:api')->put('/publications/{id}/toggle-visibility', [PublicationController::class, 'toggleVisibility']);

@@ -18,7 +18,7 @@ const ProfilUpdateForm = () => {
 
   useEffect(() => {
     axios
-      .get("/profile", { withCredentials: true })
+      .get("/me", { withCredentials: true })
       .then((res) => {
         const { nom, prenom } = res.data;
         setForm((prev) => ({ ...prev, nom, prenom }));

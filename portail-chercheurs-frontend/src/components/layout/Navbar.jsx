@@ -49,7 +49,7 @@ function Navbar({ sticky = false }) {
 
     const fetchUser = async () => {
       try {
-        const res = await axios.get("/profile", {
+        const res = await axios.get("/me", {
           withCredentials: true,
           signal: abortController.signal,
         });
@@ -127,57 +127,57 @@ function Navbar({ sticky = false }) {
         </button>
 
         {chercheur ? (
-<DropdownMenu
-  userProfile={chercheur}
-  sections={[
-    {
-      options: [
-        {
-          label: t("myAccount"),
-          icon: faUser,
-          link: "/mon-profil",
-        },
-        {
-          label: t("myDashboard"), 
-          icon: faWindowRestore,
-          link: "/chercheurs-stats",
-        },
-        ...(chercheur.role === "Administrateur"
-          ? [
+          <DropdownMenu
+            userProfile={chercheur}
+            sections={[
               {
-                label: t("dashboard"),
-                icon: faScrewdriverWrench, 
-                link: "/dashboard",
+                options: [
+                  {
+                    label: t("myAccount"),
+                    icon: faUser,
+                    link: "/mon-profil",
+                  },
+                  {
+                    label: t("myDashboard"),
+                    icon: faWindowRestore,
+                    link: "/chercheurs-stats",
+                  },
+                  ...(chercheur.role === "Administrateur"
+                    ? [
+                        {
+                          label: t("dashboard"),
+                          icon: faScrewdriverWrench,
+                          link: "/dashboard",
+                        },
+                      ]
+                    : []),
+                ],
               },
-            ]
-          : []),
-      ],
-    },
-    {
-      options: [
-        {
-          label: t("settings"),
-          icon: faCog,
-          onClick: () => setShowSettingsModal(true),
-        },
-        {
-          label: t("help"),
-          icon: faQuestionCircle,
-          link: "/aide",
-        },
-      ],
-    },
-    {
-      options: [
-        {
-          label: t("logout"),
-          icon: faSignOutAlt,
-          onClick: handleLogout,
-        },
-      ],
-    },
-  ]}
->
+              {
+                options: [
+                  {
+                    label: t("settings"),
+                    icon: faCog,
+                    onClick: () => setShowSettingsModal(true),
+                  },
+                  {
+                    label: t("help"),
+                    icon: faQuestionCircle,
+                    link: "/aide",
+                  },
+                ],
+              },
+              {
+                options: [
+                  {
+                    label: t("logout"),
+                    icon: faSignOutAlt,
+                    onClick: handleLogout,
+                  },
+                ],
+              },
+            ]}
+          >
             <div className="flex items-center gap-2 cursor-pointer">
               <ChercheurAvatar chercheur={chercheur} size="md" />
               <FontAwesomeIcon

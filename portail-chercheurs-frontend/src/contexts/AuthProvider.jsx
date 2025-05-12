@@ -8,7 +8,7 @@ const AuthProvider = ({ children }) => {
 
   const fetchUser = async () => {
     try {
-      const res = await axios.get("/profile", {
+      const res = await axios.get("/me", {
         withCredentials: true,
       });
       setUser(res.data);

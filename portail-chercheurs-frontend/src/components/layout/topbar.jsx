@@ -18,7 +18,7 @@ function TopBar() {
 
   useEffect(() => {
     axios
-      .get("/profile")
+      .get("/me")
       .then((res) => setChercheur(res.data))
       .catch((err) => {
         console.error(t("profileLoadError"), err);
@@ -38,9 +38,7 @@ function TopBar() {
   if (!chercheur) {
     return (
       <header className="flex items-center justify-between bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] border-b border-gray-200 p-4">
-        <div className="text-xl font-semibold">
-          {t("userNotFound")}
-        </div>
+        <div className="text-xl font-semibold">{t("userNotFound")}</div>
       </header>
     );
   }
@@ -48,28 +46,39 @@ function TopBar() {
   return (
     <>
       <header className="flex items-center justify-between bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] border-b border-gray-200 p-4">
-        <button type="button" onClick={toggleSideMenu} className="text-gray-500 hover:text-gray-600 focus:outline-none">
+        <button
+          type="button"
+          onClick={toggleSideMenu}
+          className="text-gray-500 hover:text-gray-600 focus:outline-none"
+        >
           <FaBars size={20} />
         </button>
 
         <h1 className="text-xl font-semibold">
-          {t("welcomeMessage", { name: `${chercheur.prenom} ${chercheur.nom}` })}
+          {t("welcomeMessage", {
+            name: `${chercheur.prenom} ${chercheur.nom}`,
+          })}
         </h1>
 
         <div className="flex items-center space-x-2">
-          <ChercheurAvatar chercheur={chercheur} size="lg" className="w-10 h-10" />
+          <ChercheurAvatar
+            chercheur={chercheur}
+            size="lg"
+            className="w-10 h-10"
+          />
           <div>
             <p className="text-md font-semibold">
               {chercheur.prenom} {chercheur.nom}
             </p>
-            <p className="text-sm text-gray-500">
-              {t("adminRole")}
-            </p>
+            <p className="text-sm text-gray-500">{t("adminRole")}</p>
           </div>
         </div>
       </header>
 
-      <SideMenu isVisible={showSideMenu} onClose={() => setShowSideMenu(false)} />
+      <SideMenu
+        isVisible={showSideMenu}
+        onClose={() => setShowSideMenu(false)}
+      />
     </>
   );
 }

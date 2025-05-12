@@ -15,7 +15,7 @@ function AdminDashboard() {
 
   useEffect(() => {
     axios
-      .get("/profile")
+      .get("/me")
       .then((response) => {
         const user = response.data;
         if (user.role !== "Administrateur") {
