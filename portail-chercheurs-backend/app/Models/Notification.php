@@ -9,15 +9,15 @@ class Notification extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'publication_id', 'message', 'is_read'];
+    protected $fillable = ['chercheur_id', 'publication_id', 'message', 'is_read'];
 
     public function chercheur()
     {
         return $this->belongsTo(Chercheur::class);
     }
 
-public function publication()
-{
-    return $this->belongsTo(Publication::class);
-}
+    public function publication()
+    {
+        return $this->belongsTo(Publication::class);
+    }
 }

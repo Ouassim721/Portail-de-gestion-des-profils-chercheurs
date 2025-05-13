@@ -17,7 +17,6 @@ import {
   faTimes,
   faQuestionCircle,
   faUser,
-  faTableColumns,
   faWindowRestore,
   faScrewdriverWrench,
 } from "@fortawesome/free-solid-svg-icons";
@@ -30,7 +29,7 @@ function Navbar({ sticky = false }) {
   const { language, switchLanguage, t } = useContext(LanguageContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
-  const [showNotificationsModal, setShowNotificationsModal] = useState(false)
+  const [showNotificationsModal, setShowNotificationsModal] = useState(false);
   const [chercheur, setChercheur] = useState(null);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const location = useLocation();
@@ -76,10 +75,11 @@ function Navbar({ sticky = false }) {
 
   useEffect(() => {
     if (isAuthenticated) {
-        axios.get('/notifications', { params: { unread: true } })
-            .then(res => setUnreadNotifications(res.data.total));
+      axios
+        .get("/notifications", { params: { unread: true } })
+        .then((res) => setUnreadNotifications(res.data.total));
     }
-}, [isAuthenticated, location])
+  }, [isAuthenticated, location]);
 
   const handleLogout = async () => {
     try {
@@ -131,19 +131,19 @@ function Navbar({ sticky = false }) {
             </li>
           ))}
         </ul>
-
-        <button 
-     onClick={() => setShowNotificationsModal(true)}
-  className="relative hover:text-[var(--color-primary)] transition-colors"
->
-    <FontAwesomeIcon icon={faRegularBell} className="text-xl" />
-    {unreadNotifications > 0 && (
-        <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
-            {unreadNotifications}
-        </span>
-    )}
-</button>
-
+        {isAuthenticated && (
+          <button
+            onClick={() => setShowNotificationsModal(true)}
+            className="relative hover:text-[var(--color-primary)] transition-colors"
+          >
+            <FontAwesomeIcon icon={faRegularBell} className="text-xl" />
+            {unreadNotifications > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                {unreadNotifications}
+              </span>
+            )}
+          </button>
+        )}
         {chercheur ? (
           <DropdownMenu
             userProfile={chercheur}
@@ -270,10 +270,10 @@ function Navbar({ sticky = false }) {
         onClose={() => setShowSettingsModal(false)}
         onLanguageChange={switchLanguage}
       />
-        <NotificationModal 
-  show={showNotificationsModal}
-  onClose={() => setShowNotificationsModal(false)}
-/>
+      <NotificationModal
+        show={showNotificationsModal}
+        onClose={() => setShowNotificationsModal(false)}
+      />
     </nav>
   );
 }

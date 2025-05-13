@@ -35,7 +35,6 @@ function Home() {
   const [isLoadingChercheurs, setIsLoadingChercheurs] = useState(false);
   const [errorChercheurs, setErrorChercheurs] = useState(null);
 
-
   const locale = language === "fr" ? fr : enUS;
 
   // Fetch stats
@@ -60,7 +59,10 @@ function Home() {
         const today = new Date();
         const upcoming = res.data
           .filter((event) => new Date(event.date_publication) > today)
-          .sort((a, b) => new Date(a.date_publication) - new Date(b.date_publication))
+          .sort(
+            (a, b) =>
+              new Date(a.date_publication) - new Date(b.date_publication)
+          )
           .slice(0, 5); // Limite à 5 événements
 
         setEvents(upcoming);
@@ -121,16 +123,13 @@ function Home() {
                 {t("homeSubtitle")}
               </p>
               <div className="flex flex-col lg:flex-row items-center gap-4">
-  <Link to="/chercheurs">
-    <Button variant="primary">{t("exploreResearchers")}</Button>
-  </Link>
-  <Link to="/about">
-    <Button variant="neutral">{t("learnMore")}</Button>
-  </Link>
-  <Link to="/contact">
-    <Button variant="neutral">{t("contact")}</Button>
-  </Link>
-</div>
+                <Link to="/chercheurs">
+                  <Button variant="primary">{t("exploreResearchers")}</Button>
+                </Link>
+                <Link to="/about">
+                  <Button variant="neutral">{t("learnMore")}</Button>
+                </Link>
+              </div>
             </div>
           </div>
           <div className="hidden lg:flex items-center bg-[#111827] h-full p-5 w-[30%] relative">
@@ -150,10 +149,26 @@ function Home() {
         </h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {[
-            { stat: countChercheurs ?? 0, label: t("researchersCount"), icon: faUsers },
-            { stat: countPublications ?? 0, label: t("publicationsCount"), icon: faBook },
-            { stat: countCitations ?? 0, label: t("citations"), icon: faQuoteRight },
-            { stat: countDisciplines ?? 0, label: t("domain"), icon: faChartPie },
+            {
+              stat: countChercheurs ?? 0,
+              label: t("researchersCount"),
+              icon: faUsers,
+            },
+            {
+              stat: countPublications ?? 0,
+              label: t("publicationsCount"),
+              icon: faBook,
+            },
+            {
+              stat: countCitations ?? 0,
+              label: t("citations"),
+              icon: faQuoteRight,
+            },
+            {
+              stat: countDisciplines ?? 0,
+              label: t("domain"),
+              icon: faChartPie,
+            },
           ].map((item, index) => (
             <motion.div
               key={index}
@@ -175,8 +190,8 @@ function Home() {
         </div>
       </section>
 
- {/* Timeline des événements scientifiques */}
- <section className="bg-[var(--color-bg-primary)] py-16">
+      {/* Timeline des événements scientifiques */}
+      <section className="bg-[var(--color-bg-primary)] py-16">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-3xl font-bold mb-8 text-center text-[var(--color-text-primary)]">
             {t("upcomingEvents")}
@@ -237,7 +252,7 @@ function Home() {
         <h2 className="text-3xl font-bold mb-12 text-center text-[var(--color-text-primary)]">
           {t("recentPublications")}
         </h2>
-        
+
         {isLoadingPublications ? (
           <div className="text-center text-[var(--color-text-secondary)]">
             {t("loading")}...
@@ -263,14 +278,14 @@ function Home() {
           </div>
         )}
       </section>
-       {/* Nouvelle section Chercheurs */}
-        {/* Bannière avec image */}
-    <img
-      src={ logo}
-      alt={t("researchTeamAlt")}
-      className="w-full h-full object-cover"
-    />
-       <section className="max-w-7xl mx-auto py-16 px-4">
+      {/* Nouvelle section Chercheurs */}
+      {/* Bannière avec image */}
+      <img
+        src={logo}
+        alt={t("researchTeamAlt")}
+        className="w-full h-full object-cover"
+      />
+      <section className="max-w-7xl mx-auto py-16 px-4">
         <div className="flex justify-between items-center mb-12">
           <h2 className="text-3xl font-bold text-[var(--color-text-primary)]">
             {t("featuredResearchers")}
@@ -289,7 +304,7 @@ function Home() {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {chercheurs.map((chercheur) => (
-              <motion.div 
+              <motion.div
                 key={chercheur.id}
                 whileHover={{ scale: 1.02 }}
                 className="bg-[var(--color-bg-primary)] p-6 rounded-xl shadow-lg"
@@ -298,7 +313,9 @@ function Home() {
                   <div className="flex items-center gap-4 mb-4">
                     <img
                       src={chercheur.photo || pdp}
-                      alt={t("avatarAlt", { name: `${chercheur.prenom} ${chercheur.nom}` })}
+                      alt={t("avatarAlt", {
+                        name: `${chercheur.prenom} ${chercheur.nom}`,
+                      })}
                       className="w-16 h-16 rounded-full object-cover"
                     />
                     <div>
@@ -312,7 +329,7 @@ function Home() {
                   </div>
                   <div className="flex flex-wrap gap-2 mt-4">
                     {chercheur.disciplines?.map((discipline) => (
-                      <span 
+                      <span
                         key={discipline.id}
                         className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full"
                       >

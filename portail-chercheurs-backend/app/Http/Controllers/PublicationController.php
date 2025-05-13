@@ -23,33 +23,33 @@ class PublicationController extends Controller
         $publications = Publication::with(['chercheur', 'discipline'])->get();
         return view('publications.index', compact('publications'));
     }*/
-public function index(Request $request)
-{
-    $query = Publication::query()->with(['chercheur', 'discipline']);
+    public function index(Request $request)
+    {
+        $query = Publication::query()->with(['chercheur', 'discipline']);
 
-    if ($request->has('year')) {
-        $query->whereYear('date_publication', $request->year);
+        if ($request->has('year')) {
+            $query->whereYear('date_publication', $request->year);
+        }
+
+        if ($request->has('discipline_id')) {
+            $query->where('discipline_id', $request->discipline_id);
+        }
+
+        // Nouveau filtre de recherche
+        if ($request->has('search')) {
+            $searchTerm = '%' . $request->search . '%';
+            $query->where('titre', 'LIKE', $searchTerm);
+        }
+
+        $page = $request->input('page', 1);
+        $limit = $request->input('limit', 10);
+        $publications = $query->paginate($limit, ['*'], 'page', $page);
+
+        return response()->json([
+            'data' => $publications->items(),
+            'hasMore' => $publications->hasMorePages(),
+        ]);
     }
-
-    if ($request->has('discipline_id')) {
-        $query->where('discipline_id', $request->discipline_id);
-    }
-
-    // Nouveau filtre de recherche
-    if ($request->has('search')) {
-        $searchTerm = '%' . $request->search . '%';
-        $query->where('titre', 'LIKE', $searchTerm);
-    }
-
-    $page = $request->input('page', 1);
-    $limit = $request->input('limit', 10);
-    $publications = $query->paginate($limit, ['*'], 'page', $page);
-
-    return response()->json([
-        'data' => $publications->items(),
-        'hasMore' => $publications->hasMorePages(),
-    ]);
-}
 
     /**
      * Affiche le formulaire de création
@@ -115,7 +115,7 @@ public function index(Request $request)
         }
     }
 
-public function store(Request $request)
+    public function store(Request $request)
     {
         try {
             $chercheur = JWTAuth::parseToken()->authenticate();
@@ -153,7 +153,7 @@ public function store(Request $request)
                 foreach ($followers as $follower) {
                     // Création de la notification
                     Notification::create([
-                        'user_id' => $follower->id,
+                        'chercheur_id' => $follower->id,
                         'publication_id' => $publication->id,
                         'message' => 'Nouvelle publication de ' . $chercheur->prenom . ' ' . $chercheur->nom
                     ]);
@@ -185,7 +185,7 @@ public function store(Request $request)
 
         return response()->json(['publications' => $publications], 200);
     }
-    
+
     public function getPublicationYears()
     {
         $years = Publication::selectRaw('YEAR(date_publication) as year')
@@ -201,21 +201,20 @@ public function store(Request $request)
     }
 
     public function toggleVisibility($id)
-{
-    $publication = Publication::findOrFail($id);
-    $user = auth()->user();
+    {
+        $publication = Publication::findOrFail($id);
+        $user = JWTAuth::user();
 
-    if ($publication->chercheur_id !== $user->id) {
-        return response()->json(['error' => 'Unauthorized'], 403);
+        if ($publication->chercheur_id !== $user->id) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $publication->visible = !$publication->visible;
+        $publication->save();
+
+        return response()->json([
+            'message' => 'Visibilité mise à jour',
+            'visible' => $publication->visible
+        ]);
     }
-
-    $publication->visible = !$publication->visible;
-    $publication->save();
-
-    return response()->json([
-        'message' => 'Visibilité mise à jour',
-        'visible' => $publication->visible
-    ]);
-}
-    
 }

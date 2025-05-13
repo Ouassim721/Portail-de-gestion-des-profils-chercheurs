@@ -9,19 +9,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-public function up()
-{
-    Schema::create('notifications', function (Blueprint $table) {
-        $table->id();
-        $table->unsignedInteger('user_id');
-        $table->foreign('user_id')->references('id')->on('chercheurs');
-        $table->unsignedInteger('publication_id'); 
-        $table->foreign('publication_id')->references('id')->on('publications');
-        $table->string('message');
-        $table->boolean('is_read')->default(false);
-        $table->timestamps();
-    });
-}
+    public function up()
+    {
+        Schema::create('notifications', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedInteger('chercheur_id');
+            $table->foreign('chercheur_id')->references('id')->on('chercheurs');
+            $table->unsignedInteger('publication_id');
+            $table->foreign('publication_id')->references('id')->on('publications');
+            $table->string('message');
+            $table->boolean('is_read')->default(false);
+            $table->timestamps();
+        });
+    }
 
     /**
      * Reverse the migrations.
@@ -30,7 +30,7 @@ public function up()
     {
         Schema::dropIfExists('notifications');
     }
-       /**
-        * Get the user that owns the notification.
-        */
+    /**
+     * Get the user that owns the notification.
+     */
 };

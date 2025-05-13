@@ -9,7 +9,7 @@ class Contact extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'sujet', 'message', 'status'];
+    protected $fillable = ['chercheur_id', 'sujet', 'message', 'status'];
 
     // Définir la relation avec l'utilisateur
     public function user()
