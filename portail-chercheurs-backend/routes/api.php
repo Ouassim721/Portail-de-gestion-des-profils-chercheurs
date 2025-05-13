@@ -13,6 +13,7 @@ use App\Http\Controllers\FollowController;
 use App\Http\Controllers\ScopusPublicationController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -143,3 +144,8 @@ Route::middleware('auth:api')->group(function () {
 });
 
 Route::middleware('auth:api')->put('/publications/{id}/toggle-visibility', [PublicationController::class, 'toggleVisibility']);
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::post('/notifications/mark-as-read', [NotificationController::class, 'markAsRead']);
+});

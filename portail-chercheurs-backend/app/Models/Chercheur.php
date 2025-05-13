@@ -72,6 +72,11 @@ class Chercheur extends Authenticatable implements JWTSubject
         return $this->belongsToMany(Chercheur::class, 'follows', 'followed_id', 'follower_id')->withTimestamps();
     }
 
+    public function notifications()
+{
+    return $this->hasMany(Notification::class);
+}
+
     /**
      * Get the attributes that should be cast.
      *

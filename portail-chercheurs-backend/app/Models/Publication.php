@@ -55,4 +55,12 @@ class Publication extends Model
     {
         return $this->hasMany(Comment::class);
     }
+
+    /**
+     * Les notifications associées à cette publication
+     */
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class);
+    }
 }

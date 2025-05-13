@@ -6,6 +6,7 @@ import Button from "../ui/Button";
 import DropdownMenu from "../ui/DropdownMenu";
 import axios from "../../axios";
 import SearchBar from "../research/SearchBar";
+import NotificationModal from "../modals/NotificationModal";
 import ChercheurAvatar from "../ui/ChercheurAvatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -24,10 +25,12 @@ import { faBell as faRegularBell } from "@fortawesome/free-regular-svg-icons";
 import SettingsModal from "../modals/SettingsModal";
 
 function Navbar({ sticky = false }) {
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
   const { isAuthenticated } = useAuth();
   const { language, switchLanguage, t } = useContext(LanguageContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
+  const [showNotificationsModal, setShowNotificationsModal] = useState(false)
   const [chercheur, setChercheur] = useState(null);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const location = useLocation();
@@ -70,6 +73,13 @@ function Navbar({ sticky = false }) {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+        axios.get('/notifications', { params: { unread: true } })
+            .then(res => setUnreadNotifications(res.data.total));
+    }
+}, [isAuthenticated, location])
 
   const handleLogout = async () => {
     try {
@@ -122,9 +132,17 @@ function Navbar({ sticky = false }) {
           ))}
         </ul>
 
-        <button style={{ color: "var(--color-text-secondary)" }}>
-          <FontAwesomeIcon icon={faRegularBell} className="text-xl" />
-        </button>
+        <button 
+     onClick={() => setShowNotificationsModal(true)}
+  className="relative hover:text-[var(--color-primary)] transition-colors"
+>
+    <FontAwesomeIcon icon={faRegularBell} className="text-xl" />
+    {unreadNotifications > 0 && (
+        <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+            {unreadNotifications}
+        </span>
+    )}
+</button>
 
         {chercheur ? (
           <DropdownMenu
@@ -145,7 +163,7 @@ function Navbar({ sticky = false }) {
                   ...(chercheur.role === "Administrateur"
                     ? [
                         {
-                          label: t("dashboard"),
+                          label: t("Admindashboard"),
                           icon: faScrewdriverWrench,
                           link: "/dashboard",
                         },
@@ -252,6 +270,10 @@ function Navbar({ sticky = false }) {
         onClose={() => setShowSettingsModal(false)}
         onLanguageChange={switchLanguage}
       />
+        <NotificationModal 
+  show={showNotificationsModal}
+  onClose={() => setShowNotificationsModal(false)}
+/>
     </nav>
   );
 }

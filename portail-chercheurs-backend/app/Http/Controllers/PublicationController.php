@@ -9,6 +9,9 @@ use App\Models\Discipline;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Carbon;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Models\Notification;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewPublicationNotification;
 
 class PublicationController extends Controller
 {
@@ -20,21 +23,33 @@ class PublicationController extends Controller
         $publications = Publication::with(['chercheur', 'discipline'])->get();
         return view('publications.index', compact('publications'));
     }*/
-    public function index(Request $request)
-    {
-        $perPage = $request->get('limit', 10);
+public function index(Request $request)
+{
+    $query = Publication::query()->with(['chercheur', 'discipline']);
 
-        $publications = Publication::with(['chercheur', 'discipline'])
-            ->orderBy('date_publication', 'desc')
-            ->paginate($perPage);
-
-        return response()->json([
-            'data' => $publications->items(),
-            'hasMore' => $publications->hasMorePages()
-        ]);
+    if ($request->has('year')) {
+        $query->whereYear('date_publication', $request->year);
     }
 
+    if ($request->has('discipline_id')) {
+        $query->where('discipline_id', $request->discipline_id);
+    }
 
+    // Nouveau filtre de recherche
+    if ($request->has('search')) {
+        $searchTerm = '%' . $request->search . '%';
+        $query->where('titre', 'LIKE', $searchTerm);
+    }
+
+    $page = $request->input('page', 1);
+    $limit = $request->input('limit', 10);
+    $publications = $query->paginate($limit, ['*'], 'page', $page);
+
+    return response()->json([
+        'data' => $publications->items(),
+        'hasMore' => $publications->hasMorePages(),
+    ]);
+}
 
     /**
      * Affiche le formulaire de création
@@ -100,7 +115,7 @@ class PublicationController extends Controller
         }
     }
 
-    public function store(Request $request)
+public function store(Request $request)
     {
         try {
             $chercheur = JWTAuth::parseToken()->authenticate();
@@ -110,7 +125,7 @@ class PublicationController extends Controller
 
             $request->validate([
                 'publications' => 'required|array',
-                'publications.*.identifiant' => 'nullable|string', // Champ identifiant ajouté
+                'publications.*.identifiant' => 'nullable|string',
                 'publications.*.titre' => 'required|string',
                 'publications.*.date_publication' => 'required|date',
                 'publications.*.auteurs' => 'required',
@@ -120,8 +135,8 @@ class PublicationController extends Controller
             ]);
 
             foreach ($request->publications as $pub) {
-                Publication::create([
-                    'scopus_id' => $pub['identifiant'] ?? null, // Stockage de l'identifiant Scopus
+                $publication = Publication::create([
+                    'scopus_id' => $pub['identifiant'] ?? null,
                     'titre' => $pub['titre'],
                     'date_publication' => $pub['date_publication'],
                     'auteurs' => is_array($pub['auteurs'])
@@ -132,6 +147,21 @@ class PublicationController extends Controller
                     'chercheur_id' => $chercheur->id,
                     'discipline_id' => $pub['discipline_id'] ?? null
                 ]);
+
+                // Notifier les abonnés
+                $followers = $chercheur->followers;
+                foreach ($followers as $follower) {
+                    // Création de la notification
+                    Notification::create([
+                        'user_id' => $follower->id,
+                        'publication_id' => $publication->id,
+                        'message' => 'Nouvelle publication de ' . $chercheur->prenom . ' ' . $chercheur->nom
+                    ]);
+
+                    // Envoi d'email via queue
+                    Mail::to($follower->email)
+                        ->queue(new NewPublicationNotification($chercheur, $publication));
+                }
             }
 
             return response()->json(['message' => 'Publications enregistrées avec succès']);

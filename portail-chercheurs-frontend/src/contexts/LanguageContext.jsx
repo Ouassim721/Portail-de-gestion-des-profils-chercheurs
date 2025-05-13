@@ -429,6 +429,12 @@ profileLoadingError: "Erreur lors du chargement de ton profil",
     monthlyComparison:   "Comparaison mensuelle",
     makePublic: "Rendre publique",
   makePrivate: "Rendre privée",
+  allYears: "Toutes les années",
+  notifications: "Notifications",
+  noNotifications: "Aucune notification",
+  markAsRead: "Marquer comme lu",
+  Admindashboard: "Tableau de bord administrateur",
+  allDomains: "Toutes les disciplines",
   },
 
   en: {
@@ -854,6 +860,12 @@ responseTimeInfo: "We are committed to responding within 24 hours.",
     monthlyComparison:   "Monthly comparison",
     makePublic: "Make public",
   makePrivate: "Make private",
+    allYears: "All years",
+      notifications:  "Notifications",
+  noNotifications: "No notifications",
+  markAsRead: "Mark as read",
+  Admindashboard: "Admin Dashboard",
+  allDomains: "All domains",
   }
 };
 export const LanguageContext = createContext({

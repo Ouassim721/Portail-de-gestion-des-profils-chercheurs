@@ -6,7 +6,7 @@ import {
   faBook,
   faQuoteRight,
 } from "@fortawesome/free-solid-svg-icons";
-import SearchBar from "../components/research/SearchBar";
+import SearchBarPublications from "../components/research/SearchBarPublications";
 import Button from "../components/ui/Button";
 import DropdownButton from "../components/ui/DropdownButton";
 import CardStatPublication from "../components/cards/CardStatPublication";
@@ -19,6 +19,7 @@ import useAuth from "../hooks/useAuth";
 
 const Publications = () => {
   const { t } = useContext(LanguageContext);
+  const [searchTerm, setSearchTerm] = useState('');
   const [disciplines, setDisciplines] = useState([]);
   const [availableYears, setAvailableYears] = useState([]);
   const [publications, setPublications] = useState([]);
@@ -26,6 +27,8 @@ const Publications = () => {
   const [countPublications, setcountPublications] = useState(null);
   const [countCitations, setcountCitations] = useState(null);
   const [countDiscipline, setCountDiscipline] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedDiscipline, setSelectedDiscipline] = useState(null); 
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -56,18 +59,24 @@ const Publications = () => {
     };
   }, [handleObserver]);
 
-  useEffect(() => {
-    if (!hasMore || isLoading) return;
+useEffect(() => {
+  if (!hasMore || isLoading) return;
 
-    setIsLoading(true);
-    axios
-      .get(`/publications?page=${page}&limit=10`)
-      .then((res) => {
-        setPublications((prev) => [...prev, ...res.data.data]);
-        setHasMore(res.data.hasMore);
-      })
-      .finally(() => setIsLoading(false));
-  }, [page]);
+  setIsLoading(true);
+  axios
+    .get(`/publications?page=${page}&limit=10${selectedYear ? `&year=${selectedYear}` : ''}${selectedDiscipline ? `&discipline_id=${selectedDiscipline}` : ''}${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ''}`)
+    .then((res) => {
+      setPublications((prev) => (page === 1 ? res.data.data : [...prev, ...res.data.data]));
+      setHasMore(res.data.hasMore);
+    })
+    .finally(() => setIsLoading(false));
+}, [page, selectedYear, selectedDiscipline, searchTerm]); 
+
+useEffect(() => {
+  setPage(1);
+  setPublications([]);
+  setHasMore(true);
+}, [searchTerm]); // Réinitialiser quand le terme de recherche change
 
   useEffect(() => {
     axios
@@ -113,43 +122,59 @@ const Publications = () => {
     <div className="min-h-screen ">
       <div className="w-full bg-[var(--color-primary)] flex flex-col lg:flex-row gap-4 items-center p-4">
         <div className="w-full px-2">
-          <SearchBar
-            className="p-4 w-full"
-            placeHolder={t("searchPublications")}
-          />
+<SearchBarPublications
+  className="p-4 w-full"
+  placeHolder={t("searchPublications")}
+  value={searchTerm}
+  onChange={(e) => setSearchTerm(e.target.value)}
+  onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+/>
         </div>
         <div className="w-full flex flex-col sm:flex-row gap-8 sm:justify-between items-center">
           <div className="w-full flex justify-between sm:justify-start lg:justify-end sm:gap-6 px-2">
-          <DropdownButton
+         <DropdownButton
   icon={faChevronDown}
-  children={t("year")}
+  children={selectedYear ? selectedYear.toString() : t("year")}
   variant="neutral"
   iconPosition="right"
-  options={availableYears.map((year) => ({
-    label: year.toString(),
-    onClick: () => console.log("Filtrer pour", year), // Replace with actual filtering logic
-  }))}
-  className="w-full sm:w-auto" // Ensure proper width for dropdown
+  options={[
+    { label: t("allYears"), onClick: () => setSelectedYear(null) },
+    ...availableYears.map((year) => ({
+      label: year.toString(),
+      onClick: () => setSelectedYear(year),
+    })),
+  ]}
+  className="w-full sm:w-auto"
 />
+
 <DropdownButton
   icon={faChevronDown}
-  children={t("domain")}
+  children={selectedDiscipline ? disciplines.find(d => d.id === selectedDiscipline)?.nom : t("domain")}
   variant="neutral"
   iconPosition="right"
-  options={disciplines.map((discipline) => ({
-    label: discipline.nom,
-    onClick: () => console.log(discipline.id), // Adapt for filtering
-  }))}
-  className="w-full sm:w-auto" // Ensure proper width for dropdown
+  options={[
+    { label: t("allDomains"), onClick: () => setSelectedDiscipline(null) },
+    ...disciplines.map((discipline) => ({
+      label: discipline.nom,
+      onClick: () => setSelectedDiscipline(discipline.id),
+    })),
+  ]}
+  className="w-full sm:w-auto"
 />
+<Button
+  variant="secondary"
+  icon={faFilter}
+  onClick={() => {
+    // Déclencher manuellement un rechargement si nécessaire
+    setPage(1);
+    setPublications([]);
+    setHasMore(true);
+  }}
+  className="w-full sm:w-auto flex justify-center items-center"
+>
+  {t("filter")}
+</Button>
           </div>
-          <Button
-            variant="secondary"
-            icon={faFilter}
-            className="w-full sm:w-auto flex justify-center items-center"
-          >
-            {t("filter")}
-          </Button>
         </div>
       </div>
 
