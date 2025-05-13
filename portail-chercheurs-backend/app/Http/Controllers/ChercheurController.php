@@ -205,11 +205,10 @@ public function personalStats()
         return response()->json([
             'publications' => $chercheur->publications()->count(),
             'citations' => $chercheur->publications()->sum('citation_count'),
-            'collaborations' => count(array_unique(
-                $chercheur->publications->flatMap(function($pub) {
-                    return explode(',', $pub->auteurs);
-                })->toArray()
-            )) - 1
+            'collaborations' => $chercheur->publications->sum(function($pub) {
+                $auteurs = explode(',', $pub->auteurs);
+                return count($auteurs) ; // Subtract the researcher themselves
+            })
         ]);
     } catch (\Exception $e) {
         return response()->json(['error' => $e->getMessage()], 500);
