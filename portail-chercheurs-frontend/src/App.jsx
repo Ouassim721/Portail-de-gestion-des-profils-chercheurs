@@ -1,5 +1,6 @@
 import "./index.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { LanguageProvider } from "./contexts/LanguageContext"; 
 import AuthProvider from "./contexts/AuthProvider";
 import Layout from "./components/layout/Layout";
@@ -32,7 +33,13 @@ import CreationActualite from "./pages/admin/CreationActualite";
 import AdminDisciplines from "./pages/admin/AdminDisciplines";
 import ResearcherStats from "./pages/ResearcherStats";
 import Contact from "./pages/Contact";
+import CoursesPage from './pages/CoursesPage';
+import SubjectsPage from './pages/SubjectsPage';
+import CourseDetailPage from './pages/CourseDetailPage';
+import CourseForm from './components/cours/CourseForm';
+
 function App() {
+    const userId = localStorage.getItem('userId');
   return (
     <LanguageProvider>
       {" "}
@@ -138,7 +145,16 @@ function App() {
                 </ProtectedRoute>
               }
             />
-          </Routes>
+          <Route path="/chercheurs/:id/cours" element={<CoursesPage />} />
+            <Route path="/chercheurs/:id/cours/new" element={<CourseForm />} />
+            <Route path="/chercheurs/:id/cours/:coursId/edit" element={<CourseForm />} />
+            <Route path="/chercheurs/:id/cours/:coursId" element={<CourseDetailPage />} />
+            
+            {/* Matières */}
+            <Route path="/chercheurs/:id/matieres" element={<SubjectsPage />} />
+        </Routes>
+
+
         </BrowserRouter>
       </AuthProvider>
     </LanguageProvider>

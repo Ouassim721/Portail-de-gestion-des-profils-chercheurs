@@ -13,11 +13,10 @@ class MatiereController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $matieres = Matiere::with(['cours', 'chercheurs'])->get();
-        return response()->json($matieres, Response::HTTP_OK);
-    }
+public function index()
+{
+    return Matiere::all();
+}
 
     /**
      * Store a newly created resource in storage.
@@ -84,4 +83,10 @@ class MatiereController extends Controller
 
         return response()->json(['message' => 'Matière supprimée avec succès.'], Response::HTTP_NO_CONTENT);
     }
+    public function chercheurMatieres($chercheurId)
+    {
+        $chercheur = Chercheur::findOrFail($chercheurId);
+        return $chercheur->matieres;
+    }
 }
+

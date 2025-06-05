@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\Chercheur;
+use App\Models\Cours;
+use App\Models\Matiere;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\Rule;
 
 class ChercheurController extends Controller
 {
@@ -214,4 +218,243 @@ public function personalStats()
         return response()->json(['error' => $e->getMessage()], 500);
     }
 }
+
+     /**
+     * GET /api/chercheurs/{id}/cours
+     * Récupère tous les cours publiés par le chercheur d’ID = $id
+     */
+    public function getCours($id)
+    {
+        try {
+            $chercheur = Chercheur::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Chercheur introuvable.'], 404);
+        }
+
+        // Charger les cours avec leurs matières
+        $cours = $chercheur->cours()
+            ->with('matiere')
+            ->orderBy('datePublication', 'desc')
+            ->get();
+
+        return response()->json($cours, 200);
+    }
+
+    /**
+     * POST /api/chercheurs/{id}/cours
+     * Crée un nouveau cours pour le chercheur d’ID = $id
+     */
+    public function storeCours(Request $request, $id)
+    {
+        try {
+            $chercheur = Chercheur::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Chercheur introuvable.'], 404);
+        }
+
+        // Validation des champs
+        $request->validate([
+            'titre'           => 'required|string|max:255',
+            'description'     => 'required|string',
+            'datePublication' => 'required|date',
+            'fichier'         => 'required|file|mimes:pdf,doc,docx|max:5120',
+            'id_matiere'      => [
+                'required',
+                'integer',
+                Rule::exists('matieres', 'id')
+            ],
+        ]);
+
+        // Vérifier que la matière demandée existe
+        $matiere = Matiere::find($request->id_matiere);
+        if (! $matiere) {
+            return response()->json(['message' => 'Matière introuvable.'], 404);
+        }
+
+        // Stocker le fichier (par ex. dans storage/app/public/cours)
+        $cheminFichier = $request->file('fichier')->store('cours', 'public');
+
+        // Création du cours
+        $cours = new Cours();
+        $cours->titre           = $request->titre;
+        $cours->description     = $request->description;
+        $cours->datePublication = $request->datePublication;
+        $cours->fichier         = 'storage/' . $cheminFichier; // chemin accessible depuis le front
+        $cours->id_chercheur    = $chercheur->id;
+        $cours->id_matiere      = $matiere->id;
+        $cours->save();
+
+        // Charger la relation matière pour retourner un objet plus complet
+        $cours->load('matiere');
+
+        return response()->json($cours, 201);
+    }
+
+    /**
+     * PUT/PATCH /api/chercheurs/{id}/cours/{coursId}
+     * Met à jour un cours existant, à condition qu’il appartienne bien au chercheur.
+     */
+    public function updateCours(Request $request, $id, $coursId)
+    {
+        try {
+            $chercheur = Chercheur::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Chercheur introuvable.'], 404);
+        }
+
+        // Récupérer le cours et vérifier qu’il appartient à ce chercheur
+        $cours = Cours::where('id', $coursId)
+            ->where('id_chercheur', $chercheur->id)
+            ->first();
+
+        if (! $cours) {
+            return response()->json(['message' => 'Cours introuvable ou n’appartient pas à ce chercheur.'], 404);
+        }
+
+        // Validation des champs (tous en "sometimes" car on ne les modifie pas forcément tous)
+        $request->validate([
+            'titre'           => 'sometimes|required|string|max:255',
+            'description'     => 'sometimes|required|string',
+            'datePublication' => 'sometimes|required|date',
+            'fichier'         => 'sometimes|required|file|mimes:pdf,doc,docx|max:5120',
+            'id_matiere'      => [
+                'sometimes',
+                'required',
+                'integer',
+                Rule::exists('matieres', 'id')
+            ],
+        ]);
+
+        // Mise à jour des champs si présents
+        if ($request->filled('titre')) {
+            $cours->titre = $request->titre;
+        }
+        if ($request->filled('description')) {
+            $cours->description = $request->description;
+        }
+        if ($request->filled('datePublication')) {
+            $cours->datePublication = $request->datePublication;
+        }
+        if ($request->filled('id_matiere')) {
+            $cours->id_matiere = $request->id_matiere;
+        }
+
+        // Gestion du remplacement du fichier PDF
+        if ($request->hasFile('fichier')) {
+            // Supprimer l’ancien fichier
+            if ($cours->fichier && Storage::exists(str_replace('storage/', '', $cours->fichier))) {
+                Storage::delete(str_replace('storage/', '', $cours->fichier));
+            }
+            $cheminFichier = $request->file('fichier')->store('cours', 'public');
+            $cours->fichier = 'storage/' . $cheminFichier;
+        }
+
+        $cours->save();
+        $cours->load('matiere');
+
+        return response()->json($cours, 200);
+    }
+
+    /**
+     * DELETE /api/chercheurs/{id}/cours/{coursId}
+     * Supprime un cours, à condition qu’il appartienne à ce chercheur.
+     */
+    public function destroyCours($id, $coursId)
+    {
+        try {
+            $chercheur = Chercheur::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Chercheur introuvable.'], 404);
+        }
+
+        // Récupérer le cours
+        $cours = Cours::where('id', $coursId)
+            ->where('id_chercheur', $chercheur->id)
+            ->first();
+
+        if (! $cours) {
+            return response()->json(['message' => 'Cours introuvable ou n’appartient pas à ce chercheur.'], 404);
+        }
+
+        // Supprimer le fichier stocké
+        if ($cours->fichier && Storage::exists(str_replace('storage/', '', $cours->fichier))) {
+            Storage::delete(str_replace('storage/', '', $cours->fichier));
+        }
+
+        $cours->delete(); // soft delete ou delete pur selon votre migration
+        return response()->json(['message' => 'Cours supprimé avec succès.'], 200);
+    }
+
+    /**
+     * GET /api/chercheurs/{id}/matieres
+     * Récupère toutes les matières que le chercheur d’ID = $id enseigne.
+     */
+    public function getMatieres($id)
+{
+    try {
+        $chercheur = Chercheur::findOrFail($id);
+        // Charger via la relation pivot
+        $matieres = $chercheur->matieres()->get();
+        return response()->json($matieres, 200);
+    } catch (ModelNotFoundException $e) {
+        return response()->json(['message' => 'Chercheur introuvable.'], 404);
+    }
+}
+
+    /**
+     * POST /api/chercheurs/{id}/matieres
+     * Lie une matière au chercheur (table pivot 'enseigner').
+     * On attend, dans le corps JSON, { "id_matiere": X }
+     */
+    public function attachMatiere(Request $request, $id)
+    {
+        try {
+            $chercheur = Chercheur::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Chercheur introuvable.'], 404);
+        }
+
+        $request->validate([
+            'id_matiere' => 'required|integer|exists:matieres,id',
+        ]);
+
+        $matiere = Matiere::find($request->id_matiere);
+
+        // Vérifier si la relation existe déjà
+        if ($chercheur->matieres()->where('id_matiere', $matiere->id)->exists()) {
+            return response()->json(['message' => 'Le chercheur enseigne déjà cette matière.'], 409);
+        }
+
+        // Insérer dans la table pivot
+        $chercheur->matieres()->attach($matiere->id);
+
+        // Recharger la liste des matières pour la réponse
+        $matieres = $chercheur->matieres()->get();
+
+        return response()->json($matieres, 201);
+    }
+
+    /**
+     * DELETE /api/chercheurs/{id}/matieres/{matiereId}
+     * Supprime la liaison entre le chercheur et la matière (table pivot).
+     */
+    public function detachMatiere($id, $matiereId)
+    {
+        try {
+            $chercheur = Chercheur::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Chercheur introuvable.'], 404);
+        }
+
+        // Vérifier que la pivot existe
+        if (! $chercheur->matieres()->where('id_matiere', $matiereId)->exists()) {
+            return response()->json(['message' => 'Le lien chercheur⇄matière n’existe pas.'], 404);
+        }
+
+        // Supprimer la ligne pivot
+        $chercheur->matieres()->detach($matiereId);
+
+        return response()->json(['message' => 'Matière détachée avec succès.'], 200);
+    }
+
 }

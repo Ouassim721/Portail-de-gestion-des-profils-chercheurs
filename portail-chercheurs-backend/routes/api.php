@@ -167,3 +167,18 @@ Route::delete(
     'enseigner/{id_chercheur}/{id_matiere}', 
     [EnseignerController::class, 'destroy']
 );
+
+
+Route::middleware('auth:api')->group(function () {
+    // --- Pour gérer les cours d’un chercheur ---
+    Route::get('chercheurs/{id}/cours', [ChercheurController::class, 'getCours']);
+    Route::post('chercheurs/{id}/cours', [ChercheurController::class, 'storeCours']);
+    Route::put('chercheurs/{id}/cours/{coursId}', [ChercheurController::class, 'updateCours']);
+    Route::patch('chercheurs/{id}/cours/{coursId}', [ChercheurController::class, 'updateCours']);
+    Route::delete('chercheurs/{id}/cours/{coursId}', [ChercheurController::class, 'destroyCours']);
+
+    // --- Pour gérer les matières (pivot “enseigner”) ---
+    Route::get('chercheurs/{id}/matieres', [ChercheurController::class, 'getMatieres']);
+    Route::post('chercheurs/{id}/matieres', [ChercheurController::class, 'attachMatiere']);
+    Route::delete('chercheurs/{id}/matieres/{matiereId}', [ChercheurController::class, 'detachMatiere']);
+});
