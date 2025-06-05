@@ -71,6 +71,29 @@ class Chercheur extends Authenticatable implements JWTSubject
     {
         return $this->belongsToMany(Chercheur::class, 'follows', 'followed_id', 'follower_id')->withTimestamps();
     }
+    
+    /**
+     * Un chercheur peut poster plusieurs cours (relation 1-N).
+     */
+    public function cours()
+    {
+        return $this->hasMany(Cours::class, 'id_chercheur', 'id');
+    }
+    
+    /**
+     * Relation Many-to-Many vers Matiere via la table pivot 'enseigner'.
+     * Un chercheur peut enseigner plusieurs matières, et une matière peut être
+     * enseignée par plusieurs chercheurs.
+     */
+    public function matieres()
+    {
+        return $this->belongsToMany(
+            Matiere::class,
+            'enseigner',        // table pivot
+            'id_chercheur',     // clé étrangère dans 'enseigner' pointant ici
+            'id_matiere'        // clé étrangère dans 'enseigner' pointant vers Matiere
+        );
+    }
 
     public function notifications()
 {

@@ -28,7 +28,18 @@ class DatabaseSeeder extends Seeder
             ChercheurSeeder::class,
             CommentSeeder::class,
             PublicationSeeder::class,
-            ActualiteSeeder::class
+            ActualiteSeeder::class,
+            MatiereSeeder::class,
+        ]);
+
+        // 2) Ensuite, on crée des Cours qui dépendent des Chercheur + Matiere
+        $this->call([
+            CoursSeeder::class,
+        ]);
+
+        // 3) (Optionnel) Finalement, on peuple la pivot Enseigner
+        $this->call([
+            EnseignerSeeder::class,
         ]);
     }
 

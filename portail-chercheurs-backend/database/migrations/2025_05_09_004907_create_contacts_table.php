@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('chercheur_id')->constrained()->onDelete('cascade'); // Associe chaque message à un utilisateur
+            $table->foreignId('chercheur_id'); // Associe chaque message à un utilisateur
             $table->string('sujet');
             $table->text('message');
             $table->enum('status', ['en attente', 'répondu', 'archivé'])->default('en attente');
