@@ -190,36 +190,36 @@ class ChercheurController extends Controller
         return response()->json(['count' => $compteur]);
     }
 
-public function getFollowersCount()
-{
-    try {
-        $chercheur = JWTAuth::user();
-        return response()->json([
-            'count' => $chercheur->followers()->count()
-        ]);
-    } catch (\Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 500);
+    public function getFollowersCount()
+    {
+        try {
+            $chercheur = JWTAuth::user();
+            return response()->json([
+                'count' => $chercheur->followers()->count()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
-}
 
-public function personalStats()
-{
-    try {
-        $chercheur = JWTAuth::user();
-        return response()->json([
-            'publications' => $chercheur->publications()->count(),
-            'citations' => $chercheur->publications()->sum('citation_count'),
-            'collaborations' => $chercheur->publications->sum(function($pub) {
-                $auteurs = explode(',', $pub->auteurs);
-                return count($auteurs) ; // Subtract the researcher themselves
-            })
-        ]);
-    } catch (\Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 500);
+    public function personalStats()
+    {
+        try {
+            $chercheur = JWTAuth::user();
+            return response()->json([
+                'publications' => $chercheur->publications()->count(),
+                'citations' => $chercheur->publications()->sum('citation_count'),
+                'collaborations' => $chercheur->publications->sum(function ($pub) {
+                    $auteurs = explode(',', $pub->auteurs);
+                    return count($auteurs); // Subtract the researcher themselves
+                })
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
-}
 
-     /**
+    /**
      * GET /api/chercheurs/{id}/cours
      * Récupère tous les cours publiés par le chercheur d’ID = $id
      */
@@ -261,7 +261,7 @@ public function personalStats()
             'id_matiere'      => [
                 'required',
                 'integer',
-                Rule::exists('matieres', 'id')
+                Rule::exists('matieres', 'id_matiere')
             ],
         ]);
 
@@ -281,7 +281,7 @@ public function personalStats()
         $cours->datePublication = $request->datePublication;
         $cours->fichier         = 'storage/' . $cheminFichier; // chemin accessible depuis le front
         $cours->id_chercheur    = $chercheur->id;
-        $cours->id_matiere      = $matiere->id;
+        $cours->id_matiere = $matiere->id_matiere;
         $cours->save();
 
         // Charger la relation matière pour retourner un objet plus complet
@@ -321,7 +321,7 @@ public function personalStats()
                 'sometimes',
                 'required',
                 'integer',
-                Rule::exists('matieres', 'id')
+                Rule::exists('matieres', 'id_matiere')
             ],
         ]);
 
@@ -390,16 +390,16 @@ public function personalStats()
      * Récupère toutes les matières que le chercheur d’ID = $id enseigne.
      */
     public function getMatieres($id)
-{
-    try {
-        $chercheur = Chercheur::findOrFail($id);
-        // Charger via la relation pivot
-        $matieres = $chercheur->matieres()->get();
-        return response()->json($matieres, 200);
-    } catch (ModelNotFoundException $e) {
-        return response()->json(['message' => 'Chercheur introuvable.'], 404);
+    {
+        try {
+            $chercheur = Chercheur::findOrFail($id);
+            // Charger via la relation pivot
+            $matieres = $chercheur->matieres()->get();
+            return response()->json($matieres, 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Chercheur introuvable.'], 404);
+        }
     }
-}
 
     /**
      * POST /api/chercheurs/{id}/matieres
@@ -456,5 +456,4 @@ public function personalStats()
 
         return response()->json(['message' => 'Matière détachée avec succès.'], 200);
     }
-
 }

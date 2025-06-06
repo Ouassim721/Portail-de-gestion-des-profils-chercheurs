@@ -10,25 +10,19 @@ class Matiere extends Model
     use HasFactory;
 
     protected $table = 'matieres';
+    protected $primaryKey = 'id_matiere';
 
     public $timestamps = true;
 
     protected $fillable = [
         'nom_matiere',
-        
     ];
 
-    /**
-     * Une matière peut avoir plusieurs cours (relation 1-N).
-     */
     public function cours()
     {
-        return $this->hasMany(Cours::class, 'id_matiere', 'id');
+        return $this->hasMany(Cours::class, 'id_matiere', 'id_matiere');
     }
 
-    /**
-     * Relation Many-to-Many vers Chercheur via la table pivot 'enseigner'.
-     */
     public function chercheurs()
     {
         return $this->belongsToMany(

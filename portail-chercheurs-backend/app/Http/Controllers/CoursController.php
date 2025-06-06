@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Chercheur;
 use App\Models\Matiere;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 
 class CoursController extends Controller
 {
@@ -34,7 +35,7 @@ class CoursController extends Controller
             'id_matiere' => 'required|exists:matieres,id',
         ]);
 
-            $filePath = $request->file('fichier')->store('cours', 'public');
+        $filePath = $request->file('fichier')->store('cours', 'public');
 
         $cours = Cours::create([
             'titre' => $request->titre,
@@ -65,38 +66,38 @@ class CoursController extends Controller
     /**
      * Update the specified resource in storage.
      */
-public function update(Request $request, $id)
-{
-    $cours = Cours::findOrFail($id);
+    public function update(Request $request, $id)
+    {
+        $cours = Cours::findOrFail($id);
 
-    $request->validate([
-        'titre' => 'required|string|max:255',
-        'description' => 'required|string',
-        'datePublication' => 'required|date',
-        'id_matiere' => 'required|exists:matieres,id_matiere',
-        'fichier' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:10240',
-    ]);
+        $request->validate([
+            'titre' => 'required|string|max:255',
+            'description' => 'required|string',
+            'datePublication' => 'required|date',
+            'id_matiere' => 'required|exists:matieres,id_matiere',
+            'fichier' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:10240',
+        ]);
 
-    $data = $request->only(['titre', 'description', 'datePublication', 'id_matiere']);
+        $data = $request->only(['titre', 'description', 'datePublication', 'id_matiere']);
 
-    if ($request->hasFile('fichier')) {
-        // Supprimer l'ancien fichier
-        \Storage::disk('public')->delete($cours->fichier);
+        if ($request->hasFile('fichier')) {
+            // Supprimer l'ancien fichier
+            Storage::disk('public')->delete($cours->fichier);
 
-        // Stocker le nouveau fichier
-        $filePath = $request->file('fichier')->store('cours', 'public');
-        $data['fichier'] = $filePath;
+            // Stocker le nouveau fichier
+            $filePath = $request->file('fichier')->store('cours', 'public');
+            $data['fichier'] = $filePath;
+        }
+
+        $cours->update($data);
+
+        return response()->json($cours);
     }
-
-    $cours->update($data);
-
-    return response()->json($cours);
-}
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Cours $cours)
+    public function destroy($id)
     {
         $cours = Cours::find($id);
 

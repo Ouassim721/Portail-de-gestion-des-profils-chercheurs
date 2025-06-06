@@ -35,6 +35,6 @@ class Cours extends Model
      */
     public function matiere()
     {
-        return $this->belongsTo(Matiere::class, 'id_matiere', 'id');
+        return $this->belongsTo(Matiere::class, 'id_matiere', 'id_matiere');
     }
 }

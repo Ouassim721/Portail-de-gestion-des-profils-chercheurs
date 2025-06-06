@@ -14,8 +14,9 @@ use App\Http\Controllers\ScopusPublicationController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\API\MatiereController;
-use App\Http\Controllers\API\CoursController;
+use App\Http\Controllers\MatiereController;
+use App\Http\Controllers\CoursController;
+use App\Http\Controllers\EnseignerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -152,19 +153,19 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/notifications/mark-as-read', [NotificationController::class, 'markAsRead']);
 });
 
-Route::middleware('auth:api')->group(function () {   
+Route::middleware('auth:api')->group(function () {
     // Matières
-    Route::apiResource('matieres', MatiereController::class);  
+    Route::apiResource('matieres', MatiereController::class);
     // Cours
     Route::apiResource('cours', CoursController::class);
 });
 
 Route::apiResource('enseigner', EnseignerController::class)
-     ->only(['index', 'store']); 
-     
+    ->only(['index', 'store']);
+
 // Pour la suppression (DELETE /api/enseigner/{id_chercheur}/{id_matiere})
 Route::delete(
-    'enseigner/{id_chercheur}/{id_matiere}', 
+    'enseigner/{id_chercheur}/{id_matiere}',
     [EnseignerController::class, 'destroy']
 );
 
