@@ -19,6 +19,7 @@ import {
   faUser,
   faWindowRestore,
   faScrewdriverWrench,
+  faBook 
 } from "@fortawesome/free-solid-svg-icons";
 import { faBell as faRegularBell } from "@fortawesome/free-regular-svg-icons";
 import SettingsModal from "../modals/SettingsModal";
@@ -154,6 +155,11 @@ function Navbar({ sticky = false }) {
                     label: t("myAccount"),
                     icon: faUser,
                     link: "/mon-profil",
+                  },
+                  {
+                    label: t("mySubjects"),
+                    icon: faBook,
+                    link: "/mes-matieres",
                   },
                   {
                     label: t("myDashboard"),

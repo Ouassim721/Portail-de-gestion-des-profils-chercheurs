@@ -449,6 +449,7 @@ profileLoadingError: "Erreur lors du chargement de ton profil",
     noActivityFallback:             "Aucune activité",
     noCategory:                     "Non classé",
     noData:                         "Aucune donnée",
+    mySubjects: "Mes matières",
   },
 
   en: {
@@ -894,6 +895,7 @@ responseTimeInfo: "We are committed to responding within 24 hours.",
     noActivityFallback:             "No activity",
     noCategory:                     "Uncategorized",
     noData:                         "No data",
+    mySubjects:                     "My Subjects"
   }
 };
 export const LanguageContext = createContext({

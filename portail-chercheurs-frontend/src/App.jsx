@@ -151,7 +151,7 @@ function App() {
             <Route path="/chercheurs/:id/cours/:coursId" element={<CourseDetailPage />} />
             
             {/* Matières */}
-            <Route path="/chercheurs/:id/matieres" element={<SubjectsPage />} />
+            <Route path="/mes-matieres" element={<SubjectsPage />} />
         </Routes>
 
 

@@ -4,59 +4,94 @@ import api from '../axios';
 import SubjectForm from '../components/matieres/SubjectForm';
 import SubjectList from '../components/matieres/SubjectList';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
+import useAuth from '../hooks/useAuth';
 
 const SubjectsPage = () => {
-    const { id } = useParams();
-    const [subjects, setSubjects] = useState([]);
-    const [allSubjects, setAllSubjects] = useState([]);
+    const { user } = useAuth(); // Utilisez directement "user" de notre contexte
+    const id = user?.id; // ID du chercheur connecté
+    const [subjects, setSubjects] = useState([]); // Matières du chercheur
+    const [allSubjects, setAllSubjects] = useState([]); // Toutes les matières (pour le formulaire d'ajout)
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true);
-                const [researcherResponse, allResponse] = await Promise.all([
-                    api.get(`/chercheurs/${id}/matieres`),
-                    api.get('/matieres')
-                ]);
-                setSubjects(researcherResponse.data);
-                setAllSubjects(allResponse.data);
-            } catch (error) {
-                console.error('Erreur de chargement des matières:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchData();
-    }, [id]);
-
-    const handleAttach = async (subjectId) => {
+useEffect(() => { 
+    const fetchData = async () => {
         try {
-            await api.post(`/chercheurs/${id}/matieres`, { id_matiere: subjectId });
+            setLoading(true);
+            const [researcherResponse, allResponse] = await Promise.all([
+                api.get(`/chercheurs/${id}/matieres`),
+                api.get('/matieres')
+            ]);
+
+            // Log pour débogage
+            console.log("Matières du chercheur:", researcherResponse.data);
+            console.log("Toutes les matières:", allResponse.data);
+
+            setSubjects(researcherResponse.data);
+            setAllSubjects(allResponse.data);
+        } catch (error) {
+            console.error('Erreur de chargement des matières:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+    fetchData();
+}, [id]);
+
+const handleAttach = async (subjectId) => {
+    try {
+        // Envoyer l'ID de matière dans le format attendu par l'API
+        const response = await api.post(`/chercheurs/${id}/matieres`, {
+            id_matiere: subjectId
+        });
+        
+        // Ajouter la nouvelle matière à la liste actuelle
+        setSubjects(prevSubjects => [
+            ...prevSubjects,
+            {
+                id_matiere: subjectId,
+                nom_matiere: response.data.nom_matiere
+            }
+        ]);
+    } catch (error) {
+        console.error('Erreur lors de l\'ajout de la matière :', error);
+        
+        // Afficher un message d'erreur spécifique si disponible
+        if (error.response && error.response.data && error.response.data.message) {
+            alert(`Erreur: ${error.response.data.message}`);
+        } else {
+            alert('Une erreur est survenue lors de l\'ajout de la matière');
+        }
+    }
+};
+
+const handleDetach = async (subjectId) => {
+    try {
+        await api.delete(`/chercheurs/${id}/matieres/${subjectId}`);
+        
+        // Mise à jour optimiste de l'état local
+        setSubjects(prevSubjects => 
+            prevSubjects.filter(s => s.id_matiere !== subjectId)
+        );
+    } catch (error) {
+        console.error('Erreur lors de la suppression de la matière :', error);
+        
+        // Recharger les données depuis le serveur en cas d'erreur
+        try {
             const response = await api.get(`/chercheurs/${id}/matieres`);
             setSubjects(response.data);
-        } catch (error) {
-            console.error('Erreur lors de l\'ajout de la matière :', error);
+        } catch (refreshError) {
+            console.error('Erreur de rechargement des matières:', refreshError);
         }
-    };
-
-    const handleDetach = async (subjectId) => {
-        try {
-            await api.delete(`/chercheurs/${id}/matieres/${subjectId}`);
-            setSubjects(subjects.filter(s => s.id !== subjectId));
-        } catch (error) {
-            console.error('Erreur lors de la suppression de la matière :', error);
+        
+        // Afficher un message d'erreur
+        if (error.response && error.response.data && error.response.data.message) {
+            alert(`Erreur: ${error.response.data.message}`);
+        } else {
+            alert('Une erreur est survenue lors de la suppression de la matière');
         }
-    };
-
-    if (loading) {
-        return (
-            <div className="flex justify-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-            </div>
-        );
     }
+};
 
     return (
         <ProtectedRoute>

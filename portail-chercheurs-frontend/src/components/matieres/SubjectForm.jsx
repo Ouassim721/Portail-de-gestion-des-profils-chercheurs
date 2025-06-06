@@ -1,31 +1,39 @@
 import React, { useState } from 'react';
-import SearchableSelect from '../ui/SearchableSelect';
 
 const SubjectForm = ({ allSubjects, currentSubjects, onAttach }) => {
-    const [selectedSubject, setSelectedSubject] = useState(null);
+    const [selectedSubject, setSelectedSubject] = useState('');
     const [error, setError] = useState('');
 
-    // Filtrer les matières non encore associées
-    const availableSubjects = allSubjects.filter(
-        subject => !currentSubjects.some(s => s.id === subject.id)
+    // Filtrer uniquement les matières avec id_matiere valide
+    const validSubjects = allSubjects.filter(
+        subject => subject.id_matiere !== undefined && subject.id_matiere !== null
     );
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (!selectedSubject) {
-            setError('Veuillez sélectionner une matière');
-            return;
-        }
+    // Filtrer les matières non associées
+    const availableSubjects = validSubjects.filter(
+        subject => !currentSubjects.some(s => s.id_matiere === subject.id_matiere)
+    );
 
-        if (currentSubjects.some(s => s.id === selectedSubject.id)) {
-            setError('Cette matière est déjà associée');
-            return;
-        }
+const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!selectedSubject) {
+        setError('Veuillez sélectionner une matière');
+        return;
+    }
 
-        onAttach(selectedSubject.id);
-        setSelectedSubject(null);
-        setError('');
-    };
+    // Pas besoin de conversion numérique, l'API gère les strings
+    const subjectId = selectedSubject;
+    
+    // Vérification locale de l'association
+    if (currentSubjects.some(s => s.id_matiere == subjectId)) {
+        setError('Cette matière est déjà associée');
+        return;
+    }
+
+    onAttach(subjectId);
+    setSelectedSubject('');
+    setError('');
+};
 
     return (
         <div className="bg-white p-6 rounded-lg shadow-md mb-8">
@@ -36,13 +44,18 @@ const SubjectForm = ({ allSubjects, currentSubjects, onAttach }) => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                         Sélectionnez une matière
                     </label>
-                    <SearchableSelect
-                        options={availableSubjects}
+                    <select
+                        className="w-full border rounded px-3 py-2"
                         value={selectedSubject}
-                        onChange={setSelectedSubject}
-                        getOptionLabel={option => option.nom_matiere}
-                        placeholder="Rechercher une matière..."
-                    />
+                        onChange={e => setSelectedSubject(e.target.value)}
+                    >
+                        <option value="">-- Choisir une matière --</option>
+                        {availableSubjects.map(subject => (
+                            <option key={`subject-${subject.id_matiere}`} value={subject.id_matiere}>
+                                {subject.nom_matiere}
+                            </option>
+                        ))}
+                    </select>
                     {error && <p className="mt-1 text-red-500 text-sm">{error}</p>}
                 </div>
                 
