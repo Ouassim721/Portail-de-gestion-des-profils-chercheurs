@@ -19,6 +19,7 @@ import {
   faUser,
   faWindowRestore,
   faScrewdriverWrench,
+  faChalkboardTeacher,
   faBook 
 } from "@fortawesome/free-solid-svg-icons";
 import { faBell as faRegularBell } from "@fortawesome/free-regular-svg-icons";
@@ -161,6 +162,11 @@ function Navbar({ sticky = false }) {
                     icon: faBook,
                     link: "/mes-matieres",
                   },
+                  {
+                    label: t("myCourses"),
+                    icon: faChalkboardTeacher,
+                    link: `/chercheurs/${chercheur.id}/cours`
+                },
                   {
                     label: t("myDashboard"),
                     icon: faWindowRestore,

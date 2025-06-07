@@ -1,8 +1,16 @@
 import React from 'react';
 
 const FiltersBar = ({ filter, setFilter, selectedSubject, setSelectedSubject, courses }) => {
-    const uniqueSubjects = [...new Set(courses.map(c => c.matiere))]
-        .filter(subject => subject !== null)
+    // On crée un tableau de matières sans doublons en se basant sur `id_matiere`
+    const uniqueSubjects = courses
+        .map(c => c.matiere)
+        .filter(subject => subject !== null && subject.id_matiere !== undefined)
+        .reduce((acc, subj) => {
+            if (!acc.some(x => x.id_matiere === subj.id_matiere)) {
+                acc.push(subj);
+            }
+            return acc;
+        }, [])
         .sort((a, b) => a.nom_matiere.localeCompare(b.nom_matiere));
 
     return (
@@ -31,7 +39,10 @@ const FiltersBar = ({ filter, setFilter, selectedSubject, setSelectedSubject, co
                 >
                     <option value="">Toutes les matières</option>
                     {uniqueSubjects.map(subject => (
-                        <option key={subject.id} value={subject.id}>
+                        <option
+                            key={subject.id_matiere}
+                            value={subject.id_matiere}
+                        >
                             {subject.nom_matiere}
                         </option>
                     ))}

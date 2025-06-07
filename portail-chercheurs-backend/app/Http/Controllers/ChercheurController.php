@@ -257,7 +257,7 @@ class ChercheurController extends Controller
             'titre'           => 'required|string|max:255',
             'description'     => 'required|string',
             'datePublication' => 'required|date',
-            'fichier'         => 'required|file|mimes:pdf,doc,docx|max:5120',
+            'fichier'         => 'required|file|mimes:pdf|max:10240',
             'id_matiere'      => [
                 'required',
                 'integer',
@@ -303,7 +303,7 @@ class ChercheurController extends Controller
         }
 
         // Récupérer le cours et vérifier qu’il appartient à ce chercheur
-        $cours = Cours::where('id', $coursId)
+        $cours = Cours::where('id_cours', $coursId)
             ->where('id_chercheur', $chercheur->id)
             ->first();
 
@@ -316,7 +316,7 @@ class ChercheurController extends Controller
             'titre'           => 'sometimes|required|string|max:255',
             'description'     => 'sometimes|required|string',
             'datePublication' => 'sometimes|required|date',
-            'fichier'         => 'sometimes|required|file|mimes:pdf,doc,docx|max:5120',
+            'fichier' => 'sometimes|file|mimes:pdf|max:10240',
             'id_matiere'      => [
                 'sometimes',
                 'required',
@@ -359,7 +359,7 @@ class ChercheurController extends Controller
      * DELETE /api/chercheurs/{id}/cours/{coursId}
      * Supprime un cours, à condition qu’il appartienne à ce chercheur.
      */
-    public function destroyCours($id, $coursId)
+     public function destroyCours($id, $coursId)
     {
         try {
             $chercheur = Chercheur::findOrFail($id);
@@ -367,21 +367,21 @@ class ChercheurController extends Controller
             return response()->json(['message' => 'Chercheur introuvable.'], 404);
         }
 
-        // Récupérer le cours
-        $cours = Cours::where('id', $coursId)
+        $cours = Cours::where('id_cours', $coursId)
             ->where('id_chercheur', $chercheur->id)
             ->first();
 
-        if (! $cours) {
+        if (!$cours) {
             return response()->json(['message' => 'Cours introuvable ou n’appartient pas à ce chercheur.'], 404);
         }
-
-        // Supprimer le fichier stocké
-        if ($cours->fichier && Storage::exists(str_replace('storage/', '', $cours->fichier))) {
-            Storage::delete(str_replace('storage/', '', $cours->fichier));
+        // Supprimer le fichier associé au cours
+        $filePath = str_replace('storage/', 'public/', $cours->fichier);
+        
+        if (Storage::exists($filePath)) {
+            Storage::delete($filePath);
         }
 
-        $cours->delete(); // soft delete ou delete pur selon votre migration
+        $cours->delete();
         return response()->json(['message' => 'Cours supprimé avec succès.'], 200);
     }
 
@@ -460,4 +460,25 @@ public function detachMatiere($id, $matiereId)
 
     return response()->json(['message' => 'Matière détachée avec succès.'], 200);
 }
+
+public function showCours($id, $coursId)
+{
+    try {
+        $chercheur = Chercheur::findOrFail($id);
+    } catch (ModelNotFoundException $e) {
+        return response()->json(['message' => 'Chercheur introuvable.'], 404);
+    }
+
+    $cours = Cours::where('id_cours', $coursId)
+        ->where('id_chercheur', $chercheur->id)
+        ->with('matiere')
+        ->first();
+
+    if (!$cours) {
+        return response()->json(['message' => 'Cours introuvable ou n’appartient pas à ce chercheur.'], 404);
+    }
+
+    return response()->json($cours);
+}
+
 }

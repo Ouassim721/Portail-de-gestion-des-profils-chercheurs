@@ -1,3 +1,4 @@
+// src/components/matieres/CourseForm.jsx
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../../axios";
@@ -24,7 +25,7 @@ function CourseForm() {
     if (isEdit) {
       fetchCours();
     }
-  }, []);
+  }, [id, coursId, isEdit]);
 
   const fetchMatieres = async () => {
     try {
@@ -38,16 +39,20 @@ function CourseForm() {
   const fetchCours = async () => {
     try {
       setLoading(true);
-      const response = await api.get(`/cours/${coursId}`);
+      const response = await api.get(`/chercheurs/${id}/cours/${coursId}`);
       const coursData = response.data;
+      
       setFormData({
         titre: coursData.titre,
         description: coursData.description,
         datePublication: coursData.datePublication.split("T")[0],
-        id_matiere: coursData.id_matiere,
+        id_matiere: coursData.id_matiere.toString(),
         fichier: null,
       });
-      setExistingFile(coursData.fichier);
+      
+      const filePath = coursData.fichier;
+      const fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
+      setExistingFile(fileName);
     } catch (error) {
       console.error("Erreur lors de la récupération du cours :", error);
     } finally {
@@ -61,7 +66,31 @@ function CourseForm() {
   };
 
   const handleFileChange = (e) => {
-    setFormData((prev) => ({ ...prev, fichier: e.target.files[0] }));
+    const file = e.target.files[0];
+    
+    // Validation du fichier
+    if (file) {
+      const fileErrors = {};
+      
+      // Vérification du type (PDF uniquement)
+      if (file.type !== "application/pdf") {
+        fileErrors.fichier = "Le fichier doit être au format PDF";
+      }
+      
+      // Vérification de la taille (max 10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        fileErrors.fichier = "Le fichier ne doit pas dépasser 10MB";
+      }
+      
+      if (Object.keys(fileErrors).length > 0) {
+        setErrors(prev => ({ ...prev, ...fileErrors }));
+        e.target.value = null; // Réinitialiser le champ fichier
+        return;
+      }
+    }
+    
+    setFormData((prev) => ({ ...prev, fichier: file }));
+    setErrors(prev => ({ ...prev, fichier: null }));
   };
 
   const validate = () => {
@@ -71,8 +100,21 @@ function CourseForm() {
       newErrors.description = "La description est requise";
     if (!formData.id_matiere)
       newErrors.id_matiere = "Veuillez sélectionner une matière";
-    if (!isEdit && !formData.fichier)
-      newErrors.fichier = "Un fichier est requis";
+      
+    // Validation du fichier pour les nouveaux cours
+    if (!isEdit && !formData.fichier) {
+      newErrors.fichier = "Un fichier PDF est requis";
+    }
+    
+    // Validation du fichier si fourni (pour édition ou création)
+    if (formData.fichier) {
+      if (formData.fichier.type !== "application/pdf") {
+        newErrors.fichier = "Le fichier doit être au format PDF";
+      }
+      if (formData.fichier.size > 10 * 1024 * 1024) {
+        newErrors.fichier = "Le fichier ne doit pas dépasser 10MB";
+      }
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -81,7 +123,6 @@ function CourseForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-    console.log(formData.id_matiere);
 
     setLoading(true);
     const formDataToSend = new FormData();
@@ -96,7 +137,9 @@ function CourseForm() {
 
     try {
       if (isEdit) {
-        await api.put(`/chercheurs/${id}/cours/${coursId}`, formDataToSend, {
+        // SOLUTION: Utilisation du spoofing PUT avec POST
+        formDataToSend.append("_method", "PUT");
+        await api.post(`/chercheurs/${id}/cours/${coursId}`, formDataToSend, {
           headers: { "Content-Type": "multipart/form-data" },
         });
       } else {
@@ -106,11 +149,24 @@ function CourseForm() {
       }
       navigate(`/chercheurs/${id}/cours`);
     } catch (error) {
-      if (error.response && error.response.status === 422) {
-        console.error("Erreur de validation :", error.response.data.errors);
-      } else {
-        console.error("Erreur lors de l'enregistrement :", error);
+      let errorMessage = "Une erreur est survenue";
+      
+      if (error.response) {
+        // Gestion des erreurs de validation du serveur
+        if (error.response.status === 422) {
+          const serverErrors = error.response.data.errors;
+          const formattedErrors = {};
+          for (const key in serverErrors) {
+            formattedErrors[key] = serverErrors[key][0];
+          }
+          setErrors(formattedErrors);
+          return;
+        }
+        
+        errorMessage = error.response.data.message || errorMessage;
       }
+      
+      setErrors({ submit: errorMessage });
     } finally {
       setLoading(false);
     }
@@ -214,14 +270,19 @@ function CourseForm() {
 
           <input
             type="file"
-            accept=".pdf,.doc,.docx,.ppt,.pptx"
+            accept=".pdf" // Seuls les PDF sont acceptés
             onChange={handleFileChange}
-            className={`w-full ${errors.fichier ? "border-red-500" : ""}`}
+            className={`w-full px-4 py-2 border rounded-lg ${
+              errors.fichier ? "border-red-500" : "border-gray-300"
+            }`}
             disabled={loading}
           />
           {errors.fichier && (
             <p className="mt-1 text-red-500 text-sm">{errors.fichier}</p>
           )}
+          <p className="mt-1 text-sm text-gray-500">
+            Formats acceptés: PDF (max 10MB)
+          </p>
         </div>
 
         <div className="flex justify-end space-x-4">

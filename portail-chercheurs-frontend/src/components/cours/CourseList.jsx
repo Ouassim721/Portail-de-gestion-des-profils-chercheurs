@@ -1,3 +1,4 @@
+// src/components/matieres/CourseList.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../axios';
@@ -16,6 +17,7 @@ const CourseList = () => {
         const fetchCourses = async () => {
             try {
                 const response = await api.get(`/chercheurs/${id}/cours`);
+                console.log("Données des cours :", response.data);
                 setCourses(response.data);
             } catch (error) {
                 console.error('Erreur de chargement des cours :', error);
@@ -27,22 +29,28 @@ const CourseList = () => {
     }, [id]);
 
     const handleDelete = async (courseId) => {
+        if (!courseId) {
+            console.error('ID de cours invalide :', courseId);
+            return;
+        }
         if (window.confirm('Supprimer ce cours définitivement ?')) {
             try {
                 await api.delete(`/chercheurs/${id}/cours/${courseId}`);
-                setCourses(courses.filter(c => c.id !== courseId));
+                // Filtrer avec id_cours
+                setCourses(prev => prev.filter(c => c.id_cours !== courseId));
             } catch (error) {
                 console.error('Erreur de suppression :', error);
+                alert('Échec de la suppression : ' + (error.response?.data?.message || error.message));
             }
         }
     };
 
     const filteredCourses = courses.filter(course => {
         const matchesSearch =
-            course.titre.toLowerCase().includes(filter.toLowerCase()) ||
-            course.description.toLowerCase().includes(filter.toLowerCase());
+            course.titre?.toLowerCase().includes(filter.toLowerCase()) ||
+            course.description?.toLowerCase().includes(filter.toLowerCase());
         const matchesSubject = selectedSubject
-            ? (course.matiere.id == selectedSubject)
+            ? (course.matiere?.id_matiere === Number(selectedSubject))
             : true;
         return matchesSearch && matchesSubject;
     });
@@ -87,7 +95,7 @@ const CourseList = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
                     {filteredCourses.map(course => (
                         <CourseCard
-                            key={course.id}
+                            key={course.id_cours}
                             course={course}
                             researcherId={id}
                             onDelete={handleDelete}

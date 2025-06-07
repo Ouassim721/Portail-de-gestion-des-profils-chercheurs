@@ -177,6 +177,7 @@ Route::middleware('auth:api')->group(function () {
     Route::put('chercheurs/{id}/cours/{coursId}', [ChercheurController::class, 'updateCours']);
     Route::patch('chercheurs/{id}/cours/{coursId}', [ChercheurController::class, 'updateCours']);
     Route::delete('chercheurs/{id}/cours/{coursId}', [ChercheurController::class, 'destroyCours']);
+     Route::get('chercheurs/{id}/cours/{coursId}', [ChercheurController::class, 'showCours']);
 
     // --- Pour gérer les matières (pivot “enseigner”) ---
     Route::get('chercheurs/{id}/matieres', [ChercheurController::class, 'getMatieres']);

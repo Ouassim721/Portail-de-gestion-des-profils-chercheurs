@@ -1,3 +1,4 @@
+// src/components/matieres/CourseCard.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import FileIcon from './FileIcon';
@@ -26,14 +27,14 @@ const CourseCard = ({ course, researcherId, onDelete }) => {
                 <div className="flex items-center mt-auto">
                     <FileIcon filename={course.fichier} />
                     <span className="ml-2 text-sm text-gray-500 truncate">
-                        {course.fichier.split('/').pop()}
+                        {course.fichier?.split('/').pop()}
                     </span>
                 </div>
             </div>
             
             <div className="bg-gray-50 px-5 py-3 flex justify-between items-center">
                 <Link
-                    to={`/chercheurs/${researcherId}/cours/${course.id}`}
+                    to={`/chercheurs/${researcherId}/cours/${course.id_cours}`}
                     className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                 >
                     Voir détails
@@ -41,7 +42,7 @@ const CourseCard = ({ course, researcherId, onDelete }) => {
                 
                 <div className="flex space-x-2">
                     <Link
-                        to={`/chercheurs/${researcherId}/cours/${course.id}/edit`}
+                        to={`/chercheurs/${researcherId}/cours/${course.id_cours}/edit`}
                         className="text-gray-500 hover:text-blue-600 transition-colors"
                         title="Modifier"
                     >
@@ -50,7 +51,7 @@ const CourseCard = ({ course, researcherId, onDelete }) => {
                         </svg>
                     </Link>
                     <button
-                        onClick={() => onDelete(course.id)}
+                        onClick={() => onDelete(course.id_cours)}
                         className="text-gray-500 hover:text-red-600 transition-colors"
                         title="Supprimer"
                     >

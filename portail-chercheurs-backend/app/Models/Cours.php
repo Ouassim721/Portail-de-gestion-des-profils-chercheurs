@@ -10,6 +10,7 @@ class Cours extends Model
     use HasFactory;
 
     protected $table = 'cours';
+    protected $primaryKey = 'id_cours';
 
     public $timestamps = true;
 
