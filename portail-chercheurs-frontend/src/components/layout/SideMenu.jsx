@@ -11,6 +11,8 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { LanguageContext } from "../../contexts/LanguageContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHouse } from "@fortawesome/free-solid-svg-icons";
 
 const SideMenu = ({ isVisible, onClose }) => {
   const { t } = useContext(LanguageContext);
@@ -44,7 +46,7 @@ const SideMenu = ({ isVisible, onClose }) => {
       >
         <FaTimes size={20} />
       </button>
-      <nav>
+      <nav className="flex flex-col justify-between h-full">
         <ul className="space-y-2">
           {links.map(({ labelKey, icon, to }) => (
             <li key={labelKey} className="rounded-md">
@@ -63,6 +65,21 @@ const SideMenu = ({ isVisible, onClose }) => {
               </NavLink>
             </li>
           ))}
+        </ul>
+        <ul className="space-y-2 mb-10">
+          <li className="rounded-md">
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                `flex items-center space-x-2 px-4 py-2 text-[var(--color-text-primary)] hover:bg-gray-300 hover:text-black rounded-md ${
+                  isActive ? "hover:bg-gray-300 hover:text-black font-bold" : ""
+                }`
+              }
+            >
+              <FontAwesomeIcon icon={faHouse} className="w-5 h-5" />
+              <span>{t("Home")}</span>
+            </NavLink>
+          </li>
         </ul>
       </nav>
     </aside>
