@@ -134,7 +134,7 @@ function Navbar({ sticky = false }) {
         {isAuthenticated && (
           <button
             onClick={() => setShowNotificationsModal(true)}
-            className="relative hover:text-[var(--color-primary)] transition-colors"
+            className="relative text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
           >
             <FontAwesomeIcon icon={faRegularBell} className="text-xl" />
             {unreadNotifications > 0 && (

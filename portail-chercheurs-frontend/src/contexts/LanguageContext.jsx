@@ -358,7 +358,7 @@ export const translations = {
     socialFacebook: "Facebook",
     socialTwitter: "Twitter",
     socialLinkedIn: "LinkedIn",
-    featuredResearchers: "Chercheurs en vedette",
+    featuredResearchers: "Chercheurs en Vedette",
     viewAllResearchers: "Voir tous les chercheurs",
     errorLoadingResearchers: "Erreur lors du chargement des chercheurs",
     contactTitle: "Contactez notre équipe",
@@ -382,6 +382,8 @@ export const translations = {
     computerScience: "Informatique",
     biology: "Biologie",
     physics: "Physique",
+    featuredResearchersDescription:
+      "Découvrez les chercheurs les plus actifs et leurs contributions récentes.",
     monthlyActivity: "Activité Mensuelle",
     publicationDistribution: "Répartition des Publications",
     monthJul: "Juil",
@@ -465,6 +467,8 @@ export const translations = {
     citations: "Citations",
     profileError: "Error retrieving profile",
     help: "Help",
+    featuredResearchersDescription:
+      "Discover the most active researchers and their recent contributions.",
     contactSupport: "Contact support",
     more: "more",
     loading: "Loading...",
@@ -487,6 +491,7 @@ export const translations = {
     homeTitle: "Facilitate Access to Research Profiles",
     homeSubtitle:
       "Easily find researcher information and their scientific work.",
+    featuredResearchers: "Featured Researchers",
     pageNotFoundTitle: "Page not found",
     pageNotFoundDesc: "Sorry, we couldn’t find the page you’re looking for.",
     exploreResearchers: "Explore Researchers",

@@ -4,6 +4,7 @@ import axios from "../axios";
 import Button from "../components/ui/Button";
 import { LanguageContext } from "../contexts/LanguageContext";
 import ChercheurImage from "../assets/chercheurImage-HomePage.jpg";
+import ChercheurEnVedette from "../assets/cherchuerEnVedette.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CardPublication from "../components/cards/CardPublication";
 import pdp from "../assets/chercheur-place-holder.jpg";
@@ -144,9 +145,6 @@ function Home() {
 
       {/* Section Notre impact en chiffres */}
       <section className="max-w-7xl mx-auto py-16 px-4">
-        <h2 className="text-3xl font-bold mb-12 text-center text-[var(--color-text-primary)]">
-          {t("statsTitle")}
-        </h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {[
             {
@@ -180,7 +178,7 @@ function Home() {
                   icon={item.icon}
                   className="h-8 w-8 text-[var(--color-primary)]"
                 />
-                <h3 className="text-2xl font-bold">
+                <h3 className="text-2xl font-bold text-[var(--color-text-primary)]">
                   <CountUp end={item.stat} duration={2} separator="," />+
                 </h3>
               </div>
@@ -189,7 +187,28 @@ function Home() {
           ))}
         </div>
       </section>
-
+      {/*Chercheur en vedette*/}
+      <section>
+        <div className="flex justify-around items-center flex-col lg:flex-row py-4">
+          <div className="flex flex-col gap-8 p-4 items-center text-center lg:items-start lg:text-left">
+            <h2 className="font-bold text-4xl text-[var(--color-text-primary)]">
+              {" "}
+              {t("featuredResearchers")}
+            </h2>
+            <p className="text-[var(--color-text-secondary)]">
+              {t("featuredResearchersDescription")}
+            </p>
+            <div>
+              <Button variant="secondary">{t("exploreResearchers")}</Button>
+            </div>
+          </div>
+          <img
+            src={ChercheurEnVedette}
+            alt="Photo d'un chercheur"
+            className="w-4/5 lg:w-1/3 rounded-4xl"
+          />
+        </div>
+      </section>
       {/* Timeline des événements scientifiques */}
       <section className="bg-[var(--color-bg-primary)] py-16">
         <div className="max-w-7xl mx-auto px-4">
