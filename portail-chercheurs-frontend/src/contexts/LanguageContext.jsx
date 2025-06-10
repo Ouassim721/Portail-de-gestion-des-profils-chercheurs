@@ -334,6 +334,7 @@ export const translations = {
     ],
     researcherImageAlt: "Chercheur en pleine activité",
     upcomingEvents: "Événements scientifiques à venir",
+    eventsAnd: "Événements scientifiques à venir",
     conferenceTitle: "Conférence",
     recentPublications: "Publications Récentes",
     discoverLatestResearch: "Découvrez les dernières recherches",
@@ -373,6 +374,7 @@ export const translations = {
     messagePlaceholder: "Décrivez votre demande en détails...",
     sendButton: "Envoyer le message",
     sending: "Envoi en cours...",
+    viewMorePublications: "Voir Plus de Publications",
     successTitle: "Message envoyé avec succès !",
     successMessage:
       "Nous avons bien reçu votre message et vous répondrons rapidement.",
@@ -412,6 +414,9 @@ export const translations = {
     allYears: "Toutes les années",
     notifications: "Notifications",
     noNotifications: "Aucune notification",
+    stayInformed: "Restez Informé",
+    stayInformedDesc:
+      "Recevez les dernières actualités de la recherche scientifique et les événements à venir directement dans votre boîte mail.",
     markAsRead: "Marquer comme lu",
     Admindashboard: "Tableau de bord administrateur",
     allDomains: "Toutes les disciplines",
@@ -473,6 +478,9 @@ export const translations = {
     more: "more",
     loading: "Loading...",
     welcomeMessage: "Welcome, {name}}!",
+    viewMorePublications: "View More Publications",
+    stayInformedDesc:
+      "Receive the latest scientific research news and upcoming events directly in your inbox.",
     appearance: "Appearance",
     lightTheme: "Light theme",
     darkTheme: "Dark theme",

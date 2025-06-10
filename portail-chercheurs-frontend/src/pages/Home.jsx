@@ -1,7 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "../axios";
 import Button from "../components/ui/Button";
+import ResearcherCard from "../components/cards/ChercheurHomeCard";
+import DomainCard from "../components/cards/DomainCard";
+import PublicationCard from "../components/cards/PublicationHomeCard";
 import { LanguageContext } from "../contexts/LanguageContext";
 import ChercheurImage from "../assets/chercheurImage-HomePage.jpg";
 import ChercheurEnVedette from "../assets/cherchuerEnVedette.jpg";
@@ -21,6 +24,7 @@ import { format } from "date-fns";
 import { fr, enUS } from "date-fns/locale";
 
 function Home() {
+  const navigate = useNavigate();
   const { t, language } = useContext(LanguageContext);
   const [countChercheurs, setCountChercheurs] = useState(null);
   const [countPublications, setCountPublications] = useState(null);
@@ -76,39 +80,51 @@ function Home() {
       });
   }, [t]);
 
-  useEffect(() => {
-    const fetchPublications = async () => {
-      setIsLoadingPublications(true);
-      try {
-        const response = await axios.get("/publications?page=1&limit=3");
-        setPublications(response.data.data);
-        setErrorPublications(null);
-      } catch (err) {
-        setErrorPublications(t("errorLoadingPublications"));
-        console.error(err);
-      } finally {
-        setIsLoadingPublications(false);
-      }
-    };
-    fetchPublications();
-  }, [t]);
+  const fetchPublication = async (chercheurId) => {
+    try {
+      const response = await axios.get(
+        `/chercheurs/${chercheurId}/publications`
+      );
 
+      return response.data.total; // ou response.data.length si tu renvoies la liste
+    } catch (error) {
+      console.error("Erreur lors du fetch des publications :", error);
+      return 0;
+    }
+  };
   useEffect(() => {
     const fetchChercheurs = async () => {
-      setIsLoadingChercheurs(true);
       try {
-        const response = await axios.get("/chercheurs?page=1&limit=3");
-        setChercheurs(response.data.data);
-        setErrorChercheurs(null);
-      } catch (err) {
-        setErrorChercheurs(t("errorLoadingResearchers"));
-        console.error(err);
-      } finally {
-        setIsLoadingChercheurs(false);
+        const res = await axios.get("/chercheurs?per_page=3");
+        const chercheursAvecPub = await Promise.all(
+          res.data.data.map(async (chercheur) => {
+            const pubCount = await fetchPublication(chercheur.id);
+            return { ...chercheur, nombre_publications: pubCount };
+          })
+        );
+        setChercheurs(chercheursAvecPub);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des chercheurs :", error);
       }
     };
+
     fetchChercheurs();
-  }, [t]);
+  }, []);
+  useEffect(() => {
+    const fetchPublications = async () => {
+      try {
+        const res = await axios.get("/publications?limit=2");
+        setPublications(res.data.data);
+      } catch (error) {
+        console.error(
+          "Erreur lors de la récupération des publications :",
+          error
+        );
+      }
+    };
+
+    fetchPublications();
+  }, []);
 
   return (
     <>
@@ -209,158 +225,111 @@ function Home() {
           />
         </div>
       </section>
-      {/* Timeline des événements scientifiques */}
-      <section className="bg-[var(--color-bg-primary)] py-16">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8 text-center text-[var(--color-text-primary)]">
-            {t("upcomingEvents")}
-          </h2>
-
-          <AnimatePresence>
-            {loadingEvents ? (
-              <div className="text-center text-[var(--color-text-secondary)]">
-                {t("loading")}...
-              </div>
-            ) : errorEvents ? (
-              <div className="text-center text-red-500">{errorEvents}</div>
-            ) : events.length === 0 ? (
-              <div className="text-center text-[var(--color-text-secondary)]">
-                {t("noUpcomingEvents")}
-              </div>
-            ) : (
-              <div className="relative pl-8 border-l-2 border-[var(--color-primary)]">
-                {events.map((event, i) => (
-                  <motion.div
-                    key={event.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    className="mb-8 pl-6 relative"
-                  >
-                    <div className="absolute w-4 h-4 bg-[var(--color-primary)] rounded-full -left-[9px] top-4" />
-                    <Link to={`/actualites/${event.id}`}>
-                      <div className="bg-[var(--color-bg-secondary)] p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                        <h4 className="text-lg font-semibold mb-2 text-[var(--color-text-primary)]">
-                          {event.titre}
-                        </h4>
-                        <p className="text-sm text-[var(--color-text-secondary)] mb-2">
-                          {t("dateLabel")}{" "}
-                          {format(
-                            new Date(event.date_publication),
-                            t("dateFormat"),
-                            { locale }
-                          )}
-                        </p>
-                        <p className="text-sm text-[var(--color-text-secondary)] mb-2">
-                          {t("categoryLabel")}: {event.categorie}
-                        </p>
-                        <Button variant="outline-primary" size="sm">
-                          {t("viewMoreButton")}
-                        </Button>
-                      </div>
-                    </Link>
-                  </motion.div>
-                ))}
-              </div>
-            )}
-          </AnimatePresence>
+      <section className="py-12 px-4 md:px-12 lg:px-20">
+        {/* Section Top Researchers */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          {chercheurs.map((chercheur) => (
+            <ResearcherCard
+              key={chercheur.id}
+              name={`${chercheur.prenom} ${chercheur.nom}`}
+              domain={chercheur.specialisation}
+              publications={chercheur.nombre_publications}
+              tag={{ label: chercheur.tag || "Inconnu" }}
+              image={chercheur}
+            />
+          ))}
         </div>
-      </section>
-      {/* Nouvelle section Publications récentes */}
-      <section className="max-w-7xl mx-auto py-16 px-4">
-        <h2 className="text-3xl font-bold mb-12 text-center text-[var(--color-text-primary)]">
+
+        {/* Section Domaines de Recherche */}
+        {/* <h2 className="text-2xl font-bold mb-8 text-center">
+          Domaines de Recherche
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          <DomainCard
+            title="Intelligence Artificielle"
+            topics={[
+              "Machine Learning",
+              "Deep Learning",
+              "Natural Language Processing",
+              "Computer Vision",
+            ]}
+            researchers="856"
+            publications="235"
+            borderColor="border-blue-900"
+          />
+          <DomainCard
+            title="Biotechnologie"
+            topics={[
+              "Génie Génétique",
+              "Biologie Moléculaire",
+              "Bioinformatique",
+              "Biotechnologie Médicale",
+            ]}
+            researchers="624"
+            publications="189"
+            borderColor="border-emerald-500"
+          />
+          <DomainCard
+            title="Physique Quantique"
+            topics={[
+              "Mécanique Quantique",
+              "Optique Quantique",
+              "Informatique Quantique",
+              "Physique des Particules",
+            ]}
+            researchers="432"
+            publications="156"
+            borderColor="border-green-700"
+          />
+        </div> */}
+
+        {/* Section Publications Récentes */}
+        <h2 className="text-2xl font-bold mb-8 text-center">
           {t("recentPublications")}
         </h2>
-
-        {isLoadingPublications ? (
-          <div className="text-center text-[var(--color-text-secondary)]">
-            {t("loading")}...
-          </div>
-        ) : errorPublications ? (
-          <div className="text-center text-red-500">{errorPublications}</div>
-        ) : (
-          <div className="grid gap-6">
-            {publications.map((pub) => (
-              <CardPublication
-                key={pub.id}
-                title={pub.titre}
-                auteur={`${pub.chercheur.prenom} ${pub.chercheur.nom}`}
-                university={pub.chercheur.university}
-                departement={pub.discipline.nom}
-                description={pub.abstract}
-                category={pub.discipline.keywords || []}
-                date={pub.date_publication}
-                citations={pub.citation_count}
-                pdf_path={pub.pdf_path}
-              />
-            ))}
-          </div>
-        )}
-      </section>
-      {/* Nouvelle section Chercheurs */}
-      {/* Bannière avec image */}
-      <img
-        src={logo}
-        alt={t("researchTeamAlt")}
-        className="w-full h-full object-cover"
-      />
-      <section className="max-w-7xl mx-auto py-16 px-4">
-        <div className="flex justify-between items-center mb-12">
-          <h2 className="text-3xl font-bold text-[var(--color-text-primary)]">
-            {t("featuredResearchers")}
-          </h2>
-          <Link to="/chercheurs">
-            <Button variant="neutral">{t("viewAllResearchers")}</Button>
-          </Link>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {publications.map((publication) => (
+            <PublicationCard
+              title={publication.titre}
+              desc={publication.abstract}
+              author={publication.auteurs}
+              date={publication.date_publication}
+              citations={publication.citation_count}
+              tag={{ label: "IA & ML", color: "bg-teal-700" }}
+            />
+          ))}
         </div>
 
-        {isLoadingChercheurs ? (
-          <div className="text-center text-[var(--color-text-secondary)]">
-            {t("loading")}...
+        <div className="text-center">
+          <button
+            className="border-2 border-[var(--color-primary)] text-[var(--color-primary)]font-medium px-8 py-4 rounded-xl hover:bg-[var(--color-primary)] hover:text-[var(--color-white)] transition"
+            onClick={() => navigate("/publications")}
+          >
+            {t("viewMorePublications")}
+          </button>
+        </div>
+      </section>
+      <section className="bg-[var(--color-primary)] py-12 lg:py-24 px-4 md:px-12 gap-8 lg:px-20 flex flex-col lg:flex-row lg:justify-between">
+        <div className="lg:w-1/2 flex flex-col gap-6">
+          <h3 className="text-4xl font-semibold text-[var(--color-white)]">
+            {t("stayInformed")}
+          </h3>
+          <p className="text-gray-400">{t("stayInformedDesc")}</p>
+        </div>
+        <div className="lg:w-1/2 flex lg:justify-end items-center">
+          <div>
+            <Button
+              variant="secondary"
+              className="px-6! py-3!"
+              onClick={() => navigate("/publications")}
+            >
+              {t("login")}
+            </Button>
           </div>
-        ) : errorChercheurs ? (
-          <div className="text-center text-red-500">{errorChercheurs}</div>
-        ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {chercheurs.map((chercheur) => (
-              <motion.div
-                key={chercheur.id}
-                whileHover={{ scale: 1.02 }}
-                className="bg-[var(--color-bg-primary)] p-6 rounded-xl shadow-lg"
-              >
-                <Link to={`/chercheurs/${chercheur.id}`}>
-                  <div className="flex items-center gap-4 mb-4">
-                    <img
-                      src={chercheur.photo || pdp}
-                      alt={t("avatarAlt", {
-                        name: `${chercheur.prenom} ${chercheur.nom}`,
-                      })}
-                      className="w-16 h-16 rounded-full object-cover"
-                    />
-                    <div>
-                      <h3 className="text-xl font-bold text-[var(--color-text-primary)]">
-                        Dr. {chercheur.prenom} {chercheur.nom}
-                      </h3>
-                      <p className="text-sm text-[var(--color-text-secondary)]">
-                        {chercheur.university}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {chercheur.disciplines?.map((discipline) => (
-                      <span
-                        key={discipline.id}
-                        className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full"
-                      >
-                        {discipline.nom}
-                      </span>
-                    ))}
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        )}
+        </div>
+      </section>
+      <section className="py-12 lg:py-24 px-4 md:px-12 gap-8 lg:px-20">
+        <h3>{t("stayInformed")}</h3>
       </section>
     </>
   );

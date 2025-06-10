@@ -18,7 +18,7 @@ class ChercheurSeeder extends Seeder
             'password' => Hash::make('password'),
             'cv' => null,
             'role' => 'Administrateur',
-            'discipline' => 'Informatique',
+            'specialisation' => 'Informatique',
             'photoProfil' => null,
             'must_change_password' => false,
             'remember_token' => Str::random(10),

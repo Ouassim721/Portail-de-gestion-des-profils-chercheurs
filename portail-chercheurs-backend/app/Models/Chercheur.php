@@ -29,7 +29,7 @@ class Chercheur extends Authenticatable implements JWTSubject
         'date_naissance',
         'cv',
         'role',
-        'discipline',
+        'specialisation',
         'photoProfil',
         'must_change_password',
         'remember_token',
@@ -71,7 +71,7 @@ class Chercheur extends Authenticatable implements JWTSubject
     {
         return $this->belongsToMany(Chercheur::class, 'follows', 'followed_id', 'follower_id')->withTimestamps();
     }
-    
+
     /**
      * Un chercheur peut poster plusieurs cours (relation 1-N).
      */
@@ -79,7 +79,7 @@ class Chercheur extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Cours::class, 'id_chercheur', 'id');
     }
-    
+
     /**
      * Relation Many-to-Many vers Matiere via la table pivot 'enseigner'.
      * Un chercheur peut enseigner plusieurs matières, et une matière peut être
@@ -96,9 +96,9 @@ class Chercheur extends Authenticatable implements JWTSubject
     }
 
     public function notifications()
-{
-    return $this->hasMany(Notification::class);
-}
+    {
+        return $this->hasMany(Notification::class);
+    }
 
     /**
      * Get the attributes that should be cast.

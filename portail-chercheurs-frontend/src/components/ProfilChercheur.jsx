@@ -99,7 +99,7 @@ function ProfilChercheur({
             <span className="mr-3">
               <FontAwesomeIcon icon={faBuildingColumns} />
             </span>
-            {t("departmentLabel")} {chercheur.discipline}
+            {t("departmentLabel")} {chercheur.specialisation}
           </li>
           <li>
             <span className="mr-3">

@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('nom', 100);
             $table->string('prenom', 100);
             $table->string('scopus_author_id', 20)->nullable();
-            $table->string('discipline', 100)->nullable();
+            $table->string('specialisation', 100)->nullable();
             $table->string('email', 150);
             $table->string('password', 255);
             $table->string('cv', 255)->nullable();

@@ -20,7 +20,7 @@ class ChercheurFactory extends Factory
             'cv' => null,
             'photoProfil' => null,
             'role' => 'Chercheur',
-            'discipline' => $this->faker->randomElement([
+            'specialisation' => $this->faker->randomElement([
                 'Informatique',
                 'Biologie Moléculaire',
                 'Physique Quantique',
