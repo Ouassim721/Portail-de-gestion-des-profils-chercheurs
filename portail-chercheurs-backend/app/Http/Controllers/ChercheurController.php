@@ -471,7 +471,7 @@ public function showCours($id, $coursId)
 
     $cours = Cours::where('id_cours', $coursId)
         ->where('id_chercheur', $chercheur->id)
-        ->with('matiere')
+        ->with(['matiere', 'chercheur']) // Charger les relations
         ->first();
 
     if (!$cours) {

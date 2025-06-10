@@ -1,40 +1,51 @@
 import React from 'react';
+import { DocumentTextIcon, TrashIcon } from '@heroicons/react/24/solid';
 
 const FilePreview = ({ file, onRemove }) => {
-  const getFileIcon = (fileName) => {
-    const ext = fileName.split('.').pop().toLowerCase();
-    const iconMap = {
-      pdf: '📄',
-      doc: '📝',
-      docx: '📝',
-      ppt: '📊',
-      pptx: '📊',
-      xls: '📊',
-      xlsx: '📊',
-      jpg: '🖼️',
-      jpeg: '🖼️',
-      png: '🖼️'
-    };
-    return iconMap[ext] || '📁';
+  // Vérification de l'existence du fichier
+  if (!file) return null;
+
+  // Formatage robuste de la taille
+  const formatFileSize = (bytes) => {
+    if (typeof bytes !== 'number' || bytes === 0) return '0 KB';
+    
+    if (bytes < 1024) return bytes + ' bytes';
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1048576).toFixed(1) + ' MB';
   };
 
   return (
     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200 mb-3">
       <div className="flex items-center">
-        <span className="text-2xl mr-3">{getFileIcon(file.name)}</span>
-        <div>
-          <p className="text-sm font-medium text-gray-700 truncate max-w-xs">{file.name}</p>
-          <p className="text-xs text-gray-500">{(file.size / 1024).toFixed(2)} KB</p>
+        {/* Icône spécifique aux PDF */}
+        <div className="relative">
+          <DocumentTextIcon className="w-6 h-6 text-red-500 mr-3" />
+          <span className="absolute top-0 right-0 bg-red-500 text-white text-[8px] font-bold px-1 rounded">
+            PDF
+          </span>
+        </div>
+        
+        <div className="min-w-0">
+          <p 
+            className="text-sm font-medium text-gray-700 truncate"
+            title={file.name}
+          >
+            {file.name}
+          </p>
+          <p className="text-xs text-gray-500">
+            {formatFileSize(file.size)}
+          </p>
         </div>
       </div>
+      
       <button 
-        type="button" 
+        type="button"
         onClick={() => onRemove()}
-        className="text-red-500 hover:text-red-700"
+        className="text-red-500 hover:text-red-700 transition-colors"
+        aria-label={`Supprimer ${file.name}`}
+        title="Supprimer le fichier"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-        </svg>
+        <TrashIcon className="h-5 w-5" />
       </button>
     </div>
   );

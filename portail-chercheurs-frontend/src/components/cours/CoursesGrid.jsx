@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import CourseCard from './CourseCard';
 import api from '../../axios';
+import { PlusIcon, FaceFrownIcon } from '@heroicons/react/24/outline';
 
 function CoursesGrid() {
   const { id } = useParams();
@@ -50,9 +51,7 @@ function CoursesGrid() {
           onClick={() => navigate(`/chercheurs/${id}/cours/new`)}
           className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
-          </svg>
+          <PlusIcon className="h-5 w-5 mr-2" />
           Nouveau cours
         </button>
       </div>
@@ -95,9 +94,7 @@ function CoursesGrid() {
 
       {filteredCourses.length === 0 ? (
         <div className="text-center py-12">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-24 w-24 mx-auto text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
+          <FaceFrownIcon className="h-24 w-24 mx-auto text-gray-300" />
           <h3 className="mt-4 text-lg font-medium text-gray-900">Aucun cours trouvé</h3>
           <p className="mt-1 text-gray-500">Essayez de modifier vos critères de recherche</p>
         </div>
