@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Chercheur;
 use App\Models\Publication;
-use App\Models\Discipline;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Carbon;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -18,23 +17,13 @@ class PublicationController extends Controller
     /**
      * Affiche la liste des publications
      */
-    /*public function index()
-    {
-        $publications = Publication::with(['chercheur', 'discipline'])->get();
-        return view('publications.index', compact('publications'));
-    }*/
     public function index(Request $request)
     {
-        $query = Publication::query()->with(['chercheur', 'discipline']);
+        $query = Publication::query()->with(['chercheur']);
 
         if ($request->has('year')) {
             $query->whereYear('date_publication', $request->year);
         }
-
-        if ($request->has('discipline_id')) {
-            $query->where('discipline_id', $request->discipline_id);
-        }
-
         // Nouveau filtre de recherche
         if ($request->has('search')) {
             $searchTerm = '%' . $request->search . '%';
@@ -57,8 +46,7 @@ class PublicationController extends Controller
     public function create()
     {
         $chercheurs = Chercheur::all();
-        $disciplines = Discipline::all();
-        return view('publications.create', compact('chercheurs', 'disciplines'));
+        return view('publications.create', compact('chercheurs'));
     }
     public function fetchScopusPublications()
     {
@@ -101,7 +89,6 @@ class PublicationController extends Controller
                             : ($entry['dc:creator'] ?? 'Auteur inconnu'),
                         'abstract' => $entry['dc:description'] ?? null,
                         'citation_count' => $entry['citedby-count'] ?? 0,
-                        'discipline_id' => 1 // Valeur par défaut
                     ];
                 }, $data['search-results']['entry'] ?? [])
             ];
@@ -131,7 +118,6 @@ class PublicationController extends Controller
                 'publications.*.auteurs' => 'required',
                 'publications.*.abstract' => 'nullable|string',
                 'publications.*.citation_count' => 'nullable|integer',
-                'publications.*.discipline_id' => 'sometimes|exists:disciplines,id',
             ]);
 
             foreach ($request->publications as $pub) {
@@ -145,7 +131,6 @@ class PublicationController extends Controller
                     'abstract' => $pub['abstract'] ?? null,
                     'citation_count' => $pub['citation_count'] ?? 0,
                     'chercheur_id' => $chercheur->id,
-                    'discipline_id' => $pub['discipline_id'] ?? null
                 ]);
 
                 // Notifier les abonnés

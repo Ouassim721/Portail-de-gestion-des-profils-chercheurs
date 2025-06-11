@@ -20,19 +20,20 @@ class CoursFactory extends Factory
     public function definition(): array
     {
         return [
-            'titre' => $this->faker->sentence(3), 
-            'description' => $this->faker->paragraph(2), 
+            'titre' => $this->faker->sentence(3),
+            'description' => $this->faker->paragraph(2),
             'datePublication' => $this->faker->dateTimeBetween('-2 years', 'now')->format('Y-m-d'),
-            'fichier' => 'cours_'.$this->faker->numberBetween(1, 1000).'.pdf',
-            
+            'fichier' => 'cours_' . $this->faker->numberBetween(1, 1000) . '.pdf',
+
             // Clés étrangères :
             // On choisit un Chercheur existant ou on en crée un à la volée :
             'id_chercheur' => Chercheur::inRandomOrder()->first()?->id
-                                ?? Chercheur::factory()->create()->id,
-            
+                ?? Chercheur::factory()->create()->id,
+
             // Idem pour Matiere :
-            'id_matiere' => Matiere::inRandomOrder()->first()?->id
-                                ?? Matiere::factory()->create()->id,
+            'id_matiere' => Matiere::inRandomOrder()->first()?->id_matiere
+                ?? Matiere::factory()->create()->id_matiere,
+
         ];
     }
 }

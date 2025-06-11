@@ -19,7 +19,6 @@ class Publication extends Model
         'abstract',
         'citation_count',
         'chercheur_id',
-        'discipline_id',
         'pdf_path',
     ];
 
