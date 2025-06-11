@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('cv', 255)->nullable();
             $table->enum('role', ['Chercheur', 'Administrateur'])->default('Chercheur');
             $table->string('photoProfil', 255)->nullable();
+            $table->string('about', 150)->nullable();
             $table->boolean('must_change_password')->default(true);
             $table->rememberToken();
             $table->timestamps();

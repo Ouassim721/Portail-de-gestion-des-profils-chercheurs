@@ -13,20 +13,18 @@ export default function UpdateProfileModal({
   const { t } = useContext(LanguageContext);
   const [nom, setNom] = useState("");
   const [prenom, setPrenom] = useState("");
-  const [discipline, setDiscipline] = useState("");
+  const [specialisation, setSpecialisation] = useState("");
   const [photoFile, setPhotoFile] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [status, setStatus] = useState("Statut");
-  const [about, setAbout] = useState("À propos de moi...");
+  const [about, setAbout] = useState("");
 
   useEffect(() => {
     if (chercheur) {
       setNom(chercheur.nom || "");
       setPrenom(chercheur.prenom || "");
-      setDiscipline(chercheur.specialisation || "");
-      setStatus(chercheur.status || "Statut");
-      setAbout(chercheur.about || "À propos de moi...");
+      setSpecialisation(chercheur.specialisation || "");
+      setAbout(chercheur.about || "");
       setPhotoPreview(
         chercheur.photoProfil
           ? `http://localhost:8000/${chercheur.photoProfil}`
@@ -68,8 +66,7 @@ export default function UpdateProfileModal({
     const formData = new FormData();
     formData.append("nom", nom);
     formData.append("prenom", prenom);
-    formData.append("discipline", discipline);
-    formData.append("status", status);
+    formData.append("specialisation", specialisation);
     formData.append("about", about);
     if (photoFile) {
       formData.append("photoProfil", photoFile);
@@ -100,7 +97,7 @@ export default function UpdateProfileModal({
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm data-[state=open]:animate-fadeIn" />
 
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-[95vw] max-w-2xl -translate-x-1/2 -translate-y-1/2 transform rounded-xl bg-[var(--color-bg-primary)] shadow-xl transition-all duration-300 data-[state=open]:animate-slideUp data-[state=closed]:animate-slideDown focus:outline-none">
+        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-[95vw] max-w-2xl -translate-x-1/2 -translate-y-1/2 transform rounded-xl py-4 bg-[var(--color-bg-primary)] shadow-xl transition-all duration-300 data-[state=open]:animate-slideUp data-[state=closed]:animate-slideDown focus:outline-none">
           <div className="border-b border-gray-200 px-6 py-4 relative">
             <Dialog.Title className="text-2xl font-semibold text-[var(--color-primary)]">
               {t("modalTitleEditProfile")}
@@ -221,29 +218,16 @@ export default function UpdateProfileModal({
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                   />
                 </div>
-                {/** Discipline **/}
+                {/** Specialisation **/}
                 <div>
                   <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-2">
-                    {t("disciplinePlaceholder")}
+                    {t("specialisationPlaceholder")}
                   </label>
                   <input
                     type="text"
-                    value={discipline}
-                    onChange={(e) => setDiscipline(e.target.value)}
-                    placeholder={t("disciplinePlaceholder")}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                  />
-                </div>
-                {/** Statut **/}
-                <div>
-                  <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-2">
-                    {t("statusPlaceholder")}
-                  </label>
-                  <input
-                    type="text"
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value)}
-                    placeholder={t("statusPlaceholder")}
+                    value={specialisation}
+                    onChange={(e) => setSpecialisation(e.target.value)}
+                    placeholder={t("specialisationPlaceholder")}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                   />
                 </div>

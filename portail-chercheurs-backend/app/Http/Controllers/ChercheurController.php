@@ -109,7 +109,7 @@ class ChercheurController extends Controller
         ]);
 
         // Mise à jour des champs de base
-        $chercheur->update($request->only(['nom', 'prenom', 'specialisation', 'email', 'status', 'about']));
+        $chercheur->update($request->only(['nom', 'prenom', 'specialisation', 'email', 'about']));
 
         // Gestion du CV (si applicable)
         if ($request->hasFile('cv')) {

@@ -8,6 +8,7 @@ const NewsCard = ({
   description,
   categorie,
   date_publication,
+  onClick,
 }) => {
   const { t } = useContext(LanguageContext);
 
@@ -18,8 +19,8 @@ const NewsCard = ({
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl m-4">
-      <div className="p-6">
+    <div className="max-w-md mx-auto bg-[var(--color-bg-primary)] rounded-xl shadow-md overflow-hidden md:max-w-2xl m-4">
+      <div className="p-6 flex flex-col justify-between h-full w-full">
         {/* En-tête avec catégorie et date */}
         <div className="flex justify-between items-center mb-2">
           <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full uppercase font-semibold tracking-wide">
@@ -31,7 +32,9 @@ const NewsCard = ({
         </div>
 
         {/* Titre */}
-        <h2 className="mt-2 text-xl font-bold text-gray-800">{titre}</h2>
+        <h2 className="mt-2 text-xl font-bold text-[var(--color-text-secondary)]">
+          {titre}
+        </h2>
 
         {/* Localisation */}
         {localisation && (
@@ -56,16 +59,21 @@ const NewsCard = ({
                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
               />
             </svg>
-            <span className="ml-1 text-gray-600 text-sm">{localisation}</span>
+            <span className="ml-1 text-[var(--color-text-secondary)] text-sm">
+              {localisation}
+            </span>
           </div>
         )}
 
         {/* Description */}
-        <p className="mt-3 text-gray-600">{description}</p>
+        <p className="mt-3 text-[var(--color-text-secondary)]">{description}</p>
 
         {/* Bouton pour en savoir plus (optionnel) */}
         <div className="mt-4">
-          <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+          <button
+            className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            onClick={onClick}
+          >
             {t("learnMore")} →
           </button>
         </div>

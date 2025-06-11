@@ -31,6 +31,7 @@ class Chercheur extends Authenticatable implements JWTSubject
         'role',
         'specialisation',
         'photoProfil',
+        'about',
         'must_change_password',
         'remember_token',
     ];
