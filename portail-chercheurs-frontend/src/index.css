@@ -145,3 +145,6 @@ select {
   background: var(--color-error);
   color: white;
 }
+.shadow-card {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}

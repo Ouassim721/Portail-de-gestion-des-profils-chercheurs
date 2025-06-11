@@ -101,6 +101,9 @@ Route::get('/publications/years', [PublicationController::class, 'getPublication
 Route::middleware('auth:api')->get('/scopus-publications', [ScopusPublicationController::class, 'fetchPublications']);
 
 /* ==================== ROUTES POUR LES ACTUALITES ==================== */
+// Routes spécifiques à la page d'accueil
+Route::get('/actualites/home', [ActualiteController::class, 'homeIndex']);
+
 Route::apiResource('actualites', ActualiteController::class);
 Route::get('/actualites', [ActualiteController::class, 'index']);
 Route::get('/actualites/{id}', [ActualiteController::class, 'show']);

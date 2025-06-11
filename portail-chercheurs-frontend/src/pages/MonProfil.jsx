@@ -10,6 +10,9 @@ function MonProfil() {
   const [publicationsData, setPublicationsData] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const handleUpdate = (updatedData) => {
+    setChercheurData(updatedData);
+  };
   const toggleVisibility = async (publicationId) => {
     try {
       await axios.put(`/publications/${publicationId}/toggle-visibility`);
@@ -47,6 +50,7 @@ function MonProfil() {
       isPublic={false}
       chercheur={chercheurData}
       publications={publicationsData || []}
+      onUpdate={handleUpdate}
       isOwner={true}
       onToggleVisibility={toggleVisibility}
     />

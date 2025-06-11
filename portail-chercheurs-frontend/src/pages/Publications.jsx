@@ -19,7 +19,7 @@ import useAuth from "../hooks/useAuth";
 
 const Publications = () => {
   const { t } = useContext(LanguageContext);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [disciplines, setDisciplines] = useState([]);
   const [availableYears, setAvailableYears] = useState([]);
   const [publications, setPublications] = useState([]);
@@ -28,7 +28,7 @@ const Publications = () => {
   const [countCitations, setcountCitations] = useState(null);
   const [countDiscipline, setCountDiscipline] = useState(null);
   const [selectedYear, setSelectedYear] = useState(null);
-  const [selectedDiscipline, setSelectedDiscipline] = useState(null); 
+  const [selectedDiscipline, setSelectedDiscipline] = useState(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -59,24 +59,32 @@ const Publications = () => {
     };
   }, [handleObserver]);
 
-useEffect(() => {
-  if (!hasMore || isLoading) return;
+  useEffect(() => {
+    if (!hasMore || isLoading) return;
 
-  setIsLoading(true);
-  axios
-    .get(`/publications?page=${page}&limit=10${selectedYear ? `&year=${selectedYear}` : ''}${selectedDiscipline ? `&discipline_id=${selectedDiscipline}` : ''}${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ''}`)
-    .then((res) => {
-      setPublications((prev) => (page === 1 ? res.data.data : [...prev, ...res.data.data]));
-      setHasMore(res.data.hasMore);
-    })
-    .finally(() => setIsLoading(false));
-}, [page, selectedYear, selectedDiscipline, searchTerm]); 
+    setIsLoading(true);
+    axios
+      .get(
+        `/publications?page=${page}&limit=10${
+          selectedYear ? `&year=${selectedYear}` : ""
+        }${selectedDiscipline ? `&discipline_id=${selectedDiscipline}` : ""}${
+          searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ""
+        }`
+      )
+      .then((res) => {
+        setPublications((prev) =>
+          page === 1 ? res.data.data : [...prev, ...res.data.data]
+        );
+        setHasMore(res.data.hasMore);
+      })
+      .finally(() => setIsLoading(false));
+  }, [page, selectedYear, selectedDiscipline, searchTerm]);
 
-useEffect(() => {
-  setPage(1);
-  setPublications([]);
-  setHasMore(true);
-}, [searchTerm]); // Réinitialiser quand le terme de recherche change
+  useEffect(() => {
+    setPage(1);
+    setPublications([]);
+    setHasMore(true);
+  }, [searchTerm]); // Réinitialiser quand le terme de recherche change
 
   useEffect(() => {
     axios
@@ -93,7 +101,8 @@ useEffect(() => {
   }, []);
 
   useEffect(() => {
-    axios.get("/disciplines")
+    axios
+      .get("/disciplines")
       .then((response) => {
         setDisciplines(response.data);
       })
@@ -120,60 +129,67 @@ useEffect(() => {
   const nombreDisciplines = countDiscipline !== null ? countDiscipline : "...";
   return (
     <div className="min-h-screen ">
-      <div className="w-full bg-[var(--color-primary)] flex flex-col lg:flex-row gap-4 items-center p-4">
+      <div className="w-full bg-[#003366] flex flex-col lg:flex-row gap-4 items-center p-4">
         <div className="w-full px-2">
-<SearchBarPublications
-  className="p-4 w-full"
-  placeHolder={t("searchPublications")}
-  value={searchTerm}
-  onChange={(e) => setSearchTerm(e.target.value)}
-  onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-/>
+          <SearchBarPublications
+            className="p-4 w-full"
+            placeHolder={t("searchPublications")}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter"}
+          />
         </div>
         <div className="w-full flex flex-col sm:flex-row gap-8 sm:justify-between items-center">
           <div className="w-full flex justify-between sm:justify-start lg:justify-end sm:gap-6 px-2">
-         <DropdownButton
-  icon={faChevronDown}
-  children={selectedYear ? selectedYear.toString() : t("year")}
-  variant="neutral"
-  iconPosition="right"
-  options={[
-    { label: t("allYears"), onClick: () => setSelectedYear(null) },
-    ...availableYears.map((year) => ({
-      label: year.toString(),
-      onClick: () => setSelectedYear(year),
-    })),
-  ]}
-  className="w-full sm:w-auto"
-/>
+            <DropdownButton
+              icon={faChevronDown}
+              children={selectedYear ? selectedYear.toString() : t("year")}
+              variant="neutral"
+              iconPosition="right"
+              options={[
+                { label: t("allYears"), onClick: () => setSelectedYear(null) },
+                ...availableYears.map((year) => ({
+                  label: year.toString(),
+                  onClick: () => setSelectedYear(year),
+                })),
+              ]}
+              className="w-full sm:w-auto"
+            />
 
-<DropdownButton
-  icon={faChevronDown}
-  children={selectedDiscipline ? disciplines.find(d => d.id === selectedDiscipline)?.nom : t("domain")}
-  variant="neutral"
-  iconPosition="right"
-  options={[
-    { label: t("allDomains"), onClick: () => setSelectedDiscipline(null) },
-    ...disciplines.map((discipline) => ({
-      label: discipline.nom,
-      onClick: () => setSelectedDiscipline(discipline.id),
-    })),
-  ]}
-  className="w-full sm:w-auto"
-/>
-<Button
-  variant="secondary"
-  icon={faFilter}
-  onClick={() => {
-    // Déclencher manuellement un rechargement si nécessaire
-    setPage(1);
-    setPublications([]);
-    setHasMore(true);
-  }}
-  className="w-full sm:w-auto flex justify-center items-center"
->
-  {t("filter")}
-</Button>
+            <DropdownButton
+              icon={faChevronDown}
+              children={
+                selectedDiscipline
+                  ? disciplines.find((d) => d.id === selectedDiscipline)?.nom
+                  : t("domain")
+              }
+              variant="neutral"
+              iconPosition="right"
+              options={[
+                {
+                  label: t("allDomains"),
+                  onClick: () => setSelectedDiscipline(null),
+                },
+                ...disciplines.map((discipline) => ({
+                  label: discipline.nom,
+                  onClick: () => setSelectedDiscipline(discipline.id),
+                })),
+              ]}
+              className="w-full sm:w-auto"
+            />
+            <Button
+              variant="secondary"
+              icon={faFilter}
+              onClick={() => {
+                // Déclencher manuellement un rechargement si nécessaire
+                setPage(1);
+                setPublications([]);
+                setHasMore(true);
+              }}
+              className="w-full sm:w-auto flex justify-center items-center"
+            >
+              {t("filter")}
+            </Button>
           </div>
         </div>
       </div>
@@ -203,30 +219,34 @@ useEffect(() => {
             icon={faBook}
           />
         </section>
-<section>
-  <div>
-    {publications
-      .filter(pub => pub.visible) // Filtre les publications visibles
-      .map((pub) => (
-        <div key={pub.id} className="mb-10">
-          <CardPublication
-            title={pub.titre}
-            auteur={`${pub.chercheur.prenom} ${pub.chercheur.nom}`}
-            university={pub.chercheur.university}
-            departement={pub.discipline.nom}
-            description={pub.abstract}
-            category={pub.discipline.keywords || []}
-            date={pub.date_publication}
-            citations={pub.citation_count}
-            pdf_path={pub.pdf_path}
-          />
-          {!isAuthenticated && <CommentsSection publicationId={pub.id} />}
-        </div>
-      ))}
-    <div ref={loader} className="h-10 w-full" />
-    {isLoading && <Loader text={t("loading")} />}
-  </div>
-</section>
+        <section>
+          <div className="relative">
+            <div ref={loader} className="w-full" />
+            {isLoading && (
+              <Loader text={t("loading")} className="absolute! h-50!" />
+            )}
+            {publications
+              .filter((pub) => pub.visible) // Filtre les publications visibles
+              .map((pub) => (
+                <div key={pub.id} className="mb-10">
+                  <CardPublication
+                    title={pub.titre}
+                    auteur={`${pub.chercheur.prenom} ${pub.chercheur.nom}`}
+                    university={pub.chercheur.university}
+                    departement={pub.discipline.nom}
+                    description={pub.abstract}
+                    category={pub.discipline.keywords || []}
+                    date={pub.date_publication}
+                    citations={pub.citation_count}
+                    pdf_path={pub.pdf_path}
+                  />
+                  {!isAuthenticated && (
+                    <CommentsSection publicationId={pub.id} />
+                  )}
+                </div>
+              ))}
+          </div>
+        </section>
       </main>
     </div>
   );

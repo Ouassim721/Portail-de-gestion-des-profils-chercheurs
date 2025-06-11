@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "../../axios";
 import Loader from "../../components/ui/Loader";
+import Button from "../../components/ui/Button";
 import ProgressBar from "../../components/ui/ProgressBar";
 import { useNavigate } from "react-router-dom";
 import { LanguageContext } from "../../contexts/LanguageContext";
@@ -90,27 +91,8 @@ const ProfilUpdateForm = () => {
               className="w-full p-2 border rounded"
             />
           </div>
-          {/* Discipline */}
-          <div>
-            <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">
-              {t("disciplinePlaceholder")}
-            </label>
-            <input
-              type="text"
-              name="discipline"
-              placeholder={t("disciplinePlaceholder")}
-              value={form.discipline}
-              onChange={handleChange}
-              className="w-full p-2 border rounded"
-            />
-          </div>
           {/* Bouton de soumission */}
-          <button
-            type="submit"
-            className="w-full bg-[var(--color-primary)] text-white px-4 py-2 rounded hover:bg-blue-950"
-          >
-            {t("submitButton")}
-          </button>
+          <Button>{t("submitButton")}</Button>
         </form>
       </div>
     </>

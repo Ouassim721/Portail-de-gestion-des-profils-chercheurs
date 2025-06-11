@@ -217,4 +217,11 @@ class PublicationController extends Controller
             'visible' => $publication->visible
         ]);
     }
+    public function getPublicationsByChercheur($id)
+    {
+        $chercheur = Chercheur::findOrFail($id);
+        $count = $chercheur->publications()->count();
+
+        return response()->json(['total' => $count]);
+    }
 }

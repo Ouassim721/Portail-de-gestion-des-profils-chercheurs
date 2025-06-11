@@ -38,7 +38,7 @@ class AuthController extends Controller
             'email' => $email,
             'password' => Hash::make($passwordRaw),
             'role' => 'chercheur',
-            'discipline' => 'Informatique'
+            'specialisation' => 'Informatique'
         ]);
         $user->notify(new ChercheurCree($passwordRaw));
 

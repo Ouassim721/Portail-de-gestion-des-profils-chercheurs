@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import axios from "../axios";
 import Button from "../components/ui/Button";
+import Loader from "../components/ui/Loader";
 import {
   CalendarDaysIcon,
   MapPinIcon,
@@ -32,8 +33,8 @@ export default function DetailsActualite() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="flex justify-center items-center min-h-screen relative">
+        <Loader text={t("loading")} className="static!" />
       </div>
     );
   }
@@ -45,9 +46,7 @@ export default function DetailsActualite() {
           <h2 className="text-2xl font-bold text-gray-800">
             {t("actualiteNotFoundTitle")}
           </h2>
-          <p className="text-gray-600 mt-2">
-            {t("actualiteNotFoundDesc")}
-          </p>
+          <p className="text-gray-600 mt-2">{t("actualiteNotFoundDesc")}</p>
         </div>
       </div>
     );
@@ -121,7 +120,9 @@ export default function DetailsActualite() {
                 <div className="text-sm font-medium text-gray-900">
                   Jean Dupont
                 </div>
-                <div className="text-sm text-gray-500">{t("dateDaysAgo", { count: 2 })}</div>
+                <div className="text-sm text-gray-500">
+                  {t("dateDaysAgo", { count: 2 })}
+                </div>
                 <div className="mt-1 text-sm text-gray-700">
                   {t("sampleComment")}
                 </div>

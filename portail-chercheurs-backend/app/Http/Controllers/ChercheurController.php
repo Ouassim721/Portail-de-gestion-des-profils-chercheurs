@@ -34,13 +34,13 @@ class ChercheurController extends Controller
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('nom', 'LIKE', "%{$searchTerm}%")
                     ->orWhere('prenom', 'LIKE', "%{$searchTerm}%")
-                    ->orWhere('discipline', 'LIKE', "%{$searchTerm}%");
+                    ->orWhere('specialisation', 'LIKE', "%{$searchTerm}%");
             });
         }
 
         // Filtrage par département
         if ($request->filled('departement')) {
-            $query->where('discipline', $request->departement);
+            $query->where('specialisation', $request->departement);
         }
 
         // Filtrage par nombre minimum de publications
@@ -52,7 +52,7 @@ class ChercheurController extends Controller
         // Gestion du tri
         $sortableColumns = [
             'nom' => DB::raw("CONCAT(prenom, ' ', nom)"), // Tri par nom complet
-            'departement' => 'discipline',
+            'departement' => 'specialisation',
             'publications' => 'publications_count'
         ];
 
@@ -109,7 +109,7 @@ class ChercheurController extends Controller
         ]);
 
         // Mise à jour des champs de base
-        $chercheur->update($request->only(['nom', 'prenom', 'discipline', 'email', 'status', 'about']));
+        $chercheur->update($request->only(['nom', 'prenom', 'specialisation', 'email', 'about']));
 
         // Gestion du CV (si applicable)
         if ($request->hasFile('cv')) {
@@ -153,7 +153,7 @@ class ChercheurController extends Controller
             'nom' => 'required|string|max:100',
             'prenom' => 'required|string|max:100',
             'scopus_author_id' => 'required|string|max:20',
-            'discipline' => 'nullable|string|max:100',
+            'specialisation' => 'nullable|string|max:100',
         ]);
 
         $chercheur->update($validated);

@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState, useContext, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import NewsCard from "../components/cards/NewsCard";
 import { motion, AnimatePresence } from "framer-motion";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
@@ -8,7 +10,7 @@ import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
 import { fr, enUS } from "date-fns/locale";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { LanguageContext } from "../contexts/LanguageContext";
 import "./Actualites.css";
 
@@ -21,6 +23,7 @@ const Actualites = () => {
   const [underlineStyle, setUnderlineStyle] = useState({});
   const listeRef = useRef(null);
   const calendrierRef = useRef(null);
+  const navigate = useNavigate();
 
   // Memoize localizer to rebuild when language changes
   const localizer = useMemo(() => {
@@ -41,7 +44,10 @@ const Actualites = () => {
         setEvents(
           data.map((actu) => ({
             id: `${actu.id}`,
-            title: `${actu.titre} (${actu.categorie})`, 
+            title: `${actu.titre}`,
+            localisation: `${actu.localisation}`,
+            description: `${actu.description}`,
+            categorie: `${actu.categorie}`,
             start: new Date(actu.date_publication),
             end: new Date(actu.date_publication),
             allDay: true,
@@ -60,13 +66,15 @@ const Actualites = () => {
   }, [view]);
 
   return (
-    <div className="md:p-6 bg-[var(--color-bg-primary)] rounded-2xl shadow-md text-xs sm:text-sm md:text-base 2xl:text-lg">
+    <div className="md:p-6 bg-[var(--color-bg-secondary)] rounded-2xl shadow-md text-xs sm:text-sm md:text-base 2xl:text-lg">
       <div className="flex space-x-4 border-b border-gray-300 relative mb-4">
         <button
           ref={listeRef}
           onClick={() => setView("liste")}
           className={`relative pb-2 px-4 text-lg font-medium transition-colors duration-300 ${
-            view === "liste" ? "text-[var(--color-primary)]" : "text-gray-400 hover:text-[var(--color-primary)]"
+            view === "liste"
+              ? "text-[var(--color-primary)]"
+              : "text-gray-400 hover:text-[var(--color-primary)]"
           }`}
         >
           {t("list")}
@@ -75,7 +83,9 @@ const Actualites = () => {
           ref={calendrierRef}
           onClick={() => setView("calendrier")}
           className={`relative pb-2 px-4 text-lg font-medium transition-colors duration-300 ${
-            view === "calendrier" ? "text-[var(--color-primary)]" : "text-gray-400 hover:text-[var(--color-primary)]"
+            view === "calendrier"
+              ? "text-[var(--color-primary)]"
+              : "text-gray-400 hover:text-[var(--color-primary)]"
           }`}
         >
           {t("calendar")}
@@ -121,6 +131,8 @@ const Actualites = () => {
                     backgroundColor: "var(--color-primary)",
                     color: "white",
                     border: "none",
+                    fontWeight: "300",
+                    fontSize: "15px",
                     borderRadius: "4px",
                   },
                 })}
@@ -128,13 +140,25 @@ const Actualites = () => {
                   toolbar: (props) => (
                     <div className="rbc-toolbar">
                       <span className="rbc-btn-group">
-                        <button type="button" onClick={() => props.onNavigate("PREV")} className="rbc-btn">
+                        <button
+                          type="button"
+                          onClick={() => props.onNavigate("PREV")}
+                          className="rbc-btn"
+                        >
                           {t("previous")}
                         </button>
-                        <button type="button" onClick={() => props.onNavigate("TODAY")} className="rbc-btn">
+                        <button
+                          type="button"
+                          onClick={() => props.onNavigate("TODAY")}
+                          className="rbc-btn"
+                        >
                           {t("today")}
                         </button>
-                        <button type="button" onClick={() => props.onNavigate("NEXT")} className="rbc-btn">
+                        <button
+                          type="button"
+                          onClick={() => props.onNavigate("NEXT")}
+                          className="rbc-btn"
+                        >
                           {t("next")}
                         </button>
                       </span>
@@ -145,7 +169,9 @@ const Actualites = () => {
                             key={v}
                             type="button"
                             onClick={() => props.onView(v)}
-                            className={`rbc-btn ${props.view === v ? "rbc-active" : ""}`}
+                            className={`rbc-btn ${
+                              props.view === v ? "rbc-active" : ""
+                            }`}
                           >
                             {t(v)}
                           </button>
@@ -155,7 +181,11 @@ const Actualites = () => {
                   ),
                   event: ({ event }) => (
                     <div className="p-1">
-                      <strong>{event.title}</strong>
+                      <strong
+                        onClick={() => navigate(`/actualites/${event.id}`)}
+                      >
+                        {event.title}
+                      </strong>
                     </div>
                   ),
                 }}
@@ -172,21 +202,17 @@ const Actualites = () => {
             exit={{ opacity: 0, x: 50 }}
             transition={{ duration: 0.4 }}
           >
-            <div className="space-y-4 mt-6">
+            <div className="space-y-4 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-8 mt-10">
               {events.map((event) => (
-                <Link to={`/actualites/${event.id}`} key={event.id}>
-                  <div className="p-4 bg-[var(--color-bg-primary)] rounded shadow border-l-4 border-[var(--color-primary)] my-2">
-                    <h3 className="text-lg font-semibold text-[var(--color-text-primary)]">
-                      {event.title}
-                    </h3>
-                    <p className="text-sm text-[var(--color-text-secondary)]">
-                      {format(event.start, t("dateFormat"), { locale: localeMap[language] || fr })}
-                    </p>
-                    <p className="text-sm text-[var(--color-text-secondary)]">
-                      {event.resource.categorie}
-                    </p>
-                  </div>
-                </Link>
+                <NewsCard
+                  key={event.id}
+                  titre={event.titre}
+                  localisation={event.localisation}
+                  description={event.description}
+                  categorie={event.categorie}
+                  date_publication={event.date_publication}
+                  onClick={() => navigate(`/actualites/${event.id}`)}
+                />
               ))}
             </div>
           </motion.div>

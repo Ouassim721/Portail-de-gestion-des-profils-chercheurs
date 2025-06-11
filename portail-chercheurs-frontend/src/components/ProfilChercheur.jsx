@@ -12,6 +12,7 @@ import {
   faUserPen,
   faLocationDot,
   faGraduationCap,
+  faCircleInfo,
 } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import {
@@ -99,7 +100,7 @@ function ProfilChercheur({
             <span className="mr-3">
               <FontAwesomeIcon icon={faBuildingColumns} />
             </span>
-            {t("departmentLabel")} {chercheur.discipline}
+            {t("departmentLabel")} {chercheur.specialisation}
           </li>
           <li>
             <span className="mr-3">
@@ -113,6 +114,14 @@ function ProfilChercheur({
             </span>
             {t("degreeLabel")} PhD en Intelligence Artificielle
           </li>
+          {chercheur.about && (
+            <li>
+              <span className="mr-3">
+                <FontAwesomeIcon icon={faCircleInfo} />
+              </span>
+              {chercheur.about}
+            </li>
+          )}
         </ul>
       </section>
 

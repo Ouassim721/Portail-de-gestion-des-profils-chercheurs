@@ -7,10 +7,11 @@ use Illuminate\Http\Request;
 
 class ActualiteController extends Controller
 {
-    // public function index()
-    // {
-    //     return Actualite::all();
-    // }
+    /**
+     * Méthode permettant de récupérer les actualités stockés dans la Base de données
+     *
+     * @return void
+     */
     public function index()
     {
         $actualites = Actualite::whereDate('date_publication', '>=', now())
@@ -19,6 +20,21 @@ class ActualiteController extends Controller
 
         return response()->json($actualites);
     }
+    /**
+     * Méthode permettant de récuperer un nombre limité des actualites pour la page d'accueil
+     *
+     * @return void
+     */
+    public function homeIndex()
+    {
+        $actualites = Actualite::whereDate('date_publication', '>=', now())
+            ->orderBy('date_publication', 'asc')
+            ->limit(3)
+            ->get();
+
+        return response()->json($actualites);
+    }
+
 
     public function store(Request $request)
     {

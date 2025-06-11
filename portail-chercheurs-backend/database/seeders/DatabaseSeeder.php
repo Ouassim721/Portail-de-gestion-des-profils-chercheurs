@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Artisan;
@@ -18,12 +17,10 @@ class DatabaseSeeder extends Seeder
         $this->prepareStorageEnvironment();
 
         // 2. Génération de données de test
-        $this->createTestUsers();
         $this->generateFakeCVs(20);
 
         // 3. Exécution des seeders spécifiques
         $this->call([
-            UserSeeder::class,
             DisciplineSeeder::class,
             ChercheurSeeder::class,
             CommentSeeder::class,
@@ -54,20 +51,8 @@ class DatabaseSeeder extends Seeder
 
         // Création du lien symbolique si absent
         if (!is_link(public_path('storage'))) {
-            \Artisan::call('storage:link');
+            Artisan::call('storage:link');
         }
-    }
-
-    /**
-     * Crée les utilisateurs de test
-     */
-    private function createTestUsers(): void
-    {
-        // Utilisateur de test principal
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
     }
 
     /**

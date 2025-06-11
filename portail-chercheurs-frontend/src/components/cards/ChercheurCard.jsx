@@ -29,7 +29,7 @@ export default function ChercheurCard({ chercheur }) {
             {chercheur.prenom} {chercheur.nom}
           </h3>
           <p className="text-gray-600 text-sm mb-2">
-            {chercheur.discipline || "Département non spécifié"}
+            {chercheur.specialisation || "Département non spécifié"}
           </p>
           <div className="flex items-center text-sm text-gray-500">
             <FontAwesomeIcon icon={faBook} className="mr-1" />

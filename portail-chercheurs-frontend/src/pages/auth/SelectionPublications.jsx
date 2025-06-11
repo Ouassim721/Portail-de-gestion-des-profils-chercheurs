@@ -80,7 +80,14 @@ const SelectionPublications = () => {
         : [...prev, pub]
     );
   };
-
+  //fonction permettant la selection/deselection de tous les publications
+  const toggleSelectAll = () => {
+    if (selected.length === publications.length) {
+      setSelected([]);
+    } else {
+      setSelected([...publications]);
+    }
+  };
   // Enregistrement des publications sélectionnées
   const handleSave = async () => {
     try {
@@ -152,10 +159,20 @@ const SelectionPublications = () => {
       <ProgressBar currentStep={2} />
       <div className="max-w-5xl mx-auto mt-10 p-4">
         <div className="flex justify-between items-center mb-6">
-          <p className="text-gray-600">
-            {publications.length} publications trouvées | {selected.length}{" "}
-            sélectionnées
-          </p>
+          <div className="flex space-x-4">
+            <p className="text-gray-600">
+              {publications.length} publications trouvées | {selected.length}{" "}
+              sélectionnées
+            </p>
+            <button
+              onClick={toggleSelectAll}
+              className="text-blue-600 hover:text-blue-800 underline"
+            >
+              {selected.length === publications.length
+                ? "Tout désélectionner"
+                : "Tout sélectionner"}
+            </button>
+          </div>
           <Button
             onClick={handleSave}
             disabled={selected.length === 0}
