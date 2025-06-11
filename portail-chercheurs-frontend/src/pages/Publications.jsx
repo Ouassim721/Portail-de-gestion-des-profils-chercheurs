@@ -129,14 +129,14 @@ const Publications = () => {
   const nombreDisciplines = countDiscipline !== null ? countDiscipline : "...";
   return (
     <div className="min-h-screen ">
-      <div className="w-full bg-[var(--color-primary)] flex flex-col lg:flex-row gap-4 items-center p-4">
+      <div className="w-full bg-[#003366] flex flex-col lg:flex-row gap-4 items-center p-4">
         <div className="w-full px-2">
           <SearchBarPublications
             className="p-4 w-full"
             placeHolder={t("searchPublications")}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+            onKeyPress={(e) => e.key === "Enter"}
           />
         </div>
         <div className="w-full flex flex-col sm:flex-row gap-8 sm:justify-between items-center">
@@ -220,7 +220,11 @@ const Publications = () => {
           />
         </section>
         <section>
-          <div>
+          <div className="relative">
+            <div ref={loader} className="w-full" />
+            {isLoading && (
+              <Loader text={t("loading")} className="absolute! h-50!" />
+            )}
             {publications
               .filter((pub) => pub.visible) // Filtre les publications visibles
               .map((pub) => (
@@ -241,8 +245,6 @@ const Publications = () => {
                   )}
                 </div>
               ))}
-            <div ref={loader} className="h-10 w-full" />
-            {isLoading && <Loader text={t("loading")} />}
           </div>
         </section>
       </main>

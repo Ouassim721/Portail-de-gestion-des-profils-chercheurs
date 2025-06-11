@@ -1,17 +1,14 @@
-import React, { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../axios";
 import Button from "../components/ui/Button";
 import ResearcherCard from "../components/cards/ChercheurHomeCard";
-import DomainCard from "../components/cards/DomainCard";
+import NewsCard from "../components/cards/NewsCard";
 import PublicationCard from "../components/cards/PublicationHomeCard";
 import { LanguageContext } from "../contexts/LanguageContext";
 import ChercheurImage from "../assets/chercheurImage-HomePage.jpg";
 import ChercheurEnVedette from "../assets/cherchuerEnVedette.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import CardPublication from "../components/cards/CardPublication";
-import pdp from "../assets/chercheur-place-holder.jpg";
-import logo from "../assets/logo_scholarhubplusTagligne.jpg";
 import {
   faUsers,
   faBook,
@@ -20,27 +17,17 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { motion, AnimatePresence } from "framer-motion";
 import CountUp from "react-countup";
-import { format } from "date-fns";
-import { fr, enUS } from "date-fns/locale";
 
 function Home() {
   const navigate = useNavigate();
-  const { t, language } = useContext(LanguageContext);
+  const { t } = useContext(LanguageContext);
   const [countChercheurs, setCountChercheurs] = useState(null);
   const [countPublications, setCountPublications] = useState(null);
   const [countCitations, setCountCitations] = useState(null);
   const [countDisciplines, setCountDisciplines] = useState(null);
-  const [events, setEvents] = useState([]);
-  const [loadingEvents, setLoadingEvents] = useState(true);
-  const [errorEvents, setErrorEvents] = useState(null);
   const [publications, setPublications] = useState([]);
-  const [isLoadingPublications, setIsLoadingPublications] = useState(false);
-  const [errorPublications, setErrorPublications] = useState(null);
   const [chercheurs, setChercheurs] = useState([]);
-  const [isLoadingChercheurs, setIsLoadingChercheurs] = useState(false);
-  const [errorChercheurs, setErrorChercheurs] = useState(null);
-
-  const locale = language === "fr" ? fr : enUS;
+  const [actualites, setActualites] = useState([]);
 
   // Fetch stats
   useEffect(() => {
@@ -57,28 +44,17 @@ function Home() {
 
   // Fetch upcoming events
   useEffect(() => {
-    setLoadingEvents(true);
-    axios
-      .get("/actualites")
-      .then((res) => {
-        const today = new Date();
-        const upcoming = res.data
-          .filter((event) => new Date(event.date_publication) > today)
-          .sort(
-            (a, b) =>
-              new Date(a.date_publication) - new Date(b.date_publication)
-          )
-          .slice(0, 5); // Limite à 5 événements
+    const fetchActualitesAccueil = async () => {
+      try {
+        const response = await axios.get("/actualites/home");
+        setActualites(response.data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des actualités :", error);
+      }
+    };
 
-        setEvents(upcoming);
-        setLoadingEvents(false);
-      })
-      .catch((err) => {
-        console.error(t("errorLoadingEvents"), err);
-        setErrorEvents(t("errorLoadingEvents"));
-        setLoadingEvents(false);
-      });
-  }, [t]);
+    fetchActualitesAccueil();
+  }, []);
 
   const fetchPublication = async (chercheurId) => {
     try {
@@ -126,6 +102,9 @@ function Home() {
     fetchPublications();
   }, []);
 
+  const goToAbout = () => {
+    navigate("/about");
+  };
   return (
     <>
       {/* Section Hero */}
@@ -329,7 +308,56 @@ function Home() {
         </div>
       </section>
       <section className="py-12 lg:py-24 px-4 md:px-12 gap-8 lg:px-20">
-        <h3>{t("stayInformed")}</h3>
+        <h3 className="text-3xl font-bold text-center">{t("news")}</h3>
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-8 mt-10">
+          {actualites.map((actu) => (
+            <NewsCard
+              key={actu.id}
+              titre={actu.titre}
+              localisation={actu.localisation}
+              description={actu.description}
+              categorie={actu.categorie}
+              date_publication={actu.date_publication}
+            />
+          ))}
+        </div>
+      </section>
+      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-50 to-indigo-50">
+        <div className="max-w-4xl mx-auto text-center">
+          {/* Titre */}
+          <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl mb-6">
+            À propos de nous
+          </h2>
+
+          {/* Paragraphe descriptif */}
+          <p className="text-lg text-gray-600 mb-8 leading-relaxed max-w-3xl mx-auto">
+            Nous sommes une équipe passionnée dédiée à fournir des solutions
+            innovantes et sur mesure pour nos clients. Avec des années
+            d'expérience et une approche centrée sur l'humain, nous transformons
+            les idées en réalité numérique tout en garantissant qualité et
+            satisfaction.
+          </p>
+
+          {/* Bouton */}
+          <button
+            onClick={goToAbout}
+            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+          >
+            En savoir plus
+            <svg
+              className="ml-3 -mr-1 h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
       </section>
     </>
   );
