@@ -62,6 +62,13 @@ function App() {
               <Route path="/publications" element={<Publications />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/chercheurs-stats" element={<ResearcherStats />} />
+                <Route path="/chercheurs/:id/cours" element={<CoursesPage />} />
+                  <Route path="/chercheurs/:id/cours/new" element={<CourseForm />} />
+                  <Route path="/chercheurs/:id/cours/:coursId/edit" element={<CourseForm />} />
+                  <Route path="/chercheurs/:id/cours/:coursId" element={<CourseDetailPage />} />
+                  
+                  {/* Matières */}
+                  <Route path="/mes-matieres" element={<SubjectsPage />} />
               <Route
                 path="/contact"
                 element={
@@ -145,16 +152,9 @@ function App() {
                 </ProtectedRoute>
               }
             />
-          <Route path="/chercheurs/:id/cours" element={<CoursesPage />} />
-            <Route path="/chercheurs/:id/cours/new" element={<CourseForm />} />
-            <Route path="/chercheurs/:id/cours/:coursId/edit" element={<CourseForm />} />
-            <Route path="/chercheurs/:id/cours/:coursId" element={<CourseDetailPage />} />
-            
-            {/* Matières */}
-            <Route path="/mes-matieres" element={<SubjectsPage />} />
-        </Routes>
-
-
+            {/* 404 Not Found page */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
         </BrowserRouter>
       </AuthProvider>
     </LanguageProvider>

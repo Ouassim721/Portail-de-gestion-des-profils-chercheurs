@@ -4,6 +4,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration {
     public function up()
@@ -27,8 +28,15 @@ return new class extends Migration {
         });
     }
 
-    public function down()
-    {
-        Schema::dropIfExists('publications');
-    }
+public function down()
+{
+    // Désactiver temporairement les vérifications de clés étrangères
+    Schema::disableForeignKeyConstraints();
+    
+    // Supprimer la table publications
+    Schema::dropIfExists('publications');
+    
+    // Réactiver les vérifications
+    Schema::enableForeignKeyConstraints();
+}
 };

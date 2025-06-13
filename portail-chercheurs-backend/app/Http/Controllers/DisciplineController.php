@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Discipline;
 use Illuminate\Http\Request;
+use App\Models\Categoriser; 
 
 class DisciplineController extends Controller
 {
@@ -74,11 +75,17 @@ class DisciplineController extends Controller
         try {
             $stats = Discipline::query()
                 ->select('disciplines.id', 'disciplines.nom')
-                ->withCount('publications')
-                ->withSum('publications as total_citations', 'citation_count') // Ensure correct column name
+                // Utiliser la relation many-to-many via la table pivot
+                ->withCount(['publications' => function ($query) {
+                    $query->distinct(); // Éviter les doublons
+                }])
+                ->withSum(['publications' => function ($query) {
+                    $query->select(\DB::raw('SUM(citation_count)'))
+                          ->distinct(); // Somme distincte
+                }], 'citation_count') 
                 ->get();
 
-            return response()->json($stats, 200, ['Content-Type' => 'application/json']); // Ensure JSON response
+            return response()->json($stats, 200);
         } catch (\Exception $e) {
             \Log::error('Erreur stats disciplines', [
                 'message' => $e->getMessage(),
@@ -88,7 +95,8 @@ class DisciplineController extends Controller
             return response()->json([
                 'error'   => 'Erreur technique lors de la récupération des stats.',
                 'details' => $e->getMessage()
-            ], 500, ['Content-Type' => 'application/json']); // Ensure JSON response for errors
+            ], 500);
         }
     }
 }
+

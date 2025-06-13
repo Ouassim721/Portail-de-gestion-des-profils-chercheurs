@@ -8,8 +8,9 @@ function ProfilChercheurPublic() {
   const { id } = useParams();
   const [chercheurData, setChercheurData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [publicationsData, setPublicationsData] = useState(null);
+  const [publicationsData, setPublicationsData] = useState([]);
   const [loadingPublications, setLoadingPublications] = useState(true);
+  const [disciplines, setDisciplines] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,11 +22,15 @@ function ProfilChercheurPublic() {
         const chercheurResponse = await axios.get(`/chercheurs/${id}`);
         setChercheurData(chercheurResponse.data);
 
-        // Récupération des publications du chercheur
+        // Récupération des publications du chercheur avec les disciplines
         const publicationsResponse = await axios.get(
-          `/chercheurs/${id}/publications`
+          `/publications?chercheur_id=${id}`
         );
-        setPublicationsData(publicationsResponse.data);
+        setPublicationsData(publicationsResponse.data.data || []);
+
+        // Récupération des disciplines pour le filtre
+        const disciplinesResponse = await axios.get("/disciplines");
+        setDisciplines(disciplinesResponse.data);
       } catch (error) {
         console.error("Erreur lors du chargement des données :", error);
       } finally {
@@ -44,7 +49,8 @@ function ProfilChercheurPublic() {
     <ProfilChercheur
       isPublic={true}
       chercheur={chercheurData}
-      publications={publicationsData || []}
+      publications={publicationsData}
+      disciplines={disciplines}
       loadingPublications={loadingPublications}
     />
   );

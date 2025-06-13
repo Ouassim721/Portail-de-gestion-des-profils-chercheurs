@@ -187,3 +187,12 @@ Route::middleware('auth:api')->group(function () {
     Route::post('chercheurs/{id}/matieres', [ChercheurController::class, 'attachMatiere']);
     Route::delete('chercheurs/{id}/matieres/{matiereId}', [ChercheurController::class, 'detachMatiere']);
 });
+
+
+/* ==================== ROUTES POUR LA CATÉGORISATION ==================== */
+Route::middleware('auth:api')->group(function () {
+    Route::post('/categoriser', [\App\Http\Controllers\CategoriserController::class, 'store']);
+    Route::delete('/categoriser/{publicationId}/{disciplineId}', [\App\Http\Controllers\CategoriserController::class, 'destroy']);
+    Route::get('/categoriser/publication/{id}', [\App\Http\Controllers\CategoriserController::class, 'forPublication']);
+    Route::get('/categoriser/discipline/{id}', [\App\Http\Controllers\CategoriserController::class, 'forDiscipline']);
+});

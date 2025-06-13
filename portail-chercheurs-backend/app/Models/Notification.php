@@ -20,4 +20,8 @@ class Notification extends Model
     {
         return $this->belongsTo(Publication::class);
     }
+    public function down()
+{
+    Schema::dropIfExists('notifications');
+}
 }

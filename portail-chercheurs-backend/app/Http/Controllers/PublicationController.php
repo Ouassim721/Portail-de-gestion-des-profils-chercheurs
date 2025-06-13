@@ -12,6 +12,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewPublicationNotification;
+use App\Models\Categoriser;
 
 class PublicationController extends Controller
 {
@@ -25,14 +26,10 @@ class PublicationController extends Controller
     }*/
     public function index(Request $request)
     {
-        $query = Publication::query()->with(['chercheur', 'discipline']);
+        $query = Publication::query()->with(['chercheur', 'disciplines']);
 
         if ($request->has('year')) {
             $query->whereYear('date_publication', $request->year);
-        }
-
-        if ($request->has('discipline_id')) {
-            $query->where('discipline_id', $request->discipline_id);
         }
 
         // Nouveau filtre de recherche
@@ -101,7 +98,6 @@ class PublicationController extends Controller
                             : ($entry['dc:creator'] ?? 'Auteur inconnu'),
                         'abstract' => $entry['dc:description'] ?? null,
                         'citation_count' => $entry['citedby-count'] ?? 0,
-                        'discipline_id' => 1 // Valeur par défaut
                     ];
                 }, $data['search-results']['entry'] ?? [])
             ];
@@ -131,7 +127,8 @@ class PublicationController extends Controller
                 'publications.*.auteurs' => 'required',
                 'publications.*.abstract' => 'nullable|string',
                 'publications.*.citation_count' => 'nullable|integer',
-                'publications.*.discipline_id' => 'sometimes|exists:disciplines,id',
+                'publications.*.disciplines' => 'nullable|array',
+                'publications.*.disciplines.*' => 'exists:disciplines,id', // Validation des disciplines
             ]);
 
             foreach ($request->publications as $pub) {
@@ -145,8 +142,11 @@ class PublicationController extends Controller
                     'abstract' => $pub['abstract'] ?? null,
                     'citation_count' => $pub['citation_count'] ?? 0,
                     'chercheur_id' => $chercheur->id,
-                    'discipline_id' => $pub['discipline_id'] ?? null
                 ]);
+                // Association des disciplines
+                if (!empty($pub['disciplines'])) {
+                    $publication->disciplines()->attach($pub['disciplines']);
+                }
 
                 // Notifier les abonnés
                 $followers = $chercheur->followers;
@@ -181,7 +181,10 @@ class PublicationController extends Controller
             return response()->json(['message' => 'Non autorisé'], 401);
         }
 
-        $publications = Publication::where('chercheur_id', $chercheur->id)->get();
+       // Charger les disciplines associées
+        $publications = Publication::where('chercheur_id', $chercheur->id)
+            ->with('disciplines') // Charger les disciplines
+            ->get();
 
         return response()->json(['publications' => $publications], 200);
     }
