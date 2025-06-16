@@ -11,6 +11,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewPublicationNotification;
+use App\Models\Categoriser;
 
 class PublicationController extends Controller
 {
@@ -19,11 +20,12 @@ class PublicationController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Publication::query()->with(['chercheur']);
+        $query = Publication::query()->with(['chercheur', 'disciplines']);
 
         if ($request->has('year')) {
             $query->whereYear('date_publication', $request->year);
         }
+
         // Nouveau filtre de recherche
         if ($request->has('search')) {
             $searchTerm = '%' . $request->search . '%';
@@ -118,6 +120,8 @@ class PublicationController extends Controller
                 'publications.*.auteurs' => 'required',
                 'publications.*.abstract' => 'nullable|string',
                 'publications.*.citation_count' => 'nullable|integer',
+                'publications.*.disciplines' => 'nullable|array',
+                'publications.*.disciplines.*' => 'exists:disciplines,id', // Validation des disciplines
             ]);
 
             foreach ($request->publications as $pub) {
@@ -132,6 +136,10 @@ class PublicationController extends Controller
                     'citation_count' => $pub['citation_count'] ?? 0,
                     'chercheur_id' => $chercheur->id,
                 ]);
+                // Association des disciplines
+                if (!empty($pub['disciplines'])) {
+                    $publication->disciplines()->attach($pub['disciplines']);
+                }
 
                 // Notifier les abonnés
                 $followers = $chercheur->followers;
@@ -166,7 +174,10 @@ class PublicationController extends Controller
             return response()->json(['message' => 'Non autorisé'], 401);
         }
 
-        $publications = Publication::where('chercheur_id', $chercheur->id)->get();
+        // Charger les disciplines associées
+        $publications = Publication::where('chercheur_id', $chercheur->id)
+            ->with('disciplines') // Charger les disciplines
+            ->get();
 
         return response()->json(['publications' => $publications], 200);
     }

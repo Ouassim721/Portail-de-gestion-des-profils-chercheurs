@@ -437,8 +437,10 @@ export const translations = {
     noData: "Aucune donnée",
     skipStep: "Sauter l'étape",
     profilePhoto: "Photo de profil",
+    myCourses : "Mes cours",
+    mySubjects: "Mes matières",
   },
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////
   en: {
     home: "Home",
     researchers: "Researchers",
@@ -865,6 +867,8 @@ export const translations = {
     noActivityFallback: "No activity",
     noCategory: "Uncategorized",
     noData: "No data",
+    myCourses: "My Courses",
+    mySubjects: "My Subjects",
   },
 };
 export const LanguageContext = createContext({

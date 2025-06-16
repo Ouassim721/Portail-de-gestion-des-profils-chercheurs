@@ -44,7 +44,7 @@ const CardPublication = ({
         <p className="text-md text-[var(--color-text-secondary)] text-justify ">
           {description}
         </p>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           {category.map((item) => (
             <h6 key={item} className="py-2 px-5 rounded-full bg-blue-50 text-blue-900 font-light">
               {item}
@@ -54,9 +54,9 @@ const CardPublication = ({
       </div>
       <div className="flex lg:flex-col justify-between items-center lg:w-1/3 lg:min-w-42">
         <div className="lg:flex lg:flex-col lg:gap-2 lg:text-right lg:w-full lg:pr-3">
-        <h6 className="font-light text-sm text-[var(--color-text-secondary)]">
-  {t("publishedOn")} {date ? formatDate(date, { dateStyle: 'medium' }) : t("dateInvalid")}
-</h6>
+          <h6 className="font-light text-sm text-[var(--color-text-secondary)]">
+            {t("publishedOn")} {date ? formatDate(date, { dateStyle: 'medium' }) : t("dateInvalid")}
+          </h6>
           <h5 className="hidden lg:block font-bold text-xl text-[var(--color-text-primary)]">
             {citations} <span className="font-light text-sm text-[var(--color-text-secondary)]">{t("citationsLabel")}</span>
           </h5>
@@ -64,7 +64,7 @@ const CardPublication = ({
         <div className="flex lg:flex-col gap-4 lg:w-full">
           {pdf_path && (
             <a
-              href={`http://localhost:8000/storage/${pdf_path}`}
+              href={`${process.env.REACT_APP_API_URL}/storage/${pdf_path}`}
               target="_blank"
               rel="noreferrer"
               className="flex items-center gap-3 px-4 py-2 rounded-lg transition duration-300 ease-in-out cursor-pointer justify-center bg-[var(--color-secondary)] text-[var(--color-bg-primary)] hover:bg-emerald-400 font-light h-10"

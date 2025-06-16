@@ -34,6 +34,7 @@ const Publications = () => {
   const [isLoading, setIsLoading] = useState(false);
   const isAuthenticated = useAuth();
   const loader = useRef(null);
+  
   const handleObserver = useCallback(
     (entries) => {
       const target = entries[0];
@@ -80,11 +81,12 @@ const Publications = () => {
       .finally(() => setIsLoading(false));
   }, [page, selectedYear, selectedDiscipline, searchTerm]);
 
+  // Réinitialiser les filtres lorsqu'ils changent
   useEffect(() => {
     setPage(1);
     setPublications([]);
     setHasMore(true);
-  }, [searchTerm]); // Réinitialiser quand le terme de recherche change
+  }, [searchTerm, selectedYear, selectedDiscipline]);
 
   useEffect(() => {
     axios
@@ -92,8 +94,8 @@ const Publications = () => {
       .then((response) => {
         setcountChercheurs(response.data.chercheurs);
         setcountPublications(response.data.publications);
-        setcountCitations(response.data.citations);
-        setCountDiscipline(response.data.disciplines);
+        setcountCitations(response.data.avgCitations); // Changé de 'citations' à 'avgCitations'
+        setCountDiscipline(response.data.disciplines); // Nouvelle statistique
       })
       .catch((error) => {
         console.error(t("errorLoadingData"), error);
@@ -122,11 +124,11 @@ const Publications = () => {
       });
   }, []);
 
-  const nombrePublications =
-    countPublications !== null ? countPublications : "...";
+  const nombrePublications = countPublications !== null ? countPublications : "...";
   const nombreChercheurs = countChercheurs !== null ? countChercheurs : "...";
-  const nombreCitations = countChercheurs !== null ? countCitations : "...";
+  const nombreCitations = countCitations !== null ? Math.round(countCitations) : "...";
   const nombreDisciplines = countDiscipline !== null ? countDiscipline : "...";
+  
   return (
     <div className="min-h-screen ">
       <div className="w-full bg-[#003366] flex flex-col lg:flex-row gap-4 items-center p-4">
@@ -177,19 +179,6 @@ const Publications = () => {
               ]}
               className="w-full sm:w-auto"
             />
-            <Button
-              variant="secondary"
-              icon={faFilter}
-              onClick={() => {
-                // Déclencher manuellement un rechargement si nécessaire
-                setPage(1);
-                setPublications([]);
-                setHasMore(true);
-              }}
-              className="w-full sm:w-auto flex justify-center items-center"
-            >
-              {t("filter")}
-            </Button>
           </div>
         </div>
       </div>
@@ -209,12 +198,12 @@ const Publications = () => {
           />
           <CardStatPublication
             stat={nombreCitations}
-            title={t("citations")}
+            title={t("avgCitations")}  // Changé de "citations" à "avgCitations"
             icon={faQuoteRight}
           />
           <CardStatPublication
             stat={nombreDisciplines}
-            title={t("domain")} // or create a new key "disciplines" if needed
+            title={t("disciplines")}  // Nouveau titre
             variant="secondary"
             icon={faBook}
           />
@@ -223,26 +212,32 @@ const Publications = () => {
           <div className="relative">
             <div ref={loader} className="w-full" />
             {isLoading && (
-              <Loader text={t("loading")} className="absolute! h-50!" />
+              <div className="flex justify-center my-4">
+                <Loader text={t("loading")} />
+              </div>
             )}
             {publications
-              .filter((pub) => pub.visible) // Filtre les publications visibles
+              .filter((pub) => pub.visible)
               .map((pub) => (
                 <div key={pub.id} className="mb-10">
                   <CardPublication
                     title={pub.titre}
                     auteur={`${pub.chercheur.prenom} ${pub.chercheur.nom}`}
                     university={pub.chercheur.university}
-                    departement={pub.discipline.nom}
+                    // Afficher la première discipline ou "Aucune"
+                    departement={
+                      pub.disciplines.length > 0 
+                        ? pub.disciplines[0].nom 
+                        : t("noDiscipline")
+                    }
                     description={pub.abstract}
-                    category={pub.discipline.keywords || []}
+                    // Utiliser toutes les disciplines comme catégories
+                    category={pub.disciplines.map(d => d.nom)}
                     date={pub.date_publication}
                     citations={pub.citation_count}
                     pdf_path={pub.pdf_path}
                   />
-                  {!isAuthenticated && (
-                    <CommentsSection publicationId={pub.id} />
-                  )}
+                  <CommentsSection publicationId={pub.id} />
                 </div>
               ))}
           </div>

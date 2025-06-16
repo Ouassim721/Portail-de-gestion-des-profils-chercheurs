@@ -40,14 +40,6 @@ class Publication extends Model
     }
 
     /**
-     * La discipline associée à la publication
-     */
-    public function discipline(): BelongsTo
-    {
-        return $this->belongsTo(Discipline::class);
-    }
-
-    /**
      * Les commentaires sur cette publication
      */
     public function comments(): HasMany
@@ -62,4 +54,14 @@ class Publication extends Model
     {
         return $this->hasMany(Notification::class);
     }
+
+public function disciplines()
+{
+    return $this->belongsToMany(
+        Discipline::class,
+        'categoriser',
+        'publication_id',
+        'discipline_id'
+    )->using(Categoriser::class);
+}
 }

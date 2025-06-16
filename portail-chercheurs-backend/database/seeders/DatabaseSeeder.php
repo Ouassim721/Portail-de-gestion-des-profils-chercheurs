@@ -23,8 +23,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             DisciplineSeeder::class,
             ChercheurSeeder::class,
-            CommentSeeder::class,
             PublicationSeeder::class,
+            CategoriserSeeder::class,
+            CommentSeeder::class,
             ActualiteSeeder::class,
             MatiereSeeder::class,
         ]);
@@ -34,7 +35,7 @@ class DatabaseSeeder extends Seeder
             CoursSeeder::class,
         ]);
 
-        // 3) (Optionnel) Finalement, on peuple la pivot Enseigner
+        // 3) Finalement, on peuple la pivot Enseigner
         $this->call([
             EnseignerSeeder::class,
         ]);

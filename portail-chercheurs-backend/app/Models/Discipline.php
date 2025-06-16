@@ -11,13 +11,19 @@ class Discipline extends Model
 
     protected $fillable = ['nom'];
 
-    public function publications()
-    {
-        return $this->hasMany(Publication::class);
-    }
-
     public function chercheurs()
     {
         return $this->hasMany(Chercheur::class);
     }
+
+
+public function publications()
+{
+    return $this->belongsToMany(
+        Publication::class,
+        'categoriser',
+        'discipline_id',
+        'publication_id'
+    )->using(Categoriser::class);
+}
 }
