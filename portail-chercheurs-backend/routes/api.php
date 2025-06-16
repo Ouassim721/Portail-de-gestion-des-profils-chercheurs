@@ -17,6 +17,8 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\CoursController;
 use App\Http\Controllers\EnseignerController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +48,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::middleware('auth:api')->get('/me', function (Request $request) {
     return $request->user();
 });
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+Route::post('/reset-password', [ResetPasswordController::class, 'reset']);
 
 // Changement de mot de passe
 Route::middleware('auth:api')->post('/change-password', [AuthController::class, 'changePassword']);
@@ -180,7 +184,7 @@ Route::middleware('auth:api')->group(function () {
     Route::put('chercheurs/{id}/cours/{coursId}', [ChercheurController::class, 'updateCours']);
     Route::patch('chercheurs/{id}/cours/{coursId}', [ChercheurController::class, 'updateCours']);
     Route::delete('chercheurs/{id}/cours/{coursId}', [ChercheurController::class, 'destroyCours']);
-     Route::get('chercheurs/{id}/cours/{coursId}', [ChercheurController::class, 'showCours']);
+    Route::get('chercheurs/{id}/cours/{coursId}', [ChercheurController::class, 'showCours']);
 
     // --- Pour gérer les matières (pivot “enseigner”) ---
     Route::get('chercheurs/{id}/matieres', [ChercheurController::class, 'getMatieres']);

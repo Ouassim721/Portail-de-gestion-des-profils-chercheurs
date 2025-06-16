@@ -15,6 +15,10 @@ Route::get('chercheurs/{chercheur}/download-cv', [\App\Http\Controllers\Chercheu
 Route::resource('publications', PublicationController::class);
 Route::resource('disciplines', DisciplineController::class);
 
+$frontendUrl = config('app.frontend_url', 'http://localhost:5173');
+Route::get('/reset-password/{token}', function ($token) use ($frontendUrl) {
+     return redirect("$frontendUrl/reset-password/$token");
+})->name('password.reset');
 Route::get('/', function () {
      return view('welcome');
 });

@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Notifications\ResetPasswordNotification;
 
 class Chercheur extends Authenticatable implements JWTSubject
 {
@@ -146,5 +147,10 @@ class Chercheur extends Authenticatable implements JWTSubject
     public function comments()
     {
         return $this->hasMany(Comment::class, 'chercheur_id');
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 }

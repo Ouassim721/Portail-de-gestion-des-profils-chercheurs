@@ -1,11 +1,13 @@
 import "./index.css";
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { LanguageProvider } from "./contexts/LanguageContext"; 
+import React from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { LanguageProvider } from "./contexts/LanguageContext";
 import AuthProvider from "./contexts/AuthProvider";
 import Layout from "./components/layout/Layout";
 import Loader from "./components/ui/Loader";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import MotDePasseOublie from "./pages/auth/MotDePasseOublie";
+import ResetPassword from "./pages/auth/ResetPassword";
 // Pages publiques
 import Home from "./pages/Home";
 import Chercheurs from "./pages/Chercheurs";
@@ -33,13 +35,13 @@ import CreationActualite from "./pages/admin/CreationActualite";
 import AdminDisciplines from "./pages/admin/AdminDisciplines";
 import ResearcherStats from "./pages/ResearcherStats";
 import Contact from "./pages/Contact";
-import CoursesPage from './pages/CoursesPage';
-import SubjectsPage from './pages/SubjectsPage';
-import CourseDetailPage from './pages/CourseDetailPage';
-import CourseForm from './components/cours/CourseForm';
+import CoursesPage from "./pages/CoursesPage";
+import SubjectsPage from "./pages/SubjectsPage";
+import CourseDetailPage from "./pages/CourseDetailPage";
+import CourseForm from "./components/cours/CourseForm";
 
 function App() {
-    const userId = localStorage.getItem('userId');
+  const userId = localStorage.getItem("userId");
   return (
     <LanguageProvider>
       {" "}
@@ -62,13 +64,22 @@ function App() {
               <Route path="/publications" element={<Publications />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/chercheurs-stats" element={<ResearcherStats />} />
-                <Route path="/chercheurs/:id/cours" element={<CoursesPage />} />
-                  <Route path="/chercheurs/:id/cours/new" element={<CourseForm />} />
-                  <Route path="/chercheurs/:id/cours/:coursId/edit" element={<CourseForm />} />
-                  <Route path="/chercheurs/:id/cours/:coursId" element={<CourseDetailPage />} />
-                  
-                  {/* Matières */}
-                  <Route path="/mes-matieres" element={<SubjectsPage />} />
+              <Route path="/chercheurs/:id/cours" element={<CoursesPage />} />
+              <Route
+                path="/chercheurs/:id/cours/new"
+                element={<CourseForm />}
+              />
+              <Route
+                path="/chercheurs/:id/cours/:coursId/edit"
+                element={<CourseForm />}
+              />
+              <Route
+                path="/chercheurs/:id/cours/:coursId"
+                element={<CourseDetailPage />}
+              />
+
+              {/* Matières */}
+              <Route path="/mes-matieres" element={<SubjectsPage />} />
               <Route
                 path="/contact"
                 element={
@@ -102,7 +113,8 @@ function App() {
               path="/selection-publications"
               element={<SelectionPublication />}
             />
-
+            <Route path="/mot-de-passe-oublie" element={<MotDePasseOublie />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
             {/* Pages Admin protégées */}
             <Route
               path="/dashboard"
@@ -152,8 +164,19 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            {/* 404 Not Found page */}
-            <Route path="*" element={<NotFound />} />
+            <Route path="/chercheurs/:id/cours" element={<CoursesPage />} />
+            <Route path="/chercheurs/:id/cours/new" element={<CourseForm />} />
+            <Route
+              path="/chercheurs/:id/cours/:coursId/edit"
+              element={<CourseForm />}
+            />
+            <Route
+              path="/chercheurs/:id/cours/:coursId"
+              element={<CourseDetailPage />}
+            />
+
+            {/* Matières */}
+            <Route path="/mes-matieres" element={<SubjectsPage />} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../../components/ui/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -24,13 +24,14 @@ function Connexion() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [remember, setRemember] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post(
         "/login",
-        { email, password },
+        { email, password, remember },
         { withCredentials: true }
       );
       const user = res.data.user;
@@ -40,7 +41,7 @@ function Connexion() {
         window.location.href =
           user.role === "Administrateur" ? "/dashboard" : "/";
       }
-    } catch (err) {
+    } catch {
       setError(t("loginError"));
     }
   };
@@ -149,13 +150,21 @@ function Connexion() {
 
               {/* Remember & forgot */}
               <div className="flex justify-between items-center text-sm">
-                <label className="flex items-center">
-                  <input type="checkbox" className="mr-2" />
-                  {t("rememberMe")}
-                </label>
-                <a href="#" className="hover:underline">
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="remember"
+                    checked={remember}
+                    onChange={(e) => setRemember(e.target.checked)}
+                  />
+                  <label htmlFor="rememberMe">{t("rememberMe")}</label>
+                </div>
+                <Link
+                  to="/mot-de-passe-oublie"
+                  className="text-sm text-blue-500 hover:underline"
+                >
                   {t("forgotPassword")}
-                </a>
+                </Link>
               </div>
 
               {/* Submit */}
@@ -164,9 +173,7 @@ function Connexion() {
               </Button>
 
               {/* Error */}
-              {error && (
-                <p className="text-red-500 text-center">{error}</p>
-              )}
+              {error && <p className="text-red-500 text-center">{error}</p>}
             </form>
           </div>
         </div>

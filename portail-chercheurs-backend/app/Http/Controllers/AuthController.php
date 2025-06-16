@@ -51,6 +51,8 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
+        $remember = $request->boolean('remember'); // <- récupère le champ
+
         $user = Chercheur::where('email', $credentials['email'])->first();
 
         if (!$user || !Hash::check($credentials['password'], $user->password)) {
@@ -59,20 +61,24 @@ class AuthController extends Controller
 
         $token = JWTAuth::fromUser($user);
 
+        // Durée d'expiration en minutes : 30 jours si "remember", sinon 2 heures
+        $expiration = $remember ? 60 * 24 * 30 : 120;
+
         return response()->json([
             'user' => $user,
         ])->cookie(
-            'token',               // Nom du cookie
-            $token,                // Le token JWT
-            60 * 24 * 30,               // Durée d'expiration (ici 1 mois)
-            null,                  // Chemin (null pour tout le domaine)
-            null,                  // Domaine (null pour le domaine actuel)
-            true,                  // Secure (True pour HTTPS uniquement)
-            true,                  // HttpOnly (Empêche l'accès par JavaScript)
-            false,                 // SameSite (Strict pour éviter le partage inter-domaines)
-            'Strict'               // SameSite=Strict (protéger contre CSRF)
+            'token',
+            $token,
+            $expiration,
+            null,
+            null,
+            true,
+            true,
+            false,
+            'Strict'
         );
     }
+
 
     public function profile()
     {
