@@ -101,51 +101,6 @@ export default function DetailsActualite() {
           </div>
         </div>
       </div>
-
-      <div className="mt-12 bg-[var(--color-bg-primary)] rounded-xl shadow-lg overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-medium text-gray-900">
-            {t("commentsTitle")} (3)
-          </h3>
-        </div>
-        <div className="p-6">
-          <div className="space-y-4">
-            <div className="flex space-x-4">
-              <div className="flex-shrink-0">
-                <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
-                  <span className="text-gray-600">JP</span>
-                </div>
-              </div>
-              <div>
-                <div className="text-sm font-medium text-gray-900">
-                  Jean Dupont
-                </div>
-                <div className="text-sm text-gray-500">
-                  {t("dateDaysAgo", { count: 2 })}
-                </div>
-                <div className="mt-1 text-sm text-gray-700">
-                  {t("sampleComment")}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <form className="mt-6">
-            <div className="mb-4">
-              <label htmlFor="comment" className="sr-only">
-                {t("addCommentPlaceholder")}
-              </label>
-              <textarea
-                id="comment"
-                rows={3}
-                className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                placeholder={t("addCommentPlaceholder")}
-              ></textarea>
-            </div>
-            <Button variant="secondary">{t("postCommentButton")}</Button>
-          </form>
-        </div>
-      </div>
     </div>
   );
 }

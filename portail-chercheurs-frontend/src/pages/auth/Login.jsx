@@ -38,8 +38,7 @@ function Connexion() {
       if (user?.must_change_password) {
         navigate("/change-password");
       } else {
-        window.location.href =
-          user.role === "Administrateur" ? "/dashboard" : "/";
+        window.location.href = "/";
       }
     } catch {
       setError(t("loginError"));
