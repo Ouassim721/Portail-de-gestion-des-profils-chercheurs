@@ -12,7 +12,7 @@ export default function ChercheurCard({ chercheur }) {
   };
   return (
     <div
-      className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-gray-200"
+      className="bg-[var(--color-bg-primary)] rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border shadow-card"
       onClick={handleClick}
     >
       <div className="p-4 flex items-start gap-4">
@@ -25,10 +25,10 @@ export default function ChercheurCard({ chercheur }) {
         </div>
 
         <div className="flex-grow">
-          <h3 className="font-semibold text-lg text-gray-800">
+          <h3 className="font-semibold text-lg text-[var(--color-text-primary)]">
             {chercheur.prenom} {chercheur.nom}
           </h3>
-          <p className="text-gray-600 text-sm mb-2">
+          <p className="text-[var(--color-text-secondary)] text-sm mb-2">
             {chercheur.specialisation || "Département non spécifié"}
           </p>
           <div className="flex items-center text-sm text-gray-500">

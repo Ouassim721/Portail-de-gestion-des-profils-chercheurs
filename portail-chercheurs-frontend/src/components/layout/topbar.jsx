@@ -45,7 +45,7 @@ function TopBar() {
 
   return (
     <>
-      <header className="flex items-center justify-between bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] border-b border-gray-200 p-4">
+      <header className="flex items-center justify-between bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] p-4">
         <button
           type="button"
           onClick={toggleSideMenu}

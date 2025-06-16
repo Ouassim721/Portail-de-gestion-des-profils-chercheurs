@@ -73,7 +73,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
               type="button"
               className={`px-6 py-3 sm:px-6 sm:py-3 cursor-pointer ${
                 currentPage === page
-                  ? "bg-[var(--color-primary)] text-[var(--color-bg-primary)] font-bold"
+                  ? "bg-[var(--color-primary)] text-white font-bold"
                   : "bg-[var(--color-bg-primary)] border border-gray-200 hover:bg-gray-200 hover:text-black text-[var(--color-text-primary)]"
               }`}
               onClick={() => handlePageChange(page)}

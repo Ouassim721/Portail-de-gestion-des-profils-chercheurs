@@ -60,7 +60,7 @@ function Chercheurs() {
 
       <div className="container mx-auto px-4 lg:px-16 py-8">
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-          <h1 className="text-3xl font-bold text-gray-800">
+          <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">
             {t("researchers")}
           </h1>
 
@@ -73,7 +73,7 @@ function Chercheurs() {
               placeholder={t("searchResearchersPlaceholder")}
               value={searchTerm}
               onChange={handleSearch}
-              className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="pl-10 pr-4 py-2 w-full text-[var(--color-text-secondary)] border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
         </div>

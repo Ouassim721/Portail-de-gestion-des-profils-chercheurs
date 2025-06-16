@@ -56,6 +56,8 @@ function Dashboard() {
 
     return { chercheurs: chercheursData, publications: publicationsData };
   };
+  const getCssVariable = (name) =>
+    getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
   const getLastSixMonths = () => {
     const months = [];
@@ -132,7 +134,7 @@ function Dashboard() {
 
         setDisciplinesData(processDisciplinesData(chercheursDataRes.data.data));
         setLoading(false);
-      } catch (err) {
+      } catch {
         setError(t("errorLoadingData"));
         setLoading(false);
       }
@@ -143,10 +145,10 @@ function Dashboard() {
 
   const StatCard = ({ title, value, color, icon }) => (
     <div
-      className={`p-6 bg-white rounded-xl shadow-sm border border-${color}-100 transition-all hover:shadow-md`}
+      className={`p-6 bg-[var(--color-bg-primary)] rounded-xl shadow-sm shadow-card transition-all hover:shadow-md`}
     >
       <div className="flex items-center gap-4">
-        <div className={`p-3 rounded-lg bg-${color}-50`}>
+        <div className={`p-3 rounded-lg`}>
           <svg
             className={`w-8 h-8 text-${color}-600`}
             fill="none"
@@ -157,8 +159,10 @@ function Dashboard() {
           </svg>
         </div>
         <div>
-          <h3 className="text-base font-medium text-gray-600">{title}</h3>
-          <p className="mt-2 text-4xl font-bold text-gray-900">
+          <h3 className="text-base font-medium text-[var(--color-text-secondary)]">
+            {title}
+          </h3>
+          <p className="mt-2 text-4xl font-bold text-[var(--color-text-primary)]">
             {value !== null ? value.toLocaleString() : "..."}
           </p>
         </div>
@@ -204,6 +208,8 @@ function Dashboard() {
       },
     ],
   };
+  const colorTextPrimary = getCssVariable("--color-text-primary");
+  const colorTextSecondary = getCssVariable("--color-text-secondary");
 
   const chartOptions = {
     responsive: true,
@@ -217,6 +223,7 @@ function Dashboard() {
         display: true,
         text: t("monthlyActivity"),
         font: { size: 16 },
+        color: colorTextPrimary,
       },
       tooltip: {
         backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -227,6 +234,11 @@ function Dashboard() {
         padding: 12,
         boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
       },
+      legend: {
+        labels: {
+          color: colorTextSecondary,
+        },
+      },
     },
     scales: {
       y: {
@@ -234,18 +246,32 @@ function Dashboard() {
         display: true,
         position: "left",
         grid: { color: "rgba(0, 0, 0, 0.05)" },
-        title: { display: true, text: t("researchers") },
+        ticks: {
+          color: colorTextSecondary,
+        },
+        title: {
+          display: true,
+          text: t("researchers"),
+          color: colorTextSecondary,
+        },
       },
       y1: {
         type: "linear",
         display: true,
         position: "right",
         grid: { drawOnChartArea: false },
-        title: { display: true, text: t("publications") },
+        ticks: {
+          color: colorTextSecondary,
+        },
+        title: {
+          display: true,
+          text: t("publications"),
+          color: colorTextSecondary,
+        },
       },
       x: {
         grid: { display: false },
-        ticks: { padding: 10 },
+        ticks: { padding: 10, color: colorTextSecondary },
       },
     },
   };
@@ -255,12 +281,13 @@ function Dashboard() {
     plugins: {
       legend: {
         position: "right",
-        labels: { padding: 20 },
+        labels: { padding: 20, color: colorTextSecondary },
       },
       title: {
         display: true,
         text: t("publicationDistribution"),
         font: { size: 16 },
+        color: colorTextPrimary,
       },
       tooltip: {
         callbacks: {
@@ -280,7 +307,7 @@ function Dashboard() {
   if (error) return <ErrorAlert message={error} />;
 
   return (
-    <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
+    <div className="p-8 space-y-8 bg-[gray-50] min-h-screen">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <StatCard
           title={t("statPublications")}
@@ -311,13 +338,13 @@ function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+        <div className="bg-[var(--color-bg-primary)] rounded-2xl p-6 shadow-sm shadow-card">
           <div className="h-96">
             <Bar data={chartConfig} options={chartOptions} />
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+        <div className="bg-[var(--color-bg-primary)] rounded-2xl p-6 shadow-sm ">
           <div className="h-96">
             <Pie data={pieChartConfig} options={pieOptions} />
           </div>

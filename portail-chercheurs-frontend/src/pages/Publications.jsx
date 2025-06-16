@@ -32,17 +32,18 @@ const Publications = () => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [initialLoad, setInitialLoad] = useState(true);
   const isAuthenticated = useAuth();
   const loader = useRef(null);
-  
+
   const handleObserver = useCallback(
     (entries) => {
       const target = entries[0];
-      if (target.isIntersecting && hasMore) {
+      if (target.isIntersecting && hasMore && !isLoading) {
         setPage((prev) => prev + 1);
       }
     },
-    [hasMore]
+    [hasMore, isLoading]
   );
 
   useEffect(() => {
@@ -77,6 +78,11 @@ const Publications = () => {
           page === 1 ? res.data.data : [...prev, ...res.data.data]
         );
         setHasMore(res.data.hasMore);
+        if (page === 1) setInitialLoad(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching publications:", error);
+        setHasMore(false);
       })
       .finally(() => setIsLoading(false));
   }, [page, selectedYear, selectedDiscipline, searchTerm]);
@@ -86,6 +92,7 @@ const Publications = () => {
     setPage(1);
     setPublications([]);
     setHasMore(true);
+    setInitialLoad(true);
   }, [searchTerm, selectedYear, selectedDiscipline]);
 
   useEffect(() => {
@@ -94,13 +101,13 @@ const Publications = () => {
       .then((response) => {
         setcountChercheurs(response.data.chercheurs);
         setcountPublications(response.data.publications);
-        setcountCitations(response.data.avgCitations); // Changé de 'citations' à 'avgCitations'
-        setCountDiscipline(response.data.disciplines); // Nouvelle statistique
+        setcountCitations(response.data.avgCitations);
+        setCountDiscipline(response.data.disciplines);
       })
       .catch((error) => {
         console.error(t("errorLoadingData"), error);
       });
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     axios
@@ -111,7 +118,7 @@ const Publications = () => {
       .catch((error) => {
         console.error(t("errorLoadingData"), error);
       });
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     axios
@@ -122,15 +129,17 @@ const Publications = () => {
       .catch((error) => {
         console.error(t("errorLoadingData"), error);
       });
-  }, []);
+  }, [t]);
 
-  const nombrePublications = countPublications !== null ? countPublications : "...";
+  const nombrePublications =
+    countPublications !== null ? countPublications : "...";
   const nombreChercheurs = countChercheurs !== null ? countChercheurs : "...";
-  const nombreCitations = countCitations !== null ? Math.round(countCitations) : "...";
+  const nombreCitations =
+    countCitations !== null ? Math.round(countCitations) : "...";
   const nombreDisciplines = countDiscipline !== null ? countDiscipline : "...";
-  
+
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen">
       <div className="w-full bg-[#003366] flex flex-col lg:flex-row gap-4 items-center p-4">
         <div className="w-full px-2">
           <SearchBarPublications
@@ -198,24 +207,32 @@ const Publications = () => {
           />
           <CardStatPublication
             stat={nombreCitations}
-            title={t("avgCitations")}  // Changé de "citations" à "avgCitations"
+            title={t("avgCitations")}
             icon={faQuoteRight}
           />
           <CardStatPublication
             stat={nombreDisciplines}
-            title={t("disciplines")}  // Nouveau titre
+            title={t("disciplines")}
             variant="secondary"
             icon={faBook}
           />
         </section>
         <section>
           <div className="relative">
-            <div ref={loader} className="w-full" />
-            {isLoading && (
-              <div className="flex justify-center my-4">
-                <Loader text={t("loading")} />
+            {initialLoad && (
+              <div className="flex justify-center my-8">
+                <p className="text-xl text-[var(--color-text-secondary)]">
+                  {t("loading")}
+                </p>
               </div>
             )}
+
+            {!initialLoad && publications.length === 0 && (
+              <div className="text-center py-10 text-gray-500">
+                {t("noPublicationsFound")}
+              </div>
+            )}
+
             {publications
               .filter((pub) => pub.visible)
               .map((pub) => (
@@ -224,15 +241,13 @@ const Publications = () => {
                     title={pub.titre}
                     auteur={`${pub.chercheur.prenom} ${pub.chercheur.nom}`}
                     university={pub.chercheur.university}
-                    // Afficher la première discipline ou "Aucune"
                     departement={
-                      pub.disciplines.length > 0 
-                        ? pub.disciplines[0].nom 
+                      pub.disciplines.length > 0
+                        ? pub.disciplines[0].nom
                         : t("noDiscipline")
                     }
                     description={pub.abstract}
-                    // Utiliser toutes les disciplines comme catégories
-                    category={pub.disciplines.map(d => d.nom)}
+                    category={pub.disciplines.map((d) => d.nom)}
                     date={pub.date_publication}
                     citations={pub.citation_count}
                     pdf_path={pub.pdf_path}
@@ -240,6 +255,14 @@ const Publications = () => {
                   <CommentsSection publicationId={pub.id} />
                 </div>
               ))}
+
+            {isLoading && !initialLoad && (
+              <div className="flex justify-center my-4">
+                <p className="text-xl text-gray-500">{t("loading")}</p>{" "}
+              </div>
+            )}
+
+            <div ref={loader} className="h-1" />
           </div>
         </section>
       </main>

@@ -33,12 +33,20 @@ export default function CommentsDashboard() {
 
   const getMonthLabels = () => {
     const monthNames = [
-      t("monthJan"), t("monthFeb"), t("monthMar"),
-      t("monthApr"), t("monthMay"), t("monthJun"),
-      t("monthJul"), t("monthAug"), t("monthSep"),
-      t("monthOct"), t("monthNov"), t("monthDec")
+      t("monthJan"),
+      t("monthFeb"),
+      t("monthMar"),
+      t("monthApr"),
+      t("monthMay"),
+      t("monthJun"),
+      t("monthJul"),
+      t("monthAug"),
+      t("monthSep"),
+      t("monthOct"),
+      t("monthNov"),
+      t("monthDec"),
     ];
-    
+
     return Array.from({ length: 6 }, (_, i) => {
       const date = new Date();
       date.setMonth(date.getMonth() - (5 - i));
@@ -51,7 +59,7 @@ export default function CommentsDashboard() {
       try {
         const [resStats, resChart] = await Promise.all([
           axios.get("/stats"),
-          axios.get("/stats/comments")
+          axios.get("/stats/comments"),
         ]);
 
         const lastSixMonths = Array.from({ length: 6 }, (_, i) => {
@@ -59,20 +67,22 @@ export default function CommentsDashboard() {
           date.setMonth(date.getMonth() - (5 - i));
           return {
             year: date.getFullYear(),
-            month: date.getMonth() + 1
+            month: date.getMonth() + 1,
           };
         });
 
         const formattedData = lastSixMonths.map(({ year, month }) => {
           const found = resChart.data.find(
-            item => item.year == year && item.month == month.toString().padStart(2, '0')
+            (item) =>
+              item.year == year &&
+              item.month == month.toString().padStart(2, "0")
           );
           return found ? found.count : 0;
         });
 
         setStats({
           total: resStats.data.comments,
-          chartData: formattedData
+          chartData: formattedData,
         });
         setLoading(false);
       } catch (error) {
@@ -85,7 +95,9 @@ export default function CommentsDashboard() {
   }, []);
 
   // Calcul des métriques supplémentaires
-  const averageComments = Math.round(stats.chartData.reduce((a, b) => a + b, 0) / 6);
+  const averageComments = Math.round(
+    stats.chartData.reduce((a, b) => a + b, 0) / 6
+  );
   const peakValue = Math.max(...stats.chartData);
   const peakMonth = getMonthLabels()[stats.chartData.indexOf(peakValue)];
 
@@ -110,12 +122,17 @@ export default function CommentsDashboard() {
         pointBackgroundColor: "#fff",
         pointBorderColor: "rgb(99 102 241)",
         pointBorderWidth: 2,
-      }
+      },
     ],
   };
 
   const createGradient = (ctx, chartArea) => {
-    const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+    const gradient = ctx.createLinearGradient(
+      0,
+      chartArea.bottom,
+      0,
+      chartArea.top
+    );
     gradient.addColorStop(0, "rgba(99, 102, 241, 0.2)");
     gradient.addColorStop(1, "rgba(99, 102, 241, 0.05)");
     return gradient;
@@ -131,19 +148,19 @@ export default function CommentsDashboard() {
           stepSize: 1,
           precision: 0,
           color: "#6B7280",
-          font: { weight: 500 }
+          font: { weight: 500 },
         },
         grid: { color: "rgba(0, 0, 0, 0.05)" },
-        border: { display: false }
+        border: { display: false },
       },
       x: {
         ticks: {
           color: "#6B7280",
-          font: { weight: 500 }
+          font: { weight: 500 },
         },
         grid: { display: false },
-        border: { display: false }
-      }
+        border: { display: false },
+      },
     },
     plugins: {
       legend: { display: false },
@@ -156,28 +173,40 @@ export default function CommentsDashboard() {
         padding: 12,
         boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
         callbacks: {
-          label: (context) => `${context.parsed.y} ${t("comments")}`
-        }
-      }
+          label: (context) => `${context.parsed.y} ${t("comments")}`,
+        },
+      },
     },
-    interaction: { mode: 'index', intersect: false }
+    interaction: { mode: "index", intersect: false },
   };
 
   if (loading) return <Loader />;
 
   return (
-    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
+    <div className="p-6 space-y-6 min-h-screen">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Carte Total des commentaires */}
         <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl p-5 text-white shadow-lg">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-medium opacity-90">{t("totalComments")}</h3>
+              <h3 className="text-sm font-medium opacity-90">
+                {t("totalComments")}
+              </h3>
               <p className="text-3xl font-bold mt-2">{stats.total}</p>
             </div>
             <div className="bg-white/20 p-3 rounded-full">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                />
               </svg>
             </div>
           </div>
@@ -187,12 +216,24 @@ export default function CommentsDashboard() {
         <div className="bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl p-5 text-white shadow-lg">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-medium opacity-90">{t("averageComments")}</h3>
+              <h3 className="text-sm font-medium opacity-90">
+                {t("averageComments")}
+              </h3>
               <p className="text-3xl font-bold mt-2">{averageComments}</p>
             </div>
             <div className="bg-white/20 p-3 rounded-full">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"
+                />
               </svg>
             </div>
           </div>
@@ -202,13 +243,25 @@ export default function CommentsDashboard() {
         <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl p-5 text-white shadow-lg">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-medium opacity-90">{t("peakActivity")}</h3>
+              <h3 className="text-sm font-medium opacity-90">
+                {t("peakActivity")}
+              </h3>
               <p className="text-3xl font-bold mt-2">{peakValue}</p>
               <p className="text-sm mt-1 opacity-90">{peakMonth}</p>
             </div>
             <div className="bg-white/20 p-3 rounded-full">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                />
               </svg>
             </div>
           </div>
@@ -216,10 +269,10 @@ export default function CommentsDashboard() {
       </div>
 
       {/* Graphique principal */}
-      <div className="bg-white rounded-xl p-6 shadow">
+      <div className="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] rounded-xl p-6 shadow-card">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-xl font-bold text-gray-900">{t("commentTrend")}</h2>
+            <h2 className="text-xl font-bold">{t("commentTrend")}</h2>
             <p className="text-sm text-gray-500">{t("last6Months")}</p>
           </div>
         </div>
