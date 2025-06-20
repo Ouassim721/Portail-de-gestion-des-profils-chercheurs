@@ -231,7 +231,7 @@ export default function PublicationsDashboard() {
             {stats.percentageChange >= 0 ? (
               <ArrowUpRightIcon className="w-4 h-4 mr-1" />
             ) : (
-              <ArrowUpDownIcon className="w-4 h-4 mr-1" />
+              <ArrowDownRightIcon className="w-4 h-4 mr-1" />
             )}
           </div>
         </div>

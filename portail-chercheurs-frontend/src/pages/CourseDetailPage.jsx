@@ -6,8 +6,9 @@ import {
   ArrowLeftIcon,
   ArrowDownTrayIcon,
   PencilIcon,
-  TrashIcon
+  TrashIcon,
 } from '@heroicons/react/24/solid';
+import FilePreview from '../components/FilePreview';
 
 const CourseDetailPage = () => {
     const { id, coursId } = useParams();
@@ -15,23 +16,45 @@ const CourseDetailPage = () => {
     const [course, setCourse] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [fileInfo, setFileInfo] = useState(null);
 
-    useEffect(() => {
-        const fetchCourse = async () => {
-            try {
-                setLoading(true);
-                const response = await api.get(`/chercheurs/${id}/cours/${coursId}`);
-                setCourse(response.data);
-            } catch (err) {
-                setError('Erreur lors du chargement du cours');
-                console.error(err);
-            } finally {
-                setLoading(false);
+useEffect(() => {
+    const fetchCourse = async () => {
+        try {
+            setLoading(true);
+            const response = await api.get(`/chercheurs/${id}/cours/${coursId}`);
+            console.log("Données complètes du cours:", response.data);
+            
+            setCourse(response.data);
+            
+            if (response.data.fichier) {
+                // Récupérer la baseURL depuis la configuration d'axios
+                const baseUrl = api.defaults.baseURL;
+                
+                // Construire l'URL manuellement
+                const fileUrl = response.data.fichier_url || 
+                    `${baseUrl.replace('/api', '')}/storage/${response.data.fichier}`;
+                
+                console.log("URL utilisée:", fileUrl);
+                
+                setFileInfo({
+                    name: response.data.fichier.split('/').pop(),
+                    url: fileUrl
+                });
+            } else {
+                console.log("Aucun fichier associé à ce cours");
+                setFileInfo(null);
             }
-        };
-        
-        fetchCourse();
-    }, [id, coursId]);
+        } catch (err) {
+            console.error("Erreur complète:", err);
+            console.error("Réponse d'erreur:", err.response);
+            setError('Erreur lors du chargement du cours');
+        } finally {
+            setLoading(false);
+        }
+    };
+    fetchCourse();
+}, [id, coursId]);
 
     const handleDelete = async () => {
         if (window.confirm('Voulez-vous vraiment supprimer ce cours définitivement?')) {
@@ -40,102 +63,157 @@ const CourseDetailPage = () => {
                 navigate(`/chercheurs/${id}/cours`);
             } catch (error) {
                 console.error('Erreur de suppression:', error);
+                setError('Erreur lors de la suppression du cours');
             }
         }
     };
 
     if (loading) {
         return (
-            <div className="flex justify-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            <div className="min-h-screen flex items-center justify-center bg-gray-50">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500 mx-auto mb-4"></div>
+                    <p className="text-gray-600">Chargement du cours...</p>
+                </div>
             </div>
         );
     }
 
     if (error || !course) {
         return (
-            <div className="max-w-4xl mx-auto p-6 text-center">
-                <div className="text-red-500 mb-4">{error || 'Cours non trouvé'}</div>
-                <button 
-                    onClick={() => navigate(-1)} 
-                    className="text-blue-600 hover:text-blue-800"
-                >
-                    &larr; Retour à la liste des cours
-                </button>
+            <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-6">
+                <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center">
+                    <div className="text-red-500 mb-6">
+                        <DocumentTextIcon className="h-16 w-16 mx-auto text-red-400" />
+                        <h2 className="text-xl font-bold mt-4">{error || 'Cours non trouvé'}</h2>
+                        <p className="mt-2 text-gray-600">
+                            Le cours que vous recherchez n'existe pas ou n'est plus disponible.
+                        </p>
+                    </div>
+                    <button 
+                        onClick={() => navigate(`/chercheurs/${id}/cours`)} 
+                        className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center mx-auto"
+                    >
+                        <ArrowLeftIcon className="h-5 w-5 mr-2" />
+                        Retour à la liste des cours
+                    </button>
+                </div>
             </div>
         );
     }
 
     return (
-        <div className="max-w-4xl mx-auto p-6">
-            <div className="mb-6">
-                <button 
-                    onClick={() => navigate(-1)}
-                    className="flex items-center text-blue-600 hover:text-blue-800"
-                >
-                    <ArrowLeftIcon className="h-5 w-5 mr-1" />
-                    Retour à la liste
-                </button>
-            </div>
-
-            <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-                <div className="flex justify-between items-start mb-4">
-                    <div>
-                        <h1 className="text-2xl font-bold text-gray-900">{course.titre}</h1>
-                        <p className="text-gray-600 mt-1">
-                            Publié le {new Date(course.datePublication).toLocaleDateString()} par 
-                            <span className="font-medium"> {course.chercheur?.prenom} {course.chercheur?.nom}</span>
-                        </p>
-                    </div>
-                    
-                    <span className="inline-block px-3 py-1 text-sm font-semibold text-blue-700 bg-blue-100 rounded-full">
-                        {course.matiere?.nom_matiere || 'Non spécifié'}
-                    </span>
+        <div className="min-h-screen bg-gray-50 py-8">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="mb-6">
+                    <button 
+                        onClick={() => navigate(`/chercheurs/${id}/cours`)}
+                        className="flex items-center text-blue-600 hover:text-blue-800 font-medium"
+                    >
+                        <ArrowLeftIcon className="h-5 w-5 mr-1" />
+                        Retour à la liste des cours
+                    </button>
                 </div>
 
-                <div className="prose max-w-none mb-8">
-                    <p className="text-gray-700 whitespace-pre-line">{course.description}</p>
-                </div>
-
-                <div className="border-t border-gray-200 pt-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                            <DocumentTextIcon className="w-6 h-6 text-red-500" />
-                            <div className="ml-4">
-                                <h3 className="text-lg font-medium text-gray-900">Fichier attaché</h3>
-                                <p className="text-gray-500 text-sm">
-                                    {course.fichier.split('/').pop()}
-                                </p>
+                <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
+                    <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+                        <div className="flex flex-col md:flex-row md:justify-between md:items-start">
+                            <div>
+                                <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{course.titre}</h1>
+                                <div className="mt-2 flex flex-wrap items-center text-gray-600">
+                                    <span>
+                                        Publié le {new Date(course.datePublication).toLocaleDateString('fr-FR')} par
+                                    </span>
+                                    <span className="font-medium ml-1">
+                                        {course.chercheur?.prenom} {course.chercheur?.nom}
+                                    </span>
+                                </div>
                             </div>
+                            
+                            <span className="mt-4 md:mt-0 inline-block px-3 py-1 text-sm font-semibold text-blue-700 bg-blue-100 rounded-full">
+                                {course.matiere?.nom_matiere || 'Non spécifié'}
+                            </span>
                         </div>
-                        
-                        <a
-                            href={`${import.meta.env.VITE_API_URL}/${course.fichier}`}
-                            download
-                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center"
-                        >
-                            <ArrowDownTrayIcon className="h-5 w-5 mr-2" />
-                            Télécharger
-                        </a>
+                    </div>
+
+                    <div className="p-6">
+                        <div className="prose max-w-none mb-8">
+                            <h3 className="text-lg font-medium text-gray-900 mb-3">Description du cours</h3>
+                            <p className="text-gray-700 whitespace-pre-line bg-gray-50 p-4 rounded-lg border border-gray-200">
+                                {course.description || "Aucune description fournie pour ce cours."}
+                            </p>
+                        </div>
+
+                        <div className="border-t border-gray-200 pt-6">
+                            <div className="mb-6">
+                                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4">
+                                    <h3 className="text-xl font-medium text-gray-900 mb-3 sm:mb-0">
+                                        Fichier attaché
+                                    </h3>
+                                    <a
+                                        href={fileInfo?.url}
+                                        download
+                                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center text-sm w-full sm:w-auto justify-center"
+                                    >
+                                        <ArrowDownTrayIcon className="h-4 w-4 mr-2" />
+                                        Télécharger le document
+                                    </a>
+                                </div>
+                                
+                                {fileInfo && (
+                                    <FilePreview 
+                                        file={{ 
+                                            name: fileInfo.name, 
+                                            size: 0 // La taille n'est pas disponible dans les données actuelles
+                                        }} 
+                                        onRemove={() => {}} // Pas de suppression dans ce contexte
+                                    />
+                                )}
+                            </div>
+
+                            {/* Visualiseur PDF */}
+                            {fileInfo && (
+                                <div className="mt-8">
+                                    <h3 className="text-lg font-medium text-gray-900 mb-3">Aperçu du document</h3>
+                                    <div className="border rounded-lg overflow-hidden h-[500px] flex items-center justify-center bg-gray-50">
+                                        <iframe 
+                                            src={fileInfo.url} 
+                                            className="w-full h-full"
+                                            title="Aperçu du document"
+                                        />
+                                    </div>
+                                </div>
+                            )}
+
+                            {!fileInfo && (
+                                <div className="mt-8 border rounded-lg overflow-hidden bg-gray-50 p-6 text-center">
+                                    <DocumentTextIcon className="w-16 h-16 text-gray-400 mx-auto" />
+                                    <p className="mt-4 text-lg font-medium text-gray-700">Aucun document disponible</p>
+                                    <p className="text-gray-600">
+                                        Ce cours ne contient pas de fichier PDF associé.
+                                    </p>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="flex justify-end space-x-3">
-                <Link
-                    to={`/chercheurs/${id}/cours/${coursId}/edit`}
-                    className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 flex items-center"
-                >
-                    <PencilIcon className="h-5 w-5 mr-2" />
-                    Modifier
-                </Link>
-                <button
-                    onClick={handleDelete}
-                    className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center"
-                >
-                    <TrashIcon className="h-5 w-5 mr-2" />
-                    Supprimer
-                </button>
+                <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4">
+                    <Link
+                        to={`/chercheurs/${id}/cours/${coursId}/edit`}
+                        className="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 flex items-center justify-center transition-colors"
+                    >
+                        <PencilIcon className="h-5 w-5 mr-2" />
+                        Modifier ce cours
+                    </Link>
+                    <button
+                        onClick={handleDelete}
+                        className="px-5 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center justify-center transition-colors"
+                    >
+                        <TrashIcon className="h-5 w-5 mr-2" />
+                        Supprimer ce cours
+                    </button>
+                </div>
             </div>
         </div>
     );

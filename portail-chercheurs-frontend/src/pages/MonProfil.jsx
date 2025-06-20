@@ -9,17 +9,27 @@ function MonProfil() {
   const [chercheurData, setChercheurData] = useState(null);
   const [publicationsData, setPublicationsData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [refreshCounter, setRefreshCounter] = useState(0);
 
   const handleUpdate = (updatedData) => {
     setChercheurData(updatedData);
   };
+  
   const toggleVisibility = async (publicationId) => {
     try {
       await axios.put(`/publications/${publicationId}/toggle-visibility`);
+      refreshPublications();
+    } catch (error) {
+      console.error("Erreur lors du changement de visibilité :", error);
+    }
+  };
+
+  const refreshPublications = async () => {
+    try {
       const publicationsRes = await axios.get("/profile/publications");
       setPublicationsData(publicationsRes.data.publications);
     } catch (error) {
-      console.error("Erreur lors du changement de visibilité :", error);
+      console.error("Erreur lors du rafraîchissement des publications :", error);
     }
   };
 
@@ -40,7 +50,7 @@ function MonProfil() {
     };
 
     fetchData();
-  }, []);
+  }, [refreshCounter]);
 
   if (loading) return <Loader />;
   if (!chercheurData) return <p>{t("profileLoadingError")}</p>;
@@ -53,6 +63,7 @@ function MonProfil() {
       onUpdate={handleUpdate}
       isOwner={true}
       onToggleVisibility={toggleVisibility}
+      refreshPublications={() => setRefreshCounter(prev => prev + 1)}
     />
   );
 }

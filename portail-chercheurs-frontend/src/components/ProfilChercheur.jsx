@@ -31,6 +31,7 @@ function ProfilChercheur({
   isOwner = false,
   onUpdate,
   onToggleVisibility,
+  refreshPublications
 }) {
   const { t } = useContext(LanguageContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -170,6 +171,8 @@ function ProfilChercheur({
         onToggleView={() => setShowAllPublications(!showAllPublications)}
         isExpanded={showAllPublications}
         onToggleVisibility={onToggleVisibility}
+        refreshPublications={refreshPublications}
+        isOwner={isOwner}
       />
 
       {isOwner && (

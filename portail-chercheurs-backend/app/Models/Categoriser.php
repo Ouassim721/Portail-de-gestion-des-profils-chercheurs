@@ -10,8 +10,5 @@ class Categoriser extends Pivot
     
     public $incrementing = false;
     public $timestamps = false; 
-    protected $fillable = [
-        'publication_id',
-        'discipline_id'
-    ];
+    protected $primaryKey = ['publication_id', 'discipline_id'];
 }

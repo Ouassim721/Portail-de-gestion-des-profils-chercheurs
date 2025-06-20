@@ -200,3 +200,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/categoriser/publication/{id}', [\App\Http\Controllers\CategoriserController::class, 'forPublication']);
     Route::get('/categoriser/discipline/{id}', [\App\Http\Controllers\CategoriserController::class, 'forDiscipline']);
 });
+
+//  les stats pédagogiques
+Route::get('/stats/pedagogical', [StatisticsController::class, 'getPedagogicalStats']);
+

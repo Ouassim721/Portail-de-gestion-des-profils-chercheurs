@@ -6,6 +6,8 @@ use App\Models\Chercheur;
 use App\Models\Publication;
 use App\Models\Discipline;
 use App\Models\Comment;
+use App\Models\Matiere;
+use App\Models\Cours;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
@@ -139,4 +141,60 @@ class StatisticsController extends Controller
             ], 500);
         }
     }
+public function getPedagogicalStats()
+{
+    try {
+        // Statistiques globales
+        $totalMatieres = Matiere::count();
+        $totalCours = Cours::count();
+        $chercheursAvecCours = Chercheur::whereHas('cours')->count();
+        
+        // Top 10 matières avec plus de cours
+        $topMatieres = Matiere::withCount('cours')
+            ->orderBy('cours_count', 'desc')
+            ->take(10)
+            ->get();
+        
+        // Top 10 chercheurs avec plus de cours et nombre de matières
+        $topChercheurs = Chercheur::withCount(['cours', 'matieres'])
+            ->orderBy('cours_count', 'desc')
+            ->take(10)
+            ->get();
+            
+        // Distribution des cours par mois
+        $coursParMois = Cours::select(
+                DB::raw("DATE_FORMAT(datePublication, '%Y-%m') as mois"),
+                DB::raw('COUNT(*) as total')
+            )
+            ->groupBy('mois')
+            ->orderBy('mois', 'asc')
+            ->get();
+            
+        // Distribution des cours par matière
+        $coursParMatiere = Matiere::withCount('cours')
+            ->orderBy('cours_count', 'desc')
+            ->get();
+
+        return response()->json([
+            'totalMatieres' => $totalMatieres,
+            'totalCours' => $totalCours,
+            'chercheursAvecCours' => $chercheursAvecCours,
+            'topMatieres' => $topMatieres,
+            'topChercheurs' => $topChercheurs,
+            'coursParMois' => $coursParMois,
+            'coursParMatiere' => $coursParMatiere,
+        ]);
+        
+    } catch (\Exception $e) {
+        \Log::error('Erreur stats pédagogiques', [
+            'message' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ]);
+
+        return response()->json([
+            'error'   => 'Erreur technique lors de la récupération des stats pédagogiques.',
+            'details' => $e->getMessage()
+        ], 500);
+    }
+}
 }

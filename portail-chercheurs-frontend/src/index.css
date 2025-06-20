@@ -145,6 +145,21 @@ select {
   background: var(--color-error);
   color: white;
 }
+
 .shadow-card {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.discipline-attacher {
+  display: flex;
+  margin-top: 10px;
+  gap: 8px;
+}
+
+.discipline-tag {
+  background-color: var(--color-primary-light);
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  margin-right: 5px;
 }

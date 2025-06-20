@@ -18,29 +18,42 @@ class PublicationController extends Controller
     /**
      * Affiche la liste des publications
      */
-    public function index(Request $request)
-    {
-        $query = Publication::query()->with(['chercheur', 'disciplines']);
+   public function index(Request $request)
+{
+    $query = Publication::query()->with(['chercheur', 'disciplines']);
 
-        if ($request->has('year')) {
-            $query->whereYear('date_publication', $request->year);
-        }
+    // Nouveau filtre par chercheur_id
+    if ($request->has('chercheur_id')) {
+        $query->where('chercheur_id', $request->chercheur_id);
+    }
 
-        // Nouveau filtre de recherche
-        if ($request->has('search')) {
-            $searchTerm = '%' . $request->search . '%';
-            $query->where('titre', 'LIKE', $searchTerm);
-        }
+    if ($request->has('year')) {
+        $query->whereYear('date_publication', $request->year);
+    }
 
-        $page = $request->input('page', 1);
-        $limit = $request->input('limit', 10);
-        $publications = $query->paginate($limit, ['*'], 'page', $page);
+    if ($request->has('search')) {
+        $searchTerm = '%' . $request->search . '%';
+        $query->where('titre', 'LIKE', $searchTerm);
+    }
 
+    // Gestion du cas "all" pour le limit
+    if ($request->has('limit') && $request->limit === 'all') {
+        $publications = $query->get();
         return response()->json([
-            'data' => $publications->items(),
-            'hasMore' => $publications->hasMorePages(),
+            'data' => $publications,
+            'hasMore' => false,
         ]);
     }
+
+    $page = $request->input('page', 1);
+    $limit = $request->input('limit', 10);
+    $publications = $query->paginate((int)$limit, ['*'], 'page', $page);
+
+    return response()->json([
+        'data' => $publications->items(),
+        'hasMore' => $publications->hasMorePages(),
+    ]);
+}
 
     /**
      * Affiche le formulaire de création
@@ -165,22 +178,15 @@ class PublicationController extends Controller
             ], 500);
         }
     }
-    public function profilePublications(Request $request)
-    {
-
-        $chercheur = JWTAuth::user();
-
-        if (!$chercheur) {
-            return response()->json(['message' => 'Non autorisé'], 401);
-        }
-
-        // Charger les disciplines associées
-        $publications = Publication::where('chercheur_id', $chercheur->id)
-            ->with('disciplines') // Charger les disciplines
-            ->get();
-
-        return response()->json(['publications' => $publications], 200);
-    }
+// PublicationController.php
+public function profilePublications(Request $request)
+{
+    $chercheur = JWTAuth::user();
+    $publications = Publication::where('chercheur_id', $chercheur->id)
+        ->with('disciplines') // Charge les disciplines associées
+        ->get();
+    return response()->json(['publications' => $publications], 200);
+}
 
     public function getPublicationYears()
     {

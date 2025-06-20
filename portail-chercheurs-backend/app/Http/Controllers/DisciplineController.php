@@ -9,9 +9,17 @@ use App\Models\Categoriser;
 class DisciplineController extends Controller
 {
     // GET /api/disciplines
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Discipline::all(), 200);
+        $search = $request->query('search');
+        
+        $query = Discipline::query();
+        
+        if ($search) {
+            $query->where('nom', 'LIKE', '%' . $search . '%');
+        }
+        
+        return response()->json($query->get(), 200);
     }
 
     // POST /api/disciplines
@@ -71,32 +79,37 @@ class DisciplineController extends Controller
     }
 
     public function stats()
-    {
-        try {
-            $stats = Discipline::query()
-                ->select('disciplines.id', 'disciplines.nom')
-                // Utiliser la relation many-to-many via la table pivot
-                ->withCount(['publications' => function ($query) {
-                    $query->distinct(); // Éviter les doublons
-                }])
-                ->withSum(['publications' => function ($query) {
-                    $query->select(\DB::raw('SUM(citation_count)'))
-                          ->distinct(); // Somme distincte
-                }], 'citation_count') 
-                ->get();
+{
+    try {
+        $stats = Discipline::query()
+            ->select('disciplines.id', 'disciplines.nom')
+            ->withCount(['publications' => function ($query) {
+                $query->distinct(); // Correct pour le comptage
+            }])
+            // Correction : Supprimer le distinct() pour withSum
+            ->withSum('publications', 'citation_count') 
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'nom' => $item->nom,
+                    'publications_count' => $item->publications_count,
+                    'total_citations' => $item->publications_sum_citation_count
+                ];
+            });
 
-            return response()->json($stats, 200);
-        } catch (\Exception $e) {
-            \Log::error('Erreur stats disciplines', [
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
+        return response()->json($stats, 200);
+    } catch (\Exception $e) {
+        \Log::error('Erreur stats disciplines', [
+            'message' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ]);
 
-            return response()->json([
-                'error'   => 'Erreur technique lors de la récupération des stats.',
-                'details' => $e->getMessage()
-            ], 500);
-        }
+        return response()->json([
+            'error'   => 'Erreur technique lors de la récupération des stats.',
+            'details' => $e->getMessage()
+        ], 500);
     }
+}
 }
 

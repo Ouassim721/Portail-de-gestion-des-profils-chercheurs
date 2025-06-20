@@ -39,6 +39,7 @@ import CoursesPage from "./pages/CoursesPage";
 import SubjectsPage from "./pages/SubjectsPage";
 import CourseDetailPage from "./pages/CourseDetailPage";
 import CourseForm from "./components/cours/CourseForm";
+import AllCoursesPage from './pages/AllCoursesPage';
 
 function App() {
   const userId = localStorage.getItem("userId");
@@ -65,6 +66,7 @@ function App() {
               <Route path="/about" element={<AboutPage />} />
               <Route path="/chercheurs-stats" element={<ResearcherStats />} />
               <Route path="/chercheurs/:id/cours" element={<CoursesPage />} />
+              <Route path="/cours" element={<AllCoursesPage />} />
               <Route
                 path="/chercheurs/:id/cours/new"
                 element={<CourseForm />}

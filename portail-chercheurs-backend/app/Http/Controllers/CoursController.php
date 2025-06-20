@@ -25,44 +25,59 @@ class CoursController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        $request->validate([
-            'titre' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'datePublication' => 'required|date',
-            'fichier' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
-            'id_chercheur' => 'required|exists:chercheurs,id',
-            'id_matiere' => 'required|exists:matieres,id',
-        ]);
+{
+    $request->validate([
+        'titre' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'datePublication' => 'required|date',
+        'fichier' => 'required|file|mimes:pdf|max:10240', // Max 10MB, PDF uniquement
+        'id_chercheur' => 'required|exists:chercheurs,id',
+        'id_matiere' => 'required|exists:matieres,id',
+    ]);
 
-        $filePath = $request->file('fichier')->store('cours', 'public');
-
-        $cours = Cours::create([
-            'titre' => $request->titre,
-            'description' => $request->description,
-            'datePublication' => $request->datePublication,
-            'fichier' => $request->file('fichier')->store('cours', 'public'),
-            'id_chercheur' => $request->id_chercheur,
-            'id_matiere' => $request->id_matiere,
-        ]);
-
-        return response()->json($cours, Response::HTTP_CREATED);
+    // Stockage du fichier
+    if ($request->hasFile('fichier')) {
+        $file = $request->file('fichier');
+        $filePath = $file->store('cours', 'public');
+        
+        // Stocker seulement le chemin relatif
+        $relativePath = str_replace('public/', '', $filePath);
     }
 
+    $cours = Cours::create([
+        'titre' => $request->titre,
+        'description' => $request->description,
+        'datePublication' => $request->datePublication,
+        'fichier' => $relativePath, 
+        'id_chercheur' => $request->id_chercheur,
+        'id_matiere' => $request->id_matiere,
+    ]);
+
+    return response()->json([
+        'message' => 'Cours créé avec succès',
+        'cours' => $cours
+    ], Response::HTTP_CREATED);
+}
     /**
      * Display the specified resource.
      */
-    public function show(Cours $cours)
-    {
-        $cours = Cours::with(['chercheur', 'matiere'])->find($cours->id_cours);
+public function show($id)
+{
+    $cours = Cours::find($id);
 
-        if (!$cours) {
-            return response()->json(['message' => 'Cours non trouvé.'], Response::HTTP_NOT_FOUND);
-        }
-
-        return response()->json($cours, Response::HTTP_OK);
+    if (!$cours) {
+        return response()->json(['message' => 'Cours non trouvé.'], 404);
     }
 
+    if ($cours->fichier) {
+        // Génération correcte de l'URL
+        $cours->fichier_url = Storage::disk('public')->url($cours->fichier);
+    } else {
+        $cours->fichier_url = null;
+    }
+
+    return response()->json($cours);
+}
     /**
      * Update the specified resource in storage.
      */

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom"; // Correction cruciale ici
 import axios from "../axios";
 import Loader from "../components/ui/Loader";
 import ProfilChercheur from "../components/ProfilChercheur";
@@ -11,28 +11,37 @@ function ProfilChercheurPublic() {
   const [publicationsData, setPublicationsData] = useState([]);
   const [loadingPublications, setLoadingPublications] = useState(true);
   const [disciplines, setDisciplines] = useState([]);
+  const [disciplinesLoaded, setDisciplinesLoaded] = useState(false); // Nouvel état
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         setLoadingPublications(true);
+        // Réinitialisation des données
+        setChercheurData(null);
+        setPublicationsData([]);
+        setDisciplines([]);
+        setDisciplinesLoaded(false);
 
-        // Récupération des données du chercheur
+        // Chargement du chercheur
         const chercheurResponse = await axios.get(`/chercheurs/${id}`);
         setChercheurData(chercheurResponse.data);
 
-        // Récupération des publications du chercheur avec les disciplines
+        // Chargement des publications
         const publicationsResponse = await axios.get(
-          `/publications?chercheur_id=${id}`
-        );
+  `/publications?chercheur_id=${id}&limit=all` 
+);
         setPublicationsData(publicationsResponse.data.data || []);
 
-        // Récupération des disciplines pour le filtre
-        const disciplinesResponse = await axios.get("/disciplines");
-        setDisciplines(disciplinesResponse.data);
+        // Chargement unique des disciplines
+        if (!disciplinesLoaded) {
+          const disciplinesResponse = await axios.get("/disciplines");
+          setDisciplines(disciplinesResponse.data);
+          setDisciplinesLoaded(true);
+        }
       } catch (error) {
-        console.error("Erreur lors du chargement des données :", error);
+        console.error("Erreur lors du chargement :", error);
       } finally {
         setLoading(false);
         setLoadingPublications(false);
@@ -40,13 +49,14 @@ function ProfilChercheurPublic() {
     };
 
     fetchData();
-  }, [id]);
+  }, [id]); // Dépendances
 
   if (loading) return <Loader />;
-  if (!chercheurData) return <p>Erreur lors du chargement du profil public</p>;
+  if (!chercheurData) return <p>Profil non trouvé</p>;
 
   return (
     <ProfilChercheur
+    key={chercheurData.id}
       isPublic={true}
       chercheur={chercheurData}
       publications={publicationsData}

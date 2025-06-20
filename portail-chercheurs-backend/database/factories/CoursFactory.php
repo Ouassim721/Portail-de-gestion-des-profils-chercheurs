@@ -17,15 +17,21 @@ class CoursFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
-    {
-        return [
-            'titre' => $this->faker->sentence(3),
-            'description' => $this->faker->paragraph(2),
-            'datePublication' => $this->faker->dateTimeBetween('-2 years', 'now')->format('Y-m-d'),
-            'fichier' => 'cours_' . $this->faker->numberBetween(1, 1000) . '.pdf',
-            'id_chercheur' => \App\Models\Chercheur::inRandomOrder()->first()->id,
-            'id_matiere' => \App\Models\Matiere::inRandomOrder()->first()->id_matiere
-        ];
-    }
+public function definition(): array
+{
+    // Créer un nom de fichier unique
+    $fileName = 'cours_' . $this->faker->unique()->numberBetween(1, 1000) . '.pdf';
+    
+    // Chemin complet dans le stockage
+    $filePath = 'cours/' . $fileName;
+    
+    return [
+        'titre' => $this->faker->sentence(3),
+        'description' => $this->faker->paragraph(2),
+        'datePublication' => $this->faker->dateTimeBetween('-2 years', 'now')->format('Y-m-d'),
+        'fichier' => $filePath, // Chemin relatif avec dossier
+        'id_chercheur' => Chercheur::inRandomOrder()->first()->id,
+        'id_matiere' => Matiere::inRandomOrder()->first()->id_matiere
+    ];
+}
 }

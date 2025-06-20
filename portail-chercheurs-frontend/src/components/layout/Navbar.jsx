@@ -41,6 +41,7 @@ function Navbar({ sticky = false }) {
     [t("researchers")]: "/chercheurs",
     [t("publications")]: "/publications",
     [t("news")]: "/actualites",
+    [t("courses")]: "/cours",
     [t("about")]: "/about",
   };
 
