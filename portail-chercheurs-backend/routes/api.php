@@ -160,12 +160,17 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/notifications/mark-as-read', [NotificationController::class, 'markAsRead']);
 });
 
-Route::middleware('auth:api')->group(function () {
+/*Route::middleware('auth:api')->group(function () {
     // Matières
     Route::apiResource('matieres', MatiereController::class);
     // Cours
     Route::apiResource('cours', CoursController::class);
-});
+});*/
+// Matières
+Route::apiResource('matieres', MatiereController::class);
+// Cours
+Route::apiResource('cours', CoursController::class);
+
 
 Route::apiResource('enseigner', EnseignerController::class)
     ->only(['index', 'store']);
@@ -203,4 +208,3 @@ Route::middleware('auth:api')->group(function () {
 
 //  les stats pédagogiques
 Route::get('/stats/pedagogical', [StatisticsController::class, 'getPedagogicalStats']);
-

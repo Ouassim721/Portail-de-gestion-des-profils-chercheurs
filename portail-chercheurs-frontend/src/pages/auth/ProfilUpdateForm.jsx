@@ -46,7 +46,7 @@ const ProfilUpdateForm = () => {
     <>
       <ProgressBar currentStep={1} />
       <div className="max-w-xl mx-auto mt-10 bg-[var(--color-bg-primary)] p-6 rounded-2xl shadow">
-        <h2 className="text-2xl font-bold mb-4">
+        <h2 className="text-2xl font-bold mb-4 text-[var(--color-text-primary)]">
           {t("completeProfileFormTitle")}
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -60,7 +60,7 @@ const ProfilUpdateForm = () => {
               name="nom"
               value={form.nom}
               disabled
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded text-[var(--color-text-secondary)]"
             />
           </div>
           {/* Prénom */}
@@ -73,7 +73,7 @@ const ProfilUpdateForm = () => {
               name="prenom"
               value={form.prenom}
               disabled
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded text-[var(--color-text-secondary)]"
             />
           </div>
           {/* Scopus ID */}
@@ -88,7 +88,7 @@ const ProfilUpdateForm = () => {
               required
               value={form.scopus_author_id}
               onChange={handleChange}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded text-[var(--color-text-secondary)]"
             />
           </div>
           {/* Bouton de soumission */}

@@ -31,7 +31,7 @@ function ProfilChercheur({
   isOwner = false,
   onUpdate,
   onToggleVisibility,
-  refreshPublications
+  refreshPublications,
 }) {
   const { t } = useContext(LanguageContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -47,7 +47,7 @@ function ProfilChercheur({
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
       <section className="col-span-3 p-8 rounded shadow-sm bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] border-gray-200">
         <div className="col-span-3 relative flex flex-col sm:flex-row gap-2 sm:gap-12 lg:gap-16">
           <div className="flex-shrink-0">

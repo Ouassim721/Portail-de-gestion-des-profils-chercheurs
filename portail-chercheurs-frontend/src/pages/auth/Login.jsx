@@ -136,7 +136,7 @@ function Connexion() {
                   />
                   <div
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-2 cursor-pointer"
+                    className="absolute right-2 cursor-pointer text-[var(--color-text-secondary)]"
                   >
                     {showPassword ? (
                       <MdVisibilityOff size={20} />
@@ -156,7 +156,12 @@ function Connexion() {
                     checked={remember}
                     onChange={(e) => setRemember(e.target.checked)}
                   />
-                  <label htmlFor="rememberMe">{t("rememberMe")}</label>
+                  <label
+                    className="text-[var(--color-text-primary)]"
+                    htmlFor="rememberMe"
+                  >
+                    {t("rememberMe")}
+                  </label>
                 </div>
                 <Link
                   to="/mot-de-passe-oublie"

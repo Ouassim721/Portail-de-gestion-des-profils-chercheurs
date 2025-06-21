@@ -1,6 +1,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { useState, useEffect, useContext } from "react";
 import axios from "../../axios";
+import Button from "../ui/Button";
 import { LanguageContext } from "../../contexts/LanguageContext";
 import "./Modal.css";
 
@@ -201,7 +202,7 @@ export default function UpdateProfileModal({
                     onChange={(e) => setNom(e.target.value)}
                     placeholder={t("lastNamePlaceholder")}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    className="w-full px-4 py-2 border text-[var(--color-text-primary)] border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                   />
                 </div>
                 {/** Prénom **/}
@@ -215,7 +216,7 @@ export default function UpdateProfileModal({
                     onChange={(e) => setPrenom(e.target.value)}
                     placeholder={t("firstNamePlaceholder")}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    className="w-full px-4 py-2 text-[var(--color-text-primary)] border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                   />
                 </div>
                 {/** Specialisation **/}
@@ -228,7 +229,7 @@ export default function UpdateProfileModal({
                     value={specialisation}
                     onChange={(e) => setSpecialisation(e.target.value)}
                     placeholder={t("specialisationPlaceholder")}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    className="w-full px-4 py-2 text-[var(--color-text-primary)] border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                   />
                 </div>
                 {/** À propos **/}
@@ -241,25 +242,17 @@ export default function UpdateProfileModal({
                     onChange={(e) => setAbout(e.target.value)}
                     placeholder={t("aboutPlaceholder")}
                     rows="3"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all min-h-[100px]"
+                    className="w-full px-4 py-2 text-[var(--color-text-primary)] border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all min-h-[100px]"
                   ></textarea>
                 </div>
               </div>
 
               <div className="flex flex-col-reverse sm:flex-row justify-between gap-3 mt-8 pt-5 border-t border-gray-200">
-                <button
-                  type="button"
-                  className="px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors flex items-center justify-center gap-2"
-                >
-                  {t("importCV")}
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="px-5 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
+                <Button variant="secondary">{t("importCV")}</Button>
+                <Button disabled={isSubmitting}>
+                  {" "}
                   {isSubmitting ? `…${t("saving")}...` : t("saveButton")}
-                </button>
+                </Button>
               </div>
             </div>
           </form>

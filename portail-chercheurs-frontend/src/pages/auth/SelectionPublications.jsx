@@ -160,7 +160,7 @@ const SelectionPublications = () => {
       <div className="max-w-5xl mx-auto mt-10 p-4">
         <div className="flex justify-between items-center mb-6">
           <div className="flex space-x-4">
-            <p className="text-gray-600">
+            <p className="text-[var(--color-text-secondary)]">
               {publications.length} publications trouvées | {selected.length}{" "}
               sélectionnées
             </p>
@@ -207,7 +207,7 @@ const SelectionPublications = () => {
                   key={pub.identifiant} // Utilisation de l'identifiant unique
                   className={`border rounded-lg p-4 transition-all ${
                     isSelected
-                      ? "border-blue-500 bg-blue-50"
+                      ? "border-blue-500 bg-[var(--color-bg-primary)]"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
@@ -219,10 +219,10 @@ const SelectionPublications = () => {
                       className="mt-1"
                     />
                     <div className="flex-1">
-                      <h3 className="font-semibold text-gray-800">
+                      <h3 className="font-semibold text-[var(--color-text-primary)]">
                         {pub["dc:title"] || pub.titre}
                       </h3>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className="text-sm text-[var(--color-text-secondary)] mt-1">
                         {Array.isArray(pub["dc:creator"])
                           ? pub["dc:creator"].join(", ")
                           : pub["dc:creator"] || pub.auteurs}
