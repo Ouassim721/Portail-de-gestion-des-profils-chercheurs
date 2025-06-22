@@ -466,7 +466,6 @@ export const translations = {
   confirmDeleteCourse: "Supprimer ce cours définitivement ?",
   errorDeletingCourse: "Erreur de suppression :",
   unspecified: "Non spécifié",
-  noDescription: "Aucune description fournie pour ce cours.",
   viewDetails: "Voir détails",
   edit: "Modifier",
   delete: "Supprimer",
@@ -578,6 +577,13 @@ export const translations = {
   instructorByLabel: "Par {first}} {last}}",
   publishedOnLabel: "Publié le {date}}",
   saveButton: "Enregistrer",
+  createNewSubject: "Créer une nouvelle matière",
+  subjectNamePlaceholder: "Entrez le nom de la matière",
+  createAndAttach: "Créer et attacher",
+  createNew: "Créer nouvelle",
+  errorCreatingSubject: "Erreur lors de la création de la matière",
+  subjectNameRequired: "Veuillez entrer un nom pour la matière",
+  errorOccurredCreating: "Une erreur est survenue lors de la création",
   subjectsTaught:        "Matières enseignées"
   },
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1034,7 +1040,6 @@ export const translations = {
   confirmDeleteCourse: "Confirm delete course:",
   errorDeletingCourse: "Error deleting course:",
   unspecified: "Non spécifié",
-  noDescription: "Aucune description fournie pour ce cours.",
   viewDetails: "Voir détails",
   edit: "Modifier",
   delete: "Supprimer",
@@ -1146,6 +1151,13 @@ export const translations = {
   instructorByLabel: "By {first}} {last}}",
   publishedOnLabel: "Published on {date}}",
   saveButton : "Save",
+  createNewSubject: "Create New Subject",
+  SubjectNamePlaceholder: "Subject Name",
+  createAndAttach: "Create and Attach",
+  createNew: "Create New",
+  errorCreatingSubject: "Error creating subject",
+  subjectNameRequired: "Subject name is required",
+  errorOccurredCreating: "An error occurred while creating the subject",
   subjectsTaught:        "Taught Subjects"
   }
 };

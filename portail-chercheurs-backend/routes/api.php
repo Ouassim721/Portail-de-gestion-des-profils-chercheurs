@@ -208,3 +208,9 @@ Route::middleware('auth:api')->group(function () {
 
 //  les stats pédagogiques
 Route::get('/stats/pedagogical', [StatisticsController::class, 'getPedagogicalStats']);
+
+Route::middleware('auth:api')->post(
+    'chercheurs/{id}/matieres/attach-or-create',
+    [ChercheurController::class, 'attachOrCreateMatiere']
+);
+

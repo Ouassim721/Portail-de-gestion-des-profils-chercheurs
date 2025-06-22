@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { LanguageContext } from "../../contexts/LanguageContext";
 
-const SubjectForm = ({ allSubjects, currentSubjects, onAttach }) => {
+const SubjectForm = ({ allSubjects, currentSubjects, onAttach, onCreateNew }) => {
   const { t } = useContext(LanguageContext);
   const [selectedSubject, setSelectedSubject] = useState("");
   const [error, setError] = useState("");
@@ -62,7 +62,14 @@ const SubjectForm = ({ allSubjects, currentSubjects, onAttach }) => {
           {error && <p className="mt-1 text-red-500 text-sm">{error}</p>}
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex justify-between">
+          <button
+            type="button"
+            onClick={onCreateNew}
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          >
+            {t("createNew")}
+          </button>
           <button
             type="submit"
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
