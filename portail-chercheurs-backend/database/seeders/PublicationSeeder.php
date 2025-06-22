@@ -3,11 +3,14 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Publication;
 
 class PublicationSeeder extends Seeder
 {
     public function run(): void
     {
-        \App\Models\Publication::factory(100)->create();
+        Publication::factory()->count(50)->create();
     }
 }

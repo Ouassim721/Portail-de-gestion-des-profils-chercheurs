@@ -98,6 +98,9 @@ Route::get('/chercheurs/{id}/publications', [PublicationController::class, 'getP
 // Lister les publications
 Route::get('/publications', [PublicationController::class, 'index']);
 
+// Lister une publications spécifique
+Route::get('/publications/{id}', [PublicationController::class, 'show']);
+
 // Récupérer liste des annees de publication
 Route::get('/publications/years', [PublicationController::class, 'getPublicationYears']);
 
@@ -213,4 +216,3 @@ Route::middleware('auth:api')->post(
     'chercheurs/{id}/matieres/attach-or-create',
     [ChercheurController::class, 'attachOrCreateMatiere']
 );
-

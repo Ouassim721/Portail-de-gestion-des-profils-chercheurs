@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useContext } from "react";
 import {
-  faFilter,
   faChevronDown,
   faUsers,
   faBook,
@@ -237,6 +236,7 @@ const Publications = () => {
               .map((pub) => (
                 <div key={pub.id} className="mb-10">
                   <CardPublication
+                    id={pub.id}
                     title={pub.titre}
                     auteur={`${pub.chercheur.prenom} ${pub.chercheur.nom}`}
                     university={pub.chercheur.university}

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
 import api from "../axios";
 import SubjectForm from "../components/matieres/SubjectForm";
 import SubjectList from "../components/matieres/SubjectList";
