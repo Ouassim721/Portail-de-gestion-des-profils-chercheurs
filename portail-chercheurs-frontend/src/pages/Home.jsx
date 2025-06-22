@@ -263,7 +263,7 @@ function Home() {
         </div> */}
 
         {/* Section Publications Récentes */}
-        <h2 className="text-2xl font-bold mb-8 text-center">
+        <h2 className="text-2xl font-bold mb-8 text-center text-[var(--color-text-primary)]">
           {t("recentPublications")}
         </h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
@@ -281,14 +281,14 @@ function Home() {
 
         <div className="text-center">
           <button
-            className="border-2 border-[var(--color-primary)] text-[var(--color-primary)]font-medium px-8 py-4 rounded-xl hover:bg-[var(--color-primary)] hover:text-[var(--color-white)] transition"
+            className="border-2 border-[var(--color-primary)] text-[var(--color-primary)] font-medium px-8 py-4 rounded-xl hover:bg-[var(--color-primary)] hover:text-[var(--color-white)] transition"
             onClick={() => navigate("/publications")}
           >
             {t("viewMorePublications")}
           </button>
         </div>
       </section>
-      <section className="bg-[var(--color-primary)] py-12 lg:py-24 px-4 md:px-12 gap-8 lg:px-20 flex flex-col lg:flex-row lg:justify-between">
+      <section className="bg-blue-950 py-12 lg:py-24 px-4 md:px-12 gap-8 lg:px-20 flex flex-col lg:flex-row lg:justify-between">
         <div className="lg:w-1/2 flex flex-col gap-6">
           <h3 className="text-4xl font-semibold text-[var(--color-white)]">
             {t("stayInformed")}
@@ -308,7 +308,9 @@ function Home() {
         </div>
       </section>
       <section className="py-12 lg:py-24 px-4 md:px-12 gap-8 lg:px-20">
-        <h3 className="text-3xl font-bold text-center">{t("news")}</h3>
+        <h3 className="text-3xl font-bold text-center text-[var(--color-text-primary)]">
+          {t("news")}
+        </h3>
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-8 mt-10">
           {actualites.map((actu) => (
             <NewsCard

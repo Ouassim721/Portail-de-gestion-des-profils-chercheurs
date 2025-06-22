@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleDown,
   faSignOutAlt,
+  faSignInAlt,
   faCog,
   faBars,
   faTimes,
@@ -20,7 +21,7 @@ import {
   faWindowRestore,
   faScrewdriverWrench,
   faChalkboardTeacher,
-  faBook 
+  faBook,
 } from "@fortawesome/free-solid-svg-icons";
 import { faBell as faRegularBell } from "@fortawesome/free-regular-svg-icons";
 import SettingsModal from "../modals/SettingsModal";
@@ -92,6 +93,9 @@ function Navbar({ sticky = false }) {
     } catch (err) {
       console.error(t("logoutError"), err);
     }
+  };
+  const handleLogin = () => {
+    navigate("/connexion");
   };
 
   return (
@@ -166,8 +170,8 @@ function Navbar({ sticky = false }) {
                   {
                     label: t("myCourses"),
                     icon: faChalkboardTeacher,
-                    link: `/chercheurs/${chercheur.id}/cours`
-                },
+                    link: `/chercheurs/${chercheur.id}/cours`,
+                  },
                   {
                     label: t("myDashboard"),
                     icon: faWindowRestore,
@@ -218,16 +222,40 @@ function Navbar({ sticky = false }) {
             </div>
           </DropdownMenu>
         ) : (
-          <Button
-            variant="secondary"
-            onClick={() => navigate("/connexion")}
-            style={{
-              backgroundColor: "var(--color-secondary)",
-              color: "var(--color-white)",
-            }}
+          <DropdownMenu
+            sections={[
+              {
+                options: [
+                  {
+                    label: t("settings"),
+                    icon: faCog,
+                    onClick: () => setShowSettingsModal(true),
+                  },
+                  {
+                    label: t("help"),
+                    icon: faQuestionCircle,
+                    link: "/aide",
+                  },
+                ],
+              },
+              {
+                options: [
+                  {
+                    label: t("login"),
+                    icon: faSignInAlt,
+                    onClick: handleLogin,
+                  },
+                ],
+              },
+            ]}
           >
-            {t("login")}
-          </Button>
+            <div className="flex items-center gap-2 cursor-pointer">
+              <FontAwesomeIcon
+                icon={faAngleDown}
+                style={{ color: "var(--color-gray)" }}
+              />
+            </div>
+          </DropdownMenu>
         )}
       </div>
 

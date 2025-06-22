@@ -1,4 +1,5 @@
 import axios from "axios";
+import { log } from "@/utils/logger";
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost:8000/api",
@@ -8,8 +9,14 @@ const axiosInstance = axios.create({
     Accept: "application/json",
   },
 });
-axios.interceptors.request.use(req => {
-  console.log('→ Request:', req.method, req.url, ' withCredentials=', req.withCredentials);
+axios.interceptors.request.use((req) => {
+  log(
+    "→ Request:",
+    req.method,
+    req.url,
+    " withCredentials=",
+    req.withCredentials
+  );
   return req;
 });
 axiosInstance.interceptors.response.use(
