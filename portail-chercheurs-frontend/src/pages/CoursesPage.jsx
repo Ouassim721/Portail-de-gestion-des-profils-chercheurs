@@ -8,7 +8,7 @@ const CoursesPage = () => {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-[var(--color-bg-secondary)] py-8">
         <CourseList researcherId={id} />
       </div>
     </ProtectedRoute>

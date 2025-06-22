@@ -8,13 +8,13 @@
   /* Couleurs communes */
   --color-secondary: #00c49a;
   --color-white: #fefefe;
-  --color-gray: #b0b0b0;
 }
 
 /* Light mode par défaut */
 :root,
 :root.light {
   --color-primary: #003366;
+  --color-gray: #b0b0b0;
   --color-text-primary: #2c2c2c;
   --color-text-secondary: #535353;
   --color-bg-primary: #fefefe;
@@ -24,6 +24,7 @@
 /* Dark mode */
 :root.dark {
   --color-primary: #4338ca;
+  --color-gray: #525252;
   --color-text-primary: #f1f1f1;
   --color-text-secondary: #cfcfcf;
   --color-bg-primary: #2a2a2a;
