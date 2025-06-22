@@ -577,6 +577,7 @@ export const translations = {
   noFilePreview: "Aucun document à prévisualiser pour ce cours.",
   instructorByLabel: "Par {first}} {last}}",
   publishedOnLabel: "Publié le {date}}",
+  saveButton: "Enregistrer",
   subjectsTaught:        "Matières enseignées"
   },
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1144,6 +1145,7 @@ export const translations = {
   noFilePreview: "No document to preview for this course.",
   instructorByLabel: "By {first}} {last}}",
   publishedOnLabel: "Published on {date}}",
+  saveButton : "Save",
   subjectsTaught:        "Taught Subjects"
   }
 };
