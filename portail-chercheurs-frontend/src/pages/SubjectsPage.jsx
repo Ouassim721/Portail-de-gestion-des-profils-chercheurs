@@ -29,6 +29,7 @@ const SubjectsPage = () => {
           api.get(`/chercheurs/${id}/matieres`),
           api.get("/matieres"),
         ]);
+
         setSubjects(researcherResponse.data);
         setAllSubjects(allResponse.data);
       } catch (error) {
@@ -66,12 +67,15 @@ const SubjectsPage = () => {
     }
 
     try {
-      const response = await api.post(`/chercheurs/${id}/matieres/attach-or-create`, {
-        nom_matiere: newSubjectName
-      });
-      
-      setSubjects(prev => [...prev, response.data]);
-      setAllSubjects(prev => [...prev, response.data]);
+      const response = await api.post(
+        `/chercheurs/${id}/matieres/attach-or-create`,
+        {
+          nom_matiere: newSubjectName,
+        }
+      );
+
+      setSubjects((prev) => [...prev, response.data]);
+      setAllSubjects((prev) => [...prev, response.data]);
       setShowCreateModal(false);
       setNewSubjectName("");
     } catch (error) {
@@ -125,13 +129,6 @@ const SubjectsPage = () => {
                   </>
                 )}
               </button>
-              <button
-                onClick={() => setShowCreateModal(true)}
-                className="ml-4 px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center"
-              >
-                <PlusIcon className="h-5 w-5 mr-2" />
-                {t("createNewSubject")}
-              </button>
             </div>
           </div>
 
@@ -148,13 +145,15 @@ const SubjectsPage = () => {
 
           {/* Modal pour créer une nouvelle matière */}
           {showCreateModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white p-6 rounded-lg w-96">
-                <h2 className="text-xl font-semibold mb-4">{t("createNewSubject")}</h2>
+            <div className="fixed inset-0 bg-black/80 bg-opacity-50 z-50 flex items-center justify-center p-4">
+              <div className="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] p-6 rounded-lg w-96">
+                <h2 className="text-xl font-semibold mb-4">
+                  {t("createNewSubject")}
+                </h2>
                 <input
                   type="text"
                   placeholder={t("subjectNamePlaceholder")}
-                  className="w-full border rounded px-3 py-2 mb-4"
+                  className="w-full border rounded px-5 py-4 mb-4 text-[var(--color-text-secondary)]"
                   value={newSubjectName}
                   onChange={(e) => setNewSubjectName(e.target.value)}
                   onKeyDown={(e) => {
