@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import api from "../../axios";
 import CourseCard from "./CourseCard";
 import FiltersBar from "./FiltersBar";
@@ -9,8 +9,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { LanguageContext } from "../../contexts/LanguageContext";
 import { logError } from "@/utils/logger";
 
-const CourseList = () => {
-  const { id } = useParams();
+const CourseList = ({ researcherId }) => {
   const navigate = useNavigate();
   const { t } = useContext(LanguageContext);
 
@@ -22,7 +21,7 @@ const CourseList = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await api.get(`/chercheurs/${id}/cours`);
+        const response = await api.get(`/chercheurs/${researcherId}/cours`);
         setCourses(response.data);
       } catch (error) {
         logError(t("errorLoadingCourses"), error);
@@ -30,8 +29,11 @@ const CourseList = () => {
         setLoading(false);
       }
     };
-    fetchCourses();
-  }, [id, t]);
+    
+    if (researcherId) {
+      fetchCourses();
+    }
+  }, [researcherId, t]);
 
   const handleDelete = async (courseId) => {
     if (!courseId) {
@@ -41,7 +43,7 @@ const CourseList = () => {
 
     if (window.confirm(t("confirmDeleteCourse"))) {
       try {
-        await api.delete(`/chercheurs/${id}/cours/${courseId}`);
+        await api.delete(`/chercheurs/${researcherId}/cours/${courseId}`);
         setCourses((prev) => prev.filter((c) => c.id_cours !== courseId));
       } catch (error) {
         logError(t("errorDeletingCourse"), error);
@@ -82,7 +84,7 @@ const CourseList = () => {
         </h1>
         <Button
           icon={faPlus}
-          onClick={() => navigate(`/chercheurs/${id}/cours/new`)}
+          onClick={() => navigate(`/chercheurs/${researcherId}/cours/new`)}
         >
           {t("newCourse")}
         </Button>
@@ -111,7 +113,7 @@ const CourseList = () => {
             <CourseCard
               key={course.id_cours}
               course={course}
-              researcherId={id}
+              researcherId={researcherId}
               onDelete={handleDelete}
             />
           ))}

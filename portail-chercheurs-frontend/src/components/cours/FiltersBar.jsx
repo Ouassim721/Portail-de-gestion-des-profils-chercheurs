@@ -1,5 +1,3 @@
-// src/components/cours/FiltersBar.jsx
-
 import React, { useContext } from "react";
 import { LanguageContext } from "../../contexts/LanguageContext";
 

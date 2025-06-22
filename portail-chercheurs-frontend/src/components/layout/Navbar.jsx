@@ -171,7 +171,7 @@ function Navbar({ sticky = false }) {
                   {
                     label: t("myCourses"),
                     icon: faChalkboardTeacher,
-                    link: `/chercheurs/${chercheur.id}/cours`,
+                    link: `/mes-cours`,
                   },
                   {
                     label: t("myDashboard"),

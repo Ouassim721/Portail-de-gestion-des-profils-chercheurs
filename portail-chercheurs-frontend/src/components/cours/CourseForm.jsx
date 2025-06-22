@@ -1,16 +1,17 @@
-// src/components/matieres/CourseForm.jsx
 import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import axios from "../../axios";
 import api from "../../axios";
 import { LanguageContext } from "../../contexts/LanguageContext";
 import { logError } from "@/utils/logger";
 
 function CourseForm() {
   const { t } = useContext(LanguageContext);
-  const { id, coursId } = useParams();
+  const { coursId } = useParams();
   const navigate = useNavigate();
   const isEdit = Boolean(coursId);
 
+  const [researcherId, setResearcherId] = useState(null);
   const [formData, setFormData] = useState({
     titre: "",
     description: "",
@@ -24,13 +25,28 @@ function CourseForm() {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    fetchMatieres();
-    if (isEdit) fetchCours();
-  }, [id, coursId, isEdit]);
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get("/me");
+        setResearcherId(res.data.id);
+      } catch (error) {
+        console.error("Erreur fetchUser in CourseForm", error);
+      }
+    };
+    
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
+    if (researcherId) {
+      fetchMatieres();
+      if (isEdit) fetchCours();
+    }
+  }, [researcherId, isEdit]);
 
   const fetchMatieres = async () => {
     try {
-      const res = await api.get(`/chercheurs/${id}/matieres`);
+      const res = await api.get(`/chercheurs/${researcherId}/matieres`);
       setMatieres(res.data);
     } catch (e) {
       logError(t("errorFetchingSubjects"), e);
@@ -40,7 +56,7 @@ function CourseForm() {
   const fetchCours = async () => {
     try {
       setLoading(true);
-      const res = await api.get(`/chercheurs/${id}/cours/${coursId}`);
+      const res = await api.get(`/chercheurs/${researcherId}/cours/${coursId}`);
       const d = res.data;
       setFormData({
         titre: d.titre,
@@ -99,20 +115,17 @@ function CourseForm() {
     if (!validate()) return;
     setLoading(true);
 
-    // Créer FormData correctement
     const fd = new FormData();
     fd.append("titre", formData.titre);
     fd.append("description", formData.description);
     fd.append("datePublication", formData.datePublication);
     fd.append("id_matiere", formData.id_matiere);
 
-    // Ajouter le fichier s'il existe
     if (formData.fichier) {
       fd.append("fichier", formData.fichier);
     }
 
     try {
-      // Configuration pour les fichiers
       const config = {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -121,13 +134,12 @@ function CourseForm() {
 
       if (isEdit) {
         fd.append("_method", "PUT");
-        await api.post(`/chercheurs/${id}/cours/${coursId}`, fd, config);
+        await api.post(`/chercheurs/${researcherId}/cours/${coursId}`, fd, config);
       } else {
-        // Pour la création, fichier est obligatoire
-        await api.post(`/chercheurs/${id}/cours`, fd, config);
+        await api.post(`/chercheurs/${researcherId}/cours`, fd, config);
       }
 
-      navigate(`/chercheurs/${id}/cours`);
+      navigate(`/mes-cours`);
     } catch (err) {
       let msg = t("errorOccurred");
       if (err.response?.status === 422) {
@@ -269,7 +281,7 @@ function CourseForm() {
         <div className="flex justify-end space-x-4">
           <button
             type="button"
-            onClick={() => navigate(`/chercheurs/${id}/cours`)}
+            onClick={() => navigate(`/mes-cours`)}
             className="px-5 py-2 border border-gray-300 rounded-lg text-[var(--color-text-secondary)] hover:bg-gray-50 hover:text-gray-700"
             disabled={loading}
           >

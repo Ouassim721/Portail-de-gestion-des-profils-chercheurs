@@ -65,7 +65,7 @@ function App() {
               <Route path="/publications" element={<Publications />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/chercheurs-stats" element={<ResearcherStats />} />
-              <Route path="/chercheurs/:id/cours" element={<CoursesPage />} />
+              <Route path="/mes-cours" element={<CoursesPage />} />
               <Route path="/cours" element={<AllCoursesPage />} />
               <Route
                 path="/chercheurs/:id/cours/new"
@@ -166,7 +166,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/chercheurs/:id/cours" element={<CoursesPage />} />
             <Route path="/chercheurs/:id/cours/new" element={<CourseForm />} />
             <Route
               path="/chercheurs/:id/cours/:coursId/edit"
