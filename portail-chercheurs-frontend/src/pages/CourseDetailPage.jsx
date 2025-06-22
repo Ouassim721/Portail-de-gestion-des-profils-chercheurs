@@ -75,10 +75,12 @@ const CourseDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-[var(--color-bg-secondary)]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Chargement du cours...</p>
+          <p className="text-[var(--color-text-secondary)]">
+            Chargement du cours...
+          </p>
         </div>
       </div>
     );
@@ -86,14 +88,14 @@ const CourseDetailPage = () => {
 
   if (error || !course) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-6">
-        <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--color-bg-secondary)] p-6">
+        <div className="bg-[var(--color-bg-primary)] rounded-xl shadow-lg p-8 max-w-md w-full text-center">
           <div className="text-red-500 mb-6">
             <DocumentTextIcon className="h-16 w-16 mx-auto text-red-400" />
             <h2 className="text-xl font-bold mt-4">
               {error || "Cours non trouvé"}
             </h2>
-            <p className="mt-2 text-gray-600">
+            <p className="mt-2 text-[var(--color-text-secondary)]">
               Le cours que vous recherchez n'existe pas ou n'est plus
               disponible.
             </p>
@@ -111,7 +113,7 @@ const CourseDetailPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-[var(--color-bg-secondary)] py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
           <button
@@ -123,14 +125,14 @@ const CourseDetailPage = () => {
           </button>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
-          <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+        <div className="bg-[var(--color-bg-primary)] rounded-xl shadow-lg overflow-hidden mb-8">
+          <div className="p-6 border-b">
             <div className="flex flex-col md:flex-row md:justify-between md:items-start">
               <div>
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+                <h1 className="text-2xl md:text-3xl font-bold text-[var(--color-text-primary)]">
                   {course.titre}
                 </h1>
-                <div className="mt-2 flex flex-wrap items-center text-gray-600">
+                <div className="mt-2 flex flex-wrap items-center text-[var(--color-text-secondary)]">
                   <span>
                     Publié le{" "}
                     {new Date(course.datePublication).toLocaleDateString(
@@ -152,10 +154,10 @@ const CourseDetailPage = () => {
 
           <div className="p-6">
             <div className="prose max-w-none mb-8">
-              <h3 className="text-lg font-medium text-gray-900 mb-3">
+              <h3 className="text-lg font-medium text-[var(--color-text-primary)] mb-3">
                 Description du cours
               </h3>
-              <p className="text-gray-700 whitespace-pre-line bg-gray-50 p-4 rounded-lg border border-gray-200">
+              <p className="text-[var(--color-text-secondary)] whitespace-pre-line p-4 rounded-lg border border-gray-200">
                 {course.description ||
                   "Aucune description fournie pour ce cours."}
               </p>
@@ -164,7 +166,7 @@ const CourseDetailPage = () => {
             <div className="border-t border-gray-200 pt-6">
               <div className="mb-6">
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4">
-                  <h3 className="text-xl font-medium text-gray-900 mb-3 sm:mb-0">
+                  <h3 className="text-xl font-medium text-[var(--color-text-primary)] mb-3 sm:mb-0">
                     Fichier attaché
                   </h3>
                   <a
@@ -191,7 +193,7 @@ const CourseDetailPage = () => {
               {/* Visualiseur PDF */}
               {fileInfo && (
                 <div className="mt-8">
-                  <h3 className="text-lg font-medium text-gray-900 mb-3">
+                  <h3 className="text-lg font-medium text-[var(--color-text-primary)] mb-3">
                     Aperçu du document
                   </h3>
                   <div className="border rounded-lg overflow-hidden h-[500px] flex items-center justify-center bg-gray-50">
