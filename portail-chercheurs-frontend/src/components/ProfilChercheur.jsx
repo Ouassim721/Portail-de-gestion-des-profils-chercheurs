@@ -53,7 +53,7 @@ function ProfilChercheur({
           <div className="flex-shrink-0">
             <ChercheurAvatar
               chercheur={chercheur}
-              size="xl"
+              size="xl3"
               className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 mx-auto sm:mx-0"
             />
           </div>

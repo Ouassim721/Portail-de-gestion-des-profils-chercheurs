@@ -18,42 +18,42 @@ class PublicationController extends Controller
     /**
      * Affiche la liste des publications
      */
-   public function index(Request $request)
-{
-    $query = Publication::query()->with(['chercheur', 'disciplines']);
+    public function index(Request $request)
+    {
+        $query = Publication::query()->with(['chercheur', 'disciplines']);
 
-    // Nouveau filtre par chercheur_id
-    if ($request->has('chercheur_id')) {
-        $query->where('chercheur_id', $request->chercheur_id);
-    }
+        // Nouveau filtre par chercheur_id
+        if ($request->has('chercheur_id')) {
+            $query->where('chercheur_id', $request->chercheur_id);
+        }
 
-    if ($request->has('year')) {
-        $query->whereYear('date_publication', $request->year);
-    }
+        if ($request->has('year')) {
+            $query->whereYear('date_publication', $request->year);
+        }
 
-    if ($request->has('search')) {
-        $searchTerm = '%' . $request->search . '%';
-        $query->where('titre', 'LIKE', $searchTerm);
-    }
+        if ($request->has('search')) {
+            $searchTerm = '%' . $request->search . '%';
+            $query->where('titre', 'LIKE', $searchTerm);
+        }
 
-    // Gestion du cas "all" pour le limit
-    if ($request->has('limit') && $request->limit === 'all') {
-        $publications = $query->get();
+        // Gestion du cas "all" pour le limit
+        if ($request->has('limit') && $request->limit === 'all') {
+            $publications = $query->get();
+            return response()->json([
+                'data' => $publications,
+                'hasMore' => false,
+            ]);
+        }
+
+        $page = $request->input('page', 1);
+        $limit = $request->input('limit', 10);
+        $publications = $query->paginate((int)$limit, ['*'], 'page', $page);
+
         return response()->json([
-            'data' => $publications,
-            'hasMore' => false,
+            'data' => $publications->items(),
+            'hasMore' => $publications->hasMorePages(),
         ]);
     }
-
-    $page = $request->input('page', 1);
-    $limit = $request->input('limit', 10);
-    $publications = $query->paginate((int)$limit, ['*'], 'page', $page);
-
-    return response()->json([
-        'data' => $publications->items(),
-        'hasMore' => $publications->hasMorePages(),
-    ]);
-}
 
     /**
      * Affiche le formulaire de création
@@ -116,7 +116,10 @@ class PublicationController extends Controller
             ], 500);
         }
     }
-
+    public function show($id)
+    {
+        return Publication::findOrFail($id);
+    }
     public function store(Request $request)
     {
         try {
@@ -133,6 +136,7 @@ class PublicationController extends Controller
                 'publications.*.auteurs' => 'required',
                 'publications.*.abstract' => 'nullable|string',
                 'publications.*.citation_count' => 'nullable|integer',
+                'publications.*.pdf_path' => 'nullable|file|mimes:pdf|max:10240',
                 'publications.*.disciplines' => 'nullable|array',
                 'publications.*.disciplines.*' => 'exists:disciplines,id', // Validation des disciplines
             ]);
@@ -178,15 +182,15 @@ class PublicationController extends Controller
             ], 500);
         }
     }
-// PublicationController.php
-public function profilePublications(Request $request)
-{
-    $chercheur = JWTAuth::user();
-    $publications = Publication::where('chercheur_id', $chercheur->id)
-        ->with('disciplines') // Charge les disciplines associées
-        ->get();
-    return response()->json(['publications' => $publications], 200);
-}
+    // PublicationController.php
+    public function profilePublications(Request $request)
+    {
+        $chercheur = JWTAuth::user();
+        $publications = Publication::where('chercheur_id', $chercheur->id)
+            ->with('disciplines') // Charge les disciplines associées
+            ->get();
+        return response()->json(['publications' => $publications], 200);
+    }
 
     public function getPublicationYears()
     {

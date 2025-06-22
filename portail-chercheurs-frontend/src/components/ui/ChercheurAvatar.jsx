@@ -7,6 +7,7 @@ const ChercheurAvatar = ({ chercheur, size = "md", className = "" }) => {
     md: "h-10 w-10 text-sm",
     lg: "h-16 w-16 text-lg",
     xl: "h-24 w-24 text-xl",
+    xl3: "h-24 w-24 text-3xl",
   };
 
   const getInitials = () => {
