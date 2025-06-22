@@ -132,11 +132,9 @@ const Publications = () => {
       });
   }, [t]);
 
-  const nombrePublications =
-    countPublications !== null ? countPublications : "...";
+  const nombrePublications = countPublications !== null ? countPublications : "...";
   const nombreChercheurs = countChercheurs !== null ? countChercheurs : "...";
-  const nombreCitations =
-    countCitations !== null ? Math.round(countCitations) : "...";
+  const nombreCitations = countCitations !== null ? countCitations : "...";
   const nombreDisciplines = countDiscipline !== null ? countDiscipline : "...";
 
   return (

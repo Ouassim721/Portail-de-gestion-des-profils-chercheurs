@@ -178,13 +178,14 @@ class PublicationController extends Controller
             ], 500);
         }
     }
-// PublicationController.php
+
 public function profilePublications(Request $request)
 {
     $chercheur = JWTAuth::user();
     $publications = Publication::where('chercheur_id', $chercheur->id)
-        ->with('disciplines') // Charge les disciplines associées
+        ->with('disciplines') // Charger les relations de disciplines
         ->get();
+    
     return response()->json(['publications' => $publications], 200);
 }
 

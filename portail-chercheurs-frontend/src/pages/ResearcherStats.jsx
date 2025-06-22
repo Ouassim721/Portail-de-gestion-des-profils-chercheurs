@@ -128,13 +128,18 @@ const ResearcherDashboard = () => {
   }, {});
 
   // Répartition par discipline
-  const disciplineDistribution = publications.reduce((acc, pub) => {
-    const name = pub.discipline_id
-      ? disciplineMap[pub.discipline_id] || t("noCategory")
-      : t("noCategory");
-    acc[name] = (acc[name] || 0) + 1;
+const disciplineDistribution = publications.reduce((acc, pub) => {
+    if (pub.disciplines && pub.disciplines.length > 0) {
+        pub.disciplines.forEach(discipline => {
+            const name = discipline.nom;
+            acc[name] = (acc[name] || 0) + 1;
+        });
+    } else {
+        const noCategory = t("noCategory");
+        acc[noCategory] = (acc[noCategory] || 0) + 1;
+    }
     return acc;
-  }, {});
+}, {});
 
   // Data pour les graphiques
   const citationsData = {

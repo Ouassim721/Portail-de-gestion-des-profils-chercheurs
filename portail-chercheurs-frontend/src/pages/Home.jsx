@@ -37,7 +37,7 @@ function Home() {
       .then((res) => {
         setCountChercheurs(res.data.chercheurs);
         setCountPublications(res.data.publications);
-        setCountCitations(res.data.citations);
+        setCountCitations(res.data.avgCitations || 0);
         setCountDisciplines(res.data.disciplines);
       })
       .catch((err) => logError(t("errorLoadingData"), err));
@@ -152,7 +152,7 @@ function Home() {
             },
             {
               stat: countCitations ?? 0,
-              label: t("citations"),
+              label: t("avgCitations"),
               icon: faQuoteRight,
             },
             {

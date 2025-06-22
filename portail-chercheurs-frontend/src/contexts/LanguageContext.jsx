@@ -584,7 +584,8 @@ export const translations = {
   errorCreatingSubject: "Erreur lors de la création de la matière",
   subjectNameRequired: "Veuillez entrer un nom pour la matière",
   errorOccurredCreating: "Une erreur est survenue lors de la création",
-  subjectsTaught:        "Matières enseignées"
+  subjectsTaught:        "Matières enseignées",
+  avgCitations: "Citations moyennes",
   },
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
   en: {
@@ -1158,6 +1159,7 @@ export const translations = {
   errorCreatingSubject: "Error creating subject",
   subjectNameRequired: "Subject name is required",
   errorOccurredCreating: "An error occurred while creating the subject",
+  avgCitations: "Average Citations",
   subjectsTaught:        "Taught Subjects"
   }
 };
