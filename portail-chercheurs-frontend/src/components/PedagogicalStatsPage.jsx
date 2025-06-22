@@ -230,7 +230,7 @@ const PedagogicalStatsPage = () => {
 
   if (error) {
     return (
-      <div className="max-w-4xl mx-auto p-6">
+      <div className="mx-auto p-6">
         <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
           <div className="flex">
             <div className="flex-shrink-0">
@@ -261,59 +261,57 @@ const PedagogicalStatsPage = () => {
   }
 
   return (
-    <div className="mx-auto px-4 py-8 max-w-7xl">
-      <div className="bg-white rounded-lg overflow-hidden shadow-xl">
-        <div className="bg-indigo-700 px-6 py-5">
-          <h2 className="text-2xl font-bold text-white">
+    <div className="mx-auto px-4 py-8">
+      <div className="rounded-lg overflow-hidden shadow-xl">
+        <div className="px-6 py-5">
+          <h2 className="text-2xl font-bold text-[var(--color-text-primary)]">
             {t("pedStatsTitle")}
           </h2>
-          <p className="mt-1 text-indigo-200">{t("pedStatsSubtitle")}</p>
+          <p className="mt-1 text-[var(--color-text-secondary)]">
+            {t("pedStatsSubtitle")}
+          </p>
         </div>
 
         <div className="px-6 py-5">
           {/* Summary cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-indigo-50 rounded-lg p-6 shadow-sm">
-              <h3 className="text-lg font-medium text-indigo-900">
+            <div className="bg-gradient-to-br from-purple-500 to-indigo-500 text-white rounded-lg p-6 shadow-sm">
+              <h3 className="text-lg font-medium text-indigo-50">
                 {t("totalSubjects")}
               </h3>
-              <p className="text-3xl font-bold text-indigo-700 mt-2">
-                {stats.totalMatieres}
-              </p>
-              <p className="text-sm text-indigo-500 mt-1">{t("subjects")}</p>
+              <p className="text-3xl font-bold mt-2">{stats.totalMatieres}</p>
+              <p className="text-sm text-indigo-50 mt-1">{t("subjects")}</p>
             </div>
 
-            <div className="bg-green-50 rounded-lg p-6 shadow-sm">
-              <h3 className="text-lg font-medium text-green-900">
+            <div className="bg-gradient-to-br from-green-500 to-emerald-500 text-white rounded-lg p-6 shadow-sm">
+              <h3 className="text-lg font-medium text-green-50">
                 {t("totalCourses")}
               </h3>
-              <p className="text-3xl font-bold text-green-700 mt-2">
-                {stats.totalCours}
-              </p>
-              <p className="text-sm text-green-500 mt-1">{t("courses")}</p>
+              <p className="text-3xl font-bold  mt-2">{stats.totalCours}</p>
+              <p className="text-sm text-green-50 mt-1">{t("courses")}</p>
             </div>
 
-            <div className="bg-purple-50 rounded-lg p-6 shadow-sm">
-              <h3 className="text-lg font-medium text-purple-900">
+            <div className="bg-gradient-to-br from-pink-500 to-rose-500 text-white rounded-lg p-6 shadow-sm">
+              <h3 className="text-lg font-medium text-purple-50">
                 {t("activeTeachers")}
               </h3>
-              <p className="text-3xl font-bold text-purple-700 mt-2">
+              <p className="text-3xl font-bold mt-2">
                 {stats.chercheursAvecCours}
               </p>
-              <p className="text-sm text-purple-500 mt-1">{t("teachers")}</p>
+              <p className="text-sm text-purple-50 mt-1">{t("teachers")}</p>
             </div>
           </div>
 
           {/* Charts */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-            <div className="bg-white rounded-lg p-6 shadow border border-gray-200">
+            <div className="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] rounded-lg p-6 shadow">
               <h3 className="text-xl font-semibold mb-4">{t("topSubjects")}</h3>
               <div className="h-80">
                 <Bar data={prepareTopMatieresData()} options={barOptions} />
               </div>
             </div>
 
-            <div className="bg-white rounded-lg p-6 shadow border border-gray-200">
+            <div className="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] rounded-lg p-6 shadow">
               <h3 className="text-xl font-semibold mb-4">
                 {t("distributionBySubject")}
               </h3>
@@ -322,14 +320,14 @@ const PedagogicalStatsPage = () => {
               </div>
             </div>
 
-            <div className="bg-white rounded-lg p-6 shadow border border-gray-200">
+            <div className="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] rounded-lg p-6 shadow">
               <h3 className="text-xl font-semibold mb-4">{t("topTeachers")}</h3>
               <div className="h-80">
                 <Bar data={prepareTopChercheursData()} options={barOptions} />
               </div>
             </div>
 
-            <div className="bg-white rounded-lg p-6 shadow border border-gray-200">
+            <div className="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] rounded-lg p-6 shadow">
               <h3 className="text-xl font-semibold mb-4">
                 {t("monthlyTrend")}
               </h3>
@@ -351,15 +349,15 @@ const PedagogicalStatsPage = () => {
 
             <div className="overflow-x-auto rounded-lg border border-gray-200">
               <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+                <thead className="bg-[var(--color-bg-primary)] text-[var(--color-text-secondary)]">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                       {t("subject")}
                     </th>
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">
                       {t("courses")}
                     </th>
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">
                       {t("percentage")}
                     </th>
                   </tr>
@@ -368,12 +366,14 @@ const PedagogicalStatsPage = () => {
                   {stats.coursParMatiere.map((matiere, index) => (
                     <tr
                       key={index}
-                      className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                      className={
+                        "bg-[var(--color-bg-primary)] text-[var(--color-text-primary)]"
+                      }
                     >
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
+                            <div className="text-sm font-medium">
                               {matiere.nom_matiere}
                             </div>
                           </div>
@@ -424,15 +424,15 @@ const PedagogicalStatsPage = () => {
 
             <div className="overflow-x-auto rounded-lg border border-gray-200">
               <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+                <thead className="bg-[var(--color-bg-primary)] text-[var(--color-text-secondary)]">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                       {t("teacher")}
                     </th>
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">
                       {t("publishedCourses")}
                     </th>
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">
                       {t("subjectsTaught")}
                     </th>
                   </tr>
@@ -441,15 +441,17 @@ const PedagogicalStatsPage = () => {
                   {stats.topChercheurs.map((chercheur, index) => (
                     <tr
                       key={index}
-                      className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                      className={
+                        "bg-[var(--color-bg-primary)] text-[var(--color-text-primary)]"
+                      }
                     >
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
+                            <div className="text-sm font-medium">
                               {chercheur.prenom} {chercheur.nom}
                             </div>
-                            <div className="text-sm text-gray-500">
+                            <div className="text-sm text-[var(--color-text-secondary)]">
                               {chercheur.specialisation}
                             </div>
                           </div>
@@ -460,7 +462,7 @@ const PedagogicalStatsPage = () => {
                           {chercheur.cours_count}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-[var(--color-text-secondary)]">
                         {chercheur.matieres_count || 0}
                       </td>
                     </tr>

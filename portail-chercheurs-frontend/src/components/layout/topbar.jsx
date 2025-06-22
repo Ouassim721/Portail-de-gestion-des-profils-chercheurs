@@ -5,7 +5,6 @@ import ChercheurAvatar from "../ui/ChercheurAvatar";
 import axios from "../../axios";
 import Loader from "../../components/ui/Loader";
 import { LanguageContext } from "../../contexts/LanguageContext";
-import { logError } from "@/utils/logger";
 
 function TopBar() {
   const { t } = useContext(LanguageContext);
@@ -22,7 +21,7 @@ function TopBar() {
       .get("/me")
       .then((res) => setChercheur(res.data))
       .catch((err) => {
-        logError(t("profileLoadError"), err);
+        console.error(t("profileLoadError"), err);
         setChercheur(null);
       })
       .finally(() => setLoading(false));
