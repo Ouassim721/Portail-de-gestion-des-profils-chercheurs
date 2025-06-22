@@ -481,4 +481,36 @@ public function showCours($id, $coursId)
     return response()->json($cours);
 }
 
+public function attachOrCreateMatiere(Request $request, $id)
+{
+    $request->validate([
+        'nom_matiere' => 'required|string|max:100|unique:matieres,nom_matiere'
+    ]);
+
+    DB::beginTransaction();
+    try {
+        $chercheur = Chercheur::findOrFail($id);
+        $nomMatiere = $request->nom_matiere;
+
+        // Vérifier si la matière existe déjà
+        $matiere = Matiere::firstOrCreate(['nom_matiere' => $nomMatiere]);
+
+        // Attacher la matière au chercheur
+        if (!$chercheur->matieres()->where('matieres.id_matiere', $matiere->id_matiere)->exists()) {
+            $chercheur->matieres()->attach($matiere->id_matiere);
+        }
+
+        DB::commit();
+
+        return response()->json([
+            'id_matiere' => $matiere->id_matiere,
+            'nom_matiere' => $matiere->nom_matiere
+        ], 201);
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return response()->json(['message' => 'Une erreur est survenue: ' . $e->getMessage()], 500);
+    }
+}
+
 }

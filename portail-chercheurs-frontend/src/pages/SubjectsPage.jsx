@@ -18,6 +18,8 @@ const SubjectsPage = () => {
   const [allSubjects, setAllSubjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [newSubjectName, setNewSubjectName] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,6 +59,27 @@ const SubjectsPage = () => {
     }
   };
 
+  const handleCreateAndAttach = async () => {
+    if (!newSubjectName.trim()) {
+      alert(t("subjectNameRequired"));
+      return;
+    }
+
+    try {
+      const response = await api.post(`/chercheurs/${id}/matieres/attach-or-create`, {
+        nom_matiere: newSubjectName
+      });
+      
+      setSubjects(prev => [...prev, response.data]);
+      setAllSubjects(prev => [...prev, response.data]);
+      setShowCreateModal(false);
+      setNewSubjectName("");
+    } catch (error) {
+      logError(t("errorCreatingSubject"), error);
+      alert(error.response?.data?.message || t("errorOccurredCreating"));
+    }
+  };
+
   const handleDetach = async (subjectId) => {
     try {
       await api.delete(`/chercheurs/${id}/matieres/${subjectId}`);
@@ -81,26 +104,35 @@ const SubjectsPage = () => {
             <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">
               {t("mySubjects")}
             </h1>
-            <button
-              onClick={() => setShowForm(!showForm)}
-              className={`px-4 py-2 rounded-lg flex items-center ${
-                showForm
-                  ? "bg-gray-500 hover:bg-gray-600 text-white"
-                  : "bg-green-600 hover:bg-green-700 text-white"
-              }`}
-            >
-              {showForm ? (
-                <>
-                  <XMarkIcon className="h-5 w-5 mr-2" />
-                  {t("cancel")}
-                </>
-              ) : (
-                <>
-                  <PlusIcon className="h-5 w-5 mr-2" />
-                  {t("addSubject")}
-                </>
-              )}
-            </button>
+            <div className="flex">
+              <button
+                onClick={() => setShowForm(!showForm)}
+                className={`px-4 py-2 rounded-lg flex items-center ${
+                  showForm
+                    ? "bg-gray-500 hover:bg-gray-600 text-white"
+                    : "bg-green-600 hover:bg-green-700 text-white"
+                }`}
+              >
+                {showForm ? (
+                  <>
+                    <XMarkIcon className="h-5 w-5 mr-2" />
+                    {t("cancel")}
+                  </>
+                ) : (
+                  <>
+                    <PlusIcon className="h-5 w-5 mr-2" />
+                    {t("addSubject")}
+                  </>
+                )}
+              </button>
+              <button
+                onClick={() => setShowCreateModal(true)}
+                className="ml-4 px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center"
+              >
+                <PlusIcon className="h-5 w-5 mr-2" />
+                {t("createNewSubject")}
+              </button>
+            </div>
           </div>
 
           {showForm && (
@@ -108,10 +140,50 @@ const SubjectsPage = () => {
               allSubjects={allSubjects}
               currentSubjects={subjects}
               onAttach={handleAttach}
+              onCreateNew={() => setShowCreateModal(true)}
             />
           )}
 
           <SubjectList subjects={subjects} onDetach={handleDetach} />
+
+          {/* Modal pour créer une nouvelle matière */}
+          {showCreateModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white p-6 rounded-lg w-96">
+                <h2 className="text-xl font-semibold mb-4">{t("createNewSubject")}</h2>
+                <input
+                  type="text"
+                  placeholder={t("subjectNamePlaceholder")}
+                  className="w-full border rounded px-3 py-2 mb-4"
+                  value={newSubjectName}
+                  onChange={(e) => setNewSubjectName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handleCreateAndAttach();
+                    }
+                  }}
+                />
+                <div className="flex justify-end space-x-2">
+                  <button
+                    onClick={() => {
+                      setShowCreateModal(false);
+                      setNewSubjectName("");
+                    }}
+                    className="px-4 py-2 bg-gray-500 text-white rounded-md"
+                  >
+                    {t("cancel")}
+                  </button>
+                  <button
+                    onClick={handleCreateAndAttach}
+                    className="px-4 py-2 bg-green-600 text-white rounded-md"
+                  >
+                    {t("createAndAttach")}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </ProtectedRoute>
