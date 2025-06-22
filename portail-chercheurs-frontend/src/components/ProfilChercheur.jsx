@@ -65,14 +65,7 @@ function ProfilChercheur({
               <p className="text-sm mt-1 text-center sm:text-left text-[var(--color-text-secondary)]">
                 {t("universityLabel")} {chercheur.university}
               </p>
-              <div className="flex gap-4 justify-center my-3 sm:my-2">
-                <Button
-                  variant="secondary"
-                  icon={faEnvelope}
-                  className="text-sm p-2!"
-                >
-                  {t("contactButton")}
-                </Button>
+              <div className="my-3 sm:my-4">
                 {isAuthenticated &&
                   (isOwner ? (
                     <Button

@@ -179,8 +179,8 @@ const CardProfilPublication = ({
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
+        <div className="fixed inset-0 bg-black/80 bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] p-6 rounded-lg shadow-xl w-full max-w-md">
             <h3 className="text-lg font-semibold mb-4">{t("addDiscipline")}</h3>
 
             <input
@@ -188,14 +188,14 @@ const CardProfilPublication = ({
               value={disciplineName}
               onChange={(e) => setDisciplineName(e.target.value)}
               placeholder={t("disciplineNamePlaceholder")}
-              className="w-full p-2 border border-gray-300 rounded mb-4"
+              className="w-full p-2 border border-gray-300 rounded mb-4 text-[var(--color-text-secondary)]"
               disabled={isLoading}
             />
 
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 text-gray-800"
                 disabled={isLoading}
               >
                 {t("cancel")}
