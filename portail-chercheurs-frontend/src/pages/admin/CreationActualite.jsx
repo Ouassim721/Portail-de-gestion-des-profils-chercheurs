@@ -47,57 +47,59 @@ const CreationActualite = () => {
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto bg-[var(--color-bg-primary)] shadow-lg rounded-lg">
-      <h2 className="text-xl font-bold mb-4">{t("createNewsTitle")}</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          name="titre"
-          placeholder={t("titrePlaceholder")}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-          required
-        />
-        <input
-          type="text"
-          name="localisation"
-          placeholder={t("locationPlaceholder")}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-          required
-        />
-        <textarea
-          name="description"
-          placeholder={t("descriptionPlaceholder")}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-          required
-        />
-        <input
-          type="text"
-          name="categorie"
-          placeholder={t("categoryPlaceholder")}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-          required
-        />
-        <input
-          type="file"
-          name="document_pdf"
-          accept="application/pdf"
-          onChange={handleFileChange}
-          className="w-full border p-2 rounded"
-        />
-        <input
-          type="date"
-          name="date_publication"
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-          required
-        />
-        <Button className="w-full">{t("addButton")}</Button>
-      </form>
-      {message && <p className="mt-4 text-sm">{message}</p>}
+    <div className="min-h-[100vh] flex justify-center items-center">
+      <div className="p-4 max-w-md mx-auto bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] shadow-lg rounded-lg">
+        <h2 className="text-xl font-bold mb-4">{t("createNewsTitle")}</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            name="titre"
+            placeholder={t("titrePlaceholder")}
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+            required
+          />
+          <input
+            type="text"
+            name="localisation"
+            placeholder={t("locationPlaceholder")}
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+            required
+          />
+          <textarea
+            name="description"
+            placeholder={t("descriptionPlaceholder")}
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+            required
+          />
+          <input
+            type="text"
+            name="categorie"
+            placeholder={t("categoryPlaceholder")}
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+            required
+          />
+          <input
+            type="file"
+            name="document_pdf"
+            accept="application/pdf"
+            onChange={handleFileChange}
+            className="w-full border p-2 rounded"
+          />
+          <input
+            type="date"
+            name="date_publication"
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+            required
+          />
+          <Button className="w-full">{t("addButton")}</Button>
+        </form>
+        {message && <p className="mt-4 text-sm">{message}</p>}
+      </div>
     </div>
   );
 };

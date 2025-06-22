@@ -86,9 +86,9 @@ const AdminActualite = () => {
             </select>
 
             {/* Tableau */}
-            <table className="w-full border text-left shadow">
-              <thead className="bg-[var(--color-bg-primary)]">
-                <tr>
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-[var(--color-bg-primary)] text-[var(--color-text-secondary)]">
+                <tr className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer">
                   <th className="p-2">{t("tableHeaderTitle")}</th>
                   <th className="p-2">{t("tableHeaderLocation")}</th>
                   <th className="p-2">{t("tableHeaderDate")}</th>
@@ -96,12 +96,9 @@ const AdminActualite = () => {
                   <th className="p-2">{t("tableHeaderActions")}</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] divide-y divide-gray-200">
                 {liste.map((a) => (
-                  <tr
-                    key={a.id}
-                    className="border-t bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] hover:bg-gray-50 hover:text-black cursor-pointer"
-                  >
+                  <tr key={a.id} className="transition-colors">
                     <td className="p-2">{a.titre}</td>
                     <td className="p-2">{a.localisation}</td>
                     <td className="p-2">

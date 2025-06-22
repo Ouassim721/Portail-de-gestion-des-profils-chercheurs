@@ -32,14 +32,13 @@ import AdminChercheurs from "./pages/admin/AdminChercheurs";
 import CreationChercheur from "./pages/admin/CreationChercheur";
 import AdminActualite from "./pages/admin/AdminActualites";
 import CreationActualite from "./pages/admin/CreationActualite";
-import AdminDisciplines from "./pages/admin/AdminDisciplines";
 import ResearcherStats from "./pages/ResearcherStats";
 import Contact from "./pages/Contact";
 import CoursesPage from "./pages/CoursesPage";
 import SubjectsPage from "./pages/SubjectsPage";
 import CourseDetailPage from "./pages/CourseDetailPage";
 import CourseForm from "./components/cours/CourseForm";
-import AllCoursesPage from './pages/AllCoursesPage';
+import AllCoursesPage from "./pages/AllCoursesPage";
 
 function App() {
   const userId = localStorage.getItem("userId");
@@ -142,14 +141,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/dashboard/admindisciplines"
-              element={
-                <ProtectedRoute redirectTo="/connexion" adminOnly>
-                  <AdminDisciplines />
-                </ProtectedRoute>
-              }
-            />
+
             <Route
               path="/dashboard/adminchercheurs/creationchercheur"
               element={

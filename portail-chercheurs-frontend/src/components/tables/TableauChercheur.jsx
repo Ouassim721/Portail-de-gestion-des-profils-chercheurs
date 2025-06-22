@@ -5,6 +5,7 @@ import TableGenerique2 from "./TableGenerique2";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Button from "../ui/Button";
 import axios from "../../axios";
+import Loader from "../ui/Loader";
 import { LanguageContext } from "../../contexts/LanguageContext";
 import { logError } from "@/utils/logger";
 
@@ -86,7 +87,12 @@ export default function ChercheursList() {
       return 0;
     });
 
-  if (isLoading) return <div className="text-center py-8">{t("loading")}</div>;
+  if (isLoading)
+    return (
+      <div className="text-center text-[var(--color-text-primary)] py-8">
+        <Loader />
+      </div>
+    );
   if (error)
     return <div className="text-center py-8 text-red-500">{error}</div>;
 

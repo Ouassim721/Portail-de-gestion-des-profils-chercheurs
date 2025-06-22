@@ -16,12 +16,12 @@ const TableGenerique = ({
   return (
     <div className="overflow-x-auto rounded-lg shadow">
       <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+        <thead className="bg-[var(--color-bg-primary)] text-[var(--color-text-secondary)]">
           <tr>
             {columns.map((header) => (
               <th
                 key={header.key || header.label}
-                className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer"
                 onClick={() =>
                   header.key &&
                   setSortConfig({
@@ -46,10 +46,7 @@ const TableGenerique = ({
 
         <tbody className="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] divide-y divide-gray-200">
           {data.map((researcher) => (
-            <tr
-              key={researcher.id}
-              className="hover:bg-gray-50 transition-colors"
-            >
+            <tr key={researcher.id} className="transition-colors">
               <td className="px-4 py-3 flex items-center gap-3">
                 <div className="relative">
                   <ChercheurAvatar
@@ -60,9 +57,7 @@ const TableGenerique = ({
                 </div>
                 <span className="font-medium">{researcher.name}</span>
               </td>
-              <td className="px-4 py-3 text-[var(--color-text-secondary)]">
-                {researcher.email}
-              </td>
+              <td className="px-4 py-3">{researcher.email}</td>
               <td className="px-4 py-3">
                 <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
                   {researcher.domain}

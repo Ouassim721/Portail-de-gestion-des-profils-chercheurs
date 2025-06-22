@@ -24,7 +24,6 @@ const SideMenu = ({ isVisible, onClose }) => {
       icon: <FaUser />,
       to: "/AdminChercheurs",
     },
-    { labelKey: "Discipline", icon: <FaUniversity />, to: "/admindisciplines" },
     {
       labelKey: "upcomingEventTitle",
       icon: <FaCalendarAlt />,
@@ -77,7 +76,7 @@ const SideMenu = ({ isVisible, onClose }) => {
               }
             >
               <FontAwesomeIcon icon={faHouse} className="w-5 h-5" />
-              <span>{t("Home")}</span>
+              <span>{t("home")}</span>
             </NavLink>
           </li>
         </ul>
