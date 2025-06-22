@@ -13,6 +13,8 @@ import {
 import axios from "../../axios";
 import TopBar from "../../components/layout/topbar";
 import { LanguageContext } from "../../contexts/LanguageContext";
+import { log } from "@/utils/logger";
+import { logError } from "@/utils/logger";
 
 const AdminDiscipline = () => {
   const { t, formatDate } = useContext(LanguageContext);
@@ -35,9 +37,9 @@ const AdminDiscipline = () => {
     try {
       const res = await axios.get("http://localhost:8000/api/disciplines");
       setDisciplines(res.data);
-      console.log(disciplines);
+      log(disciplines);
     } catch (err) {
-      console.error(t("errorLoadingData"), err);
+      logError(t("errorLoadingData"), err);
     }
   };
 
@@ -48,7 +50,7 @@ const AdminDiscipline = () => {
       await axios.delete(`http://localhost:8000/api/disciplines/${id}`);
       setDisciplines(disciplines.filter((a) => a.id !== id));
     } catch (err) {
-      console.error(t("errorDelete"), err);
+      logError(t("errorDelete"), err);
     }
   };
 
@@ -75,7 +77,7 @@ const AdminDiscipline = () => {
       );
       setEditingId(null);
     } catch (err) {
-      console.error(t("errorUpdate"), err);
+      logError(t("errorUpdate"), err);
     }
   };
 
@@ -93,7 +95,7 @@ const AdminDiscipline = () => {
       setNewDiscipline("");
       setIsAdding(false);
     } catch (err) {
-      console.error(t("errorAddDiscipline"), err);
+      logError(t("errorAddDiscipline"), err);
     }
   };
 

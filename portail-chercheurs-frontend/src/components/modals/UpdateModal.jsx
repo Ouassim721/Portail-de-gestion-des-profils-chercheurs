@@ -5,6 +5,7 @@ import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "../../axios";
 import { LanguageContext } from "../../contexts/LanguageContext";
+import { logError } from "@/utils/logger";
 
 export default function UpdateModal({ actualite, onUpdate }) {
   const { t } = useContext(LanguageContext);
@@ -20,7 +21,7 @@ export default function UpdateModal({ actualite, onUpdate }) {
       await axios.put(`/actualites/${actualite.id}`, form);
       onUpdate();
     } catch (err) {
-      console.error(t("updateError"), err);
+      logError(t("updateError"), err);
     }
   };
 

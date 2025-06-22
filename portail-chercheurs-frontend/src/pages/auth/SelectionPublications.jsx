@@ -4,6 +4,8 @@ import Loader from "../../components/ui/Loader";
 import Button from "../../components/ui/Button";
 import { useNavigate } from "react-router-dom";
 import ProgressBar from "../../components/ui/ProgressBar";
+import { logError } from "@/utils/logger";
+
 /**
  * Composant pour sélectionner et enregistrer des publications Scopus
  */
@@ -61,7 +63,7 @@ const SelectionPublications = () => {
         setPublications(pubsWithIds);
         setError(null);
       } catch (err) {
-        console.error("Erreur détaillée:", err.response?.data || err.message);
+        logError("Erreur détaillée:", err.response?.data || err.message);
         setError("Erreur lors du chargement des publications");
         setPublications([]);
       } finally {
@@ -121,7 +123,7 @@ const SelectionPublications = () => {
       setSelected([]);
       navigate("/");
     } catch (err) {
-      console.error("Erreur détaillée:", err.response?.data || err.message);
+      logError("Erreur détaillée:", err.response?.data || err.message);
       setSaveStatus({
         success: false,
         message: err.response?.data?.error || "Erreur lors de l'enregistrement",

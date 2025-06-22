@@ -8,6 +8,7 @@ import DisciplineStatsPage from "../../components/DisciplineStatsPage.jsx";
 import PedagogicalStatsPage from "../../components/PedagogicalStatsPage";
 import axios from "../../axios";
 import { LanguageContext } from "../../contexts/LanguageContext";
+import { logError } from "@/utils/logger";
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ function AdminDashboard() {
         }
       })
       .catch((error) => {
-        console.error(t("profileError"), error);
+        logError(t("profileError"), error);
         navigate("/connexion");
       });
   }, [navigate, t]);

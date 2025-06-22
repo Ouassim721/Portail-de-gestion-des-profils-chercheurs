@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { LanguageContext } from "../../contexts/LanguageContext";
 import * as Dialog from "@radix-ui/react-dialog";
+import { logError } from "@/utils/logger";
 
 export default function NotificationModal({ show, onClose }) {
   const { t } = useContext(LanguageContext);
@@ -25,7 +26,7 @@ export default function NotificationModal({ show, onClose }) {
       setNotifications(res.data.data);
       setIsLoading(false);
     } catch (err) {
-      console.error(err);
+      logError(err);
       setIsLoading(false);
     }
   };
@@ -37,7 +38,7 @@ export default function NotificationModal({ show, onClose }) {
         prev.map((n) => (n.id === id ? { ...n, is_read: true } : n))
       );
     } catch (err) {
-      console.error(err);
+      logError(err);
     }
   };
 

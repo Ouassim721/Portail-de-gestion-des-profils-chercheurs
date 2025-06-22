@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"; // Correction cruciale ici
 import axios from "../axios";
 import Loader from "../components/ui/Loader";
 import ProfilChercheur from "../components/ProfilChercheur";
+import { logError } from "@/utils/logger";
 
 function ProfilChercheurPublic() {
   const { id } = useParams();
@@ -30,8 +31,8 @@ function ProfilChercheurPublic() {
 
         // Chargement des publications
         const publicationsResponse = await axios.get(
-  `/publications?chercheur_id=${id}&limit=all` 
-);
+          `/publications?chercheur_id=${id}&limit=all`
+        );
         setPublicationsData(publicationsResponse.data.data || []);
 
         // Chargement unique des disciplines
@@ -41,7 +42,7 @@ function ProfilChercheurPublic() {
           setDisciplinesLoaded(true);
         }
       } catch (error) {
-        console.error("Erreur lors du chargement :", error);
+        logError("Erreur lors du chargement :", error);
       } finally {
         setLoading(false);
         setLoadingPublications(false);
@@ -56,7 +57,7 @@ function ProfilChercheurPublic() {
 
   return (
     <ProfilChercheur
-    key={chercheurData.id}
+      key={chercheurData.id}
       isPublic={true}
       chercheur={chercheurData}
       publications={publicationsData}

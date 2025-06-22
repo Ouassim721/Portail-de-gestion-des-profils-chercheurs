@@ -25,6 +25,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faBell as faRegularBell } from "@fortawesome/free-regular-svg-icons";
 import SettingsModal from "../modals/SettingsModal";
+import { logError } from "@/utils/logger";
 
 function Navbar({ sticky = false }) {
   const [unreadNotifications, setUnreadNotifications] = useState(0);
@@ -91,7 +92,7 @@ function Navbar({ sticky = false }) {
       setChercheur(null);
       navigate("/connexion");
     } catch (err) {
-      console.error(t("logoutError"), err);
+      logError(t("logoutError"), err);
     }
   };
   const handleLogin = () => {

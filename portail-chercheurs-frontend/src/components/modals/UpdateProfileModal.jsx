@@ -4,6 +4,7 @@ import axios from "../../axios";
 import Button from "../ui/Button";
 import { LanguageContext } from "../../contexts/LanguageContext";
 import "./Modal.css";
+import { logError } from "@/utils/logger";
 
 export default function UpdateProfileModal({
   isOpen,
@@ -54,7 +55,7 @@ export default function UpdateProfileModal({
       setPhotoPreview(null);
       onUpdate(response.data);
     } catch (error) {
-      console.error("Erreur lors de la suppression :", error);
+      logError("Erreur lors de la suppression :", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -87,7 +88,7 @@ export default function UpdateProfileModal({
       onUpdate(response.data);
       onClose();
     } catch (error) {
-      console.error("Erreur lors de la mise à jour :", error);
+      logError("Erreur lors de la mise à jour :", error);
     } finally {
       setIsSubmitting(false);
     }

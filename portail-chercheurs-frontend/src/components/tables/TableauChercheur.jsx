@@ -6,6 +6,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Button from "../ui/Button";
 import axios from "../../axios";
 import { LanguageContext } from "../../contexts/LanguageContext";
+import { logError } from "@/utils/logger";
 
 export default function ChercheursList() {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ export default function ChercheursList() {
         }));
         setResearchers(formatted);
       } catch (err) {
-        console.error(t("loadResearchersError"), err);
+        logError(t("loadResearchersError"), err);
         setError(t("loadResearchersError"));
       } finally {
         setIsLoading(false);
@@ -65,7 +66,7 @@ export default function ChercheursList() {
         setCurrentPage((p) => p - 1);
       }
     } catch (err) {
-      console.error(t("deleteResearcherError"), err);
+      logError(t("deleteResearcherError"), err);
       alert(t("deleteResearcherError"));
     }
   };

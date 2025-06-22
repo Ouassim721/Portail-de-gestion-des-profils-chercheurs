@@ -18,6 +18,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { logError } from "@/utils/logger";
 
 ChartJS.register(
   CategoryScale,
@@ -115,7 +116,7 @@ export default function PublicationsDashboard() {
         });
         setLoading(false);
       } catch (error) {
-        console.error("Erreur de chargement:", error);
+        logError("Erreur de chargement:", error);
         setLoading(false);
       }
     };

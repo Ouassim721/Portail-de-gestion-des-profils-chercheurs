@@ -9,6 +9,7 @@ import {
   FiLoader,
 } from "react-icons/fi";
 import { LanguageContext } from "../contexts/LanguageContext";
+import { logError } from "@/utils/logger";
 
 const Contact = () => {
   const { t } = useContext(LanguageContext);
@@ -27,7 +28,7 @@ const Contact = () => {
       setSujet("");
       setMessage("");
     } catch (err) {
-      console.error("Erreur détaillée:", err.response?.data || err.message);
+      logError("Erreur détaillée:", err.response?.data || err.message);
       setStatus("error");
     }
   };
@@ -40,9 +41,7 @@ const Contact = () => {
           <h1 className="text-3xl font-extrabold text-[var(--color-text-primary)] sm:text-4xl">
             {t("contactTitle")}
           </h1>
-          <p className="mt-3 text-xl text-gray-500">
-            {t("contactSubtitle")}
-          </p>
+          <p className="mt-3 text-xl text-gray-500">{t("contactSubtitle")}</p>
         </div>
 
         <div className="bg-[var(--color-bg-primary)] shadow-xl rounded-lg overflow-hidden">
@@ -51,9 +50,7 @@ const Contact = () => {
             <h2 className="text-2xl font-bold flex items-center">
               <FiMail className="mr-2" /> {t("contactInfoTitle")}
             </h2>
-            <p className="mt-2 opacity-90">
-              {t("contactInfoDescription")}
-            </p>
+            <p className="mt-2 opacity-90">{t("contactInfoDescription")}</p>
           </div>
 
           {/* Contact Form */}
@@ -144,9 +141,7 @@ const Contact = () => {
               <div className="mt-6 p-4 bg-red-50 rounded-lg flex items-start">
                 <FiAlertCircle className="text-red-500 text-xl mr-2 mt-0.5" />
                 <div>
-                  <p className="font-medium text-red-800">
-                    {t("errorTitle")}
-                  </p>
+                  <p className="font-medium text-red-800">{t("errorTitle")}</p>
                   <p className="text-sm text-red-600 mt-1">
                     {t("errorMessage")}
                   </p>

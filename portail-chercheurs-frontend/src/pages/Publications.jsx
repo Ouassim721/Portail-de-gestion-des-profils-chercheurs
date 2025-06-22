@@ -16,6 +16,7 @@ import axios from "../axios";
 import Loader from "../components/ui/Loader";
 import { LanguageContext } from "../contexts/LanguageContext";
 import useAuth from "../hooks/useAuth";
+import { logError } from "@/utils/logger";
 
 const Publications = () => {
   const { t } = useContext(LanguageContext);
@@ -81,7 +82,7 @@ const Publications = () => {
         if (page === 1) setInitialLoad(false);
       })
       .catch((error) => {
-        console.error("Error fetching publications:", error);
+        logError("Error fetching publications:", error);
         setHasMore(false);
       })
       .finally(() => setIsLoading(false));
@@ -105,7 +106,7 @@ const Publications = () => {
         setCountDiscipline(response.data.disciplines);
       })
       .catch((error) => {
-        console.error(t("errorLoadingData"), error);
+        logError(t("errorLoadingData"), error);
       });
   }, [t]);
 
@@ -116,7 +117,7 @@ const Publications = () => {
         setDisciplines(response.data);
       })
       .catch((error) => {
-        console.error(t("errorLoadingData"), error);
+        logError(t("errorLoadingData"), error);
       });
   }, [t]);
 
@@ -127,7 +128,7 @@ const Publications = () => {
         setAvailableYears(response.data);
       })
       .catch((error) => {
-        console.error(t("errorLoadingData"), error);
+        logError(t("errorLoadingData"), error);
       });
   }, [t]);
 

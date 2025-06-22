@@ -5,6 +5,7 @@ import Button from "../../components/ui/Button";
 import ProgressBar from "../../components/ui/ProgressBar";
 import { useNavigate } from "react-router-dom";
 import { LanguageContext } from "../../contexts/LanguageContext";
+import { logError } from "@/utils/logger";
 
 const ProfilUpdateForm = () => {
   const { t } = useContext(LanguageContext);
@@ -24,7 +25,7 @@ const ProfilUpdateForm = () => {
         const { nom, prenom } = res.data;
         setForm((prev) => ({ ...prev, nom, prenom }));
       })
-      .catch(console.error)
+      .catch(logError)
       .finally(() => setLoading(false));
   }, []);
 
@@ -37,7 +38,7 @@ const ProfilUpdateForm = () => {
     axios
       .put("/chercheur/profil", form, { withCredentials: true })
       .then(() => navigate("/selection-publications"))
-      .catch(console.error);
+      .catch(logError);
   };
 
   if (loading) return <Loader />;

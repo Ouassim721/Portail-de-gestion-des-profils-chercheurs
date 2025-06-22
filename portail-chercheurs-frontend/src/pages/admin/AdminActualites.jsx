@@ -8,6 +8,7 @@ import TopBar from "../../components/layout/topbar";
 import Button from "../../components/ui/Button";
 import UpdateModal from "../../components/modals/UpdateModal";
 import { LanguageContext } from "../../contexts/LanguageContext";
+import { logError } from "@/utils/logger";
 
 const AdminActualite = () => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const AdminActualite = () => {
       const res = await axios.get("http://localhost:8000/api/actualites");
       setActualites(res.data);
     } catch (err) {
-      console.error(t("errorLoadingData"), err);
+      logError(t("errorLoadingData"), err);
     }
   };
 
@@ -35,7 +36,7 @@ const AdminActualite = () => {
       await axios.delete(`http://localhost:8000/api/actualites/${id}`);
       setActualites(actualites.filter((a) => a.id !== id));
     } catch (err) {
-      console.error(t("errorDelete"), err);
+      logError(t("errorDelete"), err);
     }
   };
 

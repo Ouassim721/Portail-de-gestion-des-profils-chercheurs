@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "../../axios";
 import { useNavigate } from "react-router-dom";
+import { logError } from "@/utils/logger";
 
 const SearchBar = ({ placeholder = "Rechercher un Profil..." }) => {
   const [query, setQuery] = useState("");
@@ -18,7 +19,7 @@ const SearchBar = ({ placeholder = "Rechercher un Profil..." }) => {
           setShowSuggestions(true);
         })
         .catch((err) => {
-          console.error(err);
+          logError(err);
           setSuggestions([]);
         });
     } else {

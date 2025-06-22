@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
-import api from '../axios';
-import SubjectForm from '../components/matieres/SubjectForm';
-import SubjectList from '../components/matieres/SubjectList';
-import ProtectedRoute from '../components/auth/ProtectedRoute';
-import useAuth from '../hooks/useAuth';
-import { XMarkIcon, PlusIcon } from '@heroicons/react/24/solid';
-import { LanguageContext } from '../contexts/LanguageContext';
+import React, { useState, useEffect, useContext } from "react";
+import { useParams } from "react-router-dom";
+import api from "../axios";
+import SubjectForm from "../components/matieres/SubjectForm";
+import SubjectList from "../components/matieres/SubjectList";
+import ProtectedRoute from "../components/auth/ProtectedRoute";
+import useAuth from "../hooks/useAuth";
+import { XMarkIcon, PlusIcon } from "@heroicons/react/24/solid";
+import { LanguageContext } from "../contexts/LanguageContext";
+import { logError } from "@/utils/logger";
 
 const SubjectsPage = () => {
   const { user } = useAuth();
@@ -24,12 +25,12 @@ const SubjectsPage = () => {
         setLoading(true);
         const [researcherResponse, allResponse] = await Promise.all([
           api.get(`/chercheurs/${id}/matieres`),
-          api.get('/matieres')
+          api.get("/matieres"),
         ]);
         setSubjects(researcherResponse.data);
         setAllSubjects(allResponse.data);
       } catch (error) {
-        console.error(t("errorFetchingSubjects"), error);
+        logError(t("errorFetchingSubjects"), error);
       } finally {
         setLoading(false);
       }
@@ -40,18 +41,18 @@ const SubjectsPage = () => {
   const handleAttach = async (subjectId) => {
     try {
       const response = await api.post(`/chercheurs/${id}/matieres`, {
-        id_matiere: subjectId
+        id_matiere: subjectId,
       });
 
-      setSubjects(prev => [
+      setSubjects((prev) => [
         ...prev,
         {
           id_matiere: subjectId,
-          nom_matiere: response.data.nom_matiere
-        }
+          nom_matiere: response.data.nom_matiere,
+        },
       ]);
     } catch (error) {
-      console.error(t("errorAttachingSubject"), error);
+      logError(t("errorAttachingSubject"), error);
       alert(error.response?.data?.message || t("errorOccurredAttaching"));
     }
   };
@@ -59,14 +60,14 @@ const SubjectsPage = () => {
   const handleDetach = async (subjectId) => {
     try {
       await api.delete(`/chercheurs/${id}/matieres/${subjectId}`);
-      setSubjects(prev => prev.filter(s => s.id_matiere !== subjectId));
+      setSubjects((prev) => prev.filter((s) => s.id_matiere !== subjectId));
     } catch (error) {
-      console.error(t("errorDetachingSubject"), error);
+      logError(t("errorDetachingSubject"), error);
       try {
         const res = await api.get(`/chercheurs/${id}/matieres`);
         setSubjects(res.data);
       } catch (refreshError) {
-        console.error(t("errorRefreshingSubjects"), refreshError);
+        logError(t("errorRefreshingSubjects"), refreshError);
       }
       alert(error.response?.data?.message || t("errorOccurredDetaching"));
     }
@@ -74,18 +75,18 @@ const SubjectsPage = () => {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-[var(--color-bg-secondary)] py-8">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-800">
+            <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">
               {t("mySubjects")}
             </h1>
             <button
               onClick={() => setShowForm(!showForm)}
               className={`px-4 py-2 rounded-lg flex items-center ${
                 showForm
-                  ? 'bg-gray-500 hover:bg-gray-600 text-white'
-                  : 'bg-green-600 hover:bg-green-700 text-white'
+                  ? "bg-gray-500 hover:bg-gray-600 text-white"
+                  : "bg-green-600 hover:bg-green-700 text-white"
               }`}
             >
               {showForm ? (
@@ -110,10 +111,7 @@ const SubjectsPage = () => {
             />
           )}
 
-          <SubjectList
-            subjects={subjects}
-            onDetach={handleDetach}
-          />
+          <SubjectList subjects={subjects} onDetach={handleDetach} />
         </div>
       </div>
     </ProtectedRoute>

@@ -9,6 +9,7 @@ import {
   TagIcon,
 } from "@heroicons/react/24/outline";
 import { LanguageContext } from "../contexts/LanguageContext";
+import { logError } from "@/utils/logger";
 
 export default function DetailsActualite() {
   const { t, formatDate } = useContext(LanguageContext);
@@ -22,7 +23,7 @@ export default function DetailsActualite() {
         const response = await axios.get(`/actualites/${id}`);
         setActualite(response.data);
       } catch (error) {
-        console.error(t("errorLoadingData"), error);
+        logError(t("errorLoadingData"), error);
       } finally {
         setLoading(false);
       }

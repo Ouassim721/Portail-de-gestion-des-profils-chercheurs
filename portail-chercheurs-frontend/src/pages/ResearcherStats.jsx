@@ -14,6 +14,7 @@ import {
 } from "chart.js";
 import "react-circular-progressbar/dist/styles.css";
 import { LanguageContext } from "../contexts/LanguageContext";
+import { logError } from "@/utils/logger";
 
 ChartJS.register(
   CategoryScale,
@@ -45,19 +46,24 @@ const ResearcherDashboard = () => {
   useEffect(() => {
     const fetchResearcherData = async () => {
       try {
-        const [
-          profileRes,
-          pubsRes,
-          followersRes,
-          statsRes,
-          disciplinesRes,
-        ] = await Promise.all([
-          axios.get("http://localhost:8000/api/me", { withCredentials: true }),
-          axios.get("http://localhost:8000/api/profile/publications", { withCredentials: true }),
-          axios.get("http://localhost:8000/api/chercheurs/followers/count", { withCredentials: true }),
-          axios.get("http://localhost:8000/api/chercheurs/me/stats", { withCredentials: true }),
-          axios.get("http://localhost:8000/api/disciplines", { withCredentials: true }),
-        ]);
+        const [profileRes, pubsRes, followersRes, statsRes, disciplinesRes] =
+          await Promise.all([
+            axios.get("http://localhost:8000/api/me", {
+              withCredentials: true,
+            }),
+            axios.get("http://localhost:8000/api/profile/publications", {
+              withCredentials: true,
+            }),
+            axios.get("http://localhost:8000/api/chercheurs/followers/count", {
+              withCredentials: true,
+            }),
+            axios.get("http://localhost:8000/api/chercheurs/me/stats", {
+              withCredentials: true,
+            }),
+            axios.get("http://localhost:8000/api/disciplines", {
+              withCredentials: true,
+            }),
+          ]);
 
         setProfileData(profileRes.data);
         setPublications(pubsRes.data?.publications || []);
@@ -65,7 +71,7 @@ const ResearcherDashboard = () => {
         setStats(statsRes.data || {});
         setDisciplines(disciplinesRes.data || []);
       } catch (error) {
-        console.error("Erreur détaillée:", error.response?.data || error.message);
+        logError("Erreur détaillée:", error.response?.data || error.message);
         setPublications([]);
         setFollowers(0);
         setStats({
@@ -89,8 +95,8 @@ const ResearcherDashboard = () => {
       return;
     }
 
-    const collaborativePubs = publications.filter(pub => {
-      const authors = pub.auteurs?.split(",").map(a => a.trim()) || [];
+    const collaborativePubs = publications.filter((pub) => {
+      const authors = pub.auteurs?.split(",").map((a) => a.trim()) || [];
       return authors.length > 1;
     });
 
@@ -106,8 +112,8 @@ const ResearcherDashboard = () => {
     const currentResearcher = `${profileData.prenom} ${profileData.nom}`.trim();
     const collaborators = mostRecent.auteurs
       .split(",")
-      .map(a => a.trim())
-      .filter(name => name !== currentResearcher);
+      .map((a) => a.trim())
+      .filter((name) => name !== currentResearcher);
 
     setRecentCollaboration({
       collaborators: collaborators.join(", "),
@@ -124,7 +130,7 @@ const ResearcherDashboard = () => {
   // Répartition par discipline
   const disciplineDistribution = publications.reduce((acc, pub) => {
     const name = pub.discipline_id
-      ? (disciplineMap[pub.discipline_id] || t("noCategory"))
+      ? disciplineMap[pub.discipline_id] || t("noCategory")
       : t("noCategory");
     acc[name] = (acc[name] || 0) + 1;
     return acc;
@@ -134,14 +140,14 @@ const ResearcherDashboard = () => {
   const citationsData = {
     labels:
       publications.length > 0
-        ? publications.map(p => (p.titre?.substring(0, 15) + "..."))
+        ? publications.map((p) => p.titre?.substring(0, 15) + "...")
         : [t("noData")],
     datasets: [
       {
         label: t("citationsLabel"),
         data:
           publications.length > 0
-            ? publications.map(p => p.citation_count || 0)
+            ? publications.map((p) => p.citation_count || 0)
             : [0],
         backgroundColor: "#3B82F6",
       },
@@ -182,10 +188,7 @@ const ResearcherDashboard = () => {
         >
           {t("researcherDashboardTitle")}
         </h1>
-        <p
-          className="mt-2"
-          style={{ color: "var(--color-text-secondary)" }}
-        >
+        <p className="mt-2" style={{ color: "var(--color-text-secondary)" }}>
           {profileData.nom} {profileData.prenom}
         </p>
       </div>

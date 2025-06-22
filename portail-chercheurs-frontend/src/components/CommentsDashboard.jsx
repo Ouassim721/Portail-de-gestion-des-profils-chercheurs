@@ -14,6 +14,7 @@ import {
   Legend,
   Filler,
 } from "chart.js";
+import { logError } from "@/utils/logger";
 
 ChartJS.register(
   CategoryScale,
@@ -86,7 +87,7 @@ export default function CommentsDashboard() {
         });
         setLoading(false);
       } catch (error) {
-        console.error("Erreur de chargement:", error);
+        logError("Erreur de chargement:", error);
         setLoading(false);
       }
     };

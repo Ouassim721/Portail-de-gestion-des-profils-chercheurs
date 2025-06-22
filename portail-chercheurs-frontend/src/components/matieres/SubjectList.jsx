@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
-import { TrashIcon, BookOpenIcon } from '@heroicons/react/24/solid';
-import { LanguageContext } from '../../contexts/LanguageContext';
+import React, { useContext } from "react";
+import { TrashIcon, BookOpenIcon } from "@heroicons/react/24/solid";
+import { LanguageContext } from "../../contexts/LanguageContext";
 
 const SubjectList = ({ subjects, onDetach }) => {
   const { t } = useContext(LanguageContext);
@@ -9,7 +9,9 @@ const SubjectList = ({ subjects, onDetach }) => {
     return (
       <div className="bg-white rounded-lg shadow-md p-8 text-center">
         <BookOpenIcon className="h-16 w-16 mx-auto text-gray-300 mb-4" />
-        <h3 className="text-lg font-medium text-gray-900">{t("noSubjectsTitle")}</h3>
+        <h3 className="text-lg font-medium text-gray-900">
+          {t("noSubjectsTitle")}
+        </h3>
         <p className="mt-1 text-gray-500">{t("noSubjectsMessage")}</p>
       </div>
     );
@@ -26,13 +28,20 @@ const SubjectList = ({ subjects, onDetach }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="bg-[var(--color-bg-primary)] rounded-lg shadow-md overflow-hidden">
       <ul className="divide-y divide-gray-200">
-        {subjects.map(subject => (
-          <li key={subject.id_matiere} className="p-4 flex justify-between items-center">
-            <span className="text-gray-800 font-medium">{subject.nom_matiere}</span>
+        {subjects.map((subject) => (
+          <li
+            key={subject.id_matiere}
+            className="p-4 flex justify-between items-center"
+          >
+            <span className="text-gray-800 font-medium">
+              {subject.nom_matiere}
+            </span>
             <button
-              onClick={() => handleDetachClick(subject.id_matiere, subject.nom_matiere)}
+              onClick={() =>
+                handleDetachClick(subject.id_matiere, subject.nom_matiere)
+              }
               className="text-red-600 hover:text-red-800 flex items-center"
             >
               <TrashIcon className="h-5 w-5 mr-1" />

@@ -1,10 +1,12 @@
 import React, { useContext } from "react";
 import pdp from "../../assets/chercheur-place-holder.jpg";
 import Button from "../ui/Button";
-import { faShareNodes } from "@fortawesome/free-solid-svg-icons";
+import { faShareNodes, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { LanguageContext } from "../../contexts/LanguageContext";
+import { useNavigate } from "react-router-dom";
 
 const CardPublication = ({
+  id,
   title,
   auteur,
   university,
@@ -13,10 +15,10 @@ const CardPublication = ({
   category = [],
   date,
   citations,
-  pdf_path,
   className,
 }) => {
   const { t, formatDate } = useContext(LanguageContext);
+  const navigate = useNavigate();
 
   return (
     <div
@@ -41,12 +43,17 @@ const CardPublication = ({
             </p>
           </div>
         </div>
-        <p className="text-md text-[var(--color-text-secondary)] text-justify ">
-          {description}
+        <p className="text-md text-[var(--color-text-secondary)] text-justify">
+          {description.length > 300
+            ? `${description.slice(0, 300)}...`
+            : description}
         </p>
         <div className="flex gap-2 flex-wrap">
           {category.map((item) => (
-            <h6 key={item} className="py-2 px-5 rounded-full bg-blue-50 text-blue-900 font-light">
+            <h6
+              key={item}
+              className="py-2 px-5 rounded-full bg-blue-50 text-blue-900 font-light"
+            >
               {item}
             </h6>
           ))}
@@ -55,26 +62,26 @@ const CardPublication = ({
       <div className="flex lg:flex-col justify-between items-center lg:w-1/3 lg:min-w-42">
         <div className="lg:flex lg:flex-col lg:gap-2 lg:text-right lg:w-full lg:pr-3">
           <h6 className="font-light text-sm text-[var(--color-text-secondary)]">
-            {t("publishedOn")} {date ? formatDate(date, { dateStyle: 'medium' }) : t("dateInvalid")}
+            {t("publishedOn")}{" "}
+            {date
+              ? formatDate(date, { dateStyle: "medium" })
+              : t("dateInvalid")}
           </h6>
           <h5 className="hidden lg:block font-bold text-xl text-[var(--color-text-primary)]">
-            {citations} <span className="font-light text-sm text-[var(--color-text-secondary)]">{t("citationsLabel")}</span>
+            {citations}{" "}
+            <span className="font-light text-sm text-[var(--color-text-secondary)]">
+              {t("citationsLabel")}
+            </span>
           </h5>
         </div>
         <div className="flex lg:flex-col gap-4 lg:w-full">
-          {pdf_path && (
-            <a
-              href={`${process.env.REACT_APP_API_URL}/storage/${pdf_path}`}
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center gap-3 px-4 py-2 rounded-lg transition duration-300 ease-in-out cursor-pointer justify-center bg-[var(--color-secondary)] text-[var(--color-bg-primary)] hover:bg-emerald-400 font-light h-10"
-            >
-              {t("viewPdfBtn")}
-            </a>
-          )}
-
-          <Button icon={faShareNodes} variant="secondaryoutline" className="font-light h-10">
-            {t("shareButton")}
+          <Button
+            icon={faCircleInfo}
+            variant="secondaryoutline"
+            className="font-light h-10"
+            onClick={() => navigate(`/details-publication/${id}`)}
+          >
+            {t("viewDetails")}
           </Button>
         </div>
       </div>

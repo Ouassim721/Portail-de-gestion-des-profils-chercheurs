@@ -3,6 +3,7 @@ import axios from "../../axios";
 import Button from "../../components/ui/Button";
 import { Navigate } from "react-router-dom";
 import { LanguageContext } from "../../contexts/LanguageContext";
+import { logError } from "@/utils/logger";
 
 axios.defaults.withCredentials = true;
 
@@ -40,7 +41,7 @@ const CreationActualite = () => {
       setMessage(t("creationSuccess"));
       window.location.href = "/dashboard/adminactualite";
     } catch (error) {
-      console.error(error.response?.data || error);
+      logError(error.response?.data || error);
       setMessage(t("creationError"));
     }
   };

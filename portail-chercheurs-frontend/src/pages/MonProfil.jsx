@@ -3,6 +3,7 @@ import ProfilChercheur from "../components/ProfilChercheur";
 import axios from "../axios";
 import Loader from "../components/ui/Loader";
 import { LanguageContext } from "../contexts/LanguageContext";
+import { logError } from "@/utils/logger";
 
 function MonProfil() {
   const { t } = useContext(LanguageContext);
@@ -14,13 +15,13 @@ function MonProfil() {
   const handleUpdate = (updatedData) => {
     setChercheurData(updatedData);
   };
-  
+
   const toggleVisibility = async (publicationId) => {
     try {
       await axios.put(`/publications/${publicationId}/toggle-visibility`);
       refreshPublications();
     } catch (error) {
-      console.error("Erreur lors du changement de visibilité :", error);
+      logError("Erreur lors du changement de visibilité :", error);
     }
   };
 
@@ -29,7 +30,7 @@ function MonProfil() {
       const publicationsRes = await axios.get("/profile/publications");
       setPublicationsData(publicationsRes.data.publications);
     } catch (error) {
-      console.error("Erreur lors du rafraîchissement des publications :", error);
+      logError("Erreur lors du rafraîchissement des publications :", error);
     }
   };
 
@@ -43,7 +44,7 @@ function MonProfil() {
         setChercheurData(profileRes.data);
         setPublicationsData(publicationsRes.data.publications);
       } catch (error) {
-        console.error("Erreur lors du chargement des données :", error);
+        logError("Erreur lors du chargement des données :", error);
       } finally {
         setLoading(false);
       }
@@ -63,7 +64,7 @@ function MonProfil() {
       onUpdate={handleUpdate}
       isOwner={true}
       onToggleVisibility={toggleVisibility}
-      refreshPublications={() => setRefreshCounter(prev => prev + 1)}
+      refreshPublications={() => setRefreshCounter((prev) => prev + 1)}
     />
   );
 }

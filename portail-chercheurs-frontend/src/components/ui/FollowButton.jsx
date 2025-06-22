@@ -6,6 +6,8 @@ import {
   faUserMinus,
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
+import { log } from "@/utils/logger";
+import { logError } from "@/utils/logger";
 
 const FollowButton = ({ targetUserId }) => {
   const [isFollowing, setIsFollowing] = useState(false);
@@ -21,7 +23,7 @@ const FollowButton = ({ targetUserId }) => {
       })
       .catch((err) => {
         setError("Impossible de vérifier l'abonnement");
-        console.error("Erreur is-following:", err);
+        logError("Erreur is-following:", err);
       })
       .finally(() => setLoading(false));
   }, [targetUserId]);
@@ -34,7 +36,7 @@ const FollowButton = ({ targetUserId }) => {
       ? `/unfollow/${targetUserId}`
       : `/follow/${targetUserId}`;
     const method = isFollowing ? "delete" : "post";
-    console.log({ method, url: endpoint });
+    log({ method, url: endpoint });
 
     axios({ method, url: endpoint })
       .then(() => {
@@ -44,8 +46,8 @@ const FollowButton = ({ targetUserId }) => {
         setError(
           isFollowing ? "Échec de la désabonnement" : "Échec de l'abonnement"
         );
-        // console.error("Erreur follow/unfollow:", err);
-        console.error("Erreur détaillée:", err.response?.data || err.message);
+        // logError("Erreur follow/unfollow:", err);
+        logError("Erreur détaillée:", err.response?.data || err.message);
       })
       .finally(() => setLoading(false));
   };

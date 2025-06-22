@@ -1,17 +1,18 @@
-import React, { useState, useContext } from 'react';
-import { LanguageContext } from '../../contexts/LanguageContext';
+import React, { useState, useContext } from "react";
+import { LanguageContext } from "../../contexts/LanguageContext";
 
 const SubjectForm = ({ allSubjects, currentSubjects, onAttach }) => {
   const { t } = useContext(LanguageContext);
-  const [selectedSubject, setSelectedSubject] = useState('');
-  const [error, setError] = useState('');
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [error, setError] = useState("");
 
   const validSubjects = allSubjects.filter(
-    subject => subject.id_matiere !== undefined && subject.id_matiere !== null
+    (subject) => subject.id_matiere !== undefined && subject.id_matiere !== null
   );
 
   const availableSubjects = validSubjects.filter(
-    subject => !currentSubjects.some(s => s.id_matiere === subject.id_matiere)
+    (subject) =>
+      !currentSubjects.some((s) => s.id_matiere === subject.id_matiere)
   );
 
   const handleSubmit = (e) => {
@@ -22,33 +23,38 @@ const SubjectForm = ({ allSubjects, currentSubjects, onAttach }) => {
       return;
     }
 
-    if (currentSubjects.some(s => s.id_matiere == selectedSubject)) {
+    if (currentSubjects.some((s) => s.id_matiere == selectedSubject)) {
       setError(t("alreadyAttachedError"));
       return;
     }
 
     onAttach(selectedSubject);
-    setSelectedSubject('');
-    setError('');
+    setSelectedSubject("");
+    setError("");
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-      <h2 className="text-xl font-semibold mb-4">{t("addSubject")}</h2>
+    <div className="bg-[var(--color-bg-primary)] p-6 rounded-lg shadow-md mb-8">
+      <h2 className="text-xl font-semibold mb-4 text-[var(--color-text-secondary)] ">
+        {t("addSubject")}
+      </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[var(--color-gray)] mb-1">
             {t("selectSubject")}
           </label>
           <select
             className="w-full border rounded px-3 py-2"
             value={selectedSubject}
-            onChange={e => setSelectedSubject(e.target.value)}
+            onChange={(e) => setSelectedSubject(e.target.value)}
           >
             <option value="">{t("chooseSubjectPlaceholder")}</option>
-            {availableSubjects.map(subject => (
-              <option key={`subject-${subject.id_matiere}`} value={subject.id_matiere}>
+            {availableSubjects.map((subject) => (
+              <option
+                key={`subject-${subject.id_matiere}`}
+                value={subject.id_matiere}
+              >
                 {subject.nom_matiere}
               </option>
             ))}

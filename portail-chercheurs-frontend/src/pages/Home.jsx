@@ -17,6 +17,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { motion, AnimatePresence } from "framer-motion";
 import CountUp from "react-countup";
+import { logError } from "@/utils/logger";
 
 function Home() {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ function Home() {
         setCountCitations(res.data.citations);
         setCountDisciplines(res.data.disciplines);
       })
-      .catch((err) => console.error(t("errorLoadingData"), err));
+      .catch((err) => logError(t("errorLoadingData"), err));
   }, [t]);
 
   // Fetch upcoming events
@@ -49,7 +50,7 @@ function Home() {
         const response = await axios.get("/actualites/home");
         setActualites(response.data);
       } catch (error) {
-        console.error("Erreur lors de la récupération des actualités :", error);
+        logError("Erreur lors de la récupération des actualités :", error);
       }
     };
 
@@ -64,7 +65,7 @@ function Home() {
 
       return response.data.total; // ou response.data.length si tu renvoies la liste
     } catch (error) {
-      console.error("Erreur lors du fetch des publications :", error);
+      logError("Erreur lors du fetch des publications :", error);
       return 0;
     }
   };
@@ -80,7 +81,7 @@ function Home() {
         );
         setChercheurs(chercheursAvecPub);
       } catch (error) {
-        console.error("Erreur lors de la récupération des chercheurs :", error);
+        logError("Erreur lors de la récupération des chercheurs :", error);
       }
     };
 
@@ -92,10 +93,7 @@ function Home() {
         const res = await axios.get("/publications?limit=2");
         setPublications(res.data.data);
       } catch (error) {
-        console.error(
-          "Erreur lors de la récupération des publications :",
-          error
-        );
+        logError("Erreur lors de la récupération des publications :", error);
       }
     };
 
@@ -108,7 +106,7 @@ function Home() {
   return (
     <>
       {/* Section Hero */}
-      <section className="h-[calc(100vh-74px)] w-full bg-[var(--color-secondary)] relative">
+      <section className="h-[calc(100vh-74px)] w-full bg-[var(--color-secondary)] static">
         <div className="flex h-full justify-center lg:justify-start">
           <div className="bg-[var(--color-bg-primary)] h-full p-5 flex justify-center lg:justify-start items-center w-full lg:w-[70%]">
             <div className="flex flex-col gap-10 mb-24 items-center lg:items-start">
