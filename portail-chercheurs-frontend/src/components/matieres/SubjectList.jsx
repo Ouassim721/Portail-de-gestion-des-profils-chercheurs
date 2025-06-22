@@ -7,12 +7,14 @@ const SubjectList = ({ subjects, onDetach }) => {
 
   if (subjects.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-8 text-center">
-        <BookOpenIcon className="h-16 w-16 mx-auto text-gray-300 mb-4" />
-        <h3 className="text-lg font-medium text-gray-900">
+      <div className="bg-[var(--color-bg-primary)] rounded-lg shadow-md p-8 text-center">
+        <BookOpenIcon className="h-16 w-16 mx-auto text-[var(--color-gray)] mb-4" />
+        <h3 className="text-lg font-medium text-[var(--color-text-primary)]">
           {t("noSubjectsTitle")}
         </h3>
-        <p className="mt-1 text-gray-500">{t("noSubjectsMessage")}</p>
+        <p className="mt-1 text-[var(--color-gray)]">
+          {t("noSubjectsMessage")}
+        </p>
       </div>
     );
   }
@@ -35,7 +37,7 @@ const SubjectList = ({ subjects, onDetach }) => {
             key={subject.id_matiere}
             className="p-4 flex justify-between items-center"
           >
-            <span className="text-gray-800 font-medium">
+            <span className="text-[var(--color-text-primary)] font-medium">
               {subject.nom_matiere}
             </span>
             <button
