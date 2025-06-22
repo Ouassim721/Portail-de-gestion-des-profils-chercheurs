@@ -145,8 +145,8 @@ function CourseForm() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-6 text-gray-800">
+    <div className="max-w-3xl mx-auto p-6 my-8 bg-[var(--color-bg-primary)] rounded-lg shadow-md">
+      <h1 className="text-2xl font-bold mb-6 text-[var(--color-text-primary)]">
         {isEdit ? t("editCourse") : t("newCourse")}
       </h1>
 
@@ -159,7 +159,7 @@ function CourseForm() {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Titre */}
         <div>
-          <label className="block text-gray-700 mb-2">
+          <label className="block text-[var(--color-text-secondary)] mb-2">
             {t("labelTitle")} *
           </label>
           <input
@@ -167,7 +167,7 @@ function CourseForm() {
             name="titre"
             value={formData.titre}
             onChange={handleChange}
-            className={`w-full px-4 py-2 border rounded-lg ${
+            className={`w-full px-4 py-2 border rounded-lg text-[var(--color-text-primary)] ${
               errors.titre ? "border-red-500" : "border-gray-300"
             }`}
             disabled={loading}
@@ -179,7 +179,7 @@ function CourseForm() {
 
         {/* Description */}
         <div>
-          <label className="block text-gray-700 mb-2">
+          <label className="block text-[var(--color-text-secondary)] mb-2">
             {t("labelDescription")} *
           </label>
           <textarea
@@ -187,7 +187,7 @@ function CourseForm() {
             value={formData.description}
             onChange={handleChange}
             rows={4}
-            className={`w-full px-4 py-2 border rounded-lg ${
+            className={`w-full px-4 py-2 border rounded-lg text-[var(--color-text-primary)] ${
               errors.description ? "border-red-500" : "border-gray-300"
             }`}
             disabled={loading}
@@ -199,20 +199,22 @@ function CourseForm() {
 
         {/* Date */}
         <div>
-          <label className="block text-gray-700 mb-2">{t("labelDate")}</label>
+          <label className="block text-[var(--color-text-secondary)] mb-2">
+            {t("labelDate")}
+          </label>
           <input
             type="date"
             name="datePublication"
             value={formData.datePublication}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg text-[var(--color-text-primary)]"
             disabled={loading}
           />
         </div>
 
         {/* Matière */}
         <div>
-          <label className="block text-gray-700 mb-2">
+          <label className="block text-[var(--color-text-secondary)] mb-2">
             {t("labelSubject")} *
           </label>
           <select
@@ -238,7 +240,7 @@ function CourseForm() {
 
         {/* Fichier */}
         <div>
-          <label className="block text-gray-700 mb-2">
+          <label className="block text-[var(--color-text-secondary)] mb-2">
             {t("labelFile")} {isEdit ? t("optional") : "*"}
           </label>
           {isEdit && existingFile && (
@@ -252,7 +254,7 @@ function CourseForm() {
             type="file"
             accept=".pdf"
             onChange={handleFileChange}
-            className={`w-full px-4 py-2 border rounded-lg ${
+            className={`w-full px-4 py-2 border rounded-lg text-[var(--color-text-primary)] ${
               errors.fichier ? "border-red-500" : "border-gray-300"
             }`}
             disabled={loading}
@@ -268,7 +270,7 @@ function CourseForm() {
           <button
             type="button"
             onClick={() => navigate(`/chercheurs/${id}/cours`)}
-            className="px-5 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+            className="px-5 py-2 border border-gray-300 rounded-lg text-[var(--color-text-secondary)] hover:bg-gray-50 hover:text-gray-700"
             disabled={loading}
           >
             {t("cancel")}

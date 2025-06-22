@@ -3,7 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import api from "../../axios";
 import CourseCard from "./CourseCard";
 import FiltersBar from "./FiltersBar";
-import { PlusIcon } from "@heroicons/react/24/solid";
+import Loader from "../ui/Loader";
+import Button from "../ui/Button";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { LanguageContext } from "../../contexts/LanguageContext";
 import { logError } from "@/utils/logger";
 
@@ -67,7 +69,7 @@ const CourseList = () => {
   if (loading) {
     return (
       <div className="flex justify-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <Loader />
       </div>
     );
   }
@@ -75,14 +77,15 @@ const CourseList = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">{t("myCourses")}</h1>
-        <button
+        <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">
+          {t("myCourses")}
+        </h1>
+        <Button
+          icon={faPlus}
           onClick={() => navigate(`/chercheurs/${id}/cours/new`)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center"
         >
-          <PlusIcon className="h-5 w-5 mr-2" />
           {t("newCourse")}
-        </button>
+        </Button>
       </div>
 
       <FiltersBar
@@ -94,11 +97,13 @@ const CourseList = () => {
       />
 
       {filteredCourses.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-lg shadow">
-          <h3 className="mt-4 text-xl font-medium text-gray-900">
+        <div className="text-center py-12 bg-[var(--color-bg-primary)] rounded-lg shadow">
+          <h3 className="mt-4 text-xl font-medium text-[var(--color-text-primary)]">
             {t("noCoursesFound")}
           </h3>
-          <p className="mt-2 text-gray-500">{t("tryChangeFiltersOrCreate")}</p>
+          <p className="mt-2 text-[var(--color-gray)]">
+            {t("tryChangeFiltersOrCreate")}
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
