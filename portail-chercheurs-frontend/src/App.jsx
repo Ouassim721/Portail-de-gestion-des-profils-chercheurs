@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import AuthProvider from "./contexts/AuthProvider";
 import Layout from "./components/layout/Layout";
-import Loader from "./components/ui/Loader";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import MotDePasseOublie from "./pages/auth/MotDePasseOublie";
 import ResetPassword from "./pages/auth/ResetPassword";
@@ -18,6 +17,7 @@ import Publications from "./pages/Publications";
 import DetailsPublication from "./pages/DetailsPublication";
 import NotFound from "./pages/NotFound";
 import AboutPage from "./pages/AboutPage";
+import HelpPage from "./pages/HelpPage";
 
 // Authentification
 import Connexion from "./pages/auth/Login";
@@ -41,7 +41,6 @@ import CourseForm from "./components/cours/CourseForm";
 import AllCoursesPage from "./pages/AllCoursesPage";
 
 function App() {
-  const userId = localStorage.getItem("userId");
   return (
     <LanguageProvider>
       {" "}
@@ -53,7 +52,6 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="chercheurs" element={<Chercheurs />} />
-
               <Route
                 path="/chercheurs/:id"
                 element={<ProfilChercheurPublic />}
@@ -63,6 +61,7 @@ function App() {
               <Route path="/actualites/:id" element={<DetailsActualite />} />
               <Route path="/publications" element={<Publications />} />
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/help" element={<HelpPage />} />
               <Route path="/chercheurs-stats" element={<ResearcherStats />} />
               <Route path="/mes-cours" element={<CoursesPage />} />
               <Route path="/cours" element={<AllCoursesPage />} />
@@ -104,6 +103,7 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route path="*" element={<NotFound />} />
             </Route>
 
             {/* Authentification */}

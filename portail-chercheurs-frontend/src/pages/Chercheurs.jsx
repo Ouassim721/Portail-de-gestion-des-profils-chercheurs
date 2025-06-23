@@ -50,21 +50,32 @@ function Chercheurs() {
 
   return (
     <div className="chercheurs-container">
-      <div className="header-image">
-        <img
-          src={book}
-          alt={t("researchersImageAlt")}
-          className="w-full h-48 object-cover"
-        />
+      <div
+        className="w-full h-[30rem] relative px-8 py-16 bg-[var(--color-primary)] bg-cover bg-center"
+        style={{ backgroundImage: `url(${book})` }}
+      >
+        {/* Overlay sombre */}
+        <div className="absolute inset-0 bg-black opacity-50 z-0" />
+
+        {/* Contenu centré */}
+        <div className="relative z-10 text-white text-center flex flex-col items-center justify-center h-full space-y-6">
+          <h1 className="text-5xl font-bold">
+            Explorez l'Excellence en Recherche
+          </h1>
+          <p className="text-xl max-w-2xl">
+            Découvrez les profils des chercheurs, leurs spécialisations, leurs
+            publications et leurs contributions à la science.
+          </p>
+        </div>
       </div>
 
       <div className="container mx-auto px-4 lg:px-16 py-8">
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-          <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">
+          <h1 className="text-4xl font-bold text-[var(--color-primary)]">
             {t("researchers")}
           </h1>
 
-          <div className="relative w-full md:w-64">
+          <div className="relative w-full md:w-64 lg:w-100">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <FontAwesomeIcon icon={faSearch} className="text-gray-400" />
             </div>

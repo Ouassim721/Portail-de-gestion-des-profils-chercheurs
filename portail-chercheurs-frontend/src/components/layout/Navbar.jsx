@@ -213,7 +213,7 @@ function Navbar({ sticky = false }) {
                   {
                     label: t("help"),
                     icon: faQuestionCircle,
-                    link: "/aide",
+                    link: "/help",
                   },
                 ],
               },
@@ -249,7 +249,7 @@ function Navbar({ sticky = false }) {
                   {
                     label: t("help"),
                     icon: faQuestionCircle,
-                    link: "/aide",
+                    link: "/help",
                   },
                 ],
               },

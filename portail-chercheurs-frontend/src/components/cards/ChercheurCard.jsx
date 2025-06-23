@@ -12,7 +12,7 @@ export default function ChercheurCard({ chercheur }) {
   };
   return (
     <div
-      className="bg-[var(--color-bg-primary)] rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border shadow-card"
+      className="bg-[var(--color-bg-primary)] rounded-lg overflow-hidden transition-shadow duration-300 cursor-pointer shadow-card hover:shadow-card-hover"
       onClick={handleClick}
     >
       <div className="p-4 flex items-start gap-4">

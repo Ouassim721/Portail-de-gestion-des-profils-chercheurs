@@ -136,7 +136,7 @@ function TopBar() {
                   {
                     label: t("help"),
                     icon: faQuestionCircle,
-                    link: "/aide",
+                    link: "/help",
                   },
                 ],
               },
