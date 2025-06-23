@@ -9,6 +9,7 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/solid";
 import FilePreview from "../components/FilePreview";
+import Loader from "../components/ui/Loader";
 import { log, logError } from "@/utils/logger";
 
 const CourseDetailPage = () => {
@@ -75,12 +76,7 @@ const CourseDetailPage = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[var(--color-bg-secondary)]">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-[var(--color-text-secondary)]">
-            Chargement du cours...
-          </p>
-        </div>
+        <Loader />
       </div>
     );
   }
@@ -100,8 +96,8 @@ const CourseDetailPage = () => {
             </p>
           </div>
           <button
-            onClick={() => navigate(`/chercheurs/${id}/cours`)}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center mx-auto"
+            onClick={() => navigate(`/mes-cours`)}
+            className="px-6 py-3 bg-[var(--color-primary)] text-white rounded-lg hover:bg-blue-700 flex items-center justify-center mx-auto"
           >
             <ArrowLeftIcon className="h-5 w-5 mr-2" />
             Retour à la liste des cours
@@ -116,8 +112,8 @@ const CourseDetailPage = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
           <button
-            onClick={() => navigate(`/chercheurs/${id}/cours`)}
-            className="flex items-center text-blue-600 hover:text-blue-800 font-medium"
+            onClick={() => navigate(`/mes-cours`)}
+            className="flex items-center text-[var(--color-primary)] hover:text-blue-800 font-medium"
           >
             <ArrowLeftIcon className="h-5 w-5 mr-1" />
             Retour à la liste des cours
@@ -171,7 +167,7 @@ const CourseDetailPage = () => {
                   <a
                     href={fileInfo?.url}
                     download
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center text-sm w-full sm:w-auto justify-center"
+                    className="px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg hover:bg-blue-800 transition-colors flex items-center text-sm w-full sm:w-auto justify-center"
                   >
                     <ArrowDownTrayIcon className="h-4 w-4 mr-2" />
                     Télécharger le document

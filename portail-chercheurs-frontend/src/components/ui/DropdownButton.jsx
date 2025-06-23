@@ -37,17 +37,19 @@ const DropdownButton = ({
       </Button>
 
       {isOpen && (
-        <div className="absolute left-0 mt-2 w-full bg-[var(--color-bg-primary)] border border-gray-200 rounded shadow-md z-10">
+        <div className="absolute left-0 mt-2 w-full bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] border border-gray-200 rounded shadow-md z-10">
           {options.map((option, index) => (
             <button
               key={index}
-              className="w-full px-4 py-2 text-left hover:bg-gray-100 cursor-pointer"
+              className="w-full px-4 py-2 text-left hover:bg-gray-100 hover:text-gray-800 cursor-pointer"
               onClick={() => {
                 option.onClick();
                 setIsOpen(false); // Fermer le dropdown après clic
               }}
             >
-              {option.icon && <FontAwesomeIcon icon={option.icon} className="mr-2" />}
+              {option.icon && (
+                <FontAwesomeIcon icon={option.icon} className="mr-2" />
+              )}
               {option.label}
             </button>
           ))}

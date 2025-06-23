@@ -55,22 +55,27 @@ function Navbar({ sticky = false }) {
     const abortController = new AbortController();
 
     const fetchUser = async () => {
+      if (!isAuthenticated) {
+        setChercheur(null);
+        return;
+      }
       try {
         const res = await axios.get("/me", {
           withCredentials: true,
           signal: abortController.signal,
         });
         setChercheur(res.data);
-      } catch {
+      } catch (err) {
         if (!abortController.signal.aborted) {
           setChercheur(null);
+          logError(t("userFetchError"), err);
         }
       }
     };
 
     fetchUser();
     return () => abortController.abort();
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     const handleScroll = () => setIsSticky(window.scrollY > 80);
@@ -118,12 +123,20 @@ function Navbar({ sticky = false }) {
           <SearchBar placeholder={t("searchProfiles")} />
         </div>
       </div>
-
-      <div className="flex items-center gap-6">
-        <ul
-          className="hidden lg:flex gap-6"
+      <div className="lg:hidden flex items-center gap-4">
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
           style={{ color: "var(--color-text-secondary)" }}
+          className="text-2xl hover:text-[var(--color-primary)]"
         >
+          <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} />
+        </button>
+        <Link to="/" className="text-xl font-bold text-[var(--color-primary)]">
+          ScholarHub
+        </Link>
+      </div>
+      <div className="flex items-center gap-6">
+        <ul className="hidden lg:flex gap-6 text-[var(--color-text-secondary)]">
           {Object.entries(routesMap).map(([label, path]) => (
             <li key={path}>
               <Link
@@ -139,6 +152,7 @@ function Navbar({ sticky = false }) {
             </li>
           ))}
         </ul>
+
         {isAuthenticated && (
           <button
             onClick={() => setShowNotificationsModal(true)}
@@ -260,31 +274,8 @@ function Navbar({ sticky = false }) {
         )}
       </div>
 
-      <div className="lg:hidden flex items-center gap-4">
-        <Link
-          to="/"
-          className="text-xl font-bold"
-          style={{ color: "var(--color-primary)" }}
-        >
-          ScholarHub
-        </Link>
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          style={{ color: "var(--color-text-secondary)" }}
-          className="text-2xl hover:text-[var(--color-primary)]"
-        >
-          <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} />
-        </button>
-      </div>
-
       {menuOpen && (
-        <div
-          className="lg:hidden absolute top-full left-0 w-full p-4 shadow-lg"
-          style={{
-            backgroundColor: "var(--color-bg)",
-            color: "var(--color-text-primary)",
-          }}
-        >
+        <div className="lg:hidden absolute top-[74px] left-0 w-full p-4 shadow-lg bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] ">
           <div className="flex flex-col gap-4">
             {Object.entries(routesMap).map(([label, path]) => (
               <Link

@@ -105,7 +105,9 @@ export default function DetailsActualite() {
           )}
 
           <div className="prose max-w-none text-[var(--color-text-secondary)] mb-8">
-            <p className="whitespace-pre-line">{actualite.description}</p>
+            <p className="whitespace-pre-line text-lg">
+              {actualite.description}
+            </p>
           </div>
 
           {fileInfo && (
@@ -124,10 +126,7 @@ export default function DetailsActualite() {
           )}
 
           <div className="flex space-x-4 mt-8 pt-6 border-t border-gray-200">
-            <Button variant="neutral" onClick={() => window.history.back()}>
-              {t("back")}
-            </Button>
-            <Button>{t("share")}</Button>
+            <Button onClick={() => window.history.back()}>{t("back")}</Button>
           </div>
         </div>
       </div>

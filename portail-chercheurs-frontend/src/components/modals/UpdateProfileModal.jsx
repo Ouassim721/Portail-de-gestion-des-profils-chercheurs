@@ -249,7 +249,6 @@ export default function UpdateProfileModal({
               </div>
 
               <div className="flex flex-col-reverse sm:flex-row justify-between gap-3 mt-8 pt-5 border-t border-gray-200">
-                <Button variant="secondary">{t("importCV")}</Button>
                 <Button disabled={isSubmitting}>
                   {" "}
                   {isSubmitting ? `…${t("saving")}...` : t("saveButton")}

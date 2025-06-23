@@ -19,7 +19,7 @@ const NewsCard = ({
   };
 
   return (
-    <div className="max-w-md mx-auto bg-[var(--color-bg-primary)] rounded-xl shadow-md overflow-hidden md:max-w-2xl m-4">
+    <div className="max-w-md mx-auto w-full h-full bg-[var(--color-bg-primary)] rounded-xl shadow-md overflow-hidden md:max-w-2xl m-4">
       <div className="p-6 flex flex-col justify-between h-full w-full">
         {/* En-tête avec catégorie et date */}
         <div className="flex justify-between items-center mb-2">
