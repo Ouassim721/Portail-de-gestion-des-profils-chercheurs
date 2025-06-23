@@ -23,7 +23,7 @@ class PublicationFactory extends Factory
             'auteurs' => $this->generateAuthors(),
             'abstract' => $this->faker->paragraphs(3, true),
             'citation_count' => $this->faker->numberBetween(0, 1000),
-            'pdf_path' => $filePath, // ✅ Corrigé ici
+            'pdf_path' => $filePath,
             'chercheur_id' => \App\Models\Chercheur::inRandomOrder()->first()->id,
             'created_at' => now(),
             'updated_at' => now(),
