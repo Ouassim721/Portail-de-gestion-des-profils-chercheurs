@@ -18,13 +18,27 @@ const CreationActualite = () => {
   });
   const [documentPdf, setDocumentPdf] = useState(null);
   const [message, setMessage] = useState("");
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleFileChange = (e) => {
-    setDocumentPdf(e.target.files[0]);
+    const file = e.target.files[0];
+    let err = {};
+    if (file) {
+      if (file.type !== "application/pdf")
+        err.document_pdf = t("errorFileType");
+      if (file.size > 10 * 1024 * 1024) err.document_pdf = t("errorFileSize");
+      if (Object.keys(err).length) {
+        setErrors((prev) => ({ ...prev, ...err }));
+        e.target.value = null;
+        return;
+      }
+    }
+    setFormData((prev) => ({ ...prev, document_pdf: file }));
+    setErrors((prev) => ({ ...prev, document_pdf: null }));
   };
 
   const handleSubmit = async (e) => {
@@ -84,8 +98,7 @@ const CreationActualite = () => {
           />
           <input
             type="file"
-            name="document_pdf"
-            accept="application/pdf"
+            accept=".pdf"
             onChange={handleFileChange}
             className="w-full border p-2 rounded"
           />

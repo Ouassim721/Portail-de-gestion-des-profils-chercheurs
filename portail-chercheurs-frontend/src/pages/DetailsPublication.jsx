@@ -208,7 +208,8 @@ export default function PublicationDetails() {
                         Aucun document disponible
                       </p>
                       <p className="text-[var(--color-gray)]">
-                        Ce cours ne contient pas de fichier PDF associé.
+                        Cette publication ne contient pas de fichier PDF
+                        associé.
                       </p>
                     </div>
                   )}

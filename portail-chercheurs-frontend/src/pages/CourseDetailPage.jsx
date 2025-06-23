@@ -9,8 +9,7 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/solid";
 import FilePreview from "../components/FilePreview";
-import { log } from "@/utils/logger";
-import { logError } from "@/utils/logger";
+import { log, logError } from "@/utils/logger";
 
 const CourseDetailPage = () => {
   const { id, coursId } = useParams();
@@ -207,12 +206,12 @@ const CourseDetailPage = () => {
               )}
 
               {!fileInfo && (
-                <div className="mt-8 border rounded-lg overflow-hidden bg-gray-50 p-6 text-center">
+                <div className="max-w-100 mx-auto mt-8 border rounded-lg overflow-hidden bg-[var(--color-bg-secondary)] p-6 text-center">
                   <DocumentTextIcon className="w-16 h-16 text-gray-400 mx-auto" />
-                  <p className="mt-4 text-lg font-medium text-gray-700">
+                  <p className="mt-4 text-lg font-medium text-[var(--color-text-secondary)]">
                     Aucun document disponible
                   </p>
-                  <p className="text-gray-600">
+                  <p className="text-[var(--color-gray)]">
                     Ce cours ne contient pas de fichier PDF associé.
                   </p>
                 </div>
