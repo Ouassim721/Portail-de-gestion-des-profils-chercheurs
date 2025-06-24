@@ -308,18 +308,26 @@ function Dashboard() {
 
   return (
     <div className="p-8 space-y-8 bg-[gray-50] min-h-screen">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <StatCard
           title={t("statPublications")}
           value={stats.publications}
           color="blue"
           icon={
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
               strokeWidth={2}
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M7 8h10M7 12h6m5 8H6a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z"
+              />
+            </svg>
           }
         />
         <StatCard
