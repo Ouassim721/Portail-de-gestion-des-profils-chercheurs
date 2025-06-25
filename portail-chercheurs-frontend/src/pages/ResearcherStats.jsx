@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Doughnut, Bar } from "react-chartjs-2";
 import { CircularProgressbar } from "react-circular-progressbar";
-import axios from "axios";
+import axios from "../axios";
+import Loader from "../components/ui/Loader";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -48,19 +49,19 @@ const ResearcherDashboard = () => {
       try {
         const [profileRes, pubsRes, followersRes, statsRes, disciplinesRes] =
           await Promise.all([
-            axios.get("http://localhost:8000/api/me", {
+            axios.get("/me", {
               withCredentials: true,
             }),
-            axios.get("http://localhost:8000/api/profile/publications", {
+            axios.get("/profile/publications", {
               withCredentials: true,
             }),
-            axios.get("http://localhost:8000/api/chercheurs/followers/count", {
+            axios.get("/chercheurs/followers/count", {
               withCredentials: true,
             }),
-            axios.get("http://localhost:8000/api/chercheurs/me/stats", {
+            axios.get("/chercheurs/me/stats", {
               withCredentials: true,
             }),
-            axios.get("http://localhost:8000/api/disciplines", {
+            axios.get("/disciplines", {
               withCredentials: true,
             }),
           ]);
@@ -128,18 +129,18 @@ const ResearcherDashboard = () => {
   }, {});
 
   // Répartition par discipline
-const disciplineDistribution = publications.reduce((acc, pub) => {
+  const disciplineDistribution = publications.reduce((acc, pub) => {
     if (pub.disciplines && pub.disciplines.length > 0) {
-        pub.disciplines.forEach(discipline => {
-            const name = discipline.nom;
-            acc[name] = (acc[name] || 0) + 1;
-        });
+      pub.disciplines.forEach((discipline) => {
+        const name = discipline.nom;
+        acc[name] = (acc[name] || 0) + 1;
+      });
     } else {
-        const noCategory = t("noCategory");
-        acc[noCategory] = (acc[noCategory] || 0) + 1;
+      const noCategory = t("noCategory");
+      acc[noCategory] = (acc[noCategory] || 0) + 1;
     }
     return acc;
-}, {});
+  }, {});
 
   // Data pour les graphiques
   const citationsData = {
@@ -172,11 +173,8 @@ const disciplineDistribution = publications.reduce((acc, pub) => {
 
   if (loading)
     return (
-      <div
-        className="text-center py-8"
-        style={{ color: "var(--color-text-primary)" }}
-      >
-        {t("loadingResearcherStats")}
+      <div className="text-center py-8">
+        <Loader />
       </div>
     );
 

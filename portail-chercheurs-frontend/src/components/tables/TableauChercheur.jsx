@@ -38,7 +38,7 @@ export default function ChercheursList() {
           nom: c.nom,
           name: `${c.prenom} ${c.nom}`,
           email: c.email,
-          domain: c.discipline || t("notSpecified"),
+          specialisation: c.specialisation || t("notSpecified"),
           status: t("statusOnline"),
         }));
         setResearchers(formatted);

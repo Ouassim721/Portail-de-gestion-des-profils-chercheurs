@@ -9,6 +9,7 @@ function MonProfil() {
   const { t } = useContext(LanguageContext);
   const [chercheurData, setChercheurData] = useState(null);
   const [publicationsData, setPublicationsData] = useState(null);
+  const [statsRes, setStatsRes] = useState(null);
   const [loading, setLoading] = useState(true);
   const [refreshCounter, setRefreshCounter] = useState(0);
 
@@ -37,12 +38,14 @@ function MonProfil() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [profileRes, publicationsRes] = await Promise.all([
+        const [profileRes, publicationsRes, statsRes] = await Promise.all([
           axios.get("/me"),
           axios.get("/profile/publications"),
+          axios.get("/chercheurs/me/stats"),
         ]);
         setChercheurData(profileRes.data);
         setPublicationsData(publicationsRes.data.publications);
+        setStatsRes(statsRes.data);
       } catch (error) {
         logError("Erreur lors du chargement des données :", error);
       } finally {
@@ -61,6 +64,7 @@ function MonProfil() {
       isPublic={false}
       chercheur={chercheurData}
       publications={publicationsData || []}
+      stats={statsRes}
       onUpdate={handleUpdate}
       isOwner={true}
       onToggleVisibility={toggleVisibility}

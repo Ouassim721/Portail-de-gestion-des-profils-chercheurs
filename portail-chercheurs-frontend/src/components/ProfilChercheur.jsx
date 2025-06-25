@@ -32,6 +32,7 @@ function ProfilChercheur({
   onUpdate,
   onToggleVisibility,
   refreshPublications,
+  stats,
 }) {
   const { t } = useContext(LanguageContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -126,19 +127,15 @@ function ProfilChercheur({
         <div className="flex flex-col gap-4">
           <div className="flex justify-between">
             <h3>{t("statsPublications")}</h3>
-            <h3 className="font-semibold text-lg">47</h3>
+            <h3 className="font-semibold text-lg">{stats.publications}</h3>
           </div>
           <div className="flex justify-between">
             <h3>{t("statsCitations")}</h3>
-            <h3 className="font-semibold text-lg">1250</h3>
+            <h3 className="font-semibold text-lg">{stats.citations}</h3>
           </div>
           <div className="flex justify-between">
-            <h3>{t("statsHIndex")}</h3>
-            <h3 className="font-semibold text-lg">15</h3>
-          </div>
-          <div className="flex justify-between">
-            <h3>{t("statsProjects")}</h3>
-            <h3 className="font-semibold text-lg">12</h3>
+            <h3>{t("statsCollaboration")}</h3>
+            <h3 className="font-semibold text-lg">{stats.collaborations}</h3>
           </div>
         </div>
       </section>

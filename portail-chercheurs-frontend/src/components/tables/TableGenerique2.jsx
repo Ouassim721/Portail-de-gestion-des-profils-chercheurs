@@ -9,7 +9,7 @@ const TableGenerique = ({
   const columns = [
     { key: "name", label: "Nom" },
     { key: "email", label: "Email" },
-    { key: "domain", label: "Domaine" },
+    { key: "domain", label: "Spécialisation" },
     { label: "Actions" },
   ];
 
@@ -60,7 +60,7 @@ const TableGenerique = ({
               <td className="px-4 py-3">{researcher.email}</td>
               <td className="px-4 py-3">
                 <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
-                  {researcher.domain}
+                  {researcher.specialisation}
                 </span>
               </td>
               <td className="px-4 py-3 flex gap-3">
