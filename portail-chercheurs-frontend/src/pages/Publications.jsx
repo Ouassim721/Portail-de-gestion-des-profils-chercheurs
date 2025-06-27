@@ -170,7 +170,7 @@ const Publications = () => {
               children={
                 selectedDiscipline
                   ? disciplines.find((d) => d.id === selectedDiscipline)?.nom
-                  : t("domain")
+                  : t("discipline")
               }
               variant="neutral"
               iconPosition="right"
