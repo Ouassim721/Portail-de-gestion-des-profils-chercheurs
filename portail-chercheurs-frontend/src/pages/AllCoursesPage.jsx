@@ -1,5 +1,3 @@
-// src/pages/AllCoursesPage.jsx
-
 import React, { useState, useEffect, useContext } from "react";
 import api from "../axios";
 import Loader from "../components/ui/Loader";
