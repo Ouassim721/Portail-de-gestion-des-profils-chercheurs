@@ -155,6 +155,7 @@ Route::middleware('auth:api')->group(function () {
     // Nombre d'abonnés
     Route::get('/chercheurs/followers/count', [ChercheurController::class, 'getFollowersCount']);
 });
+Route::get('/chercheurs/{id}/stats', [ChercheurController::class, 'chercheurStats']);
 
 Route::middleware('auth:api')->put('/publications/{id}/toggle-visibility', [PublicationController::class, 'toggleVisibility']);
 

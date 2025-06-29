@@ -38,7 +38,7 @@ const CourseCard = ({ course, researcherId, onDelete }) => {
         </div>
       </div>
 
-      <div className="bg-[var(--color-gray)] px-5 py-3 flex justify-between items-center">
+      <div className="bg-gray-200 px-5 py-3 flex justify-between items-center">
         <Link
           to={`/chercheurs/${researcherId}/cours/${course.id_cours}`}
           className="text-gray-800 text-sm font-medium"
