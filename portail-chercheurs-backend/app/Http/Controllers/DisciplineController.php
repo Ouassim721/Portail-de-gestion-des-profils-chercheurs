@@ -9,24 +9,30 @@ use App\Models\Categoriser;
 class DisciplineController extends Controller
 {
     // GET /api/disciplines
-    public function index(Request $request)
-    {
-        $search = $request->query('search');
-        
-        $query = Discipline::query();
-        
-        if ($search) {
-            $query->where('nom', 'LIKE', '%' . $search . '%');
-        }
-        
-        return response()->json($query->get(), 200);
+    /**
+     * liste toutes les disciplines
+     */
+public function index(Request $request)
+{
+    $search = $request->query('search');
+    
+    $query = Discipline::query();
+    
+    if ($search) {
+        $query->where('nom', 'LIKE', '%' . $search . '%');
     }
 
-    // POST /api/disciplines
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'nom' => 'required|string|max:255',
+    // tri par nom
+    $query->orderBy('nom', 'asc');
+    
+    return response()->json($query->get(), 200);
+}
+
+// POST /api/disciplines
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'nom' => 'required|string|max:255',
         ]);
 
         $discipline = Discipline::create($validated);

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { LanguageContext } from "../../contexts/LanguageContext";
 import axios from "../../axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -20,11 +20,35 @@ const CardProfilPublication = ({
 }) => {
   const { t, formatDate } = useContext(LanguageContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [disciplineName, setDisciplineName] = useState("");
+  const [selectedDisciplineId, setSelectedDisciplineId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [removingDiscipline, setRemovingDiscipline] = useState(null);
+  const [existingDisciplines, setExistingDisciplines] = useState([]);
+  const [loadingDisciplines, setLoadingDisciplines] = useState(false);
+  const [errorLoading, setErrorLoading] = useState(null);
+
+  useEffect(() => {
+    const fetchDisciplines = async () => {
+      try {
+        setLoadingDisciplines(true);
+        setErrorLoading(null);
+        const response = await axios.get('/disciplines');
+        setExistingDisciplines(response.data);
+      } catch (error) {
+        logError("Erreur chargement disciplines:", error);
+        setErrorLoading(t("errorLoadingDisciplines"));
+      } finally {
+        setLoadingDisciplines(false);
+      }
+    };
+
+    if (isModalOpen) {
+      fetchDisciplines();
+    }
+  }, [isModalOpen, t]);
 
   const truncateAbstract = (text) => {
+    if (!text) return "";
     const words = text.split(" ");
     if (words.length > 15) {
       return words.slice(0, 15).join(" ") + "...";
@@ -33,49 +57,25 @@ const CardProfilPublication = ({
   };
 
   const handleAddDiscipline = async () => {
-    if (!disciplineName.trim()) return;
+    if (!selectedDisciplineId) return;
     setIsLoading(true);
 
     try {
-      const searchRes = await axios.get(
-        `/disciplines?search=${disciplineName}`
-      );
-      let disciplineId;
-
-      if (searchRes.data.length > 0) {
-        disciplineId = searchRes.data[0].id;
-      } else {
-        const createRes = await axios.post("/disciplines", {
-          nom: disciplineName,
-        });
-        disciplineId = createRes.data.id;
-      }
-
-      // Tentative d'association
-      try {
-        await axios.post("/categoriser", {
-          publication_id: publicationId,
-          discipline_id: disciplineId,
-        });
-      } catch (error) {
-        // Gestion spécifique des erreurs 409
-        if (error.response?.status === 409) {
-          alert(t("disciplineAlreadyAttached"));
-          return; // On arrête le processus
-        }
-        throw error; // On propage les autres erreurs
-      }
-
+      await axios.post("/categoriser", {
+        publication_id: publicationId,
+        discipline_id: selectedDisciplineId,
+      });
+      
       setIsModalOpen(false);
-      setDisciplineName("");
+      setSelectedDisciplineId("");
       alert(t("disciplineAddedSuccess"));
 
       if (onDisciplinesUpdated) onDisciplinesUpdated();
     } catch (error) {
-      logError("Erreur ajout discipline:", error);
-
-      // Message différent pour les conflits
-      if (error.response?.status !== 409) {
+      if (error.response?.status === 409) {
+        alert(t("disciplineAlreadyAttached"));
+      } else {
+        logError("Erreur association discipline:", error);
         alert(t("disciplineAddError"));
       }
     } finally {
@@ -96,7 +96,6 @@ const CardProfilPublication = ({
     } catch (error) {
       logError("Erreur suppression discipline:", error);
 
-      // Message plus informatif pour l'utilisateur
       const errorMsg =
         error.response?.data?.message || t("disciplineRemoveError");
       alert(`${t("disciplineRemoveError")}: ${errorMsg}`);
@@ -183,18 +182,37 @@ const CardProfilPublication = ({
           <div className="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] p-6 rounded-lg shadow-xl w-full max-w-md">
             <h3 className="text-lg font-semibold mb-4">{t("addDiscipline")}</h3>
 
-            <input
-              type="text"
-              value={disciplineName}
-              onChange={(e) => setDisciplineName(e.target.value)}
-              placeholder={t("disciplineNamePlaceholder")}
-              className="w-full p-2 border border-gray-300 rounded mb-4 text-[var(--color-text-secondary)]"
-              disabled={isLoading}
-            />
+            {loadingDisciplines ? (
+              <p className="text-center py-4">{t("loading")}...</p>
+            ) : errorLoading ? (
+              <p className="text-red-500 mb-4">{errorLoading}</p>
+            ) : (
+              <div className="mb-4">
+                <label className="block mb-2 text-sm font-medium text-[var(--color-text-primary)]">
+                  {t("selectExistingDiscipline")}
+                </label>
+                <select
+                  value={selectedDisciplineId}
+                  onChange={(e) => setSelectedDisciplineId(e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded text-[var(--color-text-secondary)] bg-white"
+                  disabled={isLoading}
+                >
+                  <option value="">{t("selectOption")}</option>
+                  {existingDisciplines.map((discipline) => (
+                    <option key={discipline.id} value={discipline.id}>
+                      {discipline.nom}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
-            <div className="flex justify-end gap-2">
+            <div className="flex justify-end gap-2 mt-6">
               <button
-                onClick={() => setIsModalOpen(false)}
+                onClick={() => {
+                  setIsModalOpen(false);
+                  setSelectedDisciplineId("");
+                }}
                 className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 text-gray-800"
                 disabled={isLoading}
               >
@@ -203,7 +221,7 @@ const CardProfilPublication = ({
               <button
                 onClick={handleAddDiscipline}
                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
-                disabled={isLoading || !disciplineName.trim()}
+                disabled={isLoading || !selectedDisciplineId || loadingDisciplines}
               >
                 {isLoading ? t("adding") + "..." : t("add")}
               </button>
