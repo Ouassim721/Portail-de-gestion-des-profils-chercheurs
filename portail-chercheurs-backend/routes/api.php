@@ -98,11 +98,12 @@ Route::get('/chercheurs/{id}/publications', [PublicationController::class, 'getP
 // Lister les publications
 Route::get('/publications', [PublicationController::class, 'index']);
 
+// Récupérer liste des annees de publication
+Route::get('/publications/years', [PublicationController::class, 'getPublicationYears']);
+
 // Lister une publications spécifique
 Route::get('/publications/{id}', [PublicationController::class, 'show']);
 
-// Récupérer liste des annees de publication
-Route::get('/publications/years', [PublicationController::class, 'getPublicationYears']);
 
 // Récupérer les publications Scopus (via API externe)
 Route::middleware('auth:api')->get('/scopus-publications', [ScopusPublicationController::class, 'fetchPublications']);

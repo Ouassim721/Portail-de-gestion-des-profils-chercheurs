@@ -324,28 +324,19 @@ function Home() {
           ))}
         </div>
       </section>
-      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-50 to-indigo-50">
-        <div className="max-w-4xl mx-auto text-center">
-          {/* Titre */}
-          <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl mb-6">
-            À propos de nous
-          </h2>
-
-          {/* Paragraphe descriptif */}
-          <p className="text-lg text-gray-600 mb-8 leading-relaxed max-w-3xl mx-auto">
-            Nous sommes une équipe passionnée dédiée à fournir des solutions
-            innovantes et sur mesure pour nos clients. Avec des années
-            d'expérience et une approche centrée sur l'humain, nous transformons
-            les idées en réalité numérique tout en garantissant qualité et
-            satisfaction.
-          </p>
-
-          {/* Bouton */}
-          <button
-            onClick={goToAbout}
-            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-900 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
-          >
-            En savoir plus
+<section className="py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-50 to-indigo-50">
+  <div className="max-w-4xl mx-auto text-center">
+    <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl mb-6">
+      {t("aboutUsTitle")}
+    </h2>
+    <p className="text-lg text-gray-600 mb-8 leading-relaxed max-w-3xl mx-auto">
+      {t("aboutUsDescription")}
+    </p>
+    <button
+      onClick={goToAbout}
+      className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-900 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+    >
+      {t("learnMoreButton")}
             <svg
               className="ml-3 -mr-1 h-5 w-5"
               xmlns="http://www.w3.org/2000/svg"

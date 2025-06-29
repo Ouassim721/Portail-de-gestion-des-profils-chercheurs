@@ -45,6 +45,14 @@ class PublicationController extends Controller
             ]);
         }
 
+            // filtre par discipline
+    if ($request->has('discipline_id')) {
+        $disciplineId = $request->discipline_id;
+        $query->whereHas('disciplines', function ($q) use ($disciplineId) {
+            $q->where('disciplines.id', $disciplineId);
+        });
+    }
+
         $page = $request->input('page', 1);
         $limit = $request->input('limit', 10);
         $publications = $query->paginate((int)$limit, ['*'], 'page', $page);
