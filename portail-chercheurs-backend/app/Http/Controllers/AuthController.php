@@ -61,8 +61,8 @@ class AuthController extends Controller
 
         $token = JWTAuth::fromUser($user);
 
-        // Durée d'expiration en minutes : 30 jours si "remember", sinon 2 heures
-        $expiration = $remember ? 60 * 24 * 30 : 120;
+        // Durée d'expiration en minutes : 30 jours si "remember", sinon 24 heures
+        $expiration = $remember ? 60 * 24 * 30 : 60 * 24;
 
         return response()->json([
             'user' => $user,
