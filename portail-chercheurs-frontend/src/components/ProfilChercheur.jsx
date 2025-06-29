@@ -95,9 +95,9 @@ function ProfilChercheur({
             <span className="mr-3">
               <FontAwesomeIcon icon={faBuildingColumns} />
             </span>
-            {t("departmentLabel")} {chercheur.specialisation}
+            Département {chercheur.specialisation}
           </li>
-          <li>
+          {/* <li>
             <span className="mr-3">
               <FontAwesomeIcon icon={faLocationDot} />
             </span>
@@ -108,7 +108,7 @@ function ProfilChercheur({
               <FontAwesomeIcon icon={faGraduationCap} />
             </span>
             {t("degreeLabel")} PhD en Intelligence Artificielle
-          </li>
+          </li> */}
           {chercheur.about && (
             <li>
               <span className="mr-3">

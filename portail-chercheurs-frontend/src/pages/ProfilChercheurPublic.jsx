@@ -12,7 +12,9 @@ function ProfilChercheurPublic() {
   const [publicationsData, setPublicationsData] = useState([]);
   const [loadingPublications, setLoadingPublications] = useState(true);
   const [disciplines, setDisciplines] = useState([]);
+  const [statsRes, setStatsRes] = useState(null);
   const [disciplinesLoaded, setDisciplinesLoaded] = useState(false); // Nouvel état
+  const [refreshCounter, setRefreshCounter] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,6 +54,23 @@ function ProfilChercheurPublic() {
     fetchData();
   }, [id]); // Dépendances
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [statsRes] = await Promise.all([
+          axios.get(`/chercheurs/${id}/stats`),
+        ]);
+        setStatsRes(statsRes.data);
+      } catch (error) {
+        logError("Erreur lors du chargement des données :", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [refreshCounter]);
+
   if (loading) return <Loader />;
   if (!chercheurData) return <p>Profil non trouvé</p>;
 
@@ -62,7 +81,9 @@ function ProfilChercheurPublic() {
       chercheur={chercheurData}
       publications={publicationsData}
       disciplines={disciplines}
+      stats={statsRes}
       loadingPublications={loadingPublications}
+      refreshPublications={() => setRefreshCounter((prev) => prev + 1)}
     />
   );
 }
