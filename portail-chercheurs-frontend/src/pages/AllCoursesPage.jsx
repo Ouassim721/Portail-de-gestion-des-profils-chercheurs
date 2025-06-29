@@ -128,10 +128,9 @@ const AllCoursesPage = () => {
                         {t("attachedFile")}
                       </h3>
                       <a
-                        href={`${api.defaults.baseURL.replace(
-                          "/api",
-                          ""
-                        )}/storage/${selectedCourse.fichier}`}
+                        href={`${api.defaults.baseURL.replace("/api", "")}/${
+                          selectedCourse.fichier
+                        }`}
                         download
                         className="flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                       >
@@ -141,10 +140,9 @@ const AllCoursesPage = () => {
                     </div>
                     <div className="h-[500px] border rounded overflow-hidden">
                       <iframe
-                        src={`${api.defaults.baseURL.replace(
-                          "/api",
-                          ""
-                        )}/storage/${selectedCourse.fichier}`}
+                        src={`${api.defaults.baseURL.replace("/api", "")}/${
+                          selectedCourse.fichier
+                        }`}
                         className="w-full h-full"
                         title="Preview"
                       />

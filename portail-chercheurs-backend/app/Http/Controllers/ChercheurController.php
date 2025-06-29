@@ -218,6 +218,24 @@ class ChercheurController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+    public function chercheurStats($id)
+    {
+        try {
+            $chercheur = Chercheur::findOrFail($id);
+
+            return response()->json([
+                'publications' => $chercheur->publications()->count(),
+                'citations' => $chercheur->publications()->sum('citation_count'),
+                'collaborations' => $chercheur->publications->sum(function ($pub) {
+                    $auteurs = explode(',', $pub->auteurs);
+                    return count($auteurs);
+                })
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
 
     /**
      * GET /api/chercheurs/{id}/cours
@@ -359,7 +377,7 @@ class ChercheurController extends Controller
      * DELETE /api/chercheurs/{id}/cours/{coursId}
      * Supprime un cours, à condition qu’il appartienne à ce chercheur.
      */
-     public function destroyCours($id, $coursId)
+    public function destroyCours($id, $coursId)
     {
         try {
             $chercheur = Chercheur::findOrFail($id);
@@ -376,7 +394,7 @@ class ChercheurController extends Controller
         }
         // Supprimer le fichier associé au cours
         $filePath = str_replace('storage/', 'public/', $cours->fichier);
-        
+
         if (Storage::exists($filePath)) {
             Storage::delete($filePath);
         }
@@ -389,128 +407,126 @@ class ChercheurController extends Controller
      * GET /api/chercheurs/{id}/matieres
      * Récupère toutes les matières que le chercheur d’ID = $id enseigne.
      */
-public function getMatieres($id)
-{
-    try {
-        $chercheur = Chercheur::findOrFail($id);
-        // Charger via la relation pivot
-        $matieres = $chercheur->matieres()
-            ->select('matieres.id_matiere', 'matieres.nom_matiere') // Spécifier explicitement les colonnes
-            ->get();
-        return response()->json($matieres, 200);
-    } catch (ModelNotFoundException $e) {
-        return response()->json(['message' => 'Chercheur introuvable.'], 404);
+    public function getMatieres($id)
+    {
+        try {
+            $chercheur = Chercheur::findOrFail($id);
+            // Charger via la relation pivot
+            $matieres = $chercheur->matieres()
+                ->select('matieres.id_matiere', 'matieres.nom_matiere') // Spécifier explicitement les colonnes
+                ->get();
+            return response()->json($matieres, 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Chercheur introuvable.'], 404);
+        }
     }
-}
 
     /**
      * POST /api/chercheurs/{id}/matieres
      * Lie une matière au chercheur (table pivot 'enseigner').
      * On attend, dans le corps JSON, { "id_matiere": X }
      */
-   public function attachMatiere(Request $request, $id)
-{
-    try {
-        $chercheur = Chercheur::findOrFail($id);
-    } catch (ModelNotFoundException $e) {
-        return response()->json(['message' => 'Chercheur introuvable.'], 404);
+    public function attachMatiere(Request $request, $id)
+    {
+        try {
+            $chercheur = Chercheur::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Chercheur introuvable.'], 404);
+        }
+
+        $request->validate([
+            'id_matiere' => 'required|integer|exists:matieres,id_matiere',
+        ]);
+
+        $matiereId = $request->id_matiere;
+
+        // Correction : Spécifier explicitement la table dans la condition where
+        if ($chercheur->matieres()->where('matieres.id_matiere', $matiereId)->exists()) {
+            return response()->json(['message' => 'Le chercheur enseigne déjà cette matière.'], 409);
+        }
+
+        // Insérer dans la table pivot
+        $chercheur->matieres()->attach($matiereId);
+
+        // Retourner la matière attachée
+        $matiere = Matiere::find($matiereId);
+        return response()->json([
+            'id_matiere' => $matiere->id_matiere,
+            'nom_matiere' => $matiere->nom_matiere
+        ], 201);
     }
-
-    $request->validate([
-        'id_matiere' => 'required|integer|exists:matieres,id_matiere',
-    ]);
-
-    $matiereId = $request->id_matiere;
-
-    // Correction : Spécifier explicitement la table dans la condition where
-    if ($chercheur->matieres()->where('matieres.id_matiere', $matiereId)->exists()) {
-        return response()->json(['message' => 'Le chercheur enseigne déjà cette matière.'], 409);
-    }
-
-    // Insérer dans la table pivot
-    $chercheur->matieres()->attach($matiereId);
-
-    // Retourner la matière attachée
-    $matiere = Matiere::find($matiereId);
-    return response()->json([
-        'id_matiere' => $matiere->id_matiere,
-        'nom_matiere' => $matiere->nom_matiere
-    ], 201);
-}
 
     /**
      * DELETE /api/chercheurs/{id}/matieres/{matiereId}
      * Supprime la liaison entre le chercheur et la matière (table pivot).
      */
-public function detachMatiere($id, $matiereId)
-{
-    try {
-        $chercheur = Chercheur::findOrFail($id);
-    } catch (ModelNotFoundException $e) {
-        return response()->json(['message' => 'Chercheur introuvable.'], 404);
-    }
-
-    // Correction : Spécifier explicitement la table dans la condition where
-    if (!$chercheur->matieres()->where('matieres.id_matiere', $matiereId)->exists()) {
-        return response()->json(['message' => 'Le lien chercheur⇄matière n’existe pas.'], 404);
-    }
-
-    // Correction : Utiliser detach avec l'ID de matière
-    $chercheur->matieres()->detach($matiereId);
-
-    return response()->json(['message' => 'Matière détachée avec succès.'], 200);
-}
-
-public function showCours($id, $coursId)
-{
-    try {
-        $chercheur = Chercheur::findOrFail($id);
-    } catch (ModelNotFoundException $e) {
-        return response()->json(['message' => 'Chercheur introuvable.'], 404);
-    }
-
-    $cours = Cours::where('id_cours', $coursId)
-        ->where('id_chercheur', $chercheur->id)
-        ->with(['matiere', 'chercheur']) // Charger les relations
-        ->first();
-
-    if (!$cours) {
-        return response()->json(['message' => 'Cours introuvable ou n’appartient pas à ce chercheur.'], 404);
-    }
-
-    return response()->json($cours);
-}
-
-public function attachOrCreateMatiere(Request $request, $id)
-{
-    $request->validate([
-        'nom_matiere' => 'required|string|max:100|unique:matieres,nom_matiere'
-    ]);
-
-    DB::beginTransaction();
-    try {
-        $chercheur = Chercheur::findOrFail($id);
-        $nomMatiere = $request->nom_matiere;
-
-        // Vérifier si la matière existe déjà
-        $matiere = Matiere::firstOrCreate(['nom_matiere' => $nomMatiere]);
-
-        // Attacher la matière au chercheur
-        if (!$chercheur->matieres()->where('matieres.id_matiere', $matiere->id_matiere)->exists()) {
-            $chercheur->matieres()->attach($matiere->id_matiere);
+    public function detachMatiere($id, $matiereId)
+    {
+        try {
+            $chercheur = Chercheur::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Chercheur introuvable.'], 404);
         }
 
-        DB::commit();
+        // Correction : Spécifier explicitement la table dans la condition where
+        if (!$chercheur->matieres()->where('matieres.id_matiere', $matiereId)->exists()) {
+            return response()->json(['message' => 'Le lien chercheur⇄matière n’existe pas.'], 404);
+        }
 
-        return response()->json([
-            'id_matiere' => $matiere->id_matiere,
-            'nom_matiere' => $matiere->nom_matiere
-        ], 201);
+        // Correction : Utiliser detach avec l'ID de matière
+        $chercheur->matieres()->detach($matiereId);
 
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return response()->json(['message' => 'Une erreur est survenue: ' . $e->getMessage()], 500);
+        return response()->json(['message' => 'Matière détachée avec succès.'], 200);
     }
-}
 
+    public function showCours($id, $coursId)
+    {
+        try {
+            $chercheur = Chercheur::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Chercheur introuvable.'], 404);
+        }
+
+        $cours = Cours::where('id_cours', $coursId)
+            ->where('id_chercheur', $chercheur->id)
+            ->with(['matiere', 'chercheur']) // Charger les relations
+            ->first();
+
+        if (!$cours) {
+            return response()->json(['message' => 'Cours introuvable ou n’appartient pas à ce chercheur.'], 404);
+        }
+
+        return response()->json($cours);
+    }
+
+    public function attachOrCreateMatiere(Request $request, $id)
+    {
+        $request->validate([
+            'nom_matiere' => 'required|string|max:100|unique:matieres,nom_matiere'
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $chercheur = Chercheur::findOrFail($id);
+            $nomMatiere = $request->nom_matiere;
+
+            // Vérifier si la matière existe déjà
+            $matiere = Matiere::firstOrCreate(['nom_matiere' => $nomMatiere]);
+
+            // Attacher la matière au chercheur
+            if (!$chercheur->matieres()->where('matieres.id_matiere', $matiere->id_matiere)->exists()) {
+                $chercheur->matieres()->attach($matiere->id_matiere);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'id_matiere' => $matiere->id_matiere,
+                'nom_matiere' => $matiere->nom_matiere
+            ], 201);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'Une erreur est survenue: ' . $e->getMessage()], 500);
+        }
+    }
 }
