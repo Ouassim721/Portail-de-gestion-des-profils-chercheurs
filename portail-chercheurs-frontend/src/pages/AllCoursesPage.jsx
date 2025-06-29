@@ -52,8 +52,8 @@ const AllCoursesPage = () => {
       );
     }
     if (selectedSubject) {
-      result = result.filter((c) => c.matiere?.id_matiere === selectedSubject);
-    }
+  result = result.filter((c) => c.matiere?.id_matiere === Number(selectedSubject));
+}
     setFilteredCourses(result);
   }, [filter, selectedSubject, courses]);
 
