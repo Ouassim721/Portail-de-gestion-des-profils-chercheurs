@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import axios from "../../axios";
-import Loader from "../../components/ui/Loader";
-import Button from "../../components/ui/Button";
+import axios from "../axios";
+import Loader from "../components/ui/Loader";
+import Button from "../components/ui/Button";
 import { useNavigate } from "react-router-dom";
-import ProgressBar from "../../components/ui/ProgressBar";
+import ProgressBar from "../components/ui/ProgressBar";
 import { logError } from "@/utils/logger";
 
 /**
  * Composant pour sélectionner et enregistrer des publications Scopus
  */
-const SelectionPublications = () => {
+const MesPublications = () => {
   const [publications, setPublications] = useState([]);
   const [selected, setSelected] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -18,16 +18,10 @@ const SelectionPublications = () => {
   const navigate = useNavigate();
   // Fonction pour extraire un identifiant unique d'une publication
   const getPublicationId = (pub) => {
-    console.log("pub keys:", Object.keys(pub));
-    console.log("dc:identifier:", pub.identifiant);
-    console.log("dc:identifier:", pub["dc:identifier"]);
-    console.log("eid:", pub["eid"]);
-    console.log("prism:url:", pub["prism:url"]);
-    console.log("id:", pub.id);
+    // Priorité 1: identifier (format Scopus)
     if (pub.identifiant) {
       return pub.identifiant; // Priorité au champ 'identifiant'
     }
-    // Priorité 1: dc:identifier (format Scopus)
     if (pub["dc:identifier"]) {
       return pub["dc:identifier"].replace("SCOPUS_ID:", "");
     }
@@ -70,6 +64,7 @@ const SelectionPublications = () => {
         }));
 
         setPublications(pubsWithIds);
+        console.log("Exemple de publication:", rawPublications[0]);
 
         setError(null);
       } catch (err) {
@@ -116,9 +111,11 @@ const SelectionPublications = () => {
         citation_count: pub["citedby-count"] || pub.citation_count || 0,
         disciplines: pub.disciplines || [],
       }));
+      console.log("haha");
+      console.log(formatted);
 
       const response = await axios.post(
-        "/chercheur/publications", // Note: vérifiez bien l'URL (publications vs publications)
+        "/chercheur/publications",
         { publications: formatted },
         {
           withCredentials: true,
@@ -131,7 +128,7 @@ const SelectionPublications = () => {
           response.data.message || "Publications sauvegardées avec succès",
       });
       setSelected([]);
-      navigate("/");
+      navigate("/mon-profil");
     } catch (err) {
       logError("Erreur détaillée:", err.response?.data || err.message);
       setSaveStatus({
@@ -168,7 +165,6 @@ const SelectionPublications = () => {
 
   return (
     <>
-      <ProgressBar currentStep={2} />
       <div className="max-w-5xl mx-auto mt-10 p-4">
         <div className="flex justify-between items-center mb-6">
           <div className="flex space-x-4">
@@ -272,4 +268,4 @@ const SelectionPublications = () => {
   );
 };
 
-export default SelectionPublications;
+export default MesPublications;

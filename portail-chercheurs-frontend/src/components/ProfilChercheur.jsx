@@ -5,16 +5,15 @@ import PublicationsSection from "./PublicationsSection";
 import useAuth from "../hooks/useAuth";
 import Loader from "../components/ui/Loader";
 import UpdateProfileModal from "./modals/UpdateProfileModal";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ChercheurAvatar from "./ui/ChercheurAvatar";
 import {
   faBuildingColumns,
   faUserPen,
-  faLocationDot,
-  faGraduationCap,
   faCircleInfo,
+  faBookmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import {
   BarChart,
   Bar,
@@ -24,6 +23,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { LanguageContext } from "../contexts/LanguageContext";
+import { Navigate } from "react-router-dom";
 
 function ProfilChercheur({
   chercheur,
@@ -38,6 +38,7 @@ function ProfilChercheur({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showAllPublications, setShowAllPublications] = useState(false);
   const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   const dataBar = [
     { year: "2019", publications: 5 },
@@ -69,14 +70,24 @@ function ProfilChercheur({
               <div className="my-3 sm:my-4">
                 {isAuthenticated &&
                   (isOwner ? (
-                    <Button
-                      variant="neutral"
-                      icon={faUserPen}
-                      className="text-sm p-2!"
-                      onClick={() => setIsModalOpen(true)}
-                    >
-                      {t("editButton")}
-                    </Button>
+                    <div className="flex items-center gap-4">
+                      <Button
+                        variant="neutral"
+                        icon={faUserPen}
+                        className="text-sm p-2!"
+                        onClick={() => setIsModalOpen(true)}
+                      >
+                        {t("editButton")}
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        icon={faBookmark}
+                        className="text-sm p-2!"
+                        onClick={() => navigate(`/mes-publications`)}
+                      >
+                        Publication
+                      </Button>
+                    </div>
                   ) : (
                     <FollowButton targetUserId={chercheur.id} />
                   ))}

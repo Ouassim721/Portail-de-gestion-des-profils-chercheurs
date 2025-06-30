@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import axios from "axios";
+import axios from "../../axios";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/ui/Button";
 import { LanguageContext } from "../../contexts/LanguageContext";
@@ -44,7 +44,7 @@ const ChangePassword = () => {
     }
     try {
       await axios.post(
-        "http://localhost:8000/api/change-password",
+        "/change-password",
         {
           current_password: form.currentPassword,
           password: form.newPassword,

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../axios";
 import NewsCard from "../components/cards/NewsCard";
 import { motion, AnimatePresence } from "framer-motion";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -38,23 +38,21 @@ const Actualites = () => {
   }, [language]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/actualites", { withCredentials: true })
-      .then(({ data }) => {
-        setEvents(
-          data.map((actu) => ({
-            id: `${actu.id}`,
-            title: `${actu.titre}`,
-            localisation: `${actu.localisation}`,
-            description: `${actu.description}`,
-            categorie: `${actu.categorie}`,
-            start: new Date(actu.date_publication),
-            end: new Date(actu.date_publication),
-            allDay: true,
-            resource: actu,
-          }))
-        );
-      });
+    axios.get("/actualites", { withCredentials: true }).then(({ data }) => {
+      setEvents(
+        data.map((actu) => ({
+          id: `${actu.id}`,
+          title: `${actu.titre}`,
+          localisation: `${actu.localisation}`,
+          description: `${actu.description}`,
+          categorie: `${actu.categorie}`,
+          start: new Date(actu.date_publication),
+          end: new Date(actu.date_publication),
+          allDay: true,
+          resource: actu,
+        }))
+      );
+    });
   }, []);
 
   useEffect(() => {

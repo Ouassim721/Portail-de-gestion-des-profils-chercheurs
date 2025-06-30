@@ -33,7 +33,7 @@ function CourseForm() {
         console.error("Erreur fetchUser in CourseForm", error);
       }
     };
-    
+
     fetchUser();
   }, []);
 
@@ -134,7 +134,11 @@ function CourseForm() {
 
       if (isEdit) {
         fd.append("_method", "PUT");
-        await api.post(`/chercheurs/${researcherId}/cours/${coursId}`, fd, config);
+        await api.post(
+          `/chercheurs/${researcherId}/cours/${coursId}`,
+          fd,
+          config
+        );
       } else {
         await api.post(`/chercheurs/${researcherId}/cours`, fd, config);
       }
@@ -289,7 +293,7 @@ function CourseForm() {
           </button>
           <button
             type="submit"
-            className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="px-5 py-2 bg-[var(--color-primary)] text-white rounded-lg hover:bg-blue-950 disabled:opacity-50"
             disabled={loading}
           >
             {loading ? (
