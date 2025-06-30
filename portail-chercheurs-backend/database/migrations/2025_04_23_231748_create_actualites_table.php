@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('document_pdf')->nullable();
             $table->date('date_publication')->nullable(); // Date de publication
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -28,6 +29,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('actualites');
+        Schema::table('actualites', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };

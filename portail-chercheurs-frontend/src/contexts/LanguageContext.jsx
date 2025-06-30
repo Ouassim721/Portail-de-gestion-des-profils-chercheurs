@@ -1212,9 +1212,15 @@ export const translations = {
     subjectsTaught: "Taught Subjects",
     selectExistingDiscipline: "Select a discipline",
     selectOption: "Choose a discipline",
-    loading: "Loading",
     errorLoadingDisciplines: "Error loading disciplines",
-    disciplineAddedSuccess: "Discipline added successfully",
+    attachFile: "Associer un PDF",
+    fileUploadSuccess: "Fichier associé avec succès",
+    fileUploadError: "Erreur lors de l'association du fichier",
+    fileRemoveSuccess: "Fichier supprimé avec succès",
+    fileRemoveError: "Erreur lors de la suppression du fichier",
+    confirmRemoveFile: "Voulez-vous vraiment supprimer ce fichier ?",
+    uploading: "Envoi en cours...",
+
     disciplineAlreadyAttached:
       "This discipline is already attached to the publication",
     disciplineAddError: "Error adding discipline",
@@ -1226,7 +1232,6 @@ export const translations = {
     aboutUsDescription:
       "We are a passionate team dedicated to providing innovative and tailored solutions for our clients. With years of experience and a human-centered approach, we transform ideas into digital reality while ensuring quality and satisfaction.",
     learnMoreButton: "Learn More",
-    viewMorePublications: "View More Publications",
     viewMorePublications: "View More Publications",
     noPublicationsFound: "No publications found",
     pedagogy: "Pedagogy",

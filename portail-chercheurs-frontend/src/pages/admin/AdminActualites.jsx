@@ -14,7 +14,7 @@ const AdminActualite = () => {
   const navigate = useNavigate();
   const { t, formatDate } = useContext(LanguageContext);
   const [actualites, setActualites] = useState([]);
-  const [filtre, setFiltre] = useState("toutes");
+  const [filtre, setFiltre] = useState("avenir");
 
   useEffect(() => {
     fetchActualites();
@@ -22,7 +22,7 @@ const AdminActualite = () => {
 
   const fetchActualites = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/actualites");
+      const res = await axios.get("/actualites");
       setActualites(res.data);
     } catch (err) {
       logError(t("errorLoadingData"), err);
@@ -33,7 +33,7 @@ const AdminActualite = () => {
     if (!window.confirm(t("confirmDelete"))) return;
 
     try {
-      await axios.delete(`http://localhost:8000/api/actualites/${id}`);
+      await axios.delete(`/actualites/${id}`);
       setActualites(actualites.filter((a) => a.id !== id));
     } catch (err) {
       logError(t("errorDelete"), err);
