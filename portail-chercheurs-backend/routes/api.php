@@ -59,6 +59,9 @@ Route::middleware(['jwt.cookie', 'auth:api'])->group(function () {
     // Supprimer un chercheur
     Route::delete('/chercheurs/{id}', [ChercheurController::class, 'destroy']);
 
+    // restaurer un chercheur
+    Route::put('/chercheurs/{id}/restore', [ChercheurController::class, 'restore']);
+
     // Mettre à jour un chercheur
     Route::post('/chercheurs/{id}/update', [ChercheurController::class, 'update']);
 
@@ -69,7 +72,7 @@ Route::middleware(['jwt.cookie', 'auth:api'])->group(function () {
     Route::put('/chercheur/profile', [ChercheurController::class, 'updateProfile']);
 });
 // Lister tous les chercheurs
-Route::get('/chercheurs', [ChercheurController::class, 'apiIndex']);
+Route::get('/chercheurs', [ChercheurController::class, 'index']);
 
 //recherche rapide (barre de recherche)
 Route::get('/chercheurs/search', [ChercheurController::class, 'search']);

@@ -2,7 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../ui/Pagination";
 import TableGenerique2 from "./TableGenerique2";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTrashRestore } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "../ui/Button";
 import axios from "../../axios";
 import Loader from "../ui/Loader";
@@ -21,61 +22,78 @@ export default function ChercheursList() {
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showArchived, setShowArchived] = useState(false);
+
+  const fetchResearchers = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await axios.get(
+        `/chercheurs?page=${currentPage}&archived=${showArchived}`
+      );
+      if (!res.data?.data || res.data.last_page == null) {
+        throw new Error("Unexpected response structure");
+      }
+      setTotalPages(res.data.last_page);
+      const formatted = res.data.data.map((c) => ({
+        id: c.id,
+        prenom: c.prenom,
+        nom: c.nom,
+        name: `${c.prenom} ${c.nom}`,
+        email: c.email,
+        specialisation: c.specialisation || t("notSpecified"),
+        archived: c.deleted_at !== null,
+      }));
+      setResearchers(formatted);
+    } catch (err) {
+      logError(t("loadResearchersError"), err);
+      setError(t("loadResearchersError"));
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchResearchers = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const res = await axios.get(`/chercheurs?page=${currentPage}`);
-        if (!res.data?.data || res.data.last_page == null) {
-          throw new Error("Unexpected response structure");
-        }
-        setTotalPages(res.data.last_page);
-        const formatted = res.data.data.map((c) => ({
-          id: c.id,
-          prenom: c.prenom,
-          nom: c.nom,
-          name: `${c.prenom} ${c.nom}`,
-          email: c.email,
-          specialisation: c.specialisation || t("notSpecified"),
-          status: t("statusOnline"),
-        }));
-        setResearchers(formatted);
-      } catch (err) {
-        logError(t("loadResearchersError"), err);
-        setError(t("loadResearchersError"));
-      } finally {
-        setIsLoading(false);
-      }
-    };
     fetchResearchers();
-  }, [currentPage, t]);
+  }, [currentPage, t, showArchived]);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value.toLowerCase());
     setCurrentPage(1);
   };
 
-  const deleteResearcher = async (id) => {
-    if (!window.confirm(t("confirmDeleteResearcher"))) return;
+  const deleteResearcher = async (id, isArchived) => {
+    const message = isArchived
+      ? t("confirmPermanentDeleteResearcher")
+      : t("confirmArchiveResearcher");
+
+    if (!window.confirm(message)) return;
+
     try {
       await axios.delete(`/chercheurs/${id}`);
-      const updated = researchers.filter((r) => r.id !== id);
-      setResearchers(updated);
-      if (updated.length === 0 && currentPage > 1) {
-        setCurrentPage((p) => p - 1);
-      }
+      await fetchResearchers(); // Recharger les données après suppression
     } catch (err) {
       logError(t("deleteResearcherError"), err);
       alert(t("deleteResearcherError"));
     }
   };
 
+  const restoreResearcher = async (id) => {
+    if (!window.confirm(t("confirmRestoreResearcher"))) return;
+
+    try {
+      await axios.put(`/chercheurs/${id}/restore`);
+      await fetchResearchers(); // Recharger les données après restauration
+    } catch (err) {
+      logError(t("restoreError"), err);
+      alert(t("restoreError"));
+    }
+  };
+
   const filteredData = researchers
     .filter((r) =>
-      [r.name, r.email || "", r.domain || ""].some((field) =>
-        field.toLowerCase().includes(searchTerm)
+      [r.name, r.email, r.specialisation].some(
+        (field) => field && field.toLowerCase().includes(searchTerm)
       )
     )
     .sort((a, b) => {
@@ -87,43 +105,43 @@ export default function ChercheursList() {
       return 0;
     });
 
-  if (isLoading)
-    return (
-      <div className="text-center text-[var(--color-text-primary)] py-8">
-        <Loader />
-      </div>
-    );
+  if (isLoading) return <Loader className="text-center py-8" />;
   if (error)
     return <div className="text-center py-8 text-red-500">{error}</div>;
 
   return (
-    <div
-      className="container mx-auto lg:p-6"
-      style={{ backgroundColor: "var(--color-bg-secondary)" }}
-    >
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-        <h1
-          className="text-2xl font-bold"
-          style={{ color: "var(--color-text-primary)" }}
-        >
+    <div className="flex flex-col gap-6 container mx-auto lg:p-6 bg-[var(--color-bg-secondary)]">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+        <h1 className="text-2xl font-bold text-[var(--color-text-primary)]">
           {t("manageResearchers")}
         </h1>
         <div className="flex gap-4 w-full md:w-auto">
           <input
             type="text"
             placeholder={t("searchResearchersPlaceholder")}
-            className="text-[var(--color-text-secondary)] border px-4 py-2 rounded-lg flex-grow md:w-64"
+            className="border px-4 py-2 rounded-lg flex-grow md:w-64 text-[var(--color-text-secondary)]"
             onChange={handleSearch}
             value={searchTerm}
           />
+
           <Button
             onClick={() => navigate("creationchercheur")}
             icon={faPlus}
             aria-label={t("addResearcher")}
           >
-            {t("addResearcher")}
+            {t("add")}
           </Button>
         </div>
+      </div>
+      <div>
+        <select
+          className="border px-4 py-2 rounded-lg"
+          value={showArchived}
+          onChange={(e) => setShowArchived(e.target.value === "true")}
+        >
+          <option value="false">{t("active")}</option>
+          <option value="true">{t("archived")}</option>
+        </select>
       </div>
 
       <TableGenerique2
@@ -133,6 +151,7 @@ export default function ChercheursList() {
         sortConfig={sortConfig}
         setSortConfig={setSortConfig}
         deleteResearcher={deleteResearcher}
+        restoreResearcher={restoreResearcher}
       />
 
       {totalPages > 1 && (

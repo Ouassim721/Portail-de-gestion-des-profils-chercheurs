@@ -89,7 +89,9 @@ function ProfilChercheur({
                       </Button>
                     </div>
                   ) : (
-                    <FollowButton targetUserId={chercheur.id} />
+                    <div className="flex items-center gap-4">
+                      <FollowButton targetUserId={chercheur.id} />
+                    </div>
                   ))}
               </div>
             </div>
