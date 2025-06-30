@@ -71,9 +71,9 @@ class CoursController extends Controller
 
         if ($cours->fichier) {
             // Génération correcte de l'URL
-            $cours->fichier_url = Storage::url($cours->fichier);
+            $cours->fichier = Storage::url($cours->fichier);
         } else {
-            $cours->fichier_url = null;
+            $cours->fichier = null;
         }
 
         return response()->json($cours);
