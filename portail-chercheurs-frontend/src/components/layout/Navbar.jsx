@@ -60,7 +60,7 @@ function Navbar({ sticky = false }) {
     const fetchUser = async () => {
       if (!isAuthenticated) {
         setChercheur(null);
-        setIsLoading(false);
+        setIsLoading(true);
         return;
       }
       try {
@@ -109,19 +109,13 @@ function Navbar({ sticky = false }) {
   const handleLogin = () => {
     navigate("/connexion");
   };
-  {
-    isLoading ? (
-      <Loader />
-    ) : (
-      <nav className={`navbar ${isSticky ? "sticky" : ""}`}>
-        {/* Votre code de navbar existant */}
-      </nav>
-    );
-  }
+
   return (
     <>
       {isLoading ? (
-        <Loader />
+        <div className="flex justify-center items-center h-64">
+          <Loader />
+        </div>
       ) : (
         <nav
           key={language}
