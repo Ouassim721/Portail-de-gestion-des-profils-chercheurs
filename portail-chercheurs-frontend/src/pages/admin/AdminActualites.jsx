@@ -14,7 +14,7 @@ const AdminActualite = () => {
   const navigate = useNavigate();
   const { t, formatDate } = useContext(LanguageContext);
   const [actualites, setActualites] = useState([]);
-  const [filtre, setFiltre] = useState("avenir");
+  const [filtre, setFiltre] = useState("actives");
 
   useEffect(() => {
     fetchActualites();
@@ -42,12 +42,18 @@ const AdminActualite = () => {
 
   const filtrerActualites = () => {
     const now = moment();
-    if (filtre === "avenir") {
-      return actualites.filter((a) => moment(a.date_publication).isAfter(now));
-    } else if (filtre === "archive") {
-      return actualites.filter((a) => moment(a.date_publication).isBefore(now));
+    switch (filtre) {
+      case "actives":
+        return actualites.filter((a) =>
+          moment(a.date_publication).isSameOrAfter(now)
+        );
+      case "archivees":
+        return actualites.filter((a) =>
+          moment(a.date_publication).isBefore(now)
+        );
+      default:
+        return actualites;
     }
-    return actualites;
   };
 
   const liste = filtrerActualites();
@@ -81,8 +87,8 @@ const AdminActualite = () => {
               className="mb-4 border p-2 rounded"
             >
               <option value="toutes">{t("filterAll")}</option>
-              <option value="avenir">{t("filterFuture")}</option>
-              <option value="archive">{t("filterArchive")}</option>
+              <option value="actives">{t("filterActive")}</option>
+              <option value="archivees">{t("filterArchive")}</option>
             </select>
 
             {/* Tableau */}
@@ -119,7 +125,11 @@ const AdminActualite = () => {
                 {liste.length === 0 && (
                   <tr>
                     <td colSpan="5" className="text-center p-4">
-                      {t("noNewsFound")}
+                      {filtre === "actives"
+                        ? t("noActiveNewsFound")
+                        : filtre === "archivees"
+                        ? t("noArchivedNewsFound")
+                        : t("noNewsFound")}
                     </td>
                   </tr>
                 )}

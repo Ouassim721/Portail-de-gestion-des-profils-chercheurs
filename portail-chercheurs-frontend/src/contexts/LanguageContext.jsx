@@ -106,6 +106,7 @@ export const translations = {
     filterAll: "Toutes",
     filterFuture: "À venir",
     filterArchive: "Archivées",
+    filterActive: "Actives",
     tableHeaderTitle: "Titre",
     tableHeaderLocation: "Localisation",
     tableHeaderDate: "Date",

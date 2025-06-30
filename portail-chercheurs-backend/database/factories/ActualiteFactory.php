@@ -21,7 +21,7 @@ class ActualiteFactory extends Factory
             'description' => $this->faker->text(150),
             'categorie' => $this->faker->randomElement(['Conférence', 'Publication', 'Événement', 'Annonce']),
             'document_pdf' => $filePath,
-            'date_publication' => $this->faker->dateTimeBetween('2025-06-01', '2025-07-01')->format('Y-m-d'),
+            'date_publication' => $this->faker->dateTimeBetween('2025-07-01', '2025-08-01')->format('Y-m-d'),
         ];
     }
 }
