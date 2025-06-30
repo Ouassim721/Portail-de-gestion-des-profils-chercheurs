@@ -13,7 +13,7 @@ const ProfilUpdateForm = () => {
     nom: "",
     prenom: "",
     scopus_author_id: "",
-    discipline: "",
+    specialisation: "",
   });
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -88,6 +88,19 @@ const ProfilUpdateForm = () => {
               placeholder={t("scopusIdPlaceholder")}
               required
               value={form.scopus_author_id}
+              onChange={handleChange}
+              className="w-full p-2 border rounded text-[var(--color-text-secondary)]"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">
+              {t("specialisationPlaceholder")}
+            </label>
+            <input
+              type="text"
+              name="specialisation"
+              placeholder={t("specialisationPlaceholder")}
+              value={form.specialisation}
               onChange={handleChange}
               className="w-full p-2 border rounded text-[var(--color-text-secondary)]"
             />
