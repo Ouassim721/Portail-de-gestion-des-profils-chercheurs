@@ -131,7 +131,8 @@ const Publications = () => {
       });
   }, [t]);
 
-  const nombrePublications = countPublications !== null ? countPublications : "...";
+  const nombrePublications =
+    countPublications !== null ? countPublications : "...";
   const nombreChercheurs = countChercheurs !== null ? countChercheurs : "...";
   const nombreCitations = countCitations !== null ? countCitations : "...";
   const nombreDisciplines = countDiscipline !== null ? countDiscipline : "...";
@@ -220,7 +221,7 @@ const Publications = () => {
             {initialLoad && (
               <div className="flex justify-center my-8">
                 <p className="text-xl text-[var(--color-text-secondary)]">
-                  {t("loading")}
+                  {t("loading")}...
                 </p>
               </div>
             )}

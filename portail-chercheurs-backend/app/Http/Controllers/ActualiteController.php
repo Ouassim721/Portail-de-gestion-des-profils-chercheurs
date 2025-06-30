@@ -14,10 +14,7 @@ class ActualiteController extends Controller
      */
     public function index()
     {
-        $actualites = Actualite::whereDate('date_publication', '>=', now())
-            ->orderBy('date_publication', 'asc')
-            ->get();
-
+        $actualites = Actualite::orderBy('date_publication', 'desc')->get();
         return response()->json($actualites);
     }
     /**

@@ -1,15 +1,19 @@
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashRestore } from "@fortawesome/free-solid-svg-icons";
 import ChercheurAvatar from "../ui/ChercheurAvatar";
-const TableGenerique = ({
+
+const TableGenerique2 = ({
   data,
   sortConfig,
   setSortConfig,
   deleteResearcher,
+  restoreResearcher,
 }) => {
   const columns = [
     { key: "name", label: "Nom" },
     { key: "email", label: "Email" },
-    { key: "domain", label: "Spécialisation" },
+    { key: "specialisation", label: "Spécialisation" },
     { label: "Actions" },
   ];
 
@@ -46,15 +50,18 @@ const TableGenerique = ({
 
         <tbody className="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] divide-y divide-gray-200">
           {data.map((researcher) => (
-            <tr key={researcher.id} className="transition-colors">
+            <tr
+              key={researcher.id}
+              className={`transition-colors ${
+                researcher.archived ? "opacity-70" : ""
+              }`}
+            >
               <td className="px-4 py-3 flex items-center gap-3">
-                <div className="relative">
-                  <ChercheurAvatar
-                    chercheur={researcher}
-                    size="md"
-                    className="w-6 mx-auto sm:mx-0"
-                  />{" "}
-                </div>
+                <ChercheurAvatar
+                  chercheur={researcher}
+                  size="md"
+                  className="w-6 mx-auto sm:mx-0"
+                />
                 <span className="font-medium">{researcher.name}</span>
               </td>
               <td className="px-4 py-3">{researcher.email}</td>
@@ -64,10 +71,28 @@ const TableGenerique = ({
                 </span>
               </td>
               <td className="px-4 py-3 flex gap-3">
-                <button className="text-blue-600 hover:text-blue-800 transition-colors"></button>
+                {researcher.archived && (
+                  <button
+                    className="text-green-600 hover:text-green-800 transition-colors"
+                    onClick={() => restoreResearcher(researcher.id)}
+                    title="Restaurer"
+                  >
+                    <FontAwesomeIcon
+                      icon={faTrashRestore}
+                      className="w-5 h-5"
+                    />
+                  </button>
+                )}
                 <button
                   className="text-red-600 hover:text-red-800 transition-colors"
-                  onClick={() => deleteResearcher(researcher.id)}
+                  onClick={() =>
+                    deleteResearcher(researcher.id, researcher.archived)
+                  }
+                  title={
+                    researcher.archived
+                      ? "Supprimer définitivement"
+                      : "Archiver"
+                  }
                 >
                   <TrashIcon className="w-5 h-5" />
                 </button>
@@ -80,4 +105,4 @@ const TableGenerique = ({
   );
 };
 
-export default TableGenerique;
+export default TableGenerique2;

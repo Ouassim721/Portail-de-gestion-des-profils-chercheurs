@@ -18,6 +18,7 @@ class Publication extends Model
         'auteurs',
         'abstract',
         'citation_count',
+        'identifiant',
         'chercheur_id',
         'pdf_path',
     ];
@@ -55,13 +56,13 @@ class Publication extends Model
         return $this->hasMany(Notification::class);
     }
 
-public function disciplines()
-{
-    return $this->belongsToMany(
-        Discipline::class,
-        'categoriser',
-        'publication_id',
-        'discipline_id'
-    )->using(Categoriser::class);
-}
+    public function disciplines()
+    {
+        return $this->belongsToMany(
+            Discipline::class,
+            'categoriser',
+            'publication_id',
+            'discipline_id'
+        )->using(Categoriser::class);
+    }
 }

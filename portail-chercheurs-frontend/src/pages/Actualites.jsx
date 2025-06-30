@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../axios";
 import NewsCard from "../components/cards/NewsCard";
 import { motion, AnimatePresence } from "framer-motion";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -38,23 +38,21 @@ const Actualites = () => {
   }, [language]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/actualites", { withCredentials: true })
-      .then(({ data }) => {
-        setEvents(
-          data.map((actu) => ({
-            id: `${actu.id}`,
-            title: `${actu.titre}`,
-            localisation: `${actu.localisation}`,
-            description: `${actu.description}`,
-            categorie: `${actu.categorie}`,
-            start: new Date(actu.date_publication),
-            end: new Date(actu.date_publication),
-            allDay: true,
-            resource: actu,
-          }))
-        );
-      });
+    axios.get("/actualites", { withCredentials: true }).then(({ data }) => {
+      setEvents(
+        data.map((actu) => ({
+          id: `${actu.id}`,
+          title: `${actu.titre}`,
+          localisation: `${actu.localisation}`,
+          description: `${actu.description}`,
+          categorie: `${actu.categorie}`,
+          start: new Date(actu.date_publication),
+          end: new Date(actu.date_publication),
+          allDay: true,
+          resource: actu,
+        }))
+      );
+    });
   }, []);
 
   useEffect(() => {
@@ -203,17 +201,42 @@ const Actualites = () => {
             transition={{ duration: 0.4 }}
           >
             <div className="space-y-4 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-8 mt-10">
-              {events.map((event) => (
-                <NewsCard
-                  key={event.id}
-                  titre={event.titre}
-                  localisation={event.localisation}
-                  description={event.description}
-                  categorie={event.categorie}
-                  date_publication={event.date_publication}
-                  onClick={() => navigate(`/actualites/${event.id}`)}
-                />
-              ))}
+              {events.length === 0 ? (
+                <div className="col-span-full flex flex-col items-center justify-center py-12 px-4 text-center">
+                  <svg
+                    className="w-16 h-16 text-gray-400 mb-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <h3 className="text-lg font-medium text-gray-700 mb-2">
+                    Aucune actualité disponible pour le moment
+                  </h3>
+                  <p className="text-gray-500 max-w-md">
+                    Revenez plus tard pour découvrir nos prochaines actualités.
+                  </p>
+                </div>
+              ) : (
+                events.map((event) => (
+                  <NewsCard
+                    key={event.id}
+                    titre={event.titre}
+                    localisation={event.localisation}
+                    description={event.description}
+                    categorie={event.categorie}
+                    date_publication={event.date_publication}
+                    onClick={() => navigate(`/actualites/${event.id}`)}
+                  />
+                ))
+              )}
             </div>
           </motion.div>
         )}

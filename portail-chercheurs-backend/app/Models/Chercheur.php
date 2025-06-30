@@ -10,10 +10,12 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Notifications\ResetPasswordNotification;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Chercheur extends Authenticatable implements JWTSubject
 {
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasFactory, Notifiable, HasApiTokens, SoftDeletes;
+
 
     protected $table = 'chercheurs';
     /**

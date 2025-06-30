@@ -43,11 +43,13 @@ const CardPublication = ({
             </p>
           </div>
         </div>
-        <p className="text-md text-[var(--color-text-secondary)] text-justify">
-          {description.length > 300
-            ? `${description.slice(0, 300)}...`
-            : description}
-        </p>
+        {description && (
+          <p className="text-md text-[var(--color-text-secondary)] text-justify">
+            {description.length > 300
+              ? `${description.slice(0, 300)}...`
+              : description}
+          </p>
+        )}
         <div className="flex gap-2 flex-wrap">
           {category.map((item) => (
             <h6

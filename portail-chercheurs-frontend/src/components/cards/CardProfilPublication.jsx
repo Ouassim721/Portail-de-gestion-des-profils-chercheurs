@@ -2,7 +2,11 @@ import React, { useState, useContext, useEffect } from "react";
 import { LanguageContext } from "../../contexts/LanguageContext";
 import axios from "../../axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTimes,
+  faPlus,
+  faPaperclip,
+} from "@fortawesome/free-solid-svg-icons";
 import { logError } from "@/utils/logger";
 
 const CardProfilPublication = ({
@@ -32,7 +36,7 @@ const CardProfilPublication = ({
       try {
         setLoadingDisciplines(true);
         setErrorLoading(null);
-        const response = await axios.get('/disciplines');
+        const response = await axios.get("/disciplines");
         setExistingDisciplines(response.data);
       } catch (error) {
         logError("Erreur chargement disciplines:", error);
@@ -65,7 +69,7 @@ const CardProfilPublication = ({
         publication_id: publicationId,
         discipline_id: selectedDisciplineId,
       });
-      
+
       setIsModalOpen(false);
       setSelectedDisciplineId("");
       alert(t("disciplineAddedSuccess"));
@@ -164,16 +168,26 @@ const CardProfilPublication = ({
 
       <div className="flex flex-wrap gap-2 mt-3">
         {isOwner && onToggleVisibility && (
-          <button
-            onClick={onToggleVisibility}
-            className={`px-3 py-1 text-xs rounded ${
-              isVisible
-                ? "bg-green-600 text-white hover:bg-green-700"
-                : "bg-red-600 text-white hover:bg-red-700"
-            }`}
-          >
-            {isVisible ? t("makePrivate") : t("makePublic")}
-          </button>
+          <>
+            <button
+              onClick={onToggleVisibility}
+              className={`px-3 py-1 text-xs rounded ${
+                isVisible
+                  ? "bg-green-600 text-white hover:bg-green-700"
+                  : "bg-red-600 text-white hover:bg-red-700"
+              }`}
+            >
+              {isVisible ? t("makePrivate") : t("makePublic")}
+            </button>
+            <label
+              className={`px-3 py-1 text-xs rounded bg-blue-900 text-white hover:bg-blue-800 cursor-pointer 
+              `}
+            >
+              <FontAwesomeIcon icon={faPaperclip} className="mr-1" />
+              Attacher PDF
+              <input type="file" accept=".pdf" className="hidden" />
+            </label>
+          </>
         )}
       </div>
 
@@ -221,7 +235,9 @@ const CardProfilPublication = ({
               <button
                 onClick={handleAddDiscipline}
                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
-                disabled={isLoading || !selectedDisciplineId || loadingDisciplines}
+                disabled={
+                  isLoading || !selectedDisciplineId || loadingDisciplines
+                }
               >
                 {isLoading ? t("adding") + "..." : t("add")}
               </button>

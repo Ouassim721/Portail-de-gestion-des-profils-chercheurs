@@ -12,6 +12,7 @@ use App\Models\Notification;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewPublicationNotification;
 use App\Models\Categoriser;
+use Illuminate\Support\Facades\Storage;
 
 class PublicationController extends Controller
 {
@@ -45,13 +46,13 @@ class PublicationController extends Controller
             ]);
         }
 
-            // filtre par discipline
-    if ($request->has('discipline_id')) {
-        $disciplineId = $request->discipline_id;
-        $query->whereHas('disciplines', function ($q) use ($disciplineId) {
-            $q->where('disciplines.id', $disciplineId);
-        });
-    }
+        // filtre par discipline
+        if ($request->has('discipline_id')) {
+            $disciplineId = $request->discipline_id;
+            $query->whereHas('disciplines', function ($q) use ($disciplineId) {
+                $q->where('disciplines.id', $disciplineId);
+            });
+        }
 
         $page = $request->input('page', 1);
         $limit = $request->input('limit', 10);
@@ -83,6 +84,10 @@ class PublicationController extends Controller
         $client = new \GuzzleHttp\Client();
 
         try {
+            // 🆕 Récupération des identifiants des publications déjà enregistrées en base
+            $existingIds = $chercheur->publications()->pluck('identifiant')->toArray();
+
+            // Appel de l'API Scopus
             $response = $client->get("https://api.elsevier.com/content/search/scopus", [
                 'query' => [
                     'query' => "AU-ID({$scopusId})",
@@ -96,9 +101,19 @@ class PublicationController extends Controller
 
             $data = json_decode($response->getBody(), true);
 
+            $rawEntries = $data['search-results']['entry'] ?? [];
+
+            // 🆕 Filtrage : ne garder que les publications dont l'identifiant n'existe pas déjà
+            $filtered = array_filter($rawEntries, function ($entry) use ($existingIds) {
+                if (!isset($entry['dc:identifier'])) return false;
+
+                $scopusId = str_replace('SCOPUS_ID:', '', $entry['dc:identifier']);
+                return !in_array($scopusId, $existingIds);
+            });
+
+            // 🆕 Formatage uniquement des publications filtrées
             $formattedData = [
                 'publications' => array_map(function ($entry) {
-                    // Extraction de l'identifiant Scopus (format: "SCOPUS_ID:85076477900")
                     $scopusId = isset($entry['dc:identifier'])
                         ? str_replace('SCOPUS_ID:', '', $entry['dc:identifier'])
                         : null;
@@ -113,7 +128,7 @@ class PublicationController extends Controller
                         'abstract' => $entry['dc:description'] ?? null,
                         'citation_count' => $entry['citedby-count'] ?? 0,
                     ];
-                }, $data['search-results']['entry'] ?? [])
+                }, array_values($filtered)) // 🆕 array_values pour réindexer proprement le tableau
             ];
 
             return response()->json($formattedData);
@@ -124,6 +139,7 @@ class PublicationController extends Controller
             ], 500);
         }
     }
+
     public function show($id)
     {
         return Publication::findOrFail($id);
@@ -146,37 +162,41 @@ class PublicationController extends Controller
                 'publications.*.citation_count' => 'nullable|integer',
                 'publications.*.pdf_path' => 'nullable|file|mimes:pdf|max:10240',
                 'publications.*.disciplines' => 'nullable|array',
-                'publications.*.disciplines.*' => 'exists:disciplines,id', // Validation des disciplines
+                'publications.*.disciplines.*' => 'exists:disciplines,id',
             ]);
 
             foreach ($request->publications as $pub) {
-                $publication = Publication::create([
-                    'scopus_id' => $pub['identifiant'] ?? null,
-                    'titre' => $pub['titre'],
-                    'date_publication' => $pub['date_publication'],
-                    'auteurs' => is_array($pub['auteurs'])
-                        ? implode(', ', $pub['auteurs'])
-                        : $pub['auteurs'],
-                    'abstract' => $pub['abstract'] ?? null,
-                    'citation_count' => $pub['citation_count'] ?? 0,
-                    'chercheur_id' => $chercheur->id,
-                ]);
+                // 🆕 Vérifie si la publication avec cet identifiant existe déjà pour ce chercheur
+                $publication = Publication::firstOrCreate(
+                    [
+                        'identifiant' => $pub['identifiant'] ?? null,
+                        'chercheur_id' => $chercheur->id
+                    ],
+                    [
+                        'titre' => $pub['titre'],
+                        'date_publication' => $pub['date_publication'],
+                        'auteurs' => is_array($pub['auteurs'])
+                            ? implode(', ', $pub['auteurs'])
+                            : $pub['auteurs'],
+                        'abstract' => $pub['abstract'] ?? null,
+                        'citation_count' => $pub['citation_count'] ?? 0,
+                    ]
+                );
+
                 // Association des disciplines
                 if (!empty($pub['disciplines'])) {
-                    $publication->disciplines()->attach($pub['disciplines']);
+                    $publication->disciplines()->syncWithoutDetaching($pub['disciplines']);
                 }
 
                 // Notifier les abonnés
                 $followers = $chercheur->followers;
                 foreach ($followers as $follower) {
-                    // Création de la notification
                     Notification::create([
                         'chercheur_id' => $follower->id,
                         'publication_id' => $publication->id,
                         'message' => 'Nouvelle publication de ' . $chercheur->prenom . ' ' . $chercheur->nom
                     ]);
 
-                    // Envoi d'email via queue
                     Mail::to($follower->email)
                         ->queue(new NewPublicationNotification($chercheur, $publication));
                 }
@@ -190,7 +210,7 @@ class PublicationController extends Controller
             ], 500);
         }
     }
-    // PublicationController.php
+
     public function profilePublications(Request $request)
     {
         $chercheur = JWTAuth::user();

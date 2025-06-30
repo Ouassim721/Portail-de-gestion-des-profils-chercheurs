@@ -15,28 +15,34 @@ return new class extends Migration {
             $table->date('date_publication');
             $table->date('date_modification')->nullable();
             $table->text('auteurs');
-            $table->text('abstract')->nullable(); //ne doit pas être nulle juste maintenant pour le test
-            $table->integer('citation_count')->nullable(); //->after('abstract'); 
+            $table->text('abstract')->nullable();
+            $table->integer('citation_count')->nullable();
             $table->unsignedInteger('chercheur_id');
+
+            $table->string('identifiant', 30)->nullable();
+
             $table->string('pdf_path')->nullable();
             $table->timestamps();
             $table->boolean('visible')->default(true);
+
             $table->foreign('chercheur_id')
                 ->references('id')
                 ->on('chercheurs')
                 ->onDelete('cascade');
+
+            $table->unique(['chercheur_id', 'identifiant']);
         });
     }
 
-public function down()
-{
-    // Désactiver temporairement les vérifications de clés étrangères
-    Schema::disableForeignKeyConstraints();
-    
-    // Supprimer la table publications
-    Schema::dropIfExists('publications');
-    
-    // Réactiver les vérifications
-    Schema::enableForeignKeyConstraints();
-}
+    public function down()
+    {
+        // Désactiver temporairement les vérifications de clés étrangères
+        Schema::disableForeignKeyConstraints();
+
+        // Supprimer la table publications
+        Schema::dropIfExists('publications');
+
+        // Réactiver les vérifications
+        Schema::enableForeignKeyConstraints();
+    }
 };

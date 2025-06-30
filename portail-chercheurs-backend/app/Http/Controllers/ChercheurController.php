@@ -8,18 +8,16 @@ use App\Models\Cours;
 use App\Models\Matiere;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\Rule;
 
 class ChercheurController extends Controller
 {
-    use SoftDeletes;
     // Méthode API pour récupérer la liste paginée des chercheurs
-    public function apiIndex(Request $request)
+    public function index(Request $request)
     {
-        $perPage = $request->get('per_page', 10); // Nombre d'éléments par page configurable
+        $perPage = $request->get('per_page', 10);
 
         // Construction de la requête de base avec le count de publications
         $query = Chercheur::query()
@@ -27,6 +25,17 @@ class ChercheurController extends Controller
                 'chercheurs.*',
                 DB::raw('(SELECT COUNT(*) FROM publications WHERE publications.chercheur_id = chercheurs.id) as publications_count')
             ]);
+
+        // [DEBUT MODIFICATION] - Gestion des chercheurs archivés
+        if ($request->has('archived')) {
+            if (filter_var($request->archived, FILTER_VALIDATE_BOOLEAN)) {
+                $query->onlyTrashed();
+            } else {
+                $query->whereNull('deleted_at');
+            }
+        }
+
+        // [FIN MODIFICATION]
 
         // Recherche textuelle
         if ($request->filled('search')) {
@@ -51,7 +60,7 @@ class ChercheurController extends Controller
 
         // Gestion du tri
         $sortableColumns = [
-            'nom' => DB::raw("CONCAT(prenom, ' ', nom)"), // Tri par nom complet
+            'nom' => DB::raw("CONCAT(prenom, ' ', nom)"),
             'departement' => 'specialisation',
             'publications' => 'publications_count'
         ];
@@ -80,19 +89,36 @@ class ChercheurController extends Controller
         ]);
     }
     /**
-     * Méthode pour la suppression d'un chercheur via admin
+     * Méthode pour la suppression d'un chercheur par l'admin
      *
      * @param [type] $id
      * @return void
      */
     public function destroy($id)
     {
-        $chercheur = Chercheur::find($id);
-        if ($chercheur) {
+        $chercheur = Chercheur::withTrashed()->findOrFail($id);
+
+        if ($chercheur->trashed()) {
+            // Si déjà archivé, suppression définitive
+            $chercheur->forceDelete();
+            return response()->json(['message' => 'Chercheur définitivement supprimé']);
+        } else {
+            // Sinon, soft delete
             $chercheur->delete();
-            return response()->json(['message' => 'Chercheur supprimé avec succès.']);
+            return response()->json(['message' => 'Chercheur archivé avec succès']);
         }
-        return response()->json(['message' => 'Chercheur introuvable.'], 404);
+    }
+    /**
+     * Méthode pour la restauration d'un chercheur par l'admin
+     *
+     * @param [type] $id
+     * @return void
+     */
+    public function restore($id)
+    {
+        $chercheur = Chercheur::onlyTrashed()->findOrFail($id);
+        $chercheur->restore();
+        return response()->json(['message' => 'Chercheur restauré avec succès']);
     }
     /**
      * Méthode permettant au chercheur de modifier son profil depuis sa page profil
@@ -297,7 +323,7 @@ class ChercheurController extends Controller
         $cours->titre           = $request->titre;
         $cours->description     = $request->description;
         $cours->datePublication = $request->datePublication;
-        $cours->fichier         = 'storage/' . $cheminFichier; // chemin accessible depuis le front
+        $cours->fichier         = $cheminFichier; // chemin accessible depuis le front
         $cours->id_chercheur    = $chercheur->id;
         $cours->id_matiere = $matiere->id_matiere;
         $cours->save();
@@ -364,7 +390,7 @@ class ChercheurController extends Controller
                 Storage::delete(str_replace('storage/', '', $cours->fichier));
             }
             $cheminFichier = $request->file('fichier')->store('cours', 'public');
-            $cours->fichier = 'storage/' . $cheminFichier;
+            $cours->fichier = $cheminFichier;
         }
 
         $cours->save();

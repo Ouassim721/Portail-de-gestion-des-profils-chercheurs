@@ -3,6 +3,7 @@ import useAuth from "../../hooks/useAuth";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LanguageContext } from "../../contexts/LanguageContext";
 import Button from "../ui/Button";
+import Loader from "../ui/Loader";
 import DropdownMenu from "../ui/DropdownMenu";
 import axios from "../../axios";
 import SearchBar from "../research/SearchBar";
@@ -38,6 +39,7 @@ function Navbar({ sticky = false }) {
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+
   const routesMap = {
     [t("home")]: "/",
     [t("researchers")]: "/chercheurs",
@@ -107,9 +109,9 @@ function Navbar({ sticky = false }) {
   return (
     <nav
       key={language}
-      className={`w-full h-[74px] p-4 pr-8 flex items-center justify-between bg-[var(--color-bg-primary)]
-        ${isSticky && sticky ? "sticky-top" : ""}
-        navbar-transition`}
+      className={`w-full h-[74px] p-4 flex items-center justify-between bg-[var(--color-bg-primary)]
+          ${isSticky && sticky ? "sticky-top" : ""}
+          navbar-transition`}
     >
       <div className="hidden lg:flex items-center gap-8">
         <Link
@@ -143,7 +145,7 @@ function Navbar({ sticky = false }) {
                 to={path}
                 className={`hover:text-[var(--color-primary)] transition-colors duration-300 ${
                   location.pathname === path
-                    ? "text-[var(--color-primary)] font-medium"
+                    ? "text-[var(--color-primary)] font-medium text-center"
                     : ""
                 }`}
               >
@@ -152,7 +154,6 @@ function Navbar({ sticky = false }) {
             </li>
           ))}
         </ul>
-
         {isAuthenticated && (
           <button
             onClick={() => setShowNotificationsModal(true)}
@@ -273,7 +274,6 @@ function Navbar({ sticky = false }) {
           </DropdownMenu>
         )}
       </div>
-
       {menuOpen && (
         <div className="lg:hidden absolute top-[74px] left-0 w-full p-4 shadow-lg bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] ">
           <div className="flex flex-col gap-4">
@@ -297,7 +297,6 @@ function Navbar({ sticky = false }) {
           </div>
         </div>
       )}
-
       <SettingsModal
         show={showSettingsModal}
         onClose={() => setShowSettingsModal(false)}

@@ -31,33 +31,36 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 |
 */
 
-/* ==================== ROUTES D'AUTHENTIFICATION (JWT) ==================== */
+/* ==================== ROUvTES D'AUTHENTIFICATION (JWT) ==================== */
 
 Route::post('/login', [AuthController::class, 'login']);
-Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']);
+Route::middleware(['jwt.cookie', 'auth:api'])->post('/logout', [AuthController::class, 'logout']);
 
 // Route protégée pour admin seulement
-Route::middleware(['auth:api', 'is_admin'])->post('/admin/create-chercheur', [AuthController::class, 'createChercheurFromAdmin']);
+Route::middleware(['jwt.cookie', 'auth:api', 'is_admin'])->post('/admin/create-chercheur', [AuthController::class, 'createChercheurFromAdmin']);
 
 // Récupérer les informations de l'utilisateur connecté
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware(['jwt.cookie', 'auth:api'])->get('/user', function (Request $request) {
     return response()->json($request->user());
 });
 
 // Profil utilisateur
-Route::middleware('auth:api')->get('/me', function (Request $request) {
+Route::middleware(['jwt.cookie', 'auth:api'])->get('/me', function (Request $request) {
     return $request->user();
 });
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail']);
 Route::post('/reset-password', [ResetPasswordController::class, 'reset']);
 
 // Changement de mot de passe
-Route::middleware('auth:api')->post('/change-password', [AuthController::class, 'changePassword']);
+Route::middleware(['jwt.cookie', 'auth:api'])->post('/change-password', [AuthController::class, 'changePassword']);
 
 /* ==================== ROUTES POUR LES CHERCHEURS ==================== */
-Route::middleware('auth:api')->group(function () {
+Route::middleware(['jwt.cookie', 'auth:api'])->group(function () {
     // Supprimer un chercheur
     Route::delete('/chercheurs/{id}', [ChercheurController::class, 'destroy']);
+
+    // restaurer un chercheur
+    Route::put('/chercheurs/{id}/restore', [ChercheurController::class, 'restore']);
 
     // Mettre à jour un chercheur
     Route::post('/chercheurs/{id}/update', [ChercheurController::class, 'update']);
@@ -69,7 +72,7 @@ Route::middleware('auth:api')->group(function () {
     Route::put('/chercheur/profile', [ChercheurController::class, 'updateProfile']);
 });
 // Lister tous les chercheurs
-Route::get('/chercheurs', [ChercheurController::class, 'apiIndex']);
+Route::get('/chercheurs', [ChercheurController::class, 'index']);
 
 //recherche rapide (barre de recherche)
 Route::get('/chercheurs/search', [ChercheurController::class, 'search']);
@@ -79,7 +82,7 @@ Route::get('/chercheurs/{id}', function ($id) {
     return Chercheur::findOrFail($id);
 });
 /* ==================== ROUTES POUR LES PUBLICATIONS ==================== */
-Route::middleware('auth:api')->group(function () {
+Route::middleware(['jwt.cookie', 'auth:api'])->group(function () {
     // Récupérer les publications Scopus d'un chercheur
     Route::get('/chercheur/publications', [PublicationController::class, 'fetchScopusPublications']);
 
@@ -90,7 +93,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/publications', [PublicationController::class, 'storeBatch']);
 });
 //Récuperer les publications d'un chercheur donnée
-Route::middleware('auth:api')->get('/profile/publications', [PublicationController::class, 'profilePublications']);
+Route::middleware(['jwt.cookie', 'auth:api'])->get('/profile/publications', [PublicationController::class, 'profilePublications']);
 
 // Récupérer les publications d'un chercheur spécifique par son ID
 Route::get('/chercheurs/{id}/publications', [PublicationController::class, 'getPublicationsByChercheur']);
@@ -106,7 +109,7 @@ Route::get('/publications/{id}', [PublicationController::class, 'show']);
 
 
 // Récupérer les publications Scopus (via API externe)
-Route::middleware('auth:api')->get('/scopus-publications', [ScopusPublicationController::class, 'fetchPublications']);
+Route::middleware(['jwt.cookie', 'auth:api'])->get('/scopus-publications', [ScopusPublicationController::class, 'fetchPublications']);
 
 /* ==================== ROUTES POUR LES ACTUALITES ==================== */
 // Routes spécifiques à la page d'accueil
@@ -118,7 +121,7 @@ Route::get('/actualites/{id}', [ActualiteController::class, 'show']);
 
 
 /* ==================== ROUTES POUR LES FOLLOWS ==================== */
-Route::middleware('auth:api')->group(function () {
+Route::middleware(['jwt.cookie', 'auth:api'])->group(function () {
     Route::post('/follow/{userToFollow}', [FollowController::class, 'follow']);
     Route::delete('/unfollow/{userToUnfollow}', [FollowController::class, 'unfollow']);
     Route::get('/is-following/{user}', [FollowController::class, 'isFollowing']);
@@ -131,7 +134,7 @@ Route::get('/disciplines', [DisciplineController::class, 'index']);
 Route::get('/disciplines/{id}', [DisciplineController::class, 'show']);
 
 /* ==================== ROUTES POUR LES COMMENTAIRES ==================== */
-Route::middleware(['auth:api'])->group(function () {
+Route::middleware(['jwt.cookie', 'auth:api'])->group(function () {
     Route::get('/publications/{publication}/comments', [CommentController::class, 'index']);
     Route::post('/comments', [CommentController::class, 'store']);
     Route::put('/comments/{comment}', [CommentController::class, 'update']);
@@ -141,7 +144,7 @@ Route::middleware(['auth:api'])->group(function () {
 Route::get('/stats', [StatisticsController::class, 'getStats']);
 
 /* ==================== ROUTES POUR LE CONTACT ==================== */
-Route::middleware('auth:api')->post('/contact', [ContactController::class, 'sendMessage']);
+Route::middleware(['jwt.cookie', 'auth:api'])->post('/contact', [ContactController::class, 'sendMessage']);
 
 /* ==================== ROUTES POUR LES STATISTIQUES ==================== */
 Route::get('/stats/chercheurs', [StatisticsController::class, 'getChercheursStats']);
@@ -149,7 +152,7 @@ Route::get('/stats/publications', [StatisticsController::class, 'getPublications
 Route::get('/stats/comments', [StatisticsController::class, 'getCommentsStats']);
 Route::get('/stats/authors', [StatisticsController::class, 'getAuthorsStats']);
 
-Route::middleware('auth:api')->group(function () {
+Route::middleware(['jwt.cookie', 'auth:api'])->group(function () {
     // Stats personnelles
     Route::get('/chercheurs/me/stats', [ChercheurController::class, 'personalStats']);
 
@@ -158,14 +161,14 @@ Route::middleware('auth:api')->group(function () {
 });
 Route::get('/chercheurs/{id}/stats', [ChercheurController::class, 'chercheurStats']);
 
-Route::middleware('auth:api')->put('/publications/{id}/toggle-visibility', [PublicationController::class, 'toggleVisibility']);
+Route::middleware(['jwt.cookie', 'auth:api'])->put('/publications/{id}/toggle-visibility', [PublicationController::class, 'toggleVisibility']);
 
-Route::middleware('auth:api')->group(function () {
+Route::middleware(['jwt.cookie', 'auth:api'])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::post('/notifications/mark-as-read', [NotificationController::class, 'markAsRead']);
 });
 
-/*Route::middleware('auth:api')->group(function () {
+/*Route::middleware(['jwt.cookie', 'auth:api'])->group(function () {
     // Matières
     Route::apiResource('matieres', MatiereController::class);
     // Cours
@@ -187,7 +190,7 @@ Route::delete(
 );
 
 
-Route::middleware('auth:api')->group(function () {
+Route::middleware(['jwt.cookie', 'auth:api'])->group(function () {
     // --- Pour gérer les cours d’un chercheur ---
     Route::get('chercheurs/{id}/cours', [ChercheurController::class, 'getCours']);
     Route::post('chercheurs/{id}/cours', [ChercheurController::class, 'storeCours']);
@@ -204,7 +207,7 @@ Route::middleware('auth:api')->group(function () {
 
 
 /* ==================== ROUTES POUR LA CATÉGORISATION ==================== */
-Route::middleware('auth:api')->group(function () {
+Route::middleware(['jwt.cookie', 'auth:api'])->group(function () {
     Route::post('/categoriser', [\App\Http\Controllers\CategoriserController::class, 'store']);
     Route::delete('/categoriser/{publicationId}/{disciplineId}', [\App\Http\Controllers\CategoriserController::class, 'destroy']);
     Route::get('/categoriser/publication/{id}', [\App\Http\Controllers\CategoriserController::class, 'forPublication']);
@@ -214,7 +217,7 @@ Route::middleware('auth:api')->group(function () {
 //  les stats pédagogiques
 Route::get('/stats/pedagogical', [StatisticsController::class, 'getPedagogicalStats']);
 
-Route::middleware('auth:api')->post(
+Route::middleware(['jwt.cookie', 'auth:api'])->post(
     'chercheurs/{id}/matieres/attach-or-create',
     [ChercheurController::class, 'attachOrCreateMatiere']
 );

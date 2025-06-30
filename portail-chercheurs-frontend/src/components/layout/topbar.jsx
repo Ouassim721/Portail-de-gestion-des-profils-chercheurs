@@ -158,7 +158,7 @@ function TopBar() {
                 className="w-10 h-10"
               />{" "}
               <div>
-                <p className="text-md font-semibold">
+                <p className="text-md font-semibold text-[var(--color-text-primary)]">
                   {chercheur.prenom} {chercheur.nom}
                 </p>
                 <p className="text-sm text-gray-500">{t("adminRole")}</p>

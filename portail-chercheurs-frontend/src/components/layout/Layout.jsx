@@ -4,13 +4,13 @@ import { Outlet } from "react-router-dom"; // Outlet permet d'afficher le conten
 
 function Layout() {
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <Navbar />
-      <main>
-        <Outlet /> {/* Ici s'afficheront les pages selon la route actuelle */}
+      <main className="flex-grow">
+        <Outlet />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
 

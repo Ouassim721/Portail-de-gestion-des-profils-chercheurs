@@ -14,7 +14,7 @@ const AdminActualite = () => {
   const navigate = useNavigate();
   const { t, formatDate } = useContext(LanguageContext);
   const [actualites, setActualites] = useState([]);
-  const [filtre, setFiltre] = useState("toutes");
+  const [filtre, setFiltre] = useState("actives");
 
   useEffect(() => {
     fetchActualites();
@@ -22,7 +22,7 @@ const AdminActualite = () => {
 
   const fetchActualites = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/actualites");
+      const res = await axios.get("/actualites");
       setActualites(res.data);
     } catch (err) {
       logError(t("errorLoadingData"), err);
@@ -33,7 +33,7 @@ const AdminActualite = () => {
     if (!window.confirm(t("confirmDelete"))) return;
 
     try {
-      await axios.delete(`http://localhost:8000/api/actualites/${id}`);
+      await axios.delete(`/actualites/${id}`);
       setActualites(actualites.filter((a) => a.id !== id));
     } catch (err) {
       logError(t("errorDelete"), err);
@@ -42,12 +42,18 @@ const AdminActualite = () => {
 
   const filtrerActualites = () => {
     const now = moment();
-    if (filtre === "avenir") {
-      return actualites.filter((a) => moment(a.date_publication).isAfter(now));
-    } else if (filtre === "archive") {
-      return actualites.filter((a) => moment(a.date_publication).isBefore(now));
+    switch (filtre) {
+      case "actives":
+        return actualites.filter((a) =>
+          moment(a.date_publication).isSameOrAfter(now)
+        );
+      case "archivees":
+        return actualites.filter((a) =>
+          moment(a.date_publication).isBefore(now)
+        );
+      default:
+        return actualites;
     }
-    return actualites;
   };
 
   const liste = filtrerActualites();
@@ -81,8 +87,8 @@ const AdminActualite = () => {
               className="mb-4 border p-2 rounded"
             >
               <option value="toutes">{t("filterAll")}</option>
-              <option value="avenir">{t("filterFuture")}</option>
-              <option value="archive">{t("filterArchive")}</option>
+              <option value="actives">{t("filterActive")}</option>
+              <option value="archivees">{t("filterArchive")}</option>
             </select>
 
             {/* Tableau */}
@@ -119,7 +125,11 @@ const AdminActualite = () => {
                 {liste.length === 0 && (
                   <tr>
                     <td colSpan="5" className="text-center p-4">
-                      {t("noNewsFound")}
+                      {filtre === "actives"
+                        ? t("noActiveNewsFound")
+                        : filtre === "archivees"
+                        ? t("noArchivedNewsFound")
+                        : t("noNewsFound")}
                     </td>
                   </tr>
                 )}

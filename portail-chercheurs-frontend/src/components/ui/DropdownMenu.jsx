@@ -25,7 +25,7 @@ const DropdownMenu = ({ children, sections = [], userProfile }) => {
       {/* Déclencheur du menu */}
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className="cursor-pointer flex items-center gap-3 hover:bg-gray-100 rounded-lg p-2 transition-colors"
+        className="cursor-pointer flex items-center gap-3 rounded-lg p-2 transition-colors"
       >
         {React.Children.map(children, (child) => {
           if (

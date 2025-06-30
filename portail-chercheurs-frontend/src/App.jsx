@@ -27,6 +27,7 @@ import SelectionPublication from "./pages/auth/SelectionPublications";
 
 // Pages protégées
 import MonProfil from "./pages/MonProfil";
+import MesPublications from "./pages/MesPublications";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminChercheurs from "./pages/admin/AdminChercheurs";
 import CreationChercheur from "./pages/admin/CreationChercheur";
@@ -100,6 +101,14 @@ function App() {
                 element={
                   <ProtectedRoute redirectTo="/connexion">
                     <MonProfil />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/mes-publications"
+                element={
+                  <ProtectedRoute redirectTo="/connexion">
+                    <MesPublications />
                   </ProtectedRoute>
                 }
               />
