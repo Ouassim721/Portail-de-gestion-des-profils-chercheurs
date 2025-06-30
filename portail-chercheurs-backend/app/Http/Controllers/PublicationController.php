@@ -12,6 +12,7 @@ use App\Models\Notification;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewPublicationNotification;
 use App\Models\Categoriser;
+use Illuminate\Support\Facades\Storage;
 
 class PublicationController extends Controller
 {
@@ -210,7 +211,6 @@ class PublicationController extends Controller
         }
     }
 
-    // PublicationController.php
     public function profilePublications(Request $request)
     {
         $chercheur = JWTAuth::user();
