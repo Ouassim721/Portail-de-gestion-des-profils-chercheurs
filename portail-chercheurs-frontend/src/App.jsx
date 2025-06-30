@@ -67,11 +67,11 @@ function App() {
               <Route path="/mes-cours" element={<CoursesPage />} />
               <Route path="/cours" element={<AllCoursesPage />} />
               <Route
-                path="/chercheurs/:id/cours/new"
+                path="/mes-cours/new"
                 element={<CourseForm />}
               />
               <Route
-                path="/chercheurs/:id/cours/:coursId/edit"
+                path="/mes-cours/:coursId/edit"
                 element={<CourseForm />}
               />
               <Route
@@ -167,15 +167,18 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/chercheurs/:id/cours/new" element={<CourseForm />} />
-            <Route
-              path="/chercheurs/:id/cours/:coursId/edit"
-              element={<CourseForm />}
-            />
-            <Route
-              path="/DetailleCours/:coursId"
-              element={<CourseDetailPage />}
-            />
+             <Route
+                path="/mes-cours/new"
+                element={<CourseForm />}
+              />
+              <Route
+                path="/mes-cours/:coursId/edit"
+                element={<CourseForm />}
+              />
+              <Route
+                path="/DetailleCours/:coursId"
+                element={<CourseDetailPage />}
+              />
 
             {/* Matières */}
             <Route path="/mes-matieres" element={<SubjectsPage />} />
