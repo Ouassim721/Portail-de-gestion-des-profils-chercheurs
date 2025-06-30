@@ -74,7 +74,7 @@ function App() {
                 element={<CourseForm />}
               />
               <Route
-                path="/chercheurs/:id/cours/:coursId"
+                path="/DetailleCours/:coursId"
                 element={<CourseDetailPage />}
               />
 
@@ -164,7 +164,7 @@ function App() {
               element={<CourseForm />}
             />
             <Route
-              path="/chercheurs/:id/cours/:coursId"
+              path="/DetailleCours/:coursId"
               element={<CourseDetailPage />}
             />
 

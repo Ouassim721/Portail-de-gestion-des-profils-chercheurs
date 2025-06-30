@@ -7,9 +7,9 @@ import {
 } from "@heroicons/react/24/solid";
 import { LanguageContext } from "../../contexts/LanguageContext";
 
-const CourseCard = ({ course, researcherId, onDelete }) => {
+const CourseCard = ({ course, onDelete }) => {
   const { t } = useContext(LanguageContext);
-
+  
   return (
     <div className="bg-[var(--color-bg-primary)] rounded-xl shadow-md overflow-hidden border border-[var(--color-gray)] hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
       <div className="p-5 flex-grow">
@@ -38,9 +38,9 @@ const CourseCard = ({ course, researcherId, onDelete }) => {
         </div>
       </div>
 
-      <div className="bg-gray-200 px-5 py-3 flex justify-between items-center">
+      <div className="bg-[var(--color-gray)] px-5 py-3 flex justify-between items-center">
         <Link
-          to={`/chercheurs/${researcherId}/cours/${course.id_cours}`}
+          to={`/DetailleCours/${course.id_cours}`}
           className="text-gray-800 text-sm font-medium"
         >
           {t("viewDetails")}
@@ -48,7 +48,7 @@ const CourseCard = ({ course, researcherId, onDelete }) => {
 
         <div className="flex space-x-2">
           <Link
-            to={`/chercheurs/${researcherId}/cours/${course.id_cours}/edit`}
+            to={`/mes-cours/${course.id_cours}/edit`}
             className="text-gray-500 hover:text-blue-600 transition-colors"
             title={t("edit")}
           >

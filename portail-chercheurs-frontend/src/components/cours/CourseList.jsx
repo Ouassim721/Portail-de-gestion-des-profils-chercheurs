@@ -8,21 +8,31 @@ import Button from "../ui/Button";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { LanguageContext } from "../../contexts/LanguageContext";
 import { logError } from "@/utils/logger";
+import axios from "../../axios"; // Ajout d'axios
 
-const CourseList = ({ researcherId }) => {
+const CourseList = () => {
   const navigate = useNavigate();
   const { t } = useContext(LanguageContext);
-
+  
+  const [researcherId, setResearcherId] = useState(null); // Nouvel état pour l'ID du chercheur
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
 
   useEffect(() => {
-    const fetchCourses = async () => {
+    const fetchUserAndCourses = async () => {
       try {
-        const response = await api.get(`/chercheurs/${researcherId}/cours`);
-        setCourses(response.data);
+        setLoading(true);
+        
+        // Récupérer l'ID de l'utilisateur connecté
+        const userRes = await axios.get("/me");
+        const userId = userRes.data.id;
+        setResearcherId(userId);
+        
+        // Récupérer les cours de l'utilisateur
+        const coursesRes = await api.get(`/chercheurs/${userId}/cours`);
+        setCourses(coursesRes.data);
       } catch (error) {
         logError(t("errorLoadingCourses"), error);
       } finally {
@@ -30,10 +40,8 @@ const CourseList = ({ researcherId }) => {
       }
     };
     
-    if (researcherId) {
-      fetchCourses();
-    }
-  }, [researcherId, t]);
+    fetchUserAndCourses();
+  }, [t]);
 
   const handleDelete = async (courseId) => {
     if (!courseId) {
@@ -82,9 +90,10 @@ const CourseList = ({ researcherId }) => {
         <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">
           {t("myCourses")}
         </h1>
+        
         <Button
           icon={faPlus}
-          onClick={() => navigate(`/chercheurs/${researcherId}/cours/new`)}
+          onClick={() => navigate(`/mes-cours/new`)}
         >
           {t("newCourse")}
         </Button>
@@ -113,7 +122,6 @@ const CourseList = ({ researcherId }) => {
             <CourseCard
               key={course.id_cours}
               course={course}
-              researcherId={researcherId}
               onDelete={handleDelete}
             />
           ))}

@@ -13,7 +13,7 @@ import Loader from "../components/ui/Loader";
 import { log, logError } from "@/utils/logger";
 
 const CourseDetailPage = () => {
-  const { id, coursId } = useParams();
+  const { coursId } = useParams();
   const navigate = useNavigate();
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -24,48 +24,39 @@ const CourseDetailPage = () => {
     const fetchCourse = async () => {
       try {
         setLoading(true);
-        const response = await api.get(`/chercheurs/${id}/cours/${coursId}`);
+        const response = await api.get(`/cours/${coursId}`);
         log("Données complètes du cours:", response.data);
 
         setCourse(response.data);
 
         if (response.data.fichier) {
-          // Récupérer la baseURL depuis la configuration d'axios
           const baseUrl = api.defaults.baseURL;
-
-          // Construire l'URL manuellement
           const fileUrl =
             response.data.fichier_url ||
-            `${baseUrl.replace("/api", "")}/storage/${response.data.fichier}`;
-
-          log("URL utilisée:", fileUrl);
+            `${baseUrl.replace("/api", "")}${response.data.fichier}`;
 
           setFileInfo({
             name: response.data.fichier.split("/").pop(),
             url: fileUrl,
           });
         } else {
-          log("Aucun fichier associé à ce cours");
           setFileInfo(null);
         }
       } catch (err) {
         logError("Erreur complète:", err);
-        logError("Réponse d'erreur:", err.response);
         setError("Erreur lors du chargement du cours");
       } finally {
         setLoading(false);
       }
     };
     fetchCourse();
-  }, [id, coursId]);
+  }, [coursId]);
 
   const handleDelete = async () => {
-    if (
-      window.confirm("Voulez-vous vraiment supprimer ce cours définitivement?")
-    ) {
+    if (window.confirm("Voulez-vous vraiment supprimer ce cours définitivement?")) {
       try {
-        await api.delete(`/chercheurs/${id}/cours/${coursId}`);
-        navigate(`/chercheurs/${id}/cours`);
+        await api.delete(`/cours/${coursId}`);
+        navigate(-1);
       } catch (error) {
         logError("Erreur de suppression:", error);
         setError("Erreur lors de la suppression du cours");
@@ -91,12 +82,11 @@ const CourseDetailPage = () => {
               {error || "Cours non trouvé"}
             </h2>
             <p className="mt-2 text-[var(--color-text-secondary)]">
-              Le cours que vous recherchez n'existe pas ou n'est plus
-              disponible.
+              Le cours que vous recherchez n'existe pas ou n'est plus disponible.
             </p>
           </div>
           <button
-            onClick={() => navigate(`/mes-cours`)}
+            onClick={() => navigate(-1)}
             className="px-6 py-3 bg-[var(--color-primary)] text-white rounded-lg hover:bg-blue-700 flex items-center justify-center mx-auto"
           >
             <ArrowLeftIcon className="h-5 w-5 mr-2" />
@@ -112,7 +102,7 @@ const CourseDetailPage = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
           <button
-            onClick={() => navigate(`/mes-cours`)}
+            onClick={() => navigate(-1)}
             className="flex items-center text-[var(--color-primary)] hover:text-blue-800 font-medium"
           >
             <ArrowLeftIcon className="h-5 w-5 mr-1" />
@@ -130,9 +120,7 @@ const CourseDetailPage = () => {
                 <div className="mt-2 flex flex-wrap items-center text-[var(--color-text-secondary)]">
                   <span>
                     Publié le{" "}
-                    {new Date(course.datePublication).toLocaleDateString(
-                      "fr-FR"
-                    )}{" "}
+                    {new Date(course.datePublication).toLocaleDateString("fr-FR")}{" "}
                     par
                   </span>
                   <span className="font-medium ml-1">
@@ -153,8 +141,7 @@ const CourseDetailPage = () => {
                 Description du cours
               </h3>
               <p className="text-[var(--color-text-secondary)] whitespace-pre-line p-4 rounded-lg border border-gray-200">
-                {course.description ||
-                  "Aucune description fournie pour ce cours."}
+                {course.description || "Aucune description fournie pour ce cours."}
               </p>
             </div>
 
@@ -178,14 +165,13 @@ const CourseDetailPage = () => {
                   <FilePreview
                     file={{
                       name: fileInfo.name,
-                      size: 0, // La taille n'est pas disponible dans les données actuelles
+                      size: 0,
                     }}
-                    onRemove={() => {}} // Pas de suppression dans ce contexte
+                    onRemove={() => {}}
                   />
                 )}
               </div>
 
-              {/* Visualiseur PDF */}
               {fileInfo && (
                 <div className="mt-8">
                   <h3 className="text-lg font-medium text-[var(--color-text-primary)] mb-3">
@@ -218,7 +204,7 @@ const CourseDetailPage = () => {
 
         <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4">
           <Link
-            to={`/chercheurs/${id}/cours/${coursId}/edit`}
+            to={`/mes-cours/${coursId}/edit`}
             className="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 flex items-center justify-center transition-colors"
           >
             <PencilIcon className="h-5 w-5 mr-2" />
