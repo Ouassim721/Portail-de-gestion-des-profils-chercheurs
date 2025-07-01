@@ -212,13 +212,15 @@ class PublicationController extends Controller
     }
 
     public function profilePublications(Request $request)
-    {
-        $chercheur = JWTAuth::user();
-        $publications = Publication::where('chercheur_id', $chercheur->id)
-            ->with('disciplines') // Charge les disciplines associées
-            ->get();
-        return response()->json(['publications' => $publications], 200);
-    }
+{
+    $chercheur = JWTAuth::user();
+    $publications = Publication::where('chercheur_id', $chercheur->id)
+        ->select('id', 'titre', 'date_publication', 'visible') // Ajouter date_publication
+        ->with('disciplines')
+        ->get();
+    
+    return response()->json(['publications' => $publications], 200);
+}
 
     public function getPublicationYears()
     {

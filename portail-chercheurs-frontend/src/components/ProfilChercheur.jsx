@@ -23,7 +23,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { LanguageContext } from "../contexts/LanguageContext";
-import { Navigate } from "react-router-dom";
 
 function ProfilChercheur({
   chercheur,
@@ -33,20 +32,13 @@ function ProfilChercheur({
   onToggleVisibility,
   refreshPublications,
   stats,
+  publicationsByYear = [], // Nouvelle prop pour les données du graphique
 }) {
   const { t } = useContext(LanguageContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showAllPublications, setShowAllPublications] = useState(false);
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
-
-  const dataBar = [
-    { year: "2019", publications: 5 },
-    { year: "2020", publications: 8 },
-    { year: "2021", publications: 12 },
-    { year: "2022", publications: 10 },
-    { year: "2023", publications: 15 },
-  ];
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
@@ -110,18 +102,6 @@ function ProfilChercheur({
             </span>
             Département {chercheur.specialisation}
           </li>
-          {/* <li>
-            <span className="mr-3">
-              <FontAwesomeIcon icon={faLocationDot} />
-            </span>
-            {t("locationLabel")} Safi, Maroc
-          </li>
-          <li>
-            <span className="mr-3">
-              <FontAwesomeIcon icon={faGraduationCap} />
-            </span>
-            {t("degreeLabel")} PhD en Intelligence Artificielle
-          </li> */}
           {chercheur.about && (
             <li>
               <span className="mr-3">
@@ -158,14 +138,24 @@ function ProfilChercheur({
           {t("chartTitle")}
         </h3>
         <div className="h-40 md:h-50 max-w-[350px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={dataBar}>
-              <XAxis dataKey="year" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="publications" fill="var(--color-primary)" />
-            </BarChart>
-          </ResponsiveContainer>
+          {publicationsByYear.length > 0 ? (
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={publicationsByYear}>
+                <XAxis dataKey="year" />
+                <YAxis />
+                <Tooltip />
+                <Bar 
+                  dataKey="publications" 
+                  fill="var(--color-primary)" 
+                  name={t("publications")}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <p className="text-center text-sm text-[var(--color-text-secondary)]">
+              {t("noDataForChart")}
+            </p>
+          )}
         </div>
       </section>
 

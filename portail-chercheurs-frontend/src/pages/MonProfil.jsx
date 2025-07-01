@@ -12,6 +12,8 @@ function MonProfil() {
   const [statsRes, setStatsRes] = useState(null);
   const [loading, setLoading] = useState(true);
   const [refreshCounter, setRefreshCounter] = useState(0);
+  // Nouvel état pour stocker les données du graphique
+  const [publicationsByYear, setPublicationsByYear] = useState([]);
 
   const handleUpdate = (updatedData) => {
     setChercheurData(updatedData);
@@ -30,9 +32,38 @@ function MonProfil() {
     try {
       const publicationsRes = await axios.get("/profile/publications");
       setPublicationsData(publicationsRes.data.publications);
+      // Calculer les publications par année lors du rafraîchissement
+      calculatePublicationsByYear(publicationsRes.data.publications);
     } catch (error) {
       logError("Erreur lors du rafraîchissement des publications :", error);
     }
+  };
+
+  // Fonction pour calculer les publications par année
+  const calculatePublicationsByYear = (publications) => {
+    if (!publications || publications.length === 0) {
+      setPublicationsByYear([]);
+      return;
+    }
+
+    // Compter les publications par année
+    const yearsMap = publications.reduce((acc, pub) => {
+      if (pub.date_publication) {
+        const year = new Date(pub.date_publication).getFullYear();
+        acc[year] = (acc[year] || 0) + 1;
+      }
+      return acc;
+    }, {});
+
+    // Transformer en tableau d'objets et trier par année
+    const yearsData = Object.entries(yearsMap)
+      .map(([year, count]) => ({
+        year: year.toString(),
+        publications: count,
+      }))
+      .sort((a, b) => parseInt(a.year) - parseInt(b.year));
+
+    setPublicationsByYear(yearsData);
   };
 
   useEffect(() => {
@@ -46,6 +77,9 @@ function MonProfil() {
         setChercheurData(profileRes.data);
         setPublicationsData(publicationsRes.data.publications);
         setStatsRes(statsRes.data);
+        
+        // Calculer les publications par année
+        calculatePublicationsByYear(publicationsRes.data.publications);
       } catch (error) {
         logError("Erreur lors du chargement des données :", error);
       } finally {
@@ -69,6 +103,8 @@ function MonProfil() {
       isOwner={true}
       onToggleVisibility={toggleVisibility}
       refreshPublications={() => setRefreshCounter((prev) => prev + 1)}
+      // Passer les données du graphique
+      publicationsByYear={publicationsByYear}
     />
   );
 }
