@@ -53,7 +53,9 @@ const CourseDetailPage = () => {
   }, [coursId]);
 
   const handleDelete = async () => {
-    if (window.confirm("Voulez-vous vraiment supprimer ce cours définitivement?")) {
+    if (
+      window.confirm("Voulez-vous vraiment supprimer ce cours définitivement?")
+    ) {
       try {
         await api.delete(`/cours/${coursId}`);
         navigate(-1);
@@ -82,7 +84,8 @@ const CourseDetailPage = () => {
               {error || "Cours non trouvé"}
             </h2>
             <p className="mt-2 text-[var(--color-text-secondary)]">
-              Le cours que vous recherchez n'existe pas ou n'est plus disponible.
+              Le cours que vous recherchez n'existe pas ou n'est plus
+              disponible.
             </p>
           </div>
           <button
@@ -120,7 +123,9 @@ const CourseDetailPage = () => {
                 <div className="mt-2 flex flex-wrap items-center text-[var(--color-text-secondary)]">
                   <span>
                     Publié le{" "}
-                    {new Date(course.datePublication).toLocaleDateString("fr-FR")}{" "}
+                    {new Date(course.datePublication).toLocaleDateString(
+                      "fr-FR"
+                    )}{" "}
                     par
                   </span>
                   <span className="font-medium ml-1">
@@ -141,7 +146,8 @@ const CourseDetailPage = () => {
                 Description du cours
               </h3>
               <p className="text-[var(--color-text-secondary)] whitespace-pre-line p-4 rounded-lg border border-gray-200">
-                {course.description || "Aucune description fournie pour ce cours."}
+                {course.description ||
+                  "Aucune description fournie pour ce cours."}
               </p>
             </div>
 
