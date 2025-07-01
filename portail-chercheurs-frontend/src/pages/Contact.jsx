@@ -66,7 +66,7 @@ const Contact = () => {
                   htmlFor="sujet"
                   className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1"
                 >
-                  {t("subjectLabel")}
+                  {t("subjectPlaceholder")}
                 </label>
                 <div className="relative">
                   <input
