@@ -52,13 +52,11 @@ function ProfilChercheur({
             />
           </div>
           <div className="sm:flex sm:justify-between w-full mx-auto">
-            <div>
+            <div className="flex flex-col justify-between">
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-center sm:text-left">
                 {chercheur.prenom} {chercheur.nom}
               </h2>
-              <p className="text-sm mt-1 text-center sm:text-left text-[var(--color-text-secondary)]">
-                {t("universityLabel")} {chercheur.university}
-              </p>
+
               <div className="my-3 sm:my-4">
                 {isAuthenticated &&
                   (isOwner ? (
@@ -144,9 +142,9 @@ function ProfilChercheur({
                 <XAxis dataKey="year" />
                 <YAxis />
                 <Tooltip />
-                <Bar 
-                  dataKey="publications" 
-                  fill="var(--color-primary)" 
+                <Bar
+                  dataKey="publications"
+                  fill="var(--color-primary)"
                   name={t("publications")}
                 />
               </BarChart>
