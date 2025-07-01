@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import api from "../axios";
 import {
@@ -11,8 +11,10 @@ import {
 import FilePreview from "../components/FilePreview";
 import Loader from "../components/ui/Loader";
 import { log, logError } from "@/utils/logger";
+import { LanguageContext } from "@/contexts/LanguageContext";
 
 const CourseDetailPage = () => {
+  const { t, formatDate } = useContext(LanguageContext);
   const { coursId } = useParams();
   const navigate = useNavigate();
   const [course, setCourse] = useState(null);
@@ -44,24 +46,22 @@ const CourseDetailPage = () => {
         }
       } catch (err) {
         logError("Erreur complète:", err);
-        setError("Erreur lors du chargement du cours");
+        setError(t("courseLoadingError"));
       } finally {
         setLoading(false);
       }
     };
     fetchCourse();
-  }, [coursId]);
+  }, [coursId, t]);
 
   const handleDelete = async () => {
-    if (
-      window.confirm("Voulez-vous vraiment supprimer ce cours définitivement?")
-    ) {
+    if (window.confirm(t("deleteCourseConfirmation"))) {
       try {
         await api.delete(`/cours/${coursId}`);
         navigate(-1);
       } catch (error) {
         logError("Erreur de suppression:", error);
-        setError("Erreur lors de la suppression du cours");
+        setError(t("courseDeleteError"));
       }
     }
   };
@@ -81,11 +81,10 @@ const CourseDetailPage = () => {
           <div className="text-red-500 mb-6">
             <DocumentTextIcon className="h-16 w-16 mx-auto text-red-400" />
             <h2 className="text-xl font-bold mt-4">
-              {error || "Cours non trouvé"}
+              {error || t("courseNotFound")}
             </h2>
             <p className="mt-2 text-[var(--color-text-secondary)]">
-              Le cours que vous recherchez n'existe pas ou n'est plus
-              disponible.
+              {t("courseNotFoundDescription")}
             </p>
           </div>
           <button
@@ -93,7 +92,7 @@ const CourseDetailPage = () => {
             className="px-6 py-3 bg-[var(--color-primary)] text-white rounded-lg hover:bg-blue-700 flex items-center justify-center mx-auto"
           >
             <ArrowLeftIcon className="h-5 w-5 mr-2" />
-            Retour à la liste des cours
+            {t("backToCourseList")}
           </button>
         </div>
       </div>
@@ -109,7 +108,7 @@ const CourseDetailPage = () => {
             className="flex items-center text-[var(--color-primary)] hover:text-blue-800 font-medium"
           >
             <ArrowLeftIcon className="h-5 w-5 mr-1" />
-            Retour à la liste des cours
+            {t("backToCourseList")}
           </button>
         </div>
 
@@ -122,11 +121,13 @@ const CourseDetailPage = () => {
                 </h1>
                 <div className="mt-2 flex flex-wrap items-center text-[var(--color-text-secondary)]">
                   <span>
-                    Publié le{" "}
-                    {new Date(course.datePublication).toLocaleDateString(
-                      "fr-FR"
-                    )}{" "}
-                    par
+                    {t("publishedOn")}{" "}
+                    {formatDate(course.datePublication, {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}{" "}
+                    {t("by")}
                   </span>
                   <span className="font-medium ml-1">
                     {course.chercheur?.prenom} {course.chercheur?.nom}
@@ -135,7 +136,7 @@ const CourseDetailPage = () => {
               </div>
 
               <span className="mt-4 md:mt-0 inline-block px-3 py-1 text-sm font-semibold text-blue-700 bg-blue-100 rounded-full">
-                {course.matiere?.nom_matiere || "Non spécifié"}
+                {course.matiere?.nom_matiere || t("notSpecified")}
               </span>
             </div>
           </div>
@@ -143,11 +144,10 @@ const CourseDetailPage = () => {
           <div className="p-6">
             <div className="prose max-w-none mb-8">
               <h3 className="text-lg font-medium text-[var(--color-text-primary)] mb-3">
-                Description du cours
+                {t("courseDescription")}
               </h3>
               <p className="text-[var(--color-text-secondary)] whitespace-pre-line p-4 rounded-lg border border-gray-200">
-                {course.description ||
-                  "Aucune description fournie pour ce cours."}
+                {course.description || t("noCourseDescription")}
               </p>
             </div>
 
@@ -155,7 +155,7 @@ const CourseDetailPage = () => {
               <div className="mb-6">
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4">
                   <h3 className="text-xl font-medium text-[var(--color-text-primary)] mb-3 sm:mb-0">
-                    Fichier attaché
+                    {t("attachedFile")}
                   </h3>
                   <a
                     href={fileInfo?.url}
@@ -163,7 +163,7 @@ const CourseDetailPage = () => {
                     className="px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg hover:bg-blue-800 transition-colors flex items-center text-sm w-full sm:w-auto justify-center"
                   >
                     <ArrowDownTrayIcon className="h-4 w-4 mr-2" />
-                    Télécharger le document
+                    {t("downloadDocument")}
                   </a>
                 </div>
 
@@ -181,13 +181,13 @@ const CourseDetailPage = () => {
               {fileInfo && (
                 <div className="mt-8">
                   <h3 className="text-lg font-medium text-[var(--color-text-primary)] mb-3">
-                    Aperçu du document
+                    {t("documentPreview")}
                   </h3>
                   <div className="border rounded-lg overflow-hidden h-[500px] flex items-center justify-center bg-gray-50">
                     <iframe
                       src={fileInfo.url}
                       className="w-full h-full"
-                      title="Aperçu du document"
+                      title={t("documentPreview")}
                     />
                   </div>
                 </div>
@@ -197,10 +197,10 @@ const CourseDetailPage = () => {
                 <div className="max-w-100 mx-auto mt-8 border rounded-lg overflow-hidden bg-[var(--color-bg-secondary)] p-6 text-center">
                   <DocumentTextIcon className="w-16 h-16 text-gray-400 mx-auto" />
                   <p className="mt-4 text-lg font-medium text-[var(--color-text-secondary)]">
-                    Aucun document disponible
+                    {t("noDocumentAvailable")}
                   </p>
                   <p className="text-[var(--color-gray)]">
-                    Ce cours ne contient pas de fichier PDF associé.
+                    {t("noPDFForCourse")}
                   </p>
                 </div>
               )}
@@ -214,14 +214,14 @@ const CourseDetailPage = () => {
             className="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 flex items-center justify-center transition-colors"
           >
             <PencilIcon className="h-5 w-5 mr-2" />
-            Modifier ce cours
+            {t("editCourse")}
           </Link>
           <button
             onClick={handleDelete}
             className="px-5 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center justify-center transition-colors"
           >
             <TrashIcon className="h-5 w-5 mr-2" />
-            Supprimer ce cours
+            {t("deleteCourse")}
           </button>
         </div>
       </div>

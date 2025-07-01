@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import axios from "../../axios";
 import { useNavigate } from "react-router-dom";
+import { LanguageContext } from "../../contexts/LanguageContext";
 
 const ResetPassword = () => {
+  const { t } = useContext(LanguageContext);
   const { token } = useParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,11 +23,11 @@ const ResetPassword = () => {
         password_confirmation: confirm,
         token,
       });
-      setMessage("Mot de passe réinitialisé avec succès !");
+      setMessage(t("resetSuccess"));
       navigate("/connexion");
       setIsError(false);
     } catch {
-      setMessage("Erreur lors de la réinitialisation.");
+      setMessage(t("resetError"));
       setIsError(true);
     }
   };
@@ -34,7 +36,7 @@ const ResetPassword = () => {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Réinitialisation du mot de passe
+          {t("resetPasswordTitle")}
         </h2>
       </div>
 
@@ -46,7 +48,7 @@ const ResetPassword = () => {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Adresse email
+                {t("emailLabel")}
               </label>
               <div className="mt-1">
                 <input
@@ -67,7 +69,7 @@ const ResetPassword = () => {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700"
               >
-                Nouveau mot de passe
+                {t("newPasswordLabel")}
               </label>
               <div className="mt-1">
                 <input
@@ -88,7 +90,7 @@ const ResetPassword = () => {
                 htmlFor="confirm-password"
                 className="block text-sm font-medium text-gray-700"
               >
-                Confirmer le mot de passe
+                {t("confirmPasswordLabel")}
               </label>
               <div className="mt-1">
                 <input
@@ -109,7 +111,7 @@ const ResetPassword = () => {
                 type="submit"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
-                Réinitialiser le mot de passe
+                {t("resetPasswordButton")}
               </button>
             </div>
 

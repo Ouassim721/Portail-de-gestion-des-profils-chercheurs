@@ -28,7 +28,7 @@ export default function CommentsSection({ publicationId }) {
 
   function handleUpdate(id, text) {
     axios
-      .put(`/comments/${id}`, { contenu: text }) // Utilisez le même endpoint que le backend
+      .put(`/comments/${id}`, { contenu: text }) 
       .then(({ data }) => {
         setComments(comments.map((c) => (c.id === id ? data : c)));
         setEditingId(null);

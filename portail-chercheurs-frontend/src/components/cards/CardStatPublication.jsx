@@ -1,5 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { LanguageContext } from "../../contexts/LanguageContext";
+import { useContext } from "react";
 
 const CardStatPublication = ({
   stat = "300",
@@ -8,6 +10,8 @@ const CardStatPublication = ({
   icon = faSearch,
   variant = "primary",
 }) => {
+  const { t } = useContext(LanguageContext);
+  
   return (
     <div className={className}>
       <div className="w-74 h-24 flex gap-3 bg-[var(--color-bg-primary)] rounded-xl shadow-xs hover:scale-101 duration-300">
@@ -37,7 +41,7 @@ const CardStatPublication = ({
           >
             {stat}
           </h3>
-          <p className="text-[var(--color-text-secondary)]">{title}</p>
+          <p className="text-[var(--color-text-secondary)]">{t(title)}</p>
         </div>
       </div>
     </div>

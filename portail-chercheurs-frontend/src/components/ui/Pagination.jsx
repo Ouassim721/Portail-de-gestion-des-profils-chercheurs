@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
+import { LanguageContext } from "../../contexts/LanguageContext";
 
 function Pagination({ currentPage, totalPages, onPageChange }) {
+  const { t } = useContext(LanguageContext);
   const maxPagesToShow = 5;
 
   if (totalPages <= 1) return null;
@@ -41,19 +43,19 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
   return (
     <nav
       className="flex justify-center my-12 text-sm md:text-base flex-wrap text-[var(--color-text-primary)]"
-      aria-label="Pagination"
+      aria-label={t("Pagination")}
     >
       <div className="flex justify-center mt-6">
         <button
           type="button"
-          className={`px-3 sm:px-4 py-2  cursor-pointer ${
+          className={`px-3 sm:px-4 py-2 cursor-pointer ${
             currentPage === 1
               ? "hidden"
               : "bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] border border-gray-200 hover:bg-gray-200 hover:text-black"
           }`}
           disabled={currentPage === 1}
           onClick={() => handlePageChange(currentPage - 1)}
-          aria-label="Page précédente"
+          aria-label={t("previous")}
         >
           ◀
         </button>
@@ -78,7 +80,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
               }`}
               onClick={() => handlePageChange(page)}
               aria-current={currentPage === page ? "page" : undefined}
-              aria-label={`Page ${page}`}
+              aria-label={`${t("page")} ${page}`}
             >
               {page}
             </button>
@@ -94,7 +96,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
           }`}
           disabled={currentPage === totalPages}
           onClick={() => handlePageChange(currentPage + 1)}
-          aria-label="Page suivante"
+          aria-label={t("next")}
         >
           ▶
         </button>

@@ -1,12 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
+import { LanguageContext } from "../../contexts/LanguageContext";
 
 const SearchableSelect = ({ 
     options, 
     value, 
     onChange, 
     getOptionLabel = option => option, 
-    placeholder = "Rechercher..." 
+    placeholder = "search"
 }) => {
+    const { t } = useContext(LanguageContext);
     const [searchTerm, setSearchTerm] = useState('');
     const [isOpen, setIsOpen] = useState(false);
     const wrapperRef = useRef(null);
@@ -39,11 +41,12 @@ const SearchableSelect = ({
             <div 
                 className="flex items-center justify-between w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm cursor-pointer bg-white"
                 onClick={() => setIsOpen(!isOpen)}
+                aria-label={t("selectDropdown")}
             >
                 {value ? (
                     <span>{getOptionLabel(value)}</span>
                 ) : (
-                    <span className="text-gray-400">{placeholder}</span>
+                    <span className="text-gray-400">{t(placeholder)}</span>
                 )}
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -55,11 +58,12 @@ const SearchableSelect = ({
                     <div className="p-2 border-b">
                         <input
                             type="text"
-                            placeholder={placeholder}
+                            placeholder={t(placeholder)}
                             className="w-full px-3 py-2 border border-gray-300 rounded-md"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             autoFocus
+                            aria-label={t("searchInput")}
                         />
                     </div>
                     
@@ -72,13 +76,14 @@ const SearchableSelect = ({
                                         value?.id === option.id ? 'bg-blue-100' : ''
                                     }`}
                                     onClick={() => handleSelect(option)}
+                                    aria-label={t("selectOption") + getOptionLabel(option)}
                                 >
                                     {getOptionLabel(option)}
                                 </li>
                             ))
                         ) : (
                             <li className="px-4 py-2 text-gray-500 italic">
-                                Aucun résultat trouvé
+                                {t("noResults")}
                             </li>
                         )}
                     </ul>

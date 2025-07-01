@@ -2,14 +2,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBook } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import ChercheurAvatar from "../ui/ChercheurAvatar";
-import FollowButton from "../ui/FollowButton";
+import { LanguageContext } from "../../contexts/LanguageContext";
+import { useContext } from "react";
 
 export default function ChercheurCard({ chercheur }) {
+  const { t } = useContext(LanguageContext);
   const navigate = useNavigate();
 
   const handleClick = () => {
     navigate(`/chercheurs/${chercheur.id}`);
   };
+  
   return (
     <div
       className="bg-[var(--color-bg-primary)] rounded-lg overflow-hidden transition-shadow duration-300 cursor-pointer shadow-card hover:shadow-card-hover"
@@ -29,11 +32,13 @@ export default function ChercheurCard({ chercheur }) {
             {chercheur.prenom} {chercheur.nom}
           </h3>
           <p className="text-[var(--color-text-secondary)] text-sm mb-2">
-            {chercheur.specialisation || "Département non spécifié"}
+            {chercheur.specialisation || t("departmentNotSpecified")}
           </p>
           <div className="flex items-center text-sm text-gray-500">
             <FontAwesomeIcon icon={faBook} className="mr-1" />
-            <span>{chercheur.publications_count || 0} publications</span>
+            <span>
+              {chercheur.publications_count || 0} {t("publications")}
+            </span>
           </div>
         </div>
       </div>

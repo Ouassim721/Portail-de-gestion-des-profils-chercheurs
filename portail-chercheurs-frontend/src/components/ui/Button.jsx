@@ -1,15 +1,18 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useContext } from "react";
+import { LanguageContext } from "../../contexts/LanguageContext";
 
 const Button = ({
   children,
   onClick,
   type = "submit",
   variant = "primary",
-  icon = null, // Icône facultative
-  iconPosition = "left", // corrigé
+  icon = null,
+  iconPosition = "left",
   className = "",
 }) => {
-  // Définition des styles selon le variant
+  const { t } = useContext(LanguageContext);
+
   const baseStyles =
     "flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition duration-300 ease-in-out cursor-pointer justify-center";
 
@@ -23,16 +26,18 @@ const Button = ({
     neutral:
       "bg-[var(--color-bg-secondary)] text-[var(--color-text-primary)] border border-[var(--color-gray)]",
   };
+
   return (
     <button
       type={type}
       onClick={onClick}
       className={`${baseStyles} ${variantStyles[variant]} ${className}`}
+      aria-label={typeof children === 'string' ? t(children) : undefined}
     >
       {icon && iconPosition === "left" && (
         <FontAwesomeIcon icon={icon} className="w-5 h-5" />
       )}
-      {children}
+      {typeof children === 'string' ? t(children) : children}
       {icon && iconPosition === "right" && (
         <FontAwesomeIcon icon={icon} className="w-5 h-5" />
       )}

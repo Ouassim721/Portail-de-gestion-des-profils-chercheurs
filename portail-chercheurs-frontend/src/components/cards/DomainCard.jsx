@@ -1,3 +1,6 @@
+import { LanguageContext } from "../../contexts/LanguageContext";
+import { useContext } from "react";
+
 export default function DomainCard({
   title,
   topics,
@@ -5,6 +8,8 @@ export default function DomainCard({
   publications,
   borderColor,
 }) {
+  const { t } = useContext(LanguageContext);
+  
   return (
     <div
       className={`rounded-2xl border-t-4 ${borderColor} bg-white p-6 shadow`}
@@ -16,8 +21,8 @@ export default function DomainCard({
         ))}
       </ul>
       <div className="text-sm font-medium text-gray-700">
-        <span className="mr-4">{researchers} chercheurs</span>
-        <span className="text-green-600">{publications} publications</span>
+        <span className="mr-4">{researchers} {t("researchers")}</span>
+        <span className="text-green-600">{publications} {t("publications")}</span>
       </div>
     </div>
   );
