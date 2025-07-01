@@ -15,6 +15,7 @@ function ProfilChercheurPublic() {
   const [statsRes, setStatsRes] = useState(null);
   const [disciplinesLoaded, setDisciplinesLoaded] = useState(false); // Nouvel état
   const [refreshCounter, setRefreshCounter] = useState(0);
+  const [publicationsByYear, setPublicationsByYear] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,6 +37,7 @@ function ProfilChercheurPublic() {
           `/publications?chercheur_id=${id}&limit=all`
         );
         setPublicationsData(publicationsResponse.data.data || []);
+        calculatePublicationsByYear(publicationsResponse.data.data);
 
         // Chargement unique des disciplines
         if (!disciplinesLoaded) {
@@ -53,6 +55,33 @@ function ProfilChercheurPublic() {
 
     fetchData();
   }, [id]); // Dépendances
+
+  // Fonction pour calculer les publications par année
+  const calculatePublicationsByYear = (publications) => {
+    if (!publications || publications.length === 0) {
+      setPublicationsByYear([]);
+      return;
+    }
+
+    // Compter les publications par année
+    const yearsMap = publications.reduce((acc, pub) => {
+      if (pub.date_publication) {
+        const year = new Date(pub.date_publication).getFullYear();
+        acc[year] = (acc[year] || 0) + 1;
+      }
+      return acc;
+    }, {});
+
+    // Transformer en tableau d'objets et trier par année
+    const yearsData = Object.entries(yearsMap)
+      .map(([year, count]) => ({
+        year: year.toString(),
+        publications: count,
+      }))
+      .sort((a, b) => parseInt(a.year) - parseInt(b.year));
+
+    setPublicationsByYear(yearsData);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,6 +113,7 @@ function ProfilChercheurPublic() {
       stats={statsRes}
       loadingPublications={loadingPublications}
       refreshPublications={() => setRefreshCounter((prev) => prev + 1)}
+      publicationsByYear={publicationsByYear}
     />
   );
 }

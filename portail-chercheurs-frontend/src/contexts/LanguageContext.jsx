@@ -164,6 +164,7 @@ export const translations = {
     completeProfileFormTitle: "Complétez votre profil",
     scopusIdPlaceholder: "ID Scopus",
     disciplinePlaceholder: "Discipline",
+    noDataForChart: "Pas de données pour ce graphe",
     specialisationPlaceholder: "Spécialisation",
     submitButton: "Valider",
     statPublications: "Publications",
@@ -1249,7 +1250,7 @@ export const translations = {
     pdfUploadSuccess: "PDF uploaded successfully!",
     pdfUploadError: "Error uploading PDF. Please try again.",
     uploading: "Uploading...",
-    attachPDF: "Attach PDF"
+    attachPDF: "Attach PDF",
   },
 };
 

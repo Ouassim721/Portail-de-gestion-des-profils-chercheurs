@@ -14,7 +14,7 @@ class ChercheurSeeder extends Seeder
         Chercheur::create([
             'nom' => 'Derja',
             'prenom' => 'Ouassim',
-            'email' => 'admin@example.com',
+            'email' => 'admin@gmail.com',
             'password' => Hash::make('password'),
             'cv' => null,
             'role' => 'Administrateur',
@@ -22,7 +22,7 @@ class ChercheurSeeder extends Seeder
             'photoProfil' => null,
             'must_change_password' => false,
             'remember_token' => Str::random(10),
-            'scopus_author_id' => null,
+            'scopus_author_id' => "7004212771",
         ]);
         \App\Models\Chercheur::factory(25)->create();
     }
