@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useContext } from "react";
-import { useParams } from "react-router-dom"; // Correction cruciale ici
+import { useParams } from "react-router-dom"; 
 import { AnimatePresence, motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import axios from "../axios";

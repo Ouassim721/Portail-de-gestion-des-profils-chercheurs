@@ -260,4 +260,26 @@ class PublicationController extends Controller
 
         return response()->json(['total' => $count]);
     }
+    public function uploadPdf(Request $request, $publicationId)
+{
+    $request->validate([
+        'pdf' => 'required|file|mimes:pdf|max:10240', // 10MB max
+    ]);
+
+    $publication = Publication::findOrFail($publicationId);
+
+    // Supprimer l'ancien PDF s'il existe
+    if ($publication->pdf_path && Storage::exists($publication->pdf_path)) {
+        Storage::delete($publication->pdf_path);
+    }
+
+    // Stocker le nouveau PDF
+    $path = $request->file('pdf')->store('publications', 'public');
+
+    // Mettre à jour le chemin du PDF dans la publication
+    $publication->pdf_path = $path;
+    $publication->save();
+
+    return response()->json(['message' => 'PDF uploaded successfully']);
+}
 }

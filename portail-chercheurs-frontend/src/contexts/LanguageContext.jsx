@@ -630,6 +630,11 @@ export const translations = {
     viewMorePublications: "Voir Plus de Publications",
     noPublicationsFound: "Aucune publication trouvée",
     pedagogy: "Pédagogie",
+    onlyPDFFiles: "Seuls les fichiers PDF sont autorisés",
+    pdfUploadSuccess: "PDF attaché avec succès !",
+    pdfUploadError: "Erreur lors de l'envoi du PDF. Veuillez réessayer.",
+    uploading: "Envoi en cours",
+    attachPDF: "Attacher PDF",
   },
   ///////////////////////////////////////////////////////////////////////////////////////////////////////
   en: {
@@ -1240,6 +1245,11 @@ export const translations = {
     viewMorePublications: "View More Publications",
     noPublicationsFound: "No publications found",
     pedagogy: "Pedagogy",
+    onlyPDFFiles: "Only PDF files are allowed",
+    pdfUploadSuccess: "PDF uploaded successfully!",
+    pdfUploadError: "Error uploading PDF. Please try again.",
+    uploading: "Uploading...",
+    attachPDF: "Attach PDF"
   },
 };
 

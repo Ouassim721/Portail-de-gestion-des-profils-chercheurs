@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { LanguageContext } from "../../contexts/LanguageContext";
 import axios from "../../axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,6 +6,7 @@ import {
   faTimes,
   faPlus,
   faPaperclip,
+  faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import { logError } from "@/utils/logger";
 
@@ -30,6 +31,10 @@ const CardProfilPublication = ({
   const [existingDisciplines, setExistingDisciplines] = useState([]);
   const [loadingDisciplines, setLoadingDisciplines] = useState(false);
   const [errorLoading, setErrorLoading] = useState(null);
+  
+  // États pour la gestion du PDF
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     const fetchDisciplines = async () => {
@@ -108,6 +113,44 @@ const CardProfilPublication = ({
     }
   };
 
+  // Fonction pour gérer l'upload du PDF
+  const handlePdfUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Vérifier que c'est un PDF
+    if (file.type !== "application/pdf") {
+      alert(t("onlyPdfFiles"));
+      return;
+    }
+
+    setIsUploading(true);
+
+    const formData = new FormData();
+    formData.append("pdf", file);
+
+    try {
+      await axios.post(`/publications/${publicationId}/upload-pdf`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      alert(t("pdfUploadSuccess"));
+      // Rafraîchir les données si nécessaire
+      if (onDisciplinesUpdated) onDisciplinesUpdated();
+    } catch (error) {
+      logError("Erreur lors de l'envoi du PDF:", error);
+      alert(t("pdfUploadError"));
+    } finally {
+      setIsUploading(false);
+      // Réinitialiser l'input pour permettre la sélection du même fichier
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
+
   return (
     <div
       className={`p-4 bg-[var(--color-bg-primary)] border-b-3 border-gray-300 mb-4 ${className}`}
@@ -179,13 +222,36 @@ const CardProfilPublication = ({
             >
               {isVisible ? t("makePrivate") : t("makePublic")}
             </button>
+            
+            {/* Bouton pour attacher PDF */}
             <label
-              className={`px-3 py-1 text-xs rounded bg-blue-900 text-white hover:bg-blue-800 cursor-pointer 
-              `}
+              className={`px-3 py-1 text-xs rounded bg-blue-900 text-white hover:bg-blue-800 cursor-pointer flex items-center ${
+                isUploading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             >
-              <FontAwesomeIcon icon={faPaperclip} className="mr-1" />
-              Attacher PDF
-              <input type="file" accept=".pdf" className="hidden" />
+              {isUploading ? (
+                <>
+                  <FontAwesomeIcon
+                    icon={faSpinner}
+                    spin
+                    className="mr-1"
+                  />
+                  {t("uploading")}
+                </>
+              ) : (
+                <>
+                  <FontAwesomeIcon icon={faPaperclip} className="mr-1" />
+                  {t("attachPDF")}
+                </>
+              )}
+              <input
+                type="file"
+                accept=".pdf"
+                className="hidden"
+                onChange={handlePdfUpload}
+                disabled={isUploading}
+                ref={fileInputRef}
+              />
             </label>
           </>
         )}

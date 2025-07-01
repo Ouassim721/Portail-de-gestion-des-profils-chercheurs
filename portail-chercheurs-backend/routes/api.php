@@ -221,3 +221,8 @@ Route::middleware(['jwt.cookie', 'auth:api'])->post(
     'chercheurs/{id}/matieres/attach-or-create',
     [ChercheurController::class, 'attachOrCreateMatiere']
 );
+
+Route::middleware(['jwt.cookie', 'auth:api'])->post(
+    '/publications/{id}/upload-pdf',
+    [PublicationController::class, 'uploadPdf']
+);
