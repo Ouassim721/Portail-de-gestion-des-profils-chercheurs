@@ -2,6 +2,8 @@ import React, { createContext, useState, useEffect } from "react";
 
 export const translations = {
   fr: {
+    noActiveNewsFound: "Aucune actualité active trouvée.",
+    noArchivedNewsFound: "Aucune actualité archivée trouvée.",
     home: "Accueil",
     researchers: "Enseignants-chercheurs",
     publications: "Publications",
@@ -631,6 +633,8 @@ export const translations = {
   },
   ///////////////////////////////////////////////////////////////////////////////////////////////////////
   en: {
+    noActiveNewsFound: "No active news found.",
+    noArchivedNewsFound: "No archived news found.",
     home: "Home",
     researchers: "teachers-researchers",
     publications: "Publications",
