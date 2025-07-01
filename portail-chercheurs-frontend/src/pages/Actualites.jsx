@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../axios";
+import Loader from "../components/ui/Loader";
 import NewsCard from "../components/cards/NewsCard";
 import { motion, AnimatePresence } from "framer-motion";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -24,6 +25,7 @@ const Actualites = () => {
   const listeRef = useRef(null);
   const calendrierRef = useRef(null);
   const navigate = useNavigate();
+  const [isLoading, setisLoading] = useState(true); // loader
 
   // Memoize localizer to rebuild when language changes
   const localizer = useMemo(() => {
@@ -38,9 +40,14 @@ const Actualites = () => {
   }, [language]);
 
   useEffect(() => {
-    axios.get("/actualites", { withCredentials: true }).then(({ data }) => {
-      setEvents(
-        data.map((actu) => ({
+    const fetchActualites = async () => {
+      try {
+        setisLoading(true);
+        const { data } = await axios.get("/actualites", {
+          withCredentials: true,
+        });
+
+        const mappedEvents = data.map((actu) => ({
           id: `${actu.id}`,
           title: `${actu.titre}`,
           localisation: `${actu.localisation}`,
@@ -50,9 +57,17 @@ const Actualites = () => {
           end: new Date(actu.date_publication),
           allDay: true,
           resource: actu,
-        }))
-      );
-    });
+        }));
+
+        setEvents(mappedEvents);
+      } catch (error) {
+        console.error("Erreur lors du chargement des actualités :", error);
+      } finally {
+        setisLoading(false);
+      }
+    };
+
+    fetchActualites();
   }, []);
 
   useEffect(() => {
@@ -62,6 +77,8 @@ const Actualites = () => {
       setUnderlineStyle({ left: offsetLeft, width: offsetWidth });
     }
   }, [view]);
+
+  if (isLoading) return <Loader />;
 
   return (
     <div className="md:p-6 bg-[var(--color-bg-secondary)] rounded-2xl shadow-md text-xs sm:text-sm md:text-base 2xl:text-lg">
