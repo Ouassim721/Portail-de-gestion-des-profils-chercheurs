@@ -127,7 +127,7 @@ const CreateResearcher = () => {
                   ></path>
                 </svg>
               )}
-              {loading ? t("creating") : t("createCourse")}
+              {loading ? t("creating") : t("createAccountButton")}
             </button>
           </div>
         </form>
