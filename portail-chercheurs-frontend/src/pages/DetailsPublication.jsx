@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useContext } from "react";
-import { useParams } from "react-router-dom"; 
+import { useParams, Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import axios from "../axios";
 import { log, logError } from "@/utils/logger";
 import Loader from "@/components/ui/Loader";
@@ -14,7 +13,7 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/solid";
 import FilePreview from "../components/FilePreview";
-import { LanguageContext } from "../contexts/LanguageContext";
+import { LanguageContext } from "@/contexts/LanguageContext";
 
 export default function PublicationDetails() {
   const { id } = useParams();
@@ -35,6 +34,7 @@ export default function PublicationDetails() {
       setUnderlineStyle({ left: offsetLeft, width: offsetWidth });
     }
   }, [view]);
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -55,15 +55,10 @@ export default function PublicationDetails() {
         setPublicationsData(publicationsChercheurResponse.data.data || []);
 
         if (resPublication.data.pdf_path) {
-          // Récupérer la baseURL depuis la configuration d'axios
           const baseUrl = axios.defaults.baseURL;
-
-          // Construire l'URL manuellement
           const fileUrl =
             resPublication.data.pdf_path_url ||
-            `${baseUrl.replace("/api", "")}/storage/${
-              resPublication.data.pdf_path
-            }`;
+            `${baseUrl.replace("/api", "")}/storage/${resPublication.data.pdf_path}`;
 
           log("URL utilisée:", fileUrl);
 
@@ -72,7 +67,6 @@ export default function PublicationDetails() {
             url: fileUrl,
           });
         } else {
-          log("Aucun fichier associé à ce cours");
           setFileInfo(null);
         }
       } catch (error) {
@@ -83,14 +77,12 @@ export default function PublicationDetails() {
     fetchData();
   }, [id]);
 
-  if (!publication || !chercheur) {
-    return <Loader />;
-  }
+  if (!publication || !chercheur) return <Loader />;
+  
   const auteurs = publication.auteurs?.split(",").map((nom) => nom.trim());
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 p-6 bg-[var(--color-bg-secondary)] min-h-screen">
-      {/* Main content */}
       <div className="bg-[var(--color-bg-primary)] p-6 rounded-2xl shadow-md flex flex-col justify-between w-full">
         <div className="flex-1">
           <h1 className="text-3xl font-bold text-[var(--color-text-primary)] leading-snug hover:underline cursor-pointer mb-6">
@@ -105,12 +97,12 @@ export default function PublicationDetails() {
                 className="w-12 h-12 mx-auto sm:mx-0"
               />
               <div>
-                <a
-                  href={`/chercheurs/${chercheur.id}`}
+                <Link
+                  to={`/chercheurs/${chercheur.id}`}
                   className="font-medium text-lg"
                 >
-                  Dr. {chercheur.prenom} {chercheur.nom}
-                </a>
+                  {t("drPrefix")} {chercheur.prenom} {chercheur.nom}
+                </Link>
                 <p className="text-xs text-[var(--color-text-secondary)]">
                   {chercheur.sprecialisation}
                 </p>
@@ -133,7 +125,7 @@ export default function PublicationDetails() {
                   : "text-gray-400 hover:text-[var(--color-primary)]"
               }`}
             >
-              Abstract
+              {t("abstract")}
             </button>
             <button
               ref={pdfRef}
@@ -178,7 +170,7 @@ export default function PublicationDetails() {
                   <div className="mb-6">
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4">
                       <h3 className="text-xl font-medium text-gray-900 mb-3 sm:mb-0">
-                        Fichier attaché
+                        {t("attachedFile")}
                       </h3>
                       <a
                         href={fileInfo?.url}
@@ -186,7 +178,7 @@ export default function PublicationDetails() {
                         className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center text-sm w-full sm:w-auto justify-center"
                       >
                         <ArrowDownTrayIcon className="h-4 w-4 mr-2" />
-                        Télécharger le document
+                        {t("downloadDocument")}
                       </a>
                     </div>
                   </div>
@@ -196,7 +188,7 @@ export default function PublicationDetails() {
                         <iframe
                           src={fileInfo.url}
                           className="w-full h-full"
-                          title="Aperçu du document"
+                          title={t("documentPreview")}
                         />
                       </div>
                     </div>
@@ -205,11 +197,10 @@ export default function PublicationDetails() {
                     <div className="max-w-100 mx-auto mt-8 border rounded-lg overflow-hidden bg-[var(--color-bg-secondary)] p-6 text-center">
                       <DocumentTextIcon className="w-16 h-16 text-gray-400 mx-auto" />
                       <p className="mt-4 text-lg font-medium text-[var(--color-text-secondary)]">
-                        Aucun document disponible
+                        {t("noDocumentAvailable")}
                       </p>
                       <p className="text-[var(--color-gray)]">
-                        Cette publication ne contient pas de fichier PDF
-                        associé.
+                        {t("noPDFForPublication")}
                       </p>
                     </div>
                   )}
@@ -220,7 +211,7 @@ export default function PublicationDetails() {
         </div>
         <div className="mt-6 ">
           <h3 className="text-md font-semibold text-[var(--color-text-secondary)] mb-2">
-            Auteurs
+            {t("authorsLabel")}
           </h3>
           <div className="flex flex-wrap gap-2">
             {auteurs.map((nom, index) => (
@@ -235,7 +226,7 @@ export default function PublicationDetails() {
         </div>
         <div className="mt-6 flex gap-5">
           <h3 className="text-md font-semibold text-[var(--color-text-secondary)] mb-2">
-            Nombre de Citations :
+            {t("citationCountLabel")} :
           </h3>
           <div className="flex flex-wrap gap-2">
             <span className="bg-blue-100 text-blue-700 text-xs font-medium px-3 py-1 rounded-full">
@@ -245,10 +236,9 @@ export default function PublicationDetails() {
         </div>
       </div>
 
-      {/* Sidebar */}
       <aside className="w-full lg:w-80 bg-[var(--color-bg-primary)] p-4 rounded-2xl shadow-md">
         <h2 className="text-lg text-center font-semibold mb-4 text-[var(--color-text-primary)]">
-          Autre Publications de {chercheur.nom} {chercheur.prenom}
+          {t("otherPublicationsBy")} {chercheur.nom} {chercheur.prenom}
         </h2>
         <ul className="space-y-3">
           {publicationData.length > 0 ? (

@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "../../axios";
+import { LanguageContext } from "../../contexts/LanguageContext";
 
 const MotDePasseOublie = () => {
+  const { t } = useContext(LanguageContext);
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
@@ -10,12 +12,10 @@ const MotDePasseOublie = () => {
     e.preventDefault();
     try {
       await axios.post("/forgot-password", { email });
-      setMessage(
-        "Un lien de réinitialisation a été envoyé à votre adresse email."
-      );
+      setMessage(t("resetLinkSent"));
       setIsError(false);
     } catch {
-      setMessage("Erreur. Email invalide ou non trouvé.");
+      setMessage(t("resetLinkError"));
       setIsError(true);
     }
   };
@@ -24,10 +24,10 @@ const MotDePasseOublie = () => {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Mot de passe oublié
+          {t("forgotPasswordTitle")}
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Entrez votre adresse email pour recevoir un lien de réinitialisation
+          {t("forgotPasswordSubtitle")}
         </p>
       </div>
 
@@ -39,7 +39,7 @@ const MotDePasseOublie = () => {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Adresse email
+                {t("emailLabel")}
               </label>
               <div className="mt-1">
                 <input
@@ -60,7 +60,7 @@ const MotDePasseOublie = () => {
                 type="submit"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
-                Envoyer le lien de réinitialisation
+                {t("sendResetLink")}
               </button>
             </div>
 

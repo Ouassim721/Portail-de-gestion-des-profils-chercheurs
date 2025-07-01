@@ -6,7 +6,7 @@ import ChercheursGrid from "../components/cards/ChercheursGrid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import book from "../assets/book.jpg";
-import { LanguageContext } from "../contexts/LanguageContext";
+import { LanguageContext } from "@/contexts/LanguageContext";
 
 function Chercheurs() {
   const { t } = useContext(LanguageContext);
@@ -60,11 +60,10 @@ function Chercheurs() {
         {/* Contenu centré */}
         <div className="relative z-10 text-white text-center flex flex-col items-center justify-center h-full space-y-6">
           <h1 className="text-5xl font-bold">
-            Explorez l'Excellence en Recherche
+            {t("exploreResearchExcellence")}
           </h1>
           <p className="text-xl max-w-2xl">
-            Découvrez les profils des chercheurs, leurs spécialisations, leurs
-            publications et leurs contributions à la science.
+            {t("discoverResearchersProfiles")}
           </p>
         </div>
       </div>
@@ -116,6 +115,12 @@ function Chercheurs() {
                   totalPages={totalPages}
                   onPageChange={setCurrentPage}
                 />
+              </div>
+            )}
+
+            {chercheurs.length === 0 && !isLoading && !error && (
+              <div className="text-center py-10 text-gray-500">
+                {t("noResults")}
               </div>
             )}
           </>

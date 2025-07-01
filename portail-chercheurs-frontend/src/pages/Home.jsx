@@ -63,7 +63,7 @@ function Home() {
         `/chercheurs/${chercheurId}/publications`
       );
 
-      return response.data.total; // ou response.data.length si tu renvoies la liste
+      return response.data.total; 
     } catch (error) {
       logError("Erreur lors du fetch des publications :", error);
       return 0;

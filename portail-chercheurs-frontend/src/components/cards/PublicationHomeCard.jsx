@@ -1,3 +1,6 @@
+import { LanguageContext } from "../../contexts/LanguageContext";
+import { useContext } from "react";
+
 export default function PublicationHomeCard({
   title,
   desc,
@@ -5,6 +8,8 @@ export default function PublicationHomeCard({
   date,
   citations,
 }) {
+  const { t } = useContext(LanguageContext);
+  
   return (
     <div className="bg-[var(--color-bg-primary)] rounded-2xl shadow p-4 flex flex-col justify-between">
       <h4 className="font-semibold text-base text-[var(--color-text-primary)]">
@@ -17,7 +22,9 @@ export default function PublicationHomeCard({
           <p>{date}</p>
         </div>
         <div className="text-right flex items-end text-[var(--color-secondary)]">
-          <p>{citations} citations</p>
+          <p>
+            {citations} {t("citations")}
+          </p>
         </div>
       </div>
     </div>

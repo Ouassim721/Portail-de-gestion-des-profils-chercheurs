@@ -10,14 +10,13 @@ import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
 import { fr, enUS } from "date-fns/locale";
-import { Link, Navigate } from "react-router-dom";
-import { LanguageContext } from "../contexts/LanguageContext";
+import { LanguageContext } from "@/contexts/LanguageContext";
 import "./Actualites.css";
 
 const localeMap = { fr, en: enUS };
 
 const Actualites = () => {
-  const { t, language } = useContext(LanguageContext);
+  const { t, language, formatDate } = useContext(LanguageContext);
   const [events, setEvents] = useState([]);
   const [view, setView] = useState("liste");
   const [underlineStyle, setUnderlineStyle] = useState({});
@@ -218,21 +217,25 @@ const Actualites = () => {
                     />
                   </svg>
                   <h3 className="text-lg font-medium text-gray-700 mb-2">
-                    Aucune actualité disponible pour le moment
+                    {t("noNewsAvailable")}
                   </h3>
                   <p className="text-gray-500 max-w-md">
-                    Revenez plus tard pour découvrir nos prochaines actualités.
+                    {t("checkBackLater")}
                   </p>
                 </div>
               ) : (
                 events.map((event) => (
                   <NewsCard
                     key={event.id}
-                    titre={event.titre}
+                    titre={event.title}
                     localisation={event.localisation}
                     description={event.description}
                     categorie={event.categorie}
-                    date_publication={event.date_publication}
+                    date_publication={formatDate(event.start, {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
                     onClick={() => navigate(`/actualites/${event.id}`)}
                   />
                 ))

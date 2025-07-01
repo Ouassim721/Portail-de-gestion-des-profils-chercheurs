@@ -28,7 +28,6 @@ const SearchBar = ({ placeholder = "Rechercher un Profil..." }) => {
     }
   }, [query]);
 
-  // Close suggestions when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (ref.current && !ref.current.contains(e.target)) {

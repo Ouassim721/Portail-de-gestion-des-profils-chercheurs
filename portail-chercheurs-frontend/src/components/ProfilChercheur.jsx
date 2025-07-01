@@ -32,7 +32,7 @@ function ProfilChercheur({
   onToggleVisibility,
   refreshPublications,
   stats,
-  publicationsByYear = [], // Nouvelle prop pour les données du graphique
+  publicationsByYear = [],
 }) {
   const { t } = useContext(LanguageContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -66,7 +66,7 @@ function ProfilChercheur({
                       <Button
                         variant="neutral"
                         icon={faUserPen}
-                        className="text-sm p-2!"
+                        className="text-sm p-2"
                         onClick={() => setIsModalOpen(true)}
                       >
                         {t("editButton")}
@@ -74,10 +74,10 @@ function ProfilChercheur({
                       <Button
                         variant="secondary"
                         icon={faBookmark}
-                        className="text-sm p-2!"
+                        className="text-sm p-2"
                         onClick={() => navigate(`/mes-publications`)}
                       >
-                        Publication
+                        {t("myPublications")}
                       </Button>
                     </div>
                   ) : (
@@ -100,7 +100,7 @@ function ProfilChercheur({
             <span className="mr-3">
               <FontAwesomeIcon icon={faBuildingColumns} />
             </span>
-            Département {chercheur.specialisation}
+            {t("departmentLabel")} {chercheur.specialisation}
           </li>
           {chercheur.about && (
             <li>

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import pdp from "../../assets/chercheur-place-holder.jpg";
 import Button from "../ui/Button";
-import { faShareNodes, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { LanguageContext } from "../../contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 
@@ -26,7 +26,7 @@ const CardPublication = ({
     >
       <div className="flex flex-col gap-4">
         <h2 className="text-lg font-medium text-[var(--color-primary)] md:text-xl">
-          {title}
+          {title || t("noTitleAvailable")}
         </h2>
         <div className="flex items-center gap-4">
           <img
@@ -36,7 +36,7 @@ const CardPublication = ({
           />
           <div>
             <h3 className="text-md font-medium md:text-lg text-[var(--color-text-primary)]">
-              Dr. {auteur}
+              {t("drPrefix")} {auteur}
             </h3>
             <p className="text-sm font-light md:text-md text-[var(--color-text-secondary)]">
               {university} - {t("departmentLabel")} {departement}
@@ -67,7 +67,7 @@ const CardPublication = ({
             {t("publishedOn")}{" "}
             {date
               ? formatDate(date, { dateStyle: "medium" })
-              : t("dateInvalid")}
+              : t("dateNotAvailable")}
           </h6>
           <h5 className="hidden lg:block font-bold text-xl text-[var(--color-text-primary)]">
             {citations}{" "}

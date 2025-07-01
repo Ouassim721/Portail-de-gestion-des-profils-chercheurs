@@ -10,18 +10,11 @@ const NewsCard = ({
   date_publication,
   onClick,
 }) => {
-  const { t } = useContext(LanguageContext);
-
-  // Fonction pour formater la date
-  const formatDate = (dateString) => {
-    const options = { day: "numeric", month: "long", year: "numeric" };
-    return new Date(dateString).toLocaleDateString("fr-FR", options);
-  };
+  const { t, formatDate } = useContext(LanguageContext);
 
   return (
     <div className="max-w-md mx-auto w-full h-full bg-[var(--color-bg-primary)] rounded-xl shadow-md overflow-hidden md:max-w-2xl m-4">
       <div className="p-6 flex flex-col justify-between h-full w-full">
-        {/* En-tête avec catégorie et date */}
         <div className="flex justify-between items-center mb-2">
           <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full uppercase font-semibold tracking-wide">
             {categorie}
@@ -31,12 +24,10 @@ const NewsCard = ({
           </span>
         </div>
 
-        {/* Titre */}
         <h2 className="mt-2 text-xl font-bold text-[var(--color-text-secondary)]">
           {titre}
         </h2>
 
-        {/* Localisation */}
         {localisation && (
           <div className="mt-1 flex items-center">
             <svg
@@ -65,10 +56,8 @@ const NewsCard = ({
           </div>
         )}
 
-        {/* Description */}
         <p className="mt-3 text-[var(--color-text-secondary)]">{description}</p>
 
-        {/* Bouton pour en savoir plus (optionnel) */}
         <div className="mt-4">
           <button
             className="text-blue-600 hover:text-blue-800 text-sm font-medium"

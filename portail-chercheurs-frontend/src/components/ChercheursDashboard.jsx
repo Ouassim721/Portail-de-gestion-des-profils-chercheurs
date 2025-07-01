@@ -56,6 +56,7 @@ function Dashboard() {
 
     return { chercheurs: chercheursData, publications: publicationsData };
   };
+  
   const getCssVariable = (name) =>
     getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
@@ -208,6 +209,7 @@ function Dashboard() {
       },
     ],
   };
+  
   const colorTextPrimary = getCssVariable("--color-text-primary");
   const colorTextSecondary = getCssVariable("--color-text-secondary");
 

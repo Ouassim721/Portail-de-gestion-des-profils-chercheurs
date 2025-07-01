@@ -8,7 +8,7 @@ import {
   MapPinIcon,
   TagIcon,
 } from "@heroicons/react/24/outline";
-import { LanguageContext } from "../contexts/LanguageContext";
+import { LanguageContext } from "@/contexts/LanguageContext";
 import { logError } from "@/utils/logger";
 import { log } from "@/utils/logger";
 
@@ -26,15 +26,10 @@ export default function DetailsActualite() {
         setActualite(response.data);
 
         if (response.data.document_pdf) {
-          // Récupérer la baseURL depuis la configuration d'axios
           const baseUrl = axios.defaults.baseURL;
-
-          // Construire l'URL manuellement
           const fileUrl =
             response.data.document_pdf_url ||
-            `${baseUrl.replace("/api", "")}/storage/${
-              response.data.document_pdf
-            }`;
+            `${baseUrl.replace("/api", "")}${response.data.document_pdf}`;
 
           log("URL utilisée:", fileUrl);
 
@@ -43,7 +38,6 @@ export default function DetailsActualite() {
             url: fileUrl,
           });
         } else {
-          log("Aucun fichier associé à ce cours");
           setFileInfo(null);
         }
       } catch (error) {
@@ -113,13 +107,13 @@ export default function DetailsActualite() {
           {fileInfo && (
             <div className="mt-8">
               <h3 className="text-lg font-medium text-[var(--color-text-primary)] mb-3">
-                Aperçu du document
+                {t("documentPreview")}
               </h3>
               <div className="border rounded-lg overflow-hidden h-[500px] flex items-center justify-center bg-gray-50">
                 <iframe
                   src={fileInfo.url}
                   className="w-full h-full"
-                  title="Aperçu du document"
+                  title={t("documentPreview")}
                 />
               </div>
             </div>

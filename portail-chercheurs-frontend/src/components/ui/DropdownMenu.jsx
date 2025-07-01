@@ -1,15 +1,16 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import ChercheurAvatar from "../ui/ChercheurAvatar";
+import { LanguageContext } from "../../contexts/LanguageContext";
 
 const DropdownMenu = ({ children, sections = [], userProfile }) => {
+  const { t } = useContext(LanguageContext);
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
 
-  // Fermer le menu lorsqu'on clique en dehors
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -22,10 +23,10 @@ const DropdownMenu = ({ children, sections = [], userProfile }) => {
 
   return (
     <div className="relative inline-block" ref={menuRef}>
-      {/* Déclencheur du menu */}
       <div
         onClick={() => setIsOpen(!isOpen)}
         className="cursor-pointer flex items-center gap-3 rounded-lg p-2 transition-colors"
+        aria-label={t("openMenu")}
       >
         {React.Children.map(children, (child) => {
           if (
@@ -46,7 +47,6 @@ const DropdownMenu = ({ children, sections = [], userProfile }) => {
 
       {isOpen && (
         <div className="absolute right-0 w-72 mt-2 bg-[var(--color-bg-primary)] rounded-md shadow-lg z-50 border border-gray-300">
-          {/* Section profil en haut */}
           {userProfile && (
             <div className="px-4 py-3 border-b border-gray-200">
               <div className="flex items-center gap-3">
@@ -58,14 +58,13 @@ const DropdownMenu = ({ children, sections = [], userProfile }) => {
                   />
                 </div>
                 <div className="flex gap-1 text-[var(--color-text-secondary)]">
-                  <h2 className="">{userProfile.prenom} </h2>
+                  <h2>{userProfile.prenom} </h2>
                   <h2 className="uppercase font-medium">{userProfile.nom}</h2>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Sections du menu */}
           {sections.map((section, sectionIndex) => (
             <div key={`section-${sectionIndex}`}>
               <div className="py-1">
@@ -77,6 +76,7 @@ const DropdownMenu = ({ children, sections = [], userProfile }) => {
                       setIsOpen(false);
                     }}
                     className="px-4 py-2 text-[var(--color-text-secondary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-white)] cursor-pointer flex items-center gap-3 "
+                    aria-label={t(option.label)}
                   >
                     {option.icon && (
                       <FontAwesomeIcon
@@ -87,12 +87,12 @@ const DropdownMenu = ({ children, sections = [], userProfile }) => {
                     {option.link ? (
                       <Link
                         to={option.link}
-                        className="block w-full  no-underline "
+                        className="block w-full no-underline"
                       >
-                        {option.label}
+                        {t(option.label)}
                       </Link>
                     ) : (
-                      <span>{option.label}</span>
+                      <span>{t(option.label)}</span>
                     )}
                   </div>
                 ))}

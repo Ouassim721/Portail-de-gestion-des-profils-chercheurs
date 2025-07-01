@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"; // Correction cruciale ici
+import React, { useEffect, useState, useContext } from "react";
+import { useParams } from "react-router-dom";
 import axios from "../axios";
 import Loader from "../components/ui/Loader";
 import ProfilChercheur from "../components/ProfilChercheur";
 import { logError } from "@/utils/logger";
+import { LanguageContext } from "@/contexts/LanguageContext";
 
 function ProfilChercheurPublic() {
+  const { t } = useContext(LanguageContext);
   const { id } = useParams();
   const [chercheurData, setChercheurData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -13,7 +15,7 @@ function ProfilChercheurPublic() {
   const [loadingPublications, setLoadingPublications] = useState(true);
   const [disciplines, setDisciplines] = useState([]);
   const [statsRes, setStatsRes] = useState(null);
-  const [disciplinesLoaded, setDisciplinesLoaded] = useState(false); // Nouvel état
+  const [disciplinesLoaded, setDisciplinesLoaded] = useState(false);
   const [refreshCounter, setRefreshCounter] = useState(0);
   const [publicationsByYear, setPublicationsByYear] = useState([]);
 
@@ -22,31 +24,27 @@ function ProfilChercheurPublic() {
       try {
         setLoading(true);
         setLoadingPublications(true);
-        // Réinitialisation des données
         setChercheurData(null);
         setPublicationsData([]);
         setDisciplines([]);
         setDisciplinesLoaded(false);
 
-        // Chargement du chercheur
         const chercheurResponse = await axios.get(`/chercheurs/${id}`);
         setChercheurData(chercheurResponse.data);
 
-        // Chargement des publications
         const publicationsResponse = await axios.get(
           `/publications?chercheur_id=${id}&limit=all`
         );
         setPublicationsData(publicationsResponse.data.data || []);
         calculatePublicationsByYear(publicationsResponse.data.data);
 
-        // Chargement unique des disciplines
         if (!disciplinesLoaded) {
           const disciplinesResponse = await axios.get("/disciplines");
           setDisciplines(disciplinesResponse.data);
           setDisciplinesLoaded(true);
         }
       } catch (error) {
-        logError("Erreur lors du chargement :", error);
+        logError(t("errorLoadingData"), error);
       } finally {
         setLoading(false);
         setLoadingPublications(false);
@@ -54,16 +52,14 @@ function ProfilChercheurPublic() {
     };
 
     fetchData();
-  }, [id]); // Dépendances
+  }, [id, t, disciplinesLoaded]);
 
-  // Fonction pour calculer les publications par année
   const calculatePublicationsByYear = (publications) => {
     if (!publications || publications.length === 0) {
       setPublicationsByYear([]);
       return;
     }
 
-    // Compter les publications par année
     const yearsMap = publications.reduce((acc, pub) => {
       if (pub.date_publication) {
         const year = new Date(pub.date_publication).getFullYear();
@@ -72,7 +68,6 @@ function ProfilChercheurPublic() {
       return acc;
     }, {});
 
-    // Transformer en tableau d'objets et trier par année
     const yearsData = Object.entries(yearsMap)
       .map(([year, count]) => ({
         year: year.toString(),
@@ -91,17 +86,17 @@ function ProfilChercheurPublic() {
         ]);
         setStatsRes(statsRes.data);
       } catch (error) {
-        logError("Erreur lors du chargement des données :", error);
+        logError(t("errorLoadingStats"), error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [refreshCounter]);
+  }, [id, refreshCounter, t]);
 
   if (loading) return <Loader />;
-  if (!chercheurData) return <p>Profil non trouvé</p>;
+  if (!chercheurData) return <p>{t("profileNotFound")}</p>;
 
   return (
     <ProfilChercheur

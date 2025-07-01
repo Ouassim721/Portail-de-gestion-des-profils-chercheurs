@@ -8,13 +8,13 @@ import Button from "../ui/Button";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { LanguageContext } from "../../contexts/LanguageContext";
 import { logError } from "@/utils/logger";
-import axios from "../../axios"; // Ajout d'axios
+import axios from "../../axios"; 
 
 const CourseList = () => {
   const navigate = useNavigate();
   const { t } = useContext(LanguageContext);
   
-  const [researcherId, setResearcherId] = useState(null); // Nouvel état pour l'ID du chercheur
+  const [researcherId, setResearcherId] = useState(null);
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("");
