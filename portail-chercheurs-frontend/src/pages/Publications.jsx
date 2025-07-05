@@ -8,6 +8,7 @@ import {
 import SearchBarPublications from "../components/research/SearchBarPublications";
 import Button from "../components/ui/Button";
 import DropdownButton from "../components/ui/DropdownButton";
+import DropdownScroll from "../components/ui/DropDownScroll";
 import CardStatPublication from "../components/cards/CardStatPublication";
 import CardPublication from "../components/cards/CardPublication";
 import CommentsSection from "../components/comments/CommentsSection";
@@ -166,12 +167,12 @@ const Publications = () => {
               className="w-full sm:w-auto"
             />
 
-            <DropdownButton
+            {/* <DropdownButton
               icon={faChevronDown}
               children={
                 selectedDiscipline
                   ? disciplines.find((d) => d.id === selectedDiscipline)?.nom
-                  : t("discipline")
+                  : "Discipline"
               }
               variant="neutral"
               iconPosition="right"
@@ -185,7 +186,25 @@ const Publications = () => {
                   onClick: () => setSelectedDiscipline(discipline.id),
                 })),
               ]}
-              className="w-full sm:w-auto"
+              className="dropdown-scrollable w-full sm:w-auto"
+            /> */}
+            <DropdownScroll
+              label="Discipline"
+              selectedLabel={
+                selectedDiscipline
+                  ? disciplines.find((d) => d.id === selectedDiscipline)?.nom
+                  : "Discipline"
+              }
+              options={[
+                {
+                  label: "Toutes les disciplines",
+                  onClick: () => setSelectedDiscipline(null),
+                },
+                ...disciplines.map((d) => ({
+                  label: d.nom,
+                  onClick: () => setSelectedDiscipline(d.id),
+                })),
+              ]}
             />
           </div>
         </div>

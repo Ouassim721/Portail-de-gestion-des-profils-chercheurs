@@ -166,3 +166,7 @@ select {
   font-size: 0.8rem;
   margin-right: 5px;
 }
+.dropdown-scrollable {
+  max-height: 300px;
+  overflow-y: auto;
+}
